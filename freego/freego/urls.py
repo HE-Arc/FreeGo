@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('fridge/', include('fridge.urls')),
+    path('', include('fridge.urls')),
     path('admin/', admin.site.urls),
 ]
