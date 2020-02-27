@@ -31,7 +31,7 @@ class Food(models.Model):
     name = models.CharField(max_length=45)
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
-    expiration_date = models.DateTimeField()
+    expiration_date = models.DateField()
     fridge = models.ForeignKey(
         'Fridge', on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
