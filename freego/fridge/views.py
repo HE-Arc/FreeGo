@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from .models import Fridge, Food
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the fridge index.")
+    context = {}
+    return render(request, 'fridge/index.html', context)
 
 class FridgeListView(generic.ListView):
     model = Fridge
@@ -23,3 +24,4 @@ class FridgeUpdateView(generic.UpdateView):
 
 class FridgeDeleteView(generic.DeleteView):
     model = Fridge
+
