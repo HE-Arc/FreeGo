@@ -12,6 +12,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Setup MySQL
+      uses: mirromutth/mysql-action@v1.1
+      with:
+        # The port of host
+        host port: '3306' # optional, default is 3306
+        # The port of container
+        container port: '3306' # optional, default is 3306
+        # --character-set-server - The character set of MySQL server
+        character set server: 'utf8mb4' # optional, default is utf8mb4
+        # --collation-server - The character collation of MySQL server
+        collation server: 'utf8mb4_general_ci' # optional, default is utf8mb4_general_ci
+        # MYSQL_DATABASE - name for the default database that is created
+        mysql database: 'freego_db' # optional, default is 
+        # MYSQL_USER - create the specified user with superuser power for created database
+        mysql user: 'root' #optional, default is 
+        # MYSQL_PASSWORD - specified superuser password which user is power for created database
+        mysql password: '' # optional, default is 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
