@@ -41,13 +41,9 @@ jobs:
         uses: jakejarvis/wait-action@v0.1.0
         with:
           time: '20s'
-      - name: Move
+      - name: Run move
         run: cd freego
       - name: Run migrations
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         run: python manage.py migrate
       - name: Run unit tests
         env:
