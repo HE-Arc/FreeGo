@@ -26,7 +26,8 @@ jobs:
         # MYSQL_DATABASE - name for the default database that is created
         mysql database: 'freego_db' # optional, default is 
         # MYSQL_USER - create the specified user with superuser power for created database
-        mysql user: 'root' # optional, default is 
+        mysql user: 'root' # optional, default is
+        mysql password: ${{ secrets.DatabasePassword }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
