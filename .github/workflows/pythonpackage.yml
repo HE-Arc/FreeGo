@@ -16,9 +16,9 @@ jobs:
       uses: mirromutth/mysql-action@v1.1
       with:
         # The port of host
-        host port: 3306 # optional, default is 3306
+        host port: 3307 # optional, default is 3306
         # The port of container
-        container port: 3306 # optional, default is 3306
+        container port: 3307 # optional, default is 3306
         # --character-set-server - The character set of MySQL server
         character set server: 'utf8mb4' # optional, default is utf8mb4
         # --collation-server - The character collation of MySQL server
