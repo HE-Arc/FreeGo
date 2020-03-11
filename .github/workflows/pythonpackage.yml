@@ -42,7 +42,7 @@ jobs:
         with:
           time: '20s'
       - name: Run move
-        run: cd freego
+        run: cd freego && ls
       - name: Run migrations
         run: python manage.py migrate
       - name: Run unit tests
