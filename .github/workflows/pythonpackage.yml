@@ -40,4 +40,5 @@ jobs:
     - name: Test
       run: |
         cd freego
+        python manage.py migrate --database=github_actions
         python manage.py test
