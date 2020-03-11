@@ -44,4 +44,4 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        run: cd freego && pytest --ds=freego.settings
+        run: python freego/manage.py test
