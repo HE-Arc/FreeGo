@@ -37,6 +37,7 @@ jobs:
           mysql user: root # optional, default is
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
           mysql password: root # optional, default is
+          options: --bind_address=127.0.0.1
       - name: Wait / Sleep
         uses: jakejarvis/wait-action@v0.1.0
         with:
