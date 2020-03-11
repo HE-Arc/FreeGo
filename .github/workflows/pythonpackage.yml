@@ -33,6 +33,10 @@ jobs:
           mysql user: 'root' # optional, default is 
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
           mysql password: 'root' # optional, default is 
+      - name: Wait / Sleep
+        uses: jakejarvis/wait-action@v0.1.0
+        with:
+          time: '20s'
       - name: Run migrations
         run: python freego/manage.py migrate --database=github_actions
       - name: Run unit tests
