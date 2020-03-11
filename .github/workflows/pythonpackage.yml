@@ -38,7 +38,7 @@ jobs:
         with:
           time: '20s'
       - name: Run migrations
-        run: python freego/manage.py migrate --database=github_actions
+        run: python freego/manage.py migrate
       - name: Run unit tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
