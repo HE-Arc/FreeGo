@@ -12,12 +12,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install Python dependencies
         run: pip install -r requirements.txt
-      - name: Shutdown Ubuntu MySQL (SUDO)
-        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary
-      - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
-        env:
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      - name: Start MySQL
+        uses: samin/mysql-action@v1.3
         with:
           # The port of host
           host port: 3800 # optional, default is 3306
@@ -28,22 +24,15 @@ jobs:
           # --collation-server - The character collation of MySQL server
           collation server: utf8mb4_general_ci # optional, default is utf8mb4_general_ci
           # Version of MySQL to use
-          mysql version: latest # optional, default is latestwait sleep
+          mysql version: latest # optional, default is latest
           # MYSQL_ROOT_PASSWORD - root superuser password
-          mysql root password: root # optional, default is
+          mysql root password: root # optional, default is 
           # MYSQL_DATABASE - name for the default database that is created
-          mysql database: freego_db # optional, default is
+          mysql database: freego_db # optional, default is 
           # MYSQL_USER - create the specified user with superuser power for created database
-          mysql user: root # optional, default is
+          mysql user: root # optional, default is 
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
-          mysql password: root # optional, default is
-          options: --bind_address=""
-      - name: Wait / Sleep
-        uses: jakejarvis/wait-action@v0.1.0
-        with:
-          time: '20s'
-      - name: Run move
-        run: cd freego && ls
+          mysql password: root # optional, default is 
       - name: Run migrations
         run: python freego/manage.py migrate --database=github_actions
       - name: Run unit tests
