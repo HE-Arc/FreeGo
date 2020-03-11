@@ -44,7 +44,7 @@ jobs:
       - name: Run move
         run: cd freego && ls
       - name: Run migrations
-        run: python freego/manage.py migrate
+        run: python freego/manage.py migrate --database=github_actions
       - name: Run unit tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
