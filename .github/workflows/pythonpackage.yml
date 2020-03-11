@@ -28,7 +28,7 @@ jobs:
           # MYSQL_ROOT_PASSWORD - root superuser password
           mysql root password: 'root' # optional, default is 
           # MYSQL_DATABASE - name for the default database that is created
-          mysql database: 'freego_db' # optional, default is 
+          mysql database: 'freego_db2' # optional, default is 
           # MYSQL_USER - create the specified user with superuser power for created database
           mysql user: 'root' # optional, default is 
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
