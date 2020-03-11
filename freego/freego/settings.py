@@ -83,7 +83,7 @@ DATABASES = {
     #     'HOST': '127.0.0.1',
     #     'PORT': '3306',
     # },
-    'default': {
+    'github_actions': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'freego_db2',
         'USER': 'root',
