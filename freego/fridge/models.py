@@ -4,7 +4,7 @@ from django.db import models
 class Fridge(models.Model):
     '''Fridge model'''
     name = models.CharField(max_length=45)
-    adresse = models.CharField(max_length=45)
+    address = models.CharField(max_length=45)
     NPA = models.CharField(max_length=45)
     phone_number = models.CharField(max_length=12)
     user = models.ForeignKey(

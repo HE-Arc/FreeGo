@@ -6,21 +6,38 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8]
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Test
-      run: |
-        cd freego
-        python manage.py test
+      - name: Setup Python environment
+        uses: actions/setup-python@v1.1.1
+      - uses: actions/checkout@v1
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      - name: Start MySQL
+        uses: samin/mysql-action@v1.3
+        with:
+          # The port of host
+          host port: 3800 # optional, default is 3306
+          # The port of container
+          container port: 3307 # optional, default is 3306
+          # --character-set-server - The character set of MySQL server
+          character set server: 'utf8mb4' # optional, default is utf8mb4
+          # --collation-server - The character collation of MySQL server
+          collation server: 'utf8mb4_general_ci' # optional, default is utf8mb4_general_ci
+          # Version of MySQL to use
+          mysql version: 'latest' # optional, default is latest
+          # MYSQL_ROOT_PASSWORD - root superuser password
+          mysql root password: 'root' # optional, default is 
+          # MYSQL_DATABASE - name for the default database that is created
+          mysql database: 'freego_db2' # optional, default is 
+          # MYSQL_USER - create the specified user with superuser power for created database
+          mysql user: 'root' # optional, default is 
+          # MYSQL_PASSWORD - specified superuser password which user is power for created database
+          mysql password: 'root' # optional, default is 
+      - name: Wait / Sleep
+        uses: jakejarvis/wait-action@v0.1.0
+        with:
+          time: '20s'
+      - name: Run migrations
+        run: python freego/manage.py migrate
+      - name: Run unit tests
+        run: python freego/manage.py test
