@@ -38,10 +38,6 @@ jobs:
         with:
           time: '20s'
       - name: Run migrations
-        run: python freego/manage.py migrate --database=github_actions
+        run: python freego/manage.py migrate
       - name: Run unit tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        run: cd freego && pytest --ds=freego.settings
+        run: python freego/manage.py test
