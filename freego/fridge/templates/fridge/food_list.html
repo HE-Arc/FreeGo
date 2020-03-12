@@ -1,0 +1,50 @@
+{% if food_list %}
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>vegetarian</th>
+      <th>vegan</th>
+      <th>expiration_date</th>
+      <th>fridge</th>
+      <th>user</th>
+      <th>actions</th>
+    </tr>
+  </thead>
+  {% for food in food_list %}
+  <tr>
+    <td>
+      {{food.pk}}
+    </td>
+    <td>
+      {{food.name}}
+    </td>
+    <td>
+      {{food.vegetarian}}
+    </td>
+    <td>
+      {{food.vegan}}
+    </td>
+    <td>
+      {{food.expiration_date}}
+    </td>
+    <td>
+      <a href="{% url 'fridge:fridge-detail' food.fridge.pk %}">{{ food.fridge }}</a>
+    </td>
+    <td>
+      {{food.user}}
+    </td>
+    <td>
+      <a href="{% url 'fridge:food-detail' food.pk %}">Détails</a>
+      <a href="{% url 'fridge:food-update-form' food.pk %}">Update</a>
+      <a href="{% url 'fridge:food-delete' food.pk %}">Delete</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No food are available.</p>
+{% endif %}
+
+<a href="{% url 'fridge:food-form' %}" class="btn btn-success btn-sm">Add a brave soldier</a>

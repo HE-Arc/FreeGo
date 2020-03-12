@@ -1,0 +1,46 @@
+{% if fridge_list %}
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>address</th>
+      <th>NPA</th>
+      <th>phone_number</th>
+      <th>user</th>
+      <th>actions</th>
+    </tr>
+  </thead>
+  {% for fridge in fridge_list %}
+  <tr>
+    <td>
+      {{fridge.pk}}
+    </td>
+    <td>
+      {{fridge.name}}
+    </td>
+    <td>
+      {{fridge.address}}
+    </td>
+    <td>
+      {{fridge.NPA}}
+    </td>
+    <td>
+      {{fridge.phone_number}}
+    </td>
+    <td>
+      {{fridge.user}}
+    </td>
+    <td>
+      <a href="{% url 'fridge:fridge-detail' fridge.pk %}">Détails</a>
+      <a href="{% url 'fridge:fridge-update-form' fridge.pk %}">Update</a>
+      <a href="{% url 'fridge:fridge-delete' fridge.pk %}">Delete</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No fridge are available.</p>
+{% endif %}
+
+<a href="{% url 'fridge:fridge-form' %}" class="btn btn-success btn-sm">Add a brave soldier</a>
