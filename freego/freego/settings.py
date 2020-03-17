@@ -85,11 +85,11 @@ DATABASES = {
     # },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'freego_db',
+        'NAME': 'freego_db2',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1',
-        'PORT': '3307',
+        'PORT': '3800',
     },
     'default_sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
