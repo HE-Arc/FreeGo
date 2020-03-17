@@ -1,5 +1,9 @@
 from django.db import models
 
+#####################################
+#              Fridge               #
+#####################################
+
 
 class Fridge(models.Model):
     '''Fridge model'''
@@ -52,3 +56,44 @@ class Reporting(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+
+#####################################
+#           Opening Hours           #
+#####################################
+
+WEEKDAYS = [
+    (1, "Monday"),
+    (2, "Tuesday"),
+    (3, "Wednesday"),
+    (4, "Thursday"),
+    (5, "Friday"),
+    (6, "Saturday"),
+    (7, "Sunday"),
+]
+
+
+class OpeningHour(models.Model):
+    '''OpeningHour model'''
+    weekday = models.PositiveSmallIntegerField(
+        choices=WEEKDAYS)
+    from_hour = models.TimeField()
+    to_hour = models.TimeField()
+    fridge = models.ForeignKey(
+        'Fridge', on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return str(WEEKDAYS[self.weekday][1])
+
+
+class SpecialDay(models.Model):
+    '''SpecialDay model'''
+    holiday_date = models.DateField()
+    closed = models.BooleanField(default=True)
+    from_hour = models.TimeField()
+    to_hour = models.TimeField()
+    fridge = models.ForeignKey(
+        'Fridge', on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.holiday_date)
