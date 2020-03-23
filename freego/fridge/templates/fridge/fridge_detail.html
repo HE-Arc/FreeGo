@@ -14,3 +14,11 @@
 <div>
     <p>{{fridge.user}}</p>
 </div>
+
+{% for oh in fridge.get_opening_hours %}
+
+<div>
+    <p>{{ oh }}</p>
+</div>
+
+{% endfor %}
