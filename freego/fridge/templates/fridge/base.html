@@ -2,28 +2,18 @@
 <html>
 
 <head>
-    <title>Hello Bulma!</title>
+  <title>Hello Bulma!</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 
 <body>
 
-    {% include "fridge/header.html" %}
+  {% block content %}{% endblock %}
 
-    <!-- <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Hello World
-      </h1>
-    </div>
-  </section> -->
-
-    {% block content %}{% endblock %}
-
-    <!-- JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 
 </html>

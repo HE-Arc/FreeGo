@@ -19,12 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$g+b++)$rxeitv#3h7+e0k%=a)4)w3*ba(a-8vu(jy*_77irgs'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = ['127.0.0.1']
 
 
@@ -77,9 +71,9 @@ WSGI_APPLICATION = 'freego.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'freego_db',
-        'USER': 'root',
-        'PASSWORD': 'root',
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
         'HOST': '127.0.0.1',
         'PORT': '3307',
     },
