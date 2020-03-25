@@ -20,7 +20,7 @@ urlpatterns = [
     path('food/<pk>/update', views.FoodUpdateView.as_view(), name='food-update-form'),
     path('food/<pk>/delete', views.FoodDeleteView.as_view(), name='food-delete'),
     # Admin
-    path('myadmin/detail/<pk>', views.AdminDetailView.as_view(), name='admins'),
+    path('myadmin', views.AdminIndexView.as_view(), name='admins'),
     path('myadmin/new', views.AdminCreateView.as_view(), name='admin-form'),
     path('myadmin/<pk>/delete', views.AdminDeleteView.as_view(), name='admin-delete')
 ]

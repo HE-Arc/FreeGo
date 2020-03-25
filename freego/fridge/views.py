@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic, View
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Fridge, Food
 from .forms import FoodForm
@@ -80,16 +81,24 @@ class FoodDeleteView(generic.DeleteView):
 #               Admin                #
 ######################################
 
-class AdminDetailView(generic.DetailView):
-    model = Fridge
+class AdminIndexView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'fridge/admin.html'
+    login_url = 'admin/login/?next=/admin/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fridge'] = Fridge.objects.filter(
+            user=self.request.user).first()
+        return context
 
 
-class AdminCreateView(View):
+
+class AdminCreateView(LoginRequiredMixin, View):
     form_class = FoodForm
     template_name = 'fridge/food_form.html'
     initial = {'name': 'n', 'vegetarian': True,
                'vegan': False, 'expiration_date': '2020-04-04'}
+    login_url = 'admin/login/?next=/admin/'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
@@ -106,15 +115,16 @@ class AdminCreateView(View):
                 vegan=form.cleaned_data['vegan'],
                 expiration_date=datetime.strptime(
                     form.cleaned_data['expiration_date'], '%b %d, %Y'),
-                fridge=Fridge.objects.filter(pk=1).first()
+                fridge=Fridge.objects.filter(pk=1).first(),
+                user=request.user
             )
             food.save()
-            return redirect('/myadmin/detail/1')
-            # return render(request, 'fridge:admins', {'pk': 1, })
+            return redirect('fridge:admins')
         return render(request, self.template_name, {'form': form})
 
 
-class AdminDeleteView(generic.DeleteView):
+class AdminDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Food
     template_name = 'fridge/food_confirm_delete.html'
-    success_url = reverse_lazy('fridge:admins', kwargs={'pk': 1, })
+    success_url = reverse_lazy('fridge:admins')
+    login_url = 'admin/login/?next=/admin/'
