@@ -18,5 +18,9 @@ urlpatterns = [
     path('food/detail/<pk>', views.FoodDetailView.as_view(), name='food-detail'),
     path('food/new', views.FoodCreateView.as_view(), name='food-form'),
     path('food/<pk>/update', views.FoodUpdateView.as_view(), name='food-update-form'),
-    path('food/<pk>/delete', views.FoodDeleteView.as_view(), name='food-delete')
+    path('food/<pk>/delete', views.FoodDeleteView.as_view(), name='food-delete'),
+    # Admin
+    path('myadmin/detail/<pk>', views.AdminDetailView.as_view(), name='admins'),
+    path('myadmin/new', views.AdminCreateView.as_view(), name='admin-form'),
+    path('myadmin/<pk>/delete', views.AdminDeleteView.as_view(), name='admin-delete')
 ]

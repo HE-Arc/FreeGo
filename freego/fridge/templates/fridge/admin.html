@@ -1,25 +1,39 @@
 {% extends 'fridge/base.html' %}
 
 {% block content %}
+
+
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo left">{{ fridge.name }}</a>
+        <a class="brand-logo right" href="{% url 'fridge:admin-form' %}" >
+            <i class="large material-icons">add_circle</i>
+          </a>
+    </div>
+</nav>
+
+{% if user.is_authenticated %}
+
 <section class="section">
     <div class="container">
         <ul class="collection with-header">
-            <li class="collection-header">
-                <h4>First Names</h4>
-            </li>
+            {% for food in fridge.get_foods %}
             <li class="collection-item">
-                <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div>
+                <div>{{ food.name }}<a href="{% url 'fridge:admin-delete' food.pk %}" class="secondary-content"><i class="material-icons">cancel</i></a></div>
             </li>
-            <li class="collection-item">
-                <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div>
-            </li>
-            <li class="collection-item">
-                <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div>
-            </li>
-            <li class="collection-item">
-                <div>Alvin<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div>
-            </li>
+            {% endfor %}
         </ul>
     </div>
 </section>
+
+{% else %}
+
+<section class="section">
+    <div class="container">
+        <p>Vous n'êtes pas authentifié!!</p>
+    </div>
+</section>
+
+{% endif %}
+
 {% endblock %}

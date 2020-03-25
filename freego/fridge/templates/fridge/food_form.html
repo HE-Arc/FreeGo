@@ -1,5 +1,52 @@
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save" />
-</form>
+{% extends 'fridge/base.html' %}
+
+{% block content %}
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo left">{{ fridge.name }}</a>
+        <a class="brand-logo right" href="{% url 'fridge:admin-form' %}" >
+            <i class="large material-icons">add_circle</i>
+          </a>
+    </div>
+</nav>
+<div class="container">
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="name" name="name" type="text" required />
+                <label for="name">Name</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <label>
+                    <input id="vegetarian" name="vegetarian" class="filled-in" type="checkbox" />
+                    <span>Vegetarian</span>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <label>
+                    <input id="vegan" name="vegan" class="filled-in" type="checkbox" />
+                    <span>Vegan</span>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="expiration_date" name="expiration_date" type="text" class="datepicker" required>
+                <label for="expiration_date">Expiration date</label>
+            </div>
+        </div>
+
+        <input type="submit" value="Save" />
+    </form>
+</div>
+
+{% load static %}
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="{% static "fridge/script.js" %}"></script>
+{% endblock %}

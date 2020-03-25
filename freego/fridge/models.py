@@ -18,7 +18,10 @@ class Fridge(models.Model):
         return str(self.name)
 
     def get_opening_hours(self):
-        return OpeningHour.objects.filter(fridge = self) #OpeningHour.objects.get
+        return OpeningHour.objects.filter(fridge = self)
+
+    def get_foods(self):
+        return Food.objects.filter(fridge = self)
 
 
 class User(models.Model):

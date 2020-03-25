@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic, View
 from django.urls import reverse_lazy
 
 from .models import Fridge, Food
+from .forms import FoodForm
+
+from datetime import datetime
 
 
 def index(request):
@@ -13,6 +16,7 @@ def index(request):
 ######################################
 #               Fridge               #
 ######################################
+
 
 class FridgeListView(generic.ListView):
     model = Fridge
@@ -54,17 +58,63 @@ class FoodDetailView(generic.DetailView):
 
 class FoodCreateView(generic.CreateView):
     model = Food
-    fields = ['name', 'vegetarian', 'vegan', 'expiration_date', 'fridge', 'user']
+    fields = ['name', 'vegetarian', 'vegan',
+              'expiration_date', 'fridge', 'user']
     success_url = reverse_lazy('fridge:foods')
 
 
 class FoodUpdateView(generic.UpdateView):
     model = Food
     template_name_suffix = '_update_form'
-    fields = ['name', 'vegetarian', 'vegan', 'expiration_date', 'fridge', 'user']
+    fields = ['name', 'vegetarian', 'vegan',
+              'expiration_date', 'fridge', 'user']
     success_url = reverse_lazy('fridge:foods')
 
 
 class FoodDeleteView(generic.DeleteView):
     model = Food
     success_url = reverse_lazy('fridge:foods')
+
+
+######################################
+#               Admin                #
+######################################
+
+class AdminDetailView(generic.DetailView):
+    model = Fridge
+    template_name = 'fridge/admin.html'
+
+
+class AdminCreateView(View):
+    form_class = FoodForm
+    template_name = 'fridge/food_form.html'
+    initial = {'name': 'n', 'vegetarian': True,
+               'vegan': False, 'expiration_date': '2020-04-04'}
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        print("test1")
+        if form.is_valid():
+            print(form.cleaned_data['expiration_date'])
+            food = Food(
+                name=form.cleaned_data['name'],
+                vegetarian=form.cleaned_data['vegetarian'],
+                vegan=form.cleaned_data['vegan'],
+                expiration_date=datetime.strptime(
+                    form.cleaned_data['expiration_date'], '%b %d, %Y'),
+                fridge=Fridge.objects.filter(pk=1).first()
+            )
+            food.save()
+            return redirect('/myadmin/detail/1')
+            # return render(request, 'fridge:admins', {'pk': 1, })
+        return render(request, self.template_name, {'form': form})
+
+
+class AdminDeleteView(generic.DeleteView):
+    model = Food
+    template_name = 'fridge/food_confirm_delete.html'
+    success_url = reverse_lazy('fridge:admins', kwargs={'pk': 1, })
