@@ -26,22 +26,26 @@ jobs:
           # Version of MySQL to use
           mysql version: 'latest' # optional, default is latest
           # MYSQL_ROOT_PASSWORD - root superuser password
-          mysql root password: 'root' # optional, default is 
+          mysql root password: ${{ secrets.DATABASE_PASSWORD }} # optional, default is 
           # MYSQL_DATABASE - name for the default database that is created
-          mysql database: 'freego_db' # optional, default is 
+          mysql database: ${{ secrets.DATABASE_NAME }} # optional, default is 
           # MYSQL_USER - create the specified user with superuser power for created database
-          mysql user: 'root' # optional, default is 
+          mysql user: ${{ secrets.DATABASE_USER }} # optional, default is 
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
-          mysql password: 'root' # optional, default is 
+          mysql password: ${{ secrets.DATABASE_PASSWORD }} # optional, default is 
       - name: Wait / Sleep
         uses: jakejarvis/wait-action@v0.1.0
         with:
           time: '20s'
       - name: Run migrations
         env:
-          SECRET_KEY: '$g+b++)$rxeitv#3h7+e0k%=a)4)w3*ba(a-8vu(jy*_77irgs'
-          DJANGO_SETTINGS_MODULE: freego.settings.production_settings
-          DATABASE_PASSWORD: 'root'
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         run: python freego/manage.py migrate
       - name: Run unit tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         run: python freego/manage.py test
