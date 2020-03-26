@@ -6,7 +6,7 @@ from . import views
 app_name = 'fridge'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    # path('', views.index, name='index'),
     # Fridge
     path('fridges', views.FridgeListView.as_view(), name='fridges'),
     path('fridge/detail/<pk>', views.FridgeDetailView.as_view(), name='fridge-detail'),
@@ -21,6 +21,10 @@ urlpatterns = [
     path('food/<pk>/delete', views.FoodDeleteView.as_view(), name='food-delete'),
     # Admin
     path('myadmin', views.AdminIndexView.as_view(), name='admins'),
-    path('myadmin/new', views.AdminCreateView.as_view(), name='admin-form'),
-    path('myadmin/<pk>/delete', views.AdminDeleteView.as_view(), name='admin-delete')
+    path('myadmin/food/new', views.AdminCreateView.as_view(), name='admin-form'),
+    path('myadmin/<pk>/delete', views.AdminDeleteView.as_view(), name='admin-delete'),
+    path('myadmin/detail', views.AdminDetailView.as_view(), name='admin-detail'),
+    path('myadmin/schedule/new', views.OpeningHourCreateView.as_view(), name='admin-schedule-new'),
+    path('', views.DashboardView.as_view(), name='dashboard'),
+    path('myadmin/specialday/new', views.SpecialDayCreateView.as_view(), name='admin-specialday-new')
 ]

@@ -4,14 +4,14 @@
 {% load static %}
 
 <nav>
-    <div class="nav-wrapper">
+    <div class="nav-wrapper" style="background-color: rgb(87, 161, 173);">
         <ul class="brand-logo left">
             <li><img src="{% static "fridge/logo.png" %}" style="width: 4rem;height: 4rem;"></li>
             <li>{{ fridge.name }}</li>
         </ul>
         <ul class="brand-logo right">
             <li>
-                <a href="{% url 'fridge:admin-form' %}">
+                <a href="{% url 'fridge:admin-detail' %}">
                     <i class="large material-icons">settings</i>
                 </a>
             </li>

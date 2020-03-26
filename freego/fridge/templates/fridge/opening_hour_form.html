@@ -15,30 +15,28 @@
 
         <div class="row">
             <div class="input-field col s6">
-                <input id="name" name="name" type="text" required />
-                <label for="name">Name</label>
+                <select name="weekday" id="weekday" required>
+                    <option value="0">Lundi</option>
+                    <option value="1">Mardi</option>
+                    <option value="2">Mercredi</option>
+                    <option value="3">Jeudi</option>
+                    <option value="4">Vendredi</option>
+                    <option value="5">Samedi</option>
+                    <option value="6">Dimanche</option>
+                </select>
+                <label>weekday</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <label>
-                    <input id="vegetarian" name="vegetarian" class="filled-in" type="checkbox" />
-                    <span>Vegetarian</span>
-                </label>
+                <input id="from_hour" name="from_hour" type="time" required />
+                <span>from_hour</span>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <label>
-                    <input id="vegan" name="vegan" class="filled-in" type="checkbox" />
-                    <span>Vegan</span>
-                </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s6">
-                <input id="expiration_date" name="expiration_date" type="text" class="datepicker" required>
-                <label for="expiration_date">Expiration date</label>
+                <input id="to_hour" name="to_hour" type="time" required />
+                <span>to_hour</span>
             </div>
         </div>
 

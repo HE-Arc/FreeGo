@@ -1,0 +1,76 @@
+{% extends 'fridge/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="navbar-fixed">
+
+    <nav class="nav-extended">
+        <div class="nav-wrapper" style="background-color: rgb(87, 161, 173);">
+            <ul class="brand-logo left">
+                <li><img src="{% static "fridge/logo.png" %}" style="width: 4rem;height: 4rem;"></li>
+                <li>{{ fridge.name }}</li>
+            </ul>
+            <ul class="brand-logo right">
+                <li>
+                    <a href="{% url 'fridge:admins' %}">
+                        <i class="large material-icons">home</i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'fridge:admin-form' %}">
+                        <i class="large material-icons">add_circle</i>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+</div>
+{% if user.is_authenticated %}
+
+<section class="section">
+    <div class="container">
+        <h4>Adresse</h4>
+        <p>{{ fridge.address }}, {{ fridge.NPA }}</p>
+
+        <h4>Numéro de téléphone</h4>
+        <p>{{ fridge.phone_number }}</p>
+
+        <h4>Horaire</h4>
+        {% for oh in fridge.get_opening_hours %}
+        <div>
+            <p>{{ oh }} : {{ oh.from_hour }} - {{ oh.to_hour }}</p>
+        </div>
+        {% endfor %}
+        <a href="{% url 'fridge:admin-schedule-new' %}">
+            <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
+        </a>
+
+        <h4>Horaire spéciaux</h4>
+        {% for sh in fridge.get_special_hour %}
+        <div>
+            <p>{{ sh }} : {{ sh.from_date }}</p>
+        </div>
+        {% endfor %}
+        <a href="{% url 'fridge:admin-specialday-new' %}">
+            <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
+        </a>
+
+        <h4>Utilisateur</h4>
+        <p>{{ fridge.user }}</p>
+    </div>
+</section>
+
+{% else %}
+
+<section class="section">
+    <div class="container">
+        <p>Vous n'êtes pas authentifié!!</p>
+    </div>
+</section>
+
+{% endif %}
+
+{% endblock %}

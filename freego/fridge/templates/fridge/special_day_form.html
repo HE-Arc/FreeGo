@@ -15,30 +15,28 @@
 
         <div class="row">
             <div class="input-field col s6">
-                <input id="name" name="name" type="text" required />
-                <label for="name">Name</label>
+                <input id="from_date" name="from_date" type="text" class="datepicker" required>
+                <label for="from_date">from_date date</label>
+            </div>
+        </div>
+
+        <!-- if from_date -->
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="to_date" name="to_date" type="text" class="datepicker" required>
+                <label for="to_date">to_date date</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <label>
-                    <input id="vegetarian" name="vegetarian" class="filled-in" type="checkbox" />
-                    <span>Vegetarian</span>
-                </label>
+                <input id="from_hour" name="from_hour" type="time" />
+                <span>from_hour</span>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <label>
-                    <input id="vegan" name="vegan" class="filled-in" type="checkbox" />
-                    <span>Vegan</span>
-                </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s6">
-                <input id="expiration_date" name="expiration_date" type="text" class="datepicker" required>
-                <label for="expiration_date">Expiration date</label>
+                <input id="to_hour" name="to_hour" type="time" />
+                <span>to_hour</span>
             </div>
         </div>
 
