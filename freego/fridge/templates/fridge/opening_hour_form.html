@@ -1,0 +1,36 @@
+{% extends 'fridge/base_admin.html' %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="input-field col s6">
+            <select name="weekday" id="weekday" required>
+                <option value="0">Lundi</option>
+                <option value="1">Mardi</option>
+                <option value="2">Mercredi</option>
+                <option value="3">Jeudi</option>
+                <option value="4">Vendredi</option>
+                <option value="5">Samedi</option>
+                <option value="6">Dimanche</option>
+            </select>
+            <label>weekday</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="from_hour" name="from_hour" type="time" required />
+            <span>from_hour</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="to_hour" name="to_hour" type="time" required />
+            <span>to_hour</span>
+        </div>
+    </div>
+
+    <input type="submit" value="Save" />
+</form>
+{% endblock %}

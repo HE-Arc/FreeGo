@@ -1,4 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.conf import settings
+from datetime import datetime
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+
 
 #####################################
 #              Fridge               #
@@ -12,25 +18,19 @@ class Fridge(models.Model):
     NPA = models.CharField(max_length=45)
     phone_number = models.CharField(max_length=12)
     user = models.ForeignKey(
-        'User', on_delete=models.CASCADE, null=True, blank=True)
+        User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
 
     def get_opening_hours(self):
-        return OpeningHour.objects.filter(fridge = self) #OpeningHour.objects.get
+        return OpeningHour.objects.filter(fridge=self)
 
+    def get_special_hour(self):
+        return SpecialDay.objects.filter(fridge=self)
 
-class User(models.Model):
-    '''User model'''
-    name = models.CharField(max_length=45)
-    first_name = models.CharField(max_length=255)
-    status = models.IntegerField()
-    email = models.CharField(max_length=45)
-    password = models.CharField(max_length=255)
-
-    def __str__(self):
-        return str(self.name)
+    def get_foods(self):
+        return Food.objects.filter(fridge=self)
 
 
 class Food(models.Model):
@@ -42,7 +42,12 @@ class Food(models.Model):
     fridge = models.ForeignKey(
         'Fridge', on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
-        'User', on_delete=models.CASCADE, null=True, blank=True)
+        User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.expiration_date < datetime.now():
+            raise ValidationError("Incorrect hour")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.name)
@@ -55,7 +60,7 @@ class Reporting(models.Model):
     fridge = models.ForeignKey(
         'Fridge', on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
-        'User', on_delete=models.CASCADE, null=True, blank=True)
+        User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.title)
@@ -85,18 +90,34 @@ class OpeningHour(models.Model):
     fridge = models.ForeignKey(
         'Fridge', on_delete=models.CASCADE, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if self.from_hour >= self.to_hour:
+            raise ValidationError("Incorrect hour")
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return str(WEEKDAYS[self.weekday][1])
 
 
 class SpecialDay(models.Model):
     '''SpecialDay model'''
-    holiday_date = models.DateField()
-    closed = models.BooleanField(default=True)
-    from_hour = models.TimeField()
-    to_hour = models.TimeField()
+    from_date = models.DateField(default=datetime.now)
+    to_date = models.DateField(null=True, blank=True)
+    from_hour = models.TimeField(null=True, blank=True)
+    to_hour = models.TimeField(null=True, blank=True)
     fridge = models.ForeignKey(
         'Fridge', on_delete=models.CASCADE, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if self.to_date != None:
+            if self.to_hour != None or self.from_hour != None:
+                raise ValidationError(
+                    "If two date are selected, you can't select an hour")
+            elif self.to_date <= self.from_date:
+                raise ValidationError("Invalid date")
+        elif self.from_hour != None and self.to_hour != None:
+            if self.to_hour <= self.from_hour:
+                raise ValidationError("Invalid hour")
+
     def __str__(self):
-        return str(self.holiday_date)
+        return str(self.from_date)
