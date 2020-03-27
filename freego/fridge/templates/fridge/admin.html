@@ -32,8 +32,11 @@
         <ul class="collection with-header">
             {% for food in fridge.get_foods %}
             <li class="collection-item">
-                <div>{{ food.name }}<a href="{% url 'fridge:admin-delete' food.pk %}" class="secondary-content"><i
-                            class="material-icons">cancel</i></a></div>
+                <div>{{ food.name }}
+                    <a href="{% url 'fridge:admin-delete' food.pk %}" class="secondary-content">
+                        <i class="material-icons">cancel</i>
+                    </a>
+                </div>
             </li>
             {% endfor %}
         </ul>

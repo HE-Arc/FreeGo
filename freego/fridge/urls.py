@@ -26,5 +26,7 @@ urlpatterns = [
     path('myadmin/detail', views.AdminDetailView.as_view(), name='admin-detail'),
     path('myadmin/schedule/new', views.OpeningHourCreateView.as_view(), name='admin-schedule-new'),
     path('', views.DashboardView.as_view(), name='dashboard'),
-    path('myadmin/specialday/new', views.SpecialDayCreateView.as_view(), name='admin-specialday-new')
+    path('myadmin/specialday/new', views.SpecialDayCreateView.as_view(), name='admin-specialday-new'),
+    path('myadmin/specialday/<pk>/delete', views.SpecialDayDeleteView.as_view(), name='admin-specialday-delete'),
+    path('myadmin/schedule/<pk>/delete', views.OpeningHourDeleteView.as_view(), name='admin-schedule-delete')
 ]

@@ -199,6 +199,23 @@ class SpecialDayCreateView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
+class SpecialDayDeleteView(generic.DeleteView):
+    model = SpecialDay
+    success_url = reverse_lazy('fridge:admin-detail')
+    login_url = 'admin/login/?next=/admin/'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+class OpeningHourDeleteView(generic.DeleteView):
+    model = OpeningHour
+    success_url = reverse_lazy('fridge:admin-detail')
+    login_url = 'admin/login/?next=/admin/'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+
 class DashboardView(generic.TemplateView):
     template_name = 'fridge/dashboard.html'
 
