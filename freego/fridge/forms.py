@@ -1,5 +1,6 @@
 from django import forms
 from datetime import datetime, date
+from django.core.exceptions import ValidationError
 
 
 class FoodForm(forms.Form):
@@ -9,13 +10,14 @@ class FoodForm(forms.Form):
     vegan = forms.BooleanField(required=False)
     expiration_date = forms.CharField(max_length=45)
 
-    def date_validation(self):
+    def clean(self):
+        cleaned_data = super().clean()
+        expiration_date = cleaned_data.get('expiration_date')
         expiration_date = datetime.strptime(
-            self.cleaned_data['expiration_date'], '%b %d, %Y')
-        if expiration_date < datetime.now():
-            return False
-        else:
-            return True
+            expiration_date, '%b %d, %Y')
+
+        if expiration_date.date() < datetime.now().date():
+            raise ValidationError("You're expiration date is already passed")
 
 
 class OpeningHourForm(forms.Form):
@@ -24,13 +26,14 @@ class OpeningHourForm(forms.Form):
     from_hour = forms.TimeField()
     to_hour = forms.TimeField()
 
-    def date_validation(self):
-        from_hour = self.cleaned_data['from_hour']
-        to_hour = self.cleaned_data['to_hour']
-        if from_hour < to_hour:
-            return True
-        else:
-            return False
+    def clean(self):
+        cleaned_data = super().clean()
+        from_hour = to_hour = None
+        from_hour = self.cleaned_data.get('from_hour')
+        to_hour = self.cleaned_data.get('to_hour')
+
+        if not (from_hour < to_hour):
+            raise ValidationError("You're date arn't correct")
 
 
 class SpecialDayForm(forms.Form):
@@ -40,18 +43,24 @@ class SpecialDayForm(forms.Form):
     from_hour = forms.TimeField(required=False)
     to_hour = forms.TimeField(required=False)
 
-    def date_validation(self):
+    def clean(self):
+        cleaned_data = super().clean()
         from_date = datetime.strptime(
-            self.cleaned_data['from_date'], '%b %d, %Y')
-        to_date = datetime.strptime(
-            self.cleaned_data['to_date'], '%b %d, %Y')
-        from_hour = self.cleaned_data['from_hour']
-        to_hour = self.cleaned_data['to_hour']
+            cleaned_data.get('from_date'), '%b %d, %Y')
 
-        if to_date != None and (to_hour != None or from_hour != None):
-            return False
-        if to_date != None and from_date >= to_date:
-            return False
-        elif from_hour != None and to_hour != None and from_hour >= to_hour:
-            return False
-        return True
+        from_hour = cleaned_data.get('from_hour')
+        to_hour = cleaned_data.get('to_hour')
+        to_date = None
+        if cleaned_data.get('to_date'):
+            to_date = datetime.strptime(
+                cleaned_data.get('to_date'), '%b %d, %Y')
+
+        if to_date != None:
+            if to_hour != None or from_hour != None:
+                raise ValidationError(
+                    "If two date are selected, you can't select an hour")
+            elif to_date <= from_date:
+                raise ValidationError("Invalid date")
+        elif from_hour != None and to_hour != None:
+            if to_hour <= from_hour:
+                raise ValidationError("Invalid hour")

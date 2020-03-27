@@ -109,13 +109,15 @@ class SpecialDay(models.Model):
         'Fridge', on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.to_date != None and (self.to_hour != None or self.from_hour != None):
-            raise ValidationError("If two date are selected, you can't select an hour")
-        if self.to_date != None and self.from_date >= self.to_date:
-            raise ValidationError("Incorrect date")
-        if self.from_hour != None and self.to_hour != None and self.from_hour >= self.to_hour:
-            raise ValidationError("Incorrect hour")
-        super().save(*args, **kwargs)
+        if self.to_date != None:
+            if self.to_hour != None or self.from_hour != None:
+                raise ValidationError(
+                    "If two date are selected, you can't select an hour")
+            elif self.to_date <= self.from_date:
+                raise ValidationError("Invalid date")
+        elif self.from_hour != None and self.to_hour != None:
+            if self.to_hour <= self.from_hour:
+                raise ValidationError("Invalid hour")
 
     def __str__(self):
         return str(self.from_date)

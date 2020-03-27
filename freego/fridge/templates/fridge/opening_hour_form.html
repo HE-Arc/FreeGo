@@ -1,50 +1,36 @@
-{% extends 'fridge/base.html' %}
+{% extends 'fridge/base_admin.html' %}
 
 {% block content %}
-<nav>
-    <div class="nav-wrapper" style="background-color: rgb(87, 161, 173);">
-        <a href="#" class="brand-logo left">{{ fridge.name }}</a>
-        <a class="brand-logo right" href="{% url 'fridge:admin-form' %}">
-            <i class="large material-icons">add_circle</i>
-        </a>
+<form action="" method="post">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="input-field col s6">
+            <select name="weekday" id="weekday" required>
+                <option value="0">Lundi</option>
+                <option value="1">Mardi</option>
+                <option value="2">Mercredi</option>
+                <option value="3">Jeudi</option>
+                <option value="4">Vendredi</option>
+                <option value="5">Samedi</option>
+                <option value="6">Dimanche</option>
+            </select>
+            <label>weekday</label>
+        </div>
     </div>
-</nav>
-<div class="container">
-    <form action="" method="post">
-        {% csrf_token %}
-
-        <div class="row">
-            <div class="input-field col s6">
-                <select name="weekday" id="weekday" required>
-                    <option value="0">Lundi</option>
-                    <option value="1">Mardi</option>
-                    <option value="2">Mercredi</option>
-                    <option value="3">Jeudi</option>
-                    <option value="4">Vendredi</option>
-                    <option value="5">Samedi</option>
-                    <option value="6">Dimanche</option>
-                </select>
-                <label>weekday</label>
-            </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="from_hour" name="from_hour" type="time" required />
+            <span>from_hour</span>
         </div>
-        <div class="row">
-            <div class="input-field col s6">
-                <input id="from_hour" name="from_hour" type="time" required />
-                <span>from_hour</span>
-            </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="to_hour" name="to_hour" type="time" required />
+            <span>to_hour</span>
         </div>
-        <div class="row">
-            <div class="input-field col s6">
-                <input id="to_hour" name="to_hour" type="time" required />
-                <span>to_hour</span>
-            </div>
-        </div>
+    </div>
 
-        <input type="submit" value="Save" />
-    </form>
-</div>
-
-{% load static %}
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="{% static "fridge/script.js" %}"></script>
+    <input type="submit" value="Save" />
+</form>
 {% endblock %}

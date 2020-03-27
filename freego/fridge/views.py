@@ -105,7 +105,8 @@ class AdminCreateView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
-        if form.is_valid() and form.date_validation():
+        if form.is_valid():
+            print(form)
             food = Food(
                 name=form.cleaned_data['name'],
                 vegetarian=form.cleaned_data['vegetarian'],
@@ -152,7 +153,7 @@ class OpeningHourCreateView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
-        if form.is_valid() and form.date_validation():
+        if form.is_valid():
             openingHour = OpeningHour(
                 weekday=form.cleaned_data['weekday'],
                 from_hour=form.cleaned_data['from_hour'],
@@ -178,12 +179,17 @@ class SpecialDayCreateView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
-        if form.is_valid() and form.date_validation():
+        if form.is_valid():
+            if form.cleaned_data['to_date']:
+                to_date = datetime.strptime(
+                    form.cleaned_data['to_date'], '%b %d, %Y')
+            else:
+                to_date = None
+
             specialDay = SpecialDay(
                 from_date=datetime.strptime(
                     form.cleaned_data['from_date'], '%b %d, %Y'),
-                to_date=datetime.strptime(
-                    form.cleaned_data['to_date'], '%b %d, %Y'),
+                to_date=to_date,
                 from_hour=form.cleaned_data['from_hour'],
                 to_hour=form.cleaned_data['to_hour'],
                 fridge=Fridge.objects.filter(user=request.user).first()
