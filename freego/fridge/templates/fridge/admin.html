@@ -16,7 +16,7 @@
                 </a>
             </li>
             <li>
-                <a href="{% url 'fridge:admin-form' %}">
+                <a href="{% url 'fridge:admin-food-form' %}">
                     <i class="large material-icons">add_circle</i>
                 </a>
             </li>
@@ -33,7 +33,7 @@
             {% for food in fridge.get_foods %}
             <li class="collection-item">
                 <div>{{ food.name }}
-                    <a href="{% url 'fridge:admin-delete' food.pk %}" class="secondary-content">
+                    <a href="{% url 'fridge:admin-food-delete' food.pk %}" class="secondary-content">
                         <i class="material-icons">cancel</i>
                     </a>
                 </div>

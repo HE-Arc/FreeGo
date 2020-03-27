@@ -15,71 +15,9 @@ def index(request):
     return render(request, 'fridge/index.html', context)
 
 ######################################
-#               Fridge               #
-######################################
-
-
-class FridgeListView(generic.ListView):
-    model = Fridge
-
-
-class FridgeDetailView(generic.DetailView):
-    model = Fridge
-
-
-class FridgeCreateView(generic.CreateView):
-    model = Fridge
-    fields = ['name', 'address', 'NPA', 'phone_number', 'user']
-    success_url = reverse_lazy('fridge:fridges')
-
-
-class FridgeUpdateView(generic.UpdateView):
-    model = Fridge
-    template_name_suffix = '_update_form'
-    fields = ['name', 'address', 'NPA', 'phone_number', 'user']
-    success_url = reverse_lazy('fridge:fridges')
-
-
-class FridgeDeleteView(generic.DeleteView):
-    model = Fridge
-    success_url = reverse_lazy('fridge:fridges')
-
-
-####################################
-#               Food               #
-####################################
-
-class FoodListView(generic.ListView):
-    model = Food
-
-
-class FoodDetailView(generic.DetailView):
-    model = Food
-
-
-class FoodCreateView(generic.CreateView):
-    model = Food
-    fields = ['name', 'vegetarian', 'vegan',
-              'expiration_date', 'fridge', 'user']
-    success_url = reverse_lazy('fridge:foods')
-
-
-class FoodUpdateView(generic.UpdateView):
-    model = Food
-    template_name_suffix = '_update_form'
-    fields = ['name', 'vegetarian', 'vegan',
-              'expiration_date', 'fridge', 'user']
-    success_url = reverse_lazy('fridge:foods')
-
-
-class FoodDeleteView(generic.DeleteView):
-    model = Food
-    success_url = reverse_lazy('fridge:foods')
-
-
-######################################
 #               Admin                #
 ######################################
+
 
 class AdminIndexView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'fridge/admin.html'
@@ -92,7 +30,22 @@ class AdminIndexView(LoginRequiredMixin, generic.TemplateView):
         return context
 
 
-class AdminCreateView(LoginRequiredMixin, View):
+class AdminDetailView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'fridge/admin_detail.html'
+    login_url = 'admin/login/?next=/admin/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fridge'] = Fridge.objects.filter(
+            user=self.request.user).first()
+        return context
+
+
+######################################
+#                Food                #
+######################################
+
+class FoodCreateView(LoginRequiredMixin, View):
     form_class = FoodForm
     template_name = 'fridge/food_form.html'
     initial = {'name': 'n', 'vegetarian': True,
@@ -122,22 +75,18 @@ class AdminCreateView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
-class AdminDeleteView(LoginRequiredMixin, generic.DeleteView):
+class FoodDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Food
-    template_name = 'fridge/food_confirm_delete.html'
     success_url = reverse_lazy('fridge:admins')
     login_url = 'admin/login/?next=/admin/'
 
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
-class AdminDetailView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'fridge/admin_detail.html'
-    login_url = 'admin/login/?next=/admin/'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['fridge'] = Fridge.objects.filter(
-            user=self.request.user).first()
-        return context
+######################################
+#            Opening hour            #
+######################################
 
 
 class OpeningHourCreateView(LoginRequiredMixin, View):
@@ -164,6 +113,19 @@ class OpeningHourCreateView(LoginRequiredMixin, View):
             return redirect('fridge:admin-detail')
         return render(request, self.template_name, {'form': form})
 
+
+class OpeningHourDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = OpeningHour
+    success_url = reverse_lazy('fridge:admin-detail')
+    login_url = 'admin/login/?next=/admin/'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+
+######################################
+#            Special day             #
+######################################
 
 class SpecialDayCreateView(LoginRequiredMixin, View):
     form_class = SpecialDayForm
@@ -199,7 +161,7 @@ class SpecialDayCreateView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
-class SpecialDayDeleteView(generic.DeleteView):
+class SpecialDayDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = SpecialDay
     success_url = reverse_lazy('fridge:admin-detail')
     login_url = 'admin/login/?next=/admin/'
@@ -207,13 +169,9 @@ class SpecialDayDeleteView(generic.DeleteView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
-class OpeningHourDeleteView(generic.DeleteView):
-    model = OpeningHour
-    success_url = reverse_lazy('fridge:admin-detail')
-    login_url = 'admin/login/?next=/admin/'
-
-    def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
+######################################
+#             Dashboard              #
+######################################
 
 
 class DashboardView(generic.TemplateView):

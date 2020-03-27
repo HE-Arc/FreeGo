@@ -6,27 +6,26 @@ from . import views
 app_name = 'fridge'
 
 urlpatterns = [
-    # path('', views.index, name='index'),
-    # Fridge
-    path('fridges', views.FridgeListView.as_view(), name='fridges'),
-    path('fridge/detail/<pk>', views.FridgeDetailView.as_view(), name='fridge-detail'),
-    path('fridge/new', views.FridgeCreateView.as_view(), name='fridge-form'),
-    path('fridge/<pk>/update', views.FridgeUpdateView.as_view(), name='fridge-update-form'),
-    path('fridge/<pk>/delete', views.FridgeDeleteView.as_view(), name='fridge-delete'),
-    # Food
-    path('foods', views.FoodListView.as_view(), name='foods'),
-    path('food/detail/<pk>', views.FoodDetailView.as_view(), name='food-detail'),
-    path('food/new', views.FoodCreateView.as_view(), name='food-form'),
-    path('food/<pk>/update', views.FoodUpdateView.as_view(), name='food-update-form'),
-    path('food/<pk>/delete', views.FoodDeleteView.as_view(), name='food-delete'),
+    path('', views.DashboardView.as_view(), name='dashboard'),
+
     # Admin
     path('myadmin', views.AdminIndexView.as_view(), name='admins'),
-    path('myadmin/food/new', views.AdminCreateView.as_view(), name='admin-form'),
-    path('myadmin/<pk>/delete', views.AdminDeleteView.as_view(), name='admin-delete'),
     path('myadmin/detail', views.AdminDetailView.as_view(), name='admin-detail'),
-    path('myadmin/schedule/new', views.OpeningHourCreateView.as_view(), name='admin-schedule-new'),
-    path('', views.DashboardView.as_view(), name='dashboard'),
-    path('myadmin/specialday/new', views.SpecialDayCreateView.as_view(), name='admin-specialday-new'),
-    path('myadmin/specialday/<pk>/delete', views.SpecialDayDeleteView.as_view(), name='admin-specialday-delete'),
-    path('myadmin/schedule/<pk>/delete', views.OpeningHourDeleteView.as_view(), name='admin-schedule-delete')
+
+    # Food
+    path('myadmin/food/new', views.FoodCreateView.as_view(), name='admin-food-form'),
+    path('myadmin/food/<pk>/delete',
+         views.FoodDeleteView.as_view(), name='admin-food-delete'),
+
+    # Opening Day
+    path('myadmin/openinghour/new', views.OpeningHourCreateView.as_view(),
+         name='admin-openinghour-form'),
+    path('myadmin/openinghour/<pk>/delete',
+         views.OpeningHourDeleteView.as_view(), name='admin-openinghour-delete'),
+
+    # Special Day
+    path('myadmin/specialday/new', views.SpecialDayCreateView.as_view(),
+         name='admin-specialday-form'),
+    path('myadmin/specialday/<pk>/delete',
+         views.SpecialDayDeleteView.as_view(), name='admin-specialday-delete')
 ]
