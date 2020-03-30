@@ -7,10 +7,16 @@
     <li class="collection-item">
         <div>{{ food.name }}
             <a href="#" class="secondary-content">
-                <i class="material-icons">eco</i><!-- TODO find better icons -->
-                <i class="material-icons">face</i><!-- TODO find better icons -->
-                <i class="material-icons">bookmark_border</i>
-            </a>
+                <i class="material-icons">eco</i></a><!-- TODO find better icons -->
+            <a href="#" class="secondary-content">
+                <i class="material-icons">face</i></a><!-- TODO find better icons -->
+            {% if food.is_reserve %}
+            <a href="{% url 'fridge:food-cancellation' food.pk %}" class="secondary-content">
+                <i class="material-icons">bookmar</i></a>
+            {% else %}
+            <a href="{% url 'fridge:food-reservation' food.pk %}" class="secondary-content">
+                <i class="material-icons">bookmark_borderk</i></a>
+            {% endif %}
         </div>
     </li>
     {% endfor %}

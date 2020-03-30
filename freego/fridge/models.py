@@ -40,7 +40,7 @@ class Food(models.Model):
     vegan = models.BooleanField()
     expiration_date = models.DateField()
     fridge = models.ForeignKey(
-        'Fridge', on_delete=models.CASCADE, null=True, blank=True)
+        Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -48,6 +48,9 @@ class Food(models.Model):
         if self.expiration_date < datetime.now():
             raise ValidationError("Incorrect hour")
         super().save(*args, **kwargs)
+
+    def is_reserve(self):
+        return Reservation.objects.filter(food = self).count() != 0
 
     def __str__(self):
         return str(self.name)
@@ -58,12 +61,26 @@ class Reporting(models.Model):
     title = models.CharField(max_length=45)
     description = models.CharField(max_length=500)
     fridge = models.ForeignKey(
-        'Fridge', on_delete=models.CASCADE, null=True, blank=True)
+        Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.title)
+
+
+class Reservation(models.Model):
+    '''Reservation model'''
+    food = models.ForeignKey(
+        Food, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        r = Reservation.objects.filter(food = self.food)
+        if r and r[0].user == self.user:
+            raise ValidationError("Reservation error hour")
+        super().save(*args, **kwargs)
 
 
 #####################################

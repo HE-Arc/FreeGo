@@ -4,7 +4,7 @@ from django.views import generic, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Fridge, Food, OpeningHour, SpecialDay
+from .models import Fridge, Food, OpeningHour, SpecialDay, Reservation
 from .forms import FoodForm, OpeningHourForm, SpecialDayForm
 
 from datetime import datetime
@@ -89,9 +89,9 @@ class FoodListView(generic.ListView):
     model = Food
 
     def get_queryset(self):
-        fridge = Fridge.objects.get(pk = self.kwargs['pk'])
-        print(Food.objects.filter(fridge = fridge))
-        return Food.objects.filter(fridge = fridge)
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        print(Food.objects.filter(fridge=fridge))
+        return Food.objects.filter(fridge=fridge)
 
 
 ######################################
@@ -192,3 +192,28 @@ class DashboardView(generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context['fridge_list'] = Fridge.objects.all()
         return context
+
+######################################
+#            Reservation             #
+######################################
+
+
+class FoodReservation(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        food = Food.objects.get(pk=self.kwargs['pk'])
+        reservation = Reservation(food=food, user=request.user)
+        reservation.save()
+        return redirect('fridge:food-list', food.fridge.pk)
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, args, kwargs) # TODO find a better solutions
+
+class FoodCancellation(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        food = Food.objects.get(pk=self.kwargs['pk'])
+        reservation = Reservation.objects.get(food = food)
+        reservation.delete()
+        return redirect('fridge:food-list', food.fridge.pk)
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, args, kwargs) # TODO find a better solutions
