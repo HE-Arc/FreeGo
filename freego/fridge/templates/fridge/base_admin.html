@@ -22,14 +22,24 @@
                     <li>{{ fridge.name }}</li>
                 </ul>
                 <ul class="brand-logo right">
-                    {% if request.path == '/myadmin/detail' %}
-                    <!-- TODO check if better solutions -->
+                    {% url 'fridge:admin-detail' as admin_detail %}
+                    {% if admin_detail %}
                     <li>
                         <a href="{% url 'fridge:admins' %}">
                             <i class="large material-icons">home</i>
                         </a>
                     </li>
                     {% endif %}
+
+                    {% url 'fridge:admins' as admins %}
+                    {% if admins %}
+                    <li>
+                        <a href="{% url 'fridge:admin-detail' %}">
+                            <i class="large material-icons">settings</i>
+                        </a>
+                    </li>
+                    {% endif %}
+
                     <li>
                         <a href="{% url 'fridge:admin-food-form' %}">
                             <i class="large material-icons">add_circle</i>
@@ -58,7 +68,19 @@
         </div>
         {% endif %}
 
+        {% if user.is_authenticated %}
+
         {% block content %}{% endblock %}
+
+        {% else %}
+
+        <section class="section">
+            <div class="container">
+                <p>Vous n'êtes pas authentifié!!</p>
+            </div>
+        </section>
+
+        {% endif %}
     </div>
 
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

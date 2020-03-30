@@ -16,6 +16,7 @@ urlpatterns = [
     path('myadmin/food/new', views.FoodCreateView.as_view(), name='admin-food-form'),
     path('myadmin/food/<pk>/delete',
          views.FoodDeleteView.as_view(), name='admin-food-delete'),
+    path('food/<pk>/list', views.FoodListView.as_view(), name='food-list'),
 
     # Opening Day
     path('myadmin/openinghour/new', views.OpeningHourCreateView.as_view(),

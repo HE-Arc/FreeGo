@@ -1,0 +1,19 @@
+{% extends 'fridge/base.html' %}
+{% load static %}
+{% block content %}
+
+<ul class="collection with-header">
+    {% for food in food_list %}
+    <li class="collection-item">
+        <div>{{ food.name }}
+            <a href="#" class="secondary-content">
+                <ul>
+                    <li><i class="material-icons">bookmark_border</i></li>
+                </ul>
+            </a>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

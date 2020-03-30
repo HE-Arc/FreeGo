@@ -84,6 +84,16 @@ class FoodDeleteView(LoginRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
 
+class FoodListView(generic.ListView):
+    template_name = 'fridge/food_list.html'
+    model = Food
+
+    def get_queryset(self):
+        fridge = Fridge.objects.get(pk = self.kwargs['pk'])
+        print(Food.objects.filter(fridge = fridge))
+        return Food.objects.filter(fridge = fridge)
+
+
 ######################################
 #            Opening hour            #
 ######################################
@@ -110,6 +120,7 @@ class OpeningHourCreateView(LoginRequiredMixin, View):
                 fridge=Fridge.objects.filter(user=request.user).first()
             )
             openingHour.save()
+
             return redirect('fridge:admin-detail')
         return render(request, self.template_name, {'form': form})
 
