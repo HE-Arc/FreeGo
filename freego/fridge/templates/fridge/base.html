@@ -23,11 +23,8 @@
   </div>
 
   <!-- BODY -->
-  <div class="container">
 
-    {% block content %}{% endblock %}
-
-  </div>
+  {% block content %}{% endblock %}
 
   <!-- NAVBAR BOTTOM-->
   <div class="navbar-bottom">
@@ -35,11 +32,11 @@
       <div class="nav-wrapper" style="background-color: rgb(87, 161, 173);">
         <div class="nav-content">
           <ul class="tabs tabs-transparent">
-            <li class="tab"><a href="#!"><i class="material-icons">home</i></a></li>
-            <li class="tab"><a href="{% url 'fridge:dashboard' %}"><i class="material-icons">list</i></a></li>
-            <li class="tab"><a href="#!"><i class="material-icons">map</i></a></li>
-            <li class="tab"><a href="#!"><i class="material-icons">favorite</i></a></li>
-            <li class="tab"><a href="#!"><i class="material-icons">account_circle</i></a></li>
+            <li class="tab"><a href="{% url 'fridge:home' %}"><i class="material-icons">home</i></a></li>
+            <li class="tab"><a href="{% url 'fridge:fridge-list' %}"><i class="material-icons">list</i></a></li>
+            <li class="tab"><a href="{% url 'fridge:map' %}"><i class="material-icons">map</i></a></li>
+            <li class="tab"><a href="{% url 'fridge:favorite' %}"><i class="material-icons">favorite</i></a></li>
+            <li class="tab"><a href="{% url 'fridge:settings' %}"><i class="material-icons">account_circle</i></a></li>
           </ul>
         </div>
       </div>

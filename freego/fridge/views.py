@@ -185,13 +185,14 @@ class SpecialDayDeleteView(LoginRequiredMixin, generic.DeleteView):
 ######################################
 
 
-class DashboardView(generic.TemplateView):
-    template_name = 'fridge/dashboard.html'
+class FridgeListView(generic.TemplateView):
+    template_name = 'fridge/fridge_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fridge_list'] = Fridge.objects.all()
         return context
+
 
 ######################################
 #            Reservation             #
@@ -206,14 +207,38 @@ class FoodReservation(LoginRequiredMixin, View):
         return redirect('fridge:food-list', food.fridge.pk)
 
     def get(self, request, *args, **kwargs):
-        return self.post(request, args, kwargs) # TODO find a better solutions
+        return self.post(request, args, kwargs)  # TODO find a better solutions
+
 
 class FoodCancellation(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         food = Food.objects.get(pk=self.kwargs['pk'])
-        reservation = Reservation.objects.get(food = food)
+        reservation = Reservation.objects.get(food=food)
         reservation.delete()
         return redirect('fridge:food-list', food.fridge.pk)
 
     def get(self, request, *args, **kwargs):
-        return self.post(request, args, kwargs) # TODO find a better solutions
+        return self.post(request, args, kwargs)  # TODO find a better solutions
+
+
+
+######################################
+#              Settings              #
+######################################
+
+class SettingsView(generic.TemplateView):
+    template_name = 'fridge/settings.html'
+
+
+######################################
+#                TODO                #
+######################################
+
+class HomeView(generic.TemplateView):
+    template_name = 'fridge/home.html'
+
+class MapView(generic.TemplateView):
+    template_name = 'fridge/map.html'
+
+class FavoriteView(generic.TemplateView):
+    template_name = 'fridge/favorite.html'

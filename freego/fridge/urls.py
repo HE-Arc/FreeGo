@@ -6,14 +6,15 @@ from . import views
 app_name = 'fridge'
 
 urlpatterns = [
-    path('', views.DashboardView.as_view(), name='dashboard'),
+    path('', views.FridgeListView.as_view(), name='fridge-list'),
 
     # Admin
     path('myadmin', views.AdminIndexView.as_view(), name='admins'),
     path('myadmin/detail', views.AdminDetailView.as_view(), name='admin-detail'),
 
     # Food
-    path('myadmin/food/new', views.FoodCreateView.as_view(), name='admin-food-form'),
+    path('myadmin/food/new', views.FoodCreateView.as_view(),
+         name='admin-food-form'),
     path('myadmin/food/<pk>/delete', views.FoodDeleteView.as_view(),
          name='admin-food-delete'),
     path('food/<pk>/list', views.FoodListView.as_view(), name='food-list'),
@@ -34,5 +35,13 @@ urlpatterns = [
     path('food/<pk>/reservation', views.FoodReservation.as_view(),
          name='food-reservation'),
     path('food/<pk>/cancellation', views.FoodCancellation.as_view(),
-         name='food-cancellation')
+         name='food-cancellation'),
+
+    # Settings
+    path('settings', views.SettingsView.as_view(), name='settings'),
+
+    # TODO
+    path('home', views.HomeView.as_view(), name='home'),
+    path('map', views.MapView.as_view(), name='map'),
+    path('favorite', views.FavoriteView.as_view(), name='favorite')
 ]
