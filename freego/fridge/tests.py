@@ -51,6 +51,7 @@ class OpeningHourModelTests(TestCase):
 
         oh.save()
         self.assertIsNotNone(oh)
+        self.assertEqual(len(OpeningHour.objects.all()), 1)
 
     def test_to_hour_equal_from_hour(self):
         """
@@ -147,7 +148,7 @@ class SpecialDayModelTests(TestCase):
 
     def test_invalid_argument(self):
         """
-        if two date are selected, you can't select an hour
+        missing from_date
         """
 
         fridge = Fridge.objects.get(name='monfridge')
@@ -158,6 +159,49 @@ class SpecialDayModelTests(TestCase):
 
         with self.assertRaises(ValidationError):
             sd.save()
+
+    def test_from_date(self):
+        fridge = Fridge.objects.get(name='monfridge')
+
+        from_date = date(2020, 5, 10)
+        sd = SpecialDay(from_date=from_date)
+        sd.save()
+
+        self.assertIsNotNone(sd)
+        self.assertEqual(len(SpecialDay.objects.all()), 1)
+
+    def test_from_date_to_date(self):
+        fridge = Fridge.objects.get(name='monfridge')
+
+        from_date = date(2020, 5, 10)
+        to_date = date(2020, 6, 8)
+        sd = SpecialDay(from_date=from_date, to_date=to_date)
+        sd.save()
+
+        self.assertIsNotNone(sd)
+        self.assertEqual(len(SpecialDay.objects.all()), 1)
+
+    def test_from_date_from_hour(self):
+        fridge = Fridge.objects.get(name='monfridge')
+
+        from_date = date(2020, 5, 10)
+        from_hour = time(5, 5, 5)
+        sd = SpecialDay(from_date=from_date, from_hour=from_hour)
+        sd.save()
+
+        self.assertIsNotNone(sd)
+        self.assertEqual(len(SpecialDay.objects.all()), 1)
+
+    def test_from_date_to_hour(self):
+        fridge = Fridge.objects.get(name='monfridge')
+
+        from_date = date(2020, 5, 10)
+        to_hour = time(5, 5, 5)
+        sd = SpecialDay(from_date=from_date, to_hour=to_hour)
+        sd.save()
+
+        self.assertIsNotNone(sd)
+        self.assertEqual(len(SpecialDay.objects.all()), 1)
 
 
 class FoodFormTest(TestCase):

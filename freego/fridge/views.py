@@ -84,6 +84,7 @@ class FridgeListView(generic.TemplateView):
         context['fridge_list'] = Fridge.objects.all()
         return context
 
+
 class FridgeDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Fridge
     success_url = reverse_lazy('fridge:myadmin')

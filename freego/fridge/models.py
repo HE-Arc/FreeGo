@@ -25,13 +25,13 @@ class Fridge(models.Model):
         return str(self.name)
 
     def delete(self, *args, **kwargs):
-        self.image.delete(save = False)
+        self.image.delete(save=False)
         super().delete(*args, **kwargs)
 
     def get_opening_hours(self):
         return OpeningHour.objects.filter(fridge=self)
 
-    def get_special_hour(self):
+    def get_special_day(self):
         return SpecialDay.objects.filter(fridge=self)
 
     def get_foods(self):
@@ -140,6 +140,7 @@ class SpecialDay(models.Model):
         elif self.from_hour != None and self.to_hour != None:
             if self.to_hour <= self.from_hour:
                 raise ValidationError("Invalid hour")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.from_date)

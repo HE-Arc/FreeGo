@@ -49,7 +49,7 @@
 
     <div class="row">
         <div class="input-field col s6">
-            <select name="user">
+            <select name="user" required>
                 <option value="" disabled selected>User</option>
 
                 {% for user in user_all %}
@@ -57,11 +57,11 @@
                 {% endfor %}
 
             </select>
-            <label>Materialize Select</label>
+            <label>User selection</label>
         </div>
     </div>
 
-    <button type="submit">Valider</button>
+    <button class="btn waves-effect waves-light" type="submit" name="action">Valider</button>
 </form>
 
 {% endblock %}

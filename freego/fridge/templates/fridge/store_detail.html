@@ -1,13 +1,13 @@
 {% extends 'fridge/base_store.html' %}
 
 {% block content %}
-<h4>Adresse</h4>
+<h5>Adresse</h5>
 <p>{{ fridge.address }}, {{ fridge.NPA }}</p>
 
-<h4>Numéro de téléphone</h4>
+<h5>Numéro de téléphone</h5>
 <p>{{ fridge.phone_number }}</p>
 
-<h4>Horaire</h4>
+<h5>Horaire</h5>
 {% for oh in fridge.get_opening_hours %}
 <div>
     <p>{{ oh }} : {{ oh.from_hour }} - {{ oh.to_hour }}
@@ -21,8 +21,8 @@
     <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
 </a>
 
-<h4>Horaire spéciaux</h4>
-{% for sh in fridge.get_special_hour %}
+<h5>Horaire spéciaux</h5>
+{% for sh in fridge.get_special_day %}
 <div>
     <div>{{ sh }} : {{ sh.from_date }}
         <a href="{% url 'fridge:specialday-delete' sh.pk %}" class="secondary-content">
@@ -35,6 +35,6 @@
     <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
 </a>
 
-<h4>Utilisateur</h4>
+<h5>Utilisateur</h5>
 <p>{{ fridge.user }}</p>
 {% endblock %}

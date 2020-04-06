@@ -14,7 +14,6 @@
 
 <body>
     <div class="navbar-fixed">
-
         <nav class="nav-extended">
             <div class="nav-wrapper" style="background-color: rgb(87, 161, 173);">
                 <ul class="brand-logo left">
@@ -23,7 +22,8 @@
                 </ul>
                 <ul class="brand-logo right">
                     {% url 'fridge:store-detail' as store_detail %}
-                    {% if store_detail %}<!-- TODO find error -->
+                    {% if request.path == store_detail %}
+                    <!-- TODO find error -->
                     <li>
                         <a href="{% url 'fridge:store' %}">
                             <i class="large material-icons">home</i>
@@ -32,7 +32,7 @@
                     {% endif %}
 
                     {% url 'fridge:store' as store %}
-                    {% if store %}
+                    {% if request.path == store %}
                     <li>
                         <a href="{% url 'fridge:store-detail' %}">
                             <i class="large material-icons">settings</i>

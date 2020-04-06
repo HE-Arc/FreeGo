@@ -17,14 +17,18 @@
         <div class="card-content">
           <b>Adresse</b>
           <p>{{ fridge.address }}</p>
-          <b>Horaire</b>
+          <b>Horaire</b><br>
           {% for oh in fridge.get_opening_hours %}
           <div>
             <p>{{ oh }} : {{ oh.from_hour }} - {{ oh.to_hour }}</p>
           </div>
           {% endfor %}
-          <b>Horaires spéciaux</b>
-          <p>TODO</p>
+          <b>Horaires spéciaux</b><br>
+          {% for sd in fridge.get_special_day %}
+          <div>
+            <p>{{ sd }} : {{ sd.from_date }}</p>
+          </div>
+          {% endfor %}
         </div>
       </div>
     </div>
