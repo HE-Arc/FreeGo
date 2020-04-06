@@ -1,4 +1,4 @@
-{% extends 'fridge/base_admin.html' %}
+{% extends 'fridge/base_store.html' %}
 
 {% block content %}
 <h4>Adresse</h4>
@@ -11,13 +11,13 @@
 {% for oh in fridge.get_opening_hours %}
 <div>
     <p>{{ oh }} : {{ oh.from_hour }} - {{ oh.to_hour }}
-        <a href="{% url 'fridge:admin-openinghour-delete' oh.pk %}" class="secondary-content">
+        <a href="{% url 'fridge:openinghour-delete' oh.pk %}" class="secondary-content">
             <i class="material-icons" style="width: 1rem;height: 1rem;color: red;">remove_circle</i>
         </a>
     </p>
 </div>
 {% endfor %}
-<a href="{% url 'fridge:admin-openinghour-form' %}">
+<a href="{% url 'fridge:openinghour-form' %}">
     <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
 </a>
 
@@ -25,13 +25,13 @@
 {% for sh in fridge.get_special_hour %}
 <div>
     <div>{{ sh }} : {{ sh.from_date }}
-        <a href="{% url 'fridge:admin-specialday-delete' sh.pk %}" class="secondary-content">
+        <a href="{% url 'fridge:specialday-delete' sh.pk %}" class="secondary-content">
             <i class="material-icons" style="width: 1rem;height: 1rem;color: red;">remove_circle</i>
         </a>
     </div>
 </div>
 {% endfor %}
-<a href="{% url 'fridge:admin-specialday-form' %}">
+<a href="{% url 'fridge:specialday-form' %}">
     <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
 </a>
 

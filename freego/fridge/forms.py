@@ -2,6 +2,9 @@ from django import forms
 from datetime import datetime, date
 from django.core.exceptions import ValidationError
 
+# Constant
+DATE_FORMAT = '%b %d, %Y'
+
 
 class FoodForm(forms.Form):
     '''Food form'''
@@ -14,7 +17,7 @@ class FoodForm(forms.Form):
         cleaned_data = super().clean()
         expiration_date = cleaned_data.get('expiration_date')
         expiration_date = datetime.strptime(
-            expiration_date, '%b %d, %Y')
+            expiration_date, DATE_FORMAT)
 
         if expiration_date.date() < datetime.now().date():
             raise ValidationError("You're expiration date is already passed")
@@ -46,14 +49,14 @@ class SpecialDayForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         from_date = datetime.strptime(
-            cleaned_data.get('from_date'), '%b %d, %Y')
+            cleaned_data.get('from_date'), DATE_FORMAT)
 
         from_hour = cleaned_data.get('from_hour')
         to_hour = cleaned_data.get('to_hour')
         to_date = None
         if cleaned_data.get('to_date'):
             to_date = datetime.strptime(
-                cleaned_data.get('to_date'), '%b %d, %Y')
+                cleaned_data.get('to_date'), DATE_FORMAT)
 
         if to_date != None:
             if to_hour != None or from_hour != None:

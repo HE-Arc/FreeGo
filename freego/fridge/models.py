@@ -17,11 +17,16 @@ class Fridge(models.Model):
     address = models.CharField(max_length=45)
     NPA = models.CharField(max_length=45)
     phone_number = models.CharField(max_length=12)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
+
+    def delete(self, *args, **kwargs):
+        self.image.delete(save = False)
+        super().delete(*args, **kwargs)
 
     def get_opening_hours(self):
         return OpeningHour.objects.filter(fridge=self)
@@ -50,7 +55,7 @@ class Food(models.Model):
         super().save(*args, **kwargs)
 
     def is_reserve(self):
-        return Reservation.objects.filter(food = self).count() != 0
+        return Reservation.objects.filter(food=self).count() != 0
 
     def __str__(self):
         return str(self.name)
@@ -77,7 +82,7 @@ class Reservation(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        r = Reservation.objects.filter(food = self.food)
+        r = Reservation.objects.filter(food=self.food)
         if r and r[0].user == self.user:
             raise ValidationError("Reservation error hour")
         super().save(*args, **kwargs)

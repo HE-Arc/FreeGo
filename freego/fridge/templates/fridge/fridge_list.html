@@ -10,7 +10,7 @@
       <div class="card">
         <a href="{% url 'fridge:food-list' fridge.pk %}">
           <div class="card-image">
-            <img src="{% static "fridge/office.JPG" %}">
+            <img src="{{ fridge.image.url}}" alt="{{ fridge.title }}">
             <span class="card-title">{{ fridge.name }}</span>
           </div>
         </a>
