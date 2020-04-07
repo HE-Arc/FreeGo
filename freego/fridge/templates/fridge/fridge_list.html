@@ -1,0 +1,39 @@
+{% extends 'fridge/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+
+    {% for fridge in fridge_list %}
+    <div class="col s10 offset-s1 m4">
+      <div class="card">
+        <a href="{% url 'fridge:food-list' fridge.pk %}">
+          <div class="card-image">
+            <img src="{{ fridge.image.url}}" alt="{{ fridge.title }}">
+            <span class="card-title">{{ fridge.name }}</span>
+          </div>
+        </a>
+        <div class="card-content">
+          <b>Adresse</b>
+          <p>{{ fridge.address }}</p>
+          <b>Horaire</b><br>
+          {% for oh in fridge.get_opening_hours %}
+          <div>
+            <p>{{ oh }} : {{ oh.from_hour }} - {{ oh.to_hour }}</p>
+          </div>
+          {% endfor %}
+          <b>Horaires spéciaux</b><br>
+          {% for sd in fridge.get_special_day %}
+          <div>
+            <p>{{ sd }} : {{ sd.from_date }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% endblock %}
