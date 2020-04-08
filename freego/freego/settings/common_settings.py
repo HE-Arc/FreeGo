@@ -15,16 +15,22 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# insta_project/settings.py
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
+<<<<<<< HEAD:freego/freego/settings.py
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '$g+b++)$rxeitv#3h7+e0k%=a)4)w3*ba(a-8vu(jy*_77irgs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+=======
+>>>>>>> cbf2ab651cf444e1bcd0af78b647c7b4d24c2e24:freego/freego/settings/common_settings.py
 ALLOWED_HOSTS = ['127.0.0.1']
 
 
@@ -71,6 +77,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'freego.wsgi.application'
 
 
+<<<<<<< HEAD:freego/freego/settings.py
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -96,6 +103,8 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
 }
+=======
+>>>>>>> cbf2ab651cf444e1bcd0af78b647c7b4d24c2e24:freego/freego/settings/common_settings.py
 
 
 # Password validation
