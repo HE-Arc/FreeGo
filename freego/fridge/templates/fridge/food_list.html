@@ -2,6 +2,13 @@
 {% load static %}
 {% block content %}
 
+<div class="row">
+    <div class="col s1">
+        <a href="{% url 'fridge:fridge-list' %}">
+            <i class="material-icons black-text">undo</i></a>
+    </div>
+</div>
+
 <div class="container">
     <ul class="collection with-header">
         {% for food in food_list %}
