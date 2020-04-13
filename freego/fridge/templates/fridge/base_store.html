@@ -20,10 +20,10 @@
                     <li><img src="{% static "fridge/logo.png" %}" style="width: 4rem;height: 4rem;"></li>
                     <li>{{ fridge.name }}</li>
                 </ul>
-                <ul class="brand-logo right">
+                <ul class="right">
                     {% url 'fridge:store-detail' as store_detail %}
-                    {% if request.path == store_detail %}
-                    <!-- TODO find error -->
+                    {% url 'fridge:food-form' as food_form %}
+                    {% if request.path == store_detail or request.path == food_form %}
                     <li>
                         <a href="{% url 'fridge:store' %}">
                             <i class="large material-icons">home</i>

@@ -93,13 +93,13 @@ class Reservation(models.Model):
 #####################################
 
 WEEKDAYS = [
-    (1, "Monday"),
-    (2, "Tuesday"),
-    (3, "Wednesday"),
-    (4, "Thursday"),
-    (5, "Friday"),
-    (6, "Saturday"),
-    (7, "Sunday"),
+    (1, "Lundi"),
+    (2, "Mardi"),
+    (3, "Mercredi"),
+    (4, "Jeudi"),
+    (5, "Vendredi"),
+    (6, "Samedi"),
+    (7, "Dimanche"),
 ]
 
 
@@ -118,7 +118,7 @@ class OpeningHour(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(WEEKDAYS[self.weekday][1])
+        return str(WEEKDAYS[self.weekday][1]) + " : " + str(self.from_hour) + "-" + str(self.to_hour)
 
 
 class SpecialDay(models.Model):
