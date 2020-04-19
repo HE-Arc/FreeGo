@@ -3,21 +3,28 @@
 {% block content %}
 {% load static %}
 
-<h1>Create Post Page</h1>
+<div class="row">
+    <div class="col s1">
+        <a href="{% url 'fridge:myadmin' %}">
+            <i class="material-icons black-text">undo</i></a>
+    </div>
+</div>
+
+<h4>Création de Free Go</h4>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="row">
         <div class="input-field col s6">
             <input id="name" name="name" type="text" required />
-            <label for="name">Name</label>
+            <label for="name">Nom</label>
         </div>
     </div>
 
     <div class="row">
         <div class="input-field col s6">
             <input id="address" name="address" type="text" required />
-            <label for="address">address</label>
+            <label for="address">Adresse</label>
         </div>
     </div>
 
@@ -31,14 +38,14 @@
     <div class="row">
         <div class="input-field col s6">
             <input id="phone_number" name="phone_number" type="text" required />
-            <label for="phone_number">phone_number</label>
+            <label for="phone_number">Numéro de téléphone</label>
         </div>
     </div>
 
     <div class="row">
         <div class="file-field input-field">
             <div class="btn">
-                <span>image</span>
+                <span>Images</span>
                 <input id="image" name="image" type="file">
             </div>
             <div class="file-path-wrapper">
@@ -50,14 +57,14 @@
     <div class="row">
         <div class="input-field col s6">
             <select name="user" required>
-                <option value="" disabled selected>User</option>
+                <option value="" disabled selected>Utilisateur</option>
 
                 {% for user in user_all %}
                 <option value="{{ user.id  }}">{{ user.username }}</option>
                 {% endfor %}
 
             </select>
-            <label>User selection</label>
+            <label>Sélection de l'utilisateur</label>
         </div>
     </div>
 
