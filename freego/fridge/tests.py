@@ -164,7 +164,7 @@ class SpecialDayModelTests(TestCase):
         fridge = Fridge.objects.get(name='monfridge')
 
         from_date = date(2020, 5, 10)
-        sd = SpecialDay(from_date=from_date)
+        sd = SpecialDay(from_date=from_date, fridge=fridge)
         sd.save()
 
         self.assertIsNotNone(sd)
@@ -175,7 +175,7 @@ class SpecialDayModelTests(TestCase):
 
         from_date = date(2020, 5, 10)
         to_date = date(2020, 6, 8)
-        sd = SpecialDay(from_date=from_date, to_date=to_date)
+        sd = SpecialDay(from_date=from_date, to_date=to_date, fridge=fridge)
         sd.save()
 
         self.assertIsNotNone(sd)
@@ -186,7 +186,8 @@ class SpecialDayModelTests(TestCase):
 
         from_date = date(2020, 5, 10)
         from_hour = time(5, 5, 5)
-        sd = SpecialDay(from_date=from_date, from_hour=from_hour)
+        sd = SpecialDay(from_date=from_date,
+                        from_hour=from_hour, fridge=fridge)
         sd.save()
 
         self.assertIsNotNone(sd)
@@ -197,7 +198,7 @@ class SpecialDayModelTests(TestCase):
 
         from_date = date(2020, 5, 10)
         to_hour = time(5, 5, 5)
-        sd = SpecialDay(from_date=from_date, to_hour=to_hour)
+        sd = SpecialDay(from_date=from_date, to_hour=to_hour, fridge=fridge)
         sd.save()
 
         self.assertIsNotNone(sd)

@@ -32,8 +32,8 @@ class OpeningHourForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         from_hour = to_hour = None
-        from_hour = self.cleaned_data.get('from_hour')
-        to_hour = self.cleaned_data.get('to_hour')
+        from_hour = cleaned_data.get('from_hour')
+        to_hour = cleaned_data.get('to_hour')
 
         if not (from_hour < to_hour):
             raise ValidationError("You're date arn't correct")
@@ -64,6 +64,5 @@ class SpecialDayForm(forms.Form):
                     "If two date are selected, you can't select an hour")
             elif to_date <= from_date:
                 raise ValidationError("Invalid date")
-        elif from_hour != None and to_hour != None:
-            if to_hour <= from_hour:
+        elif from_hour != None and to_hour != None and to_hour <= from_hour:
                 raise ValidationError("Invalid hour")

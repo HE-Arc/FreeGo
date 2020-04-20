@@ -164,13 +164,13 @@ class OpeningHourCreateView(LoginRequiredMixin, View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            openingHour = OpeningHour(
+            opening_hour = OpeningHour(
                 weekday=form.cleaned_data['weekday'],
                 from_hour=form.cleaned_data['from_hour'],
                 to_hour=form.cleaned_data['to_hour'],
                 fridge=Fridge.objects.filter(user=request.user).first()
             )
-            openingHour.save()
+            opening_hour.save()
 
             return redirect('fridge:store-detail')
         return render(request, self.template_name, {'form': form})
@@ -210,7 +210,7 @@ class SpecialDayCreateView(LoginRequiredMixin, View):
             else:
                 to_date = None
 
-            specialDay = SpecialDay(
+            special_day = SpecialDay(
                 from_date=datetime.strptime(
                     form.cleaned_data['from_date'], DATE_FORMAT),
                 to_date=to_date,
@@ -218,7 +218,7 @@ class SpecialDayCreateView(LoginRequiredMixin, View):
                 to_hour=form.cleaned_data['to_hour'],
                 fridge=Fridge.objects.filter(user=request.user).first()
             )
-            specialDay.save()
+            special_day.save()
             return redirect('fridge:store-detail')
         return render(request, self.template_name, {'form': form})
 
