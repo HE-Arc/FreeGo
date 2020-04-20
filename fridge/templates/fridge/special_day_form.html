@@ -1,0 +1,44 @@
+{% extends 'fridge/base_store.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col s1">
+        <a href="{% url 'fridge:store-detail' %}">
+            <i class="material-icons black-text">undo</i></a>
+    </div>
+</div>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="from_date" name="from_date" type="text" class="datepicker" required>
+            <label for="from_date">de la date</label>
+        </div>
+    </div>
+
+    <!-- if from_date -->
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="to_date" name="to_date" type="text" class="datepicker">
+            <label for="to_date">à la date</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="from_hour" name="from_hour" type="time" />
+            <span>de l'heure</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="to_hour" name="to_hour" type="time" />
+            <span>à l'heure</span>
+        </div>
+    </div>
+
+    <input type="submit" value="Save" />
+</form>
+{% endblock %}

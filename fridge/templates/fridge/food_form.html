@@ -1,0 +1,48 @@
+{% extends 'fridge/base_store.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col s1">
+        <a href="{% url 'fridge:store' %}">
+            <i class="material-icons black-text">undo</i></a>
+    </div>
+</div>
+
+
+<h4>Ajout de nourriture</h4>
+<form action="" method="post">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="name" name="name" type="text" required />
+            <label for="name">Nom</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <label>
+                <input id="vegetarian" name="vegetarian" class="filled-in" type="checkbox" />
+                <span>Végétarien</span>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <label>
+                <input id="vegan" name="vegan" class="filled-in" type="checkbox" />
+                <span>Vegan</span>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="expiration_date" name="expiration_date" type="text" class="datepicker" required>
+            <label for="expiration_date">Date d'expiration</label>
+        </div>
+    </div>
+
+    <button class="btn waves-effect waves-light" type="submit" name="action">Valider</button>
+</form>
+{% endblock %}
