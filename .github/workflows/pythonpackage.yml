@@ -26,13 +26,13 @@ jobs:
           # Version of MySQL to use
           mysql version: 'latest' # optional, default is latest
           # MYSQL_ROOT_PASSWORD - root superuser password
-          mysql root password: ${{ secrets.DATABASE_PASSWORD }} # optional, default is 
+          mysql root password: ${{ secrets.PASSWORD }} # optional, default is 
           # MYSQL_DATABASE - name for the default database that is created
-          mysql database: ${{ secrets.DATABASE_NAME }} # optional, default is 
+          mysql database: ${{ secrets.GROUPNAME }} # optional, default is 
           # MYSQL_USER - create the specified user with superuser power for created database
-          mysql user: ${{ secrets.DATABASE_USER }} # optional, default is 
+          mysql user: ${{ secrets.GROUPNAME }} # optional, default is 
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
-          mysql password: ${{ secrets.DATABASE_PASSWORD }} # optional, default is 
+          mysql password: ${{ secrets.PASSWORD }} # optional, default is 
       - name: Wait / Sleep
         uses: jakejarvis/wait-action@v0.1.0
         with:
