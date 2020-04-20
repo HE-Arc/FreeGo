@@ -8,7 +8,7 @@ from . import views
 app_name = 'fridge'
 
 urlpatterns = [
-    path('', views.FridgeListView.as_view(), name='fridge-list'),
+    path('fridge/list', views.FridgeListView.as_view(), name='fridge-list'),
 
     # Admin
     path('myadmin', views.AdminIndexView.as_view(), name='myadmin'),
@@ -50,7 +50,7 @@ urlpatterns = [
     path('settings', views.SettingsView.as_view(), name='settings'),
 
     # TODO (TB)
-    path('home', views.HomeView.as_view(), name='home'),
+    path('', views.HomeView.as_view(), name='home'),
     path('map', views.MapView.as_view(), name='map'),
     path('favorite', views.FavoriteView.as_view(), name='favorite')
 ]
