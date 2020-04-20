@@ -15,15 +15,15 @@
           </div>
         </a>
         <div class="card-content">
-          <b>Adresse</b>
+          <strong>Adresse</strong>
           <p>{{ fridge.address }}</p>
-          <b>Horaire</b><br>
+          <strong>Horaire</strong><br>
           {% for oh in fridge.get_opening_hours %}
           <div>
             <p>{{ oh }}</p>
           </div>
           {% endfor %}
-          <b>Horaires spéciaux</b><br>
+          <strong>Horaires spéciaux</strong><br>
           {% for sd in fridge.get_special_day %}
           <div>
             <p>{{ sd }}</p>

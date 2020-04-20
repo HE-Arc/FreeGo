@@ -137,9 +137,8 @@ class SpecialDay(models.Model):
                     "If two date are selected, you can't select an hour")
             elif self.to_date <= self.from_date:
                 raise ValidationError("Invalid date")
-        elif self.from_hour != None and self.to_hour != None:
-            if self.to_hour <= self.from_hour:
-                raise ValidationError("Invalid hour")
+        elif self.from_hour != None and self.to_hour != None and self.to_hour <= self.from_hour:
+            raise ValidationError("Invalid hour")
         super().save(*args, **kwargs)
 
     def __str__(self):
