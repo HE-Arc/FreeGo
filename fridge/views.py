@@ -13,11 +13,6 @@ from datetime import datetime
 LOGIN_URL = 'admin/login/?next=/admin/'
 DATE_FORMAT = '%b %d, %Y'
 
-
-def index(request):
-    context = {}
-    return render(request, 'fridge/index.html', context)
-
 ######################################
 #               Admin                #
 ######################################
