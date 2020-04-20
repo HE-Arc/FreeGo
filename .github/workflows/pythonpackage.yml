@@ -42,10 +42,10 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        run: python freego/manage.py migrate
+        run: python manage.py migrate
       - name: Run unit tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        run: python freego/manage.py test
+        run: python manage.py test
