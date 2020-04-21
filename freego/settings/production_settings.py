@@ -31,8 +31,8 @@ SECURE_REFERRER_POLICY = 'no-referrer'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('GROUPNAME'),
-        'USER': os.environ.get('GROUPNAME', 'root'),
+        'NAME': os.environ.get('NAME'),
+        'USER': os.environ.get('USER', 'root'),
         'PASSWORD': os.environ.get('PASSWORD', ''),
         'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
         'PORT': os.environ.get('MYSQL_PORT', '3306'),
