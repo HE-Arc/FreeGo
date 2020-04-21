@@ -1,35 +1,38 @@
+{% extends 'fridge/base_login.html' %}
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <title>Freego - Créer un compte</title>
-    <!-- CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="{% static "fridge/style.css" %}" type="text/css">
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-<body>
-    <h2>Créer un compte</h2>
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-        <p>
-            {{ field.label_tag }}<br>
-            {{ field }}
-            {% if field.help_text %}
-            <small style="color: grey">{{ field.help_text }}</small>
-            {% endif %}
-            {% for error in field.errors %}
-            <p style="color: red">{{ error }}</p>
-            {% endfor %}
-        </p>
-        {% endfor %}
-        <button type="submit">Créer un compte</button>
-    </form>
-    <!-- JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-</body>
-</html>
+{% block content %}
+
+<h4 class="center-align">S'inscrire</h4>
+<form method="post" class="col s12">
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="username" name="username" type="text" required />
+      <label for="username">Nom d'utilisateur : </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="email" name="email" type="email" required />
+      <label for="email">Adresse email : </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="password1" name="password1" type="password" required />
+      <label for="password1">Mot de passe: </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="password2" name="password2" type="password" required />
+      <label for="password2">Confirmation du mot de passe: </label>
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn waves-effect waves-light col s12" type="submit" name="action">Créer un compte</button>
+  </div>
+</form>
+{% endblock %}

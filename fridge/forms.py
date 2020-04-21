@@ -72,6 +72,7 @@ class SpecialDayForm(forms.Form):
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Requis. Remplissez avec une adresse email valide.')
 
+
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2', )

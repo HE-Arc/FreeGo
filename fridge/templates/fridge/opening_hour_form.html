@@ -9,12 +9,12 @@
     </div>
 </div>
 
-
-<form action="" method="post">
+<h4>Horaire d'ouverture</h4>
+<form method="post" class="col s12">
     {% csrf_token %}
 
     <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s12">
             <select name="weekday" id="weekday" required>
                 <option value="0">Lundi</option>
                 <option value="1">Mardi</option>
@@ -28,18 +28,20 @@
         </div>
     </div>
     <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s12">
             <input id="from_hour" name="from_hour" type="time" required />
             <span>de l'heure</span>
         </div>
     </div>
     <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s12">
             <input id="to_hour" name="to_hour" type="time" required />
             <span>à l'heure</span>
         </div>
     </div>
 
-    <button class="btn waves-effect waves-light" type="submit" name="action">Sauvegarder</button>
+    <div class="row">
+        <button class="btn waves-effect waves-light col s12" type="submit" name="action">Valider</button>
+      </div>
 </form>
 {% endblock %}
