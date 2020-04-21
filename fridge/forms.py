@@ -67,11 +67,11 @@ class SpecialDayForm(forms.Form):
             elif to_date <= from_date:
                 raise ValidationError("Date invalide")
         elif from_hour != None and to_hour != None and to_hour <= from_hour:
+
                 raise ValidationError("Heure invalide")
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Requis. Remplissez avec une adresse email valide.')
-
 
     class Meta:
         model = User
