@@ -49,6 +49,11 @@ urlpatterns = [
     # Settings
     path('settings', views.SettingsView.as_view(), name='settings'),
 
+    #Login/Register/Logout
+    path('register', views.RegisterView.as_view(), name='register'),
+    path('login', views.LoginView.as_view(), name='login'),
+    path('logout', views.LogoutView.as_view(), name='logout'),
+
     # TODO (TB)
     path('', views.HomeView.as_view(), name='home'),
     path('map', views.MapView.as_view(), name='map'),

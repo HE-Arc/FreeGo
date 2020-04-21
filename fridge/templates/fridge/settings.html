@@ -10,6 +10,9 @@
     <a href="#!" class="collection-item black-text">Dons</a>
     <a href="#!" class="collection-item black-text">Aide</a>
     <a href="#!" class="collection-item black-text">Nous contacter</a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'fridge:logout' %}" class="collection-item black-text">Se déconnecter</a>
+    {% endif %}
 </div>
 
 {% endblock %}
