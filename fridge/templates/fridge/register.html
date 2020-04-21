@@ -1,0 +1,38 @@
+{% extends 'fridge/base_login.html' %}
+
+{% load static %}
+{% block content %}
+
+<h4 class="center-align">S'inscrire</h4>
+<form method="post" class="col s12">
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="username" name="username" type="text" required />
+      <label for="username">Nom d'utilisateur : </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="email" name="email" type="email" required />
+      <label for="email">Adresse email : </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="password1" name="password1" type="password" required />
+      <label for="password1">Mot de passe: </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="password2" name="password2" type="password" required />
+      <label for="password2">Confirmation du mot de passe: </label>
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn waves-effect waves-light col s12" type="submit" name="action">S'inscrire</button>
+  </div>
+</form>
+{% endblock %}

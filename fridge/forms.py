@@ -1,6 +1,8 @@
 from django import forms
 from datetime import datetime, date
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 # Constant
 DATE_FORMAT = '%b %d, %Y'
@@ -66,3 +68,10 @@ class SpecialDayForm(forms.Form):
                 raise ValidationError("Invalid date")
         elif from_hour != None and to_hour != None and to_hour <= from_hour:
                 raise ValidationError("Invalid hour")
+
+class RegisterForm(UserCreationForm):
+    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2', )

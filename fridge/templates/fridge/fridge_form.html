@@ -11,32 +11,32 @@
 </div>
 
 <h4>Création de Free Go</h4>
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="col s12">
     {% csrf_token %}
 
     <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s12">
             <input id="name" name="name" type="text" required />
             <label for="name">Nom</label>
         </div>
     </div>
 
     <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s12">
             <input id="address" name="address" type="text" required />
             <label for="address">Adresse</label>
         </div>
     </div>
 
     <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s12">
             <input id="NPA" name="NPA" type="text" required />
             <label for="NPA">NPA</label>
         </div>
     </div>
 
     <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s12">
             <input id="phone_number" name="phone_number" type="text" required />
             <label for="phone_number">Numéro de téléphone</label>
         </div>
@@ -68,7 +68,9 @@
         </div>
     </div>
 
-    <button class="btn waves-effect waves-light" type="submit" name="action">Valider</button>
+    <div class="row">
+        <button class="btn waves-effect waves-light col s12" type="submit" name="action">Valider</button>
+    </div>
 </form>
 
 {% endblock %}
