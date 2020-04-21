@@ -16,6 +16,7 @@ urlpatterns = [
     # Fridge
     path('fridge/new', views.FridgeCreateView.as_view(), name='fridge-new'),
     path('fridge/<pk>/delete', views.FridgeDeleteView.as_view(), name='fridge-delete'),
+    path('fridge/<pk>/update', views.FridgeUpdateView.as_view(), name='fridge-update'),
 
     # Store
     path('store', views.StoreIndexView.as_view(), name='store'),
@@ -49,7 +50,7 @@ urlpatterns = [
     # Settings
     path('settings', views.SettingsView.as_view(), name='settings'),
 
-    #Login/Register/Logout
+    # Login/Register/Logout
     path('register', views.RegisterView.as_view(), name='register'),
     path('login', views.LoginView.as_view(), name='login'),
     path('logout', views.LogoutView.as_view(), name='logout'),

@@ -91,6 +91,14 @@ class FridgeDeleteView(LoginRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
 
+class FridgeUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Fridge
+    template_name = 'fridge/fridge_update_form.html'
+    success_url = reverse_lazy('fridge:store-detail')
+    fields = ['name', 'address', 'NPA', 'phone_number', 'image']
+    login_url = LOGIN_URL
+
+
 ######################################
 #                Food                #
 ######################################
