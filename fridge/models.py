@@ -114,7 +114,7 @@ class OpeningHour(models.Model):
 
     def save(self, *args, **kwargs):
         if self.from_hour >= self.to_hour:
-            raise ValidationError("Incorrect hour")
+            raise ValidationError("Heure invalide")
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -134,11 +134,11 @@ class SpecialDay(models.Model):
         if self.to_date != None:
             if self.to_hour != None or self.from_hour != None:
                 raise ValidationError(
-                    "If two date are selected, you can't select an hour")
+                    "Si deux dates sont sélecionnées, vous ne pouvez pas sélectionner une heure.")
             elif self.to_date <= self.from_date:
-                raise ValidationError("Invalid date")
+                raise ValidationError("Date invalide")
         elif self.from_hour != None and self.to_hour != None and self.to_hour <= self.from_hour:
-            raise ValidationError("Invalid hour")
+            raise ValidationError("Heure invalide")
         super().save(*args, **kwargs)
 
     def __str__(self):
