@@ -22,7 +22,7 @@ class FoodForm(forms.Form):
             expiration_date, DATE_FORMAT)
 
         if expiration_date.date() < datetime.now().date():
-            raise ValidationError("You're expiration date is already passed")
+            raise ValidationError("La date d'expiration est déjà passée.")
 
 
 class OpeningHourForm(forms.Form):
@@ -38,7 +38,7 @@ class OpeningHourForm(forms.Form):
         to_hour = cleaned_data.get('to_hour')
 
         if not (from_hour < to_hour):
-            raise ValidationError("You're date arn't correct")
+            raise ValidationError("Heure invalide")
 
 
 class SpecialDayForm(forms.Form):
@@ -63,14 +63,15 @@ class SpecialDayForm(forms.Form):
         if to_date != None:
             if to_hour != None or from_hour != None:
                 raise ValidationError(
-                    "If two date are selected, you can't select an hour")
+                    "Si deux dates sont sélecionnées, vous ne pouvez pas sélectionner une heure.")
             elif to_date <= from_date:
-                raise ValidationError("Invalid date")
+                raise ValidationError("Date invalide")
         elif from_hour != None and to_hour != None and to_hour <= from_hour:
-                raise ValidationError("Invalid hour")
+
+                raise ValidationError("Heure invalide")
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    email = forms.EmailField(max_length=254, help_text='Requis. Remplissez avec une adresse email valide.')
 
     class Meta:
         model = User
