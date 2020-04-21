@@ -28,9 +28,9 @@ jobs:
           # MYSQL_ROOT_PASSWORD - root superuser password
           mysql root password: ${{ secrets.PASSWORD }} # optional, default is 
           # MYSQL_DATABASE - name for the default database that is created
-          mysql database: ${{ secrets.GROUPNAME }} # optional, default is 
+          mysql database: ${{ secrets.NAME }} # optional, default is 
           # MYSQL_USER - create the specified user with superuser power for created database
-          mysql user: ${{ secrets.GROUPNAME }} # optional, default is 
+          mysql user: ${{ secrets.USER }} # optional, default is 
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
           mysql password: ${{ secrets.PASSWORD }} # optional, default is 
       - name: Wait / Sleep
