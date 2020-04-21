@@ -3,7 +3,7 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>Freego - Register</title>
+    <title>Freego - Créer un compte</title>
     <!-- CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
-    <h2>Register</h2>
+    <h2>Créer un compte</h2>
     <form method="post">
         {% csrf_token %}
         {% for field in form %}
@@ -27,7 +27,7 @@
             {% endfor %}
         </p>
         {% endfor %}
-        <button type="submit">Register</button>
+        <button type="submit">Créer un compte</button>
     </form>
     <!-- JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
