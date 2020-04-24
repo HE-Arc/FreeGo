@@ -34,7 +34,7 @@ DATABASES = {
         'NAME': 'freego', # os.environ.get('GROUPNAME'),
         'USER': 'freego',# os.environ.get('GROUPNAME', 'root'),
         'PASSWORD': 'root',# os.environ.get('PASSWORD', ''),
-        'HOST': 'localhost',# os.environ.get('MYSQL_HOST', '127.0.0.1'),
+        'HOST': '127.0.0.1',# os.environ.get('MYSQL_HOST', '127.0.0.1'),
         'PORT': '3800',# os.environ.get('MYSQL_PORT', '3800'),
         'OPTIONS': {
             'charset': 'utf8mb4'
