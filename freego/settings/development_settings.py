@@ -14,10 +14,10 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ['DATABASE_NAME'],
-        'USER': os.environ['DATABASE_USER'],
-        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'NAME':'freego_db',
+        'USER':  'root',
+        'PASSWORD':'root',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PORT': '3307',
     },
 }

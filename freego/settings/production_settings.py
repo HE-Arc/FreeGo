@@ -16,7 +16,7 @@ SESSION_COOKIE_SECURE = True
 
 SECURE_SSL_REDIRECT = True
 
-SECURE_HSTS_SECONDS = 3800
+SECURE_HSTS_SECONDS = 3600
 
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
@@ -31,11 +31,11 @@ SECURE_REFERRER_POLICY = 'no-referrer'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('GROUPNAME'),
+        'NAME': os.environ.get('GROUPNAME', 'freego_db'),
         'USER': os.environ.get('GROUPNAME', 'root'),
-        'PASSWORD': os.environ.get('PASSWORD', ''),
+        'PASSWORD': os.environ.get('PASSWORD', 'root'),
         'HOST': os.environ.get('MYSQL_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('MYSQL_PORT', '3800'),
+        'PORT': os.environ.get('MYSQL_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4'
         }
