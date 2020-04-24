@@ -17,7 +17,7 @@ DATABASES = {
         'NAME': os.environ['DATABASE_NAME'],
         'USER': os.environ['DATABASE_USER'],
         'PASSWORD': os.environ['DATABASE_PASSWORD'],
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'HOST': os.environ['MYSQL_HOST'], # '127.0.0.1',
+        'PORT':  os.environ['MYSQL_PORT'], #'3306',
     },
 }

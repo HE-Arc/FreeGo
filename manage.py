@@ -9,7 +9,10 @@ def main():
                           'freego.settings.development_settings')
     os.environ.setdefault('DATABASE_NAME', 'freego_db')
     os.environ.setdefault('DATABASE_USER', 'root')
-    os.environ.setdefault('DATABASE_PASSWORD', '')
+    os.environ.setdefault('DATABASE_PASSWORD', 'root')
+    os.environ.setdefault('MYSQL_HOST', '127.0.0.1')
+    os.environ.setdefault('MYSQL_PORT', '3307')
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
