@@ -30,6 +30,7 @@ jobs:
           mysql database: "freego_db" # ${{ secrets.NAME }} # optional, default is
           # MYSQL_USER - create the specified user with superuser power for created database
           mysql user: "root" # ${{ secrets.USER }} # optional, default is
+
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
           mysql password: ${{ secrets.PASSWORD }} # ${{ secrets.PASSWORD }} # optional, default is
       - name: Wait / Sleep
@@ -40,11 +41,12 @@ jobs:
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
-          DATABASE_PASSWORD: ${{ secrets.PASSWORD }} # ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
+
         run: python manage.py migrate
       - name: Run unit tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
-          DATABASE_PASSWORD: ${{ secrets.PASSWORD }} # ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         run: python manage.py test
