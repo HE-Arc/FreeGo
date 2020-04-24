@@ -28,11 +28,11 @@ jobs:
           # MYSQL_ROOT_PASSWORD - root superuser password
           mysql root password: 'root' # ${{ secrets.PASSWORD }} # optional, default is 
           # MYSQL_DATABASE - name for the default database that is created
-          mysql database: 'freego' # ${{ secrets.NAME }} # optional, default is 
+          mysql database: 'freego_db' # ${{ secrets.NAME }} # optional, default is 
           # MYSQL_USER - create the specified user with superuser power for created database
-          mysql user: 'freego' # ${{ secrets.USER }} # optional, default is 
+          mysql user: 'root' # ${{ secrets.USER }} # optional, default is 
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
-          mysql password: ${{ secrets.PASSWORD }} # optional, default is 
+          mysql password: 'root' # ${{ secrets.PASSWORD }} # optional, default is 
       - name: Wait / Sleep
         uses: jakejarvis/wait-action@v0.1.0
         with:

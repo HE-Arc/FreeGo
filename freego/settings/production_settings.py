@@ -31,8 +31,8 @@ SECURE_REFERRER_POLICY = 'no-referrer'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'freego', # os.environ.get('GROUPNAME'),
-        'USER': 'freego',# os.environ.get('GROUPNAME', 'root'),
+        'NAME': 'freego_db', # os.environ.get('GROUPNAME'),
+        'USER': 'root',# os.environ.get('GROUPNAME', 'root'),
         'PASSWORD': 'root',# os.environ.get('PASSWORD', ''),
         'HOST': '127.0.0.1',# os.environ.get('MYSQL_HOST', '127.0.0.1'),
         'PORT': '3800',# os.environ.get('MYSQL_PORT', '3800'),
