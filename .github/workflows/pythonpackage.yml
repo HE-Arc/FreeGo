@@ -26,11 +26,11 @@ jobs:
           # Version of MySQL to use
           mysql version: 'latest' # optional, default is latest
           # MYSQL_ROOT_PASSWORD - root superuser password
-          mysql root password: ${{ secrets.PASSWORD }} # optional, default is 
+          mysql root password: 'root' # ${{ secrets.PASSWORD }} # optional, default is 
           # MYSQL_DATABASE - name for the default database that is created
-          mysql database: ${{ secrets.NAME }} # optional, default is 
+          mysql database: 'freego' # ${{ secrets.NAME }} # optional, default is 
           # MYSQL_USER - create the specified user with superuser power for created database
-          mysql user: ${{ secrets.USER }} # optional, default is 
+          mysql user: 'freego' # ${{ secrets.USER }} # optional, default is 
           # MYSQL_PASSWORD - specified superuser password which user is power for created database
           mysql password: ${{ secrets.PASSWORD }} # optional, default is 
       - name: Wait / Sleep
@@ -41,11 +41,11 @@ jobs:
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_PASSWORD: 'root' # ${{ secrets.DATABASE_PASSWORD }}
         run: python manage.py migrate
       - name: Run unit tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_PASSWORD: 'root' # ${{ secrets.DATABASE_PASSWORD }}
         run: python manage.py test

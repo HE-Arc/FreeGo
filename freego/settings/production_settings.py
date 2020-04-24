@@ -31,11 +31,11 @@ SECURE_REFERRER_POLICY = 'no-referrer'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('GROUPNAME'),
-        'USER': os.environ.get('GROUPNAME', 'root'),
-        'PASSWORD': os.environ.get('PASSWORD', ''),
-        'HOST': os.environ.get('MYSQL_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('MYSQL_PORT', '3800'),
+        'NAME': 'freego', # os.environ.get('GROUPNAME'),
+        'USER': 'freego',# os.environ.get('GROUPNAME', 'root'),
+        'PASSWORD': 'root',# os.environ.get('PASSWORD', ''),
+        'HOST': 'localhost',# os.environ.get('MYSQL_HOST', '127.0.0.1'),
+        'PORT': '3800',# os.environ.get('MYSQL_PORT', '3800'),
         'OPTIONS': {
             'charset': 'utf8mb4'
         }
