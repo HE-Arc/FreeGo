@@ -13,32 +13,27 @@
 <form action="" method="post" class="col s12">
     {% csrf_token %}
 
-    <div class="row">
-        <div class="input-field col s12">
-            <input id="from_date" name="from_date" type="text" class="datepicker" required>
-            <label for="from_date">de la date</label>
-        </div>
-    </div>
+    <ol>
+        {% for error in form.non_field_errors %}
+        <strong class="red-text">{{ error|escape }}</strong>
+        {% endfor %}
+    </ol>
 
-    <!-- if from_date -->
+    {% for field in form %}
     <div class="row">
         <div class="input-field col s12">
-            <input id="to_date" name="to_date" type="text" class="datepicker">
-            <label for="to_date">à la date</label>
+            {{ field }}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% if field.errors %}
+            <ol>
+                {% for error in field.errors %}
+                <strong class="red-text">{{ error|escape }}</strong>
+                {% endfor %}
+            </ol>
+            {% endif %}
         </div>
     </div>
-    <div class="row">
-        <div class="input-field col s12">
-            <input id="from_hour" name="from_hour" type="time" />
-            <span>de l'heure</span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="input-field col s12">
-            <input id="to_hour" name="to_hour" type="time" />
-            <span>à l'heure</span>
-        </div>
-    </div>
+    {% endfor %}
 
     <div class="row">
         <button class="btn waves-effect waves-light col s12" type="submit" name="action">Sauvegarder</button>

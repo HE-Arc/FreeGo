@@ -14,36 +14,76 @@
 <form action="" method="post" class="col s12">
     {% csrf_token %}
 
+
+    <ol>
+        {% for error in form.non_field_errors %}
+        <strong class="red-text">{{ error|escape }}</strong>
+        {% endfor %}
+    </ol>
+
     <div class="row">
         <div class="input-field col s12">
-            <input id="name" name="name" type="text" required />
-            <label for="name">Nom</label>
+            {{ form.name }}
+            <label for="name">{{ form.name.label }}</label>
+
+            {% if form.name.errors %}
+            <ol>
+                {% for error in form.name.errors %}
+                <strong class="red-text">{{ error|escape }}</strong>
+                {% endfor %}
+            </ol>
+            {% endif %}
         </div>
     </div>
+
     <div class="row">
         <div class="input-field col s12">
             <label>
-                <input id="vegetarian" name="vegetarian" class="filled-in" type="checkbox" />
-                <span>Végétarien</span>
+                {{ form.vegetarian }}
+                <span>{{ form.vegetarian.label }}</span>
+
+                {% if form.vegetarian.errors %}
+                <ol>
+                    {% for error in form.vegetarian.errors %}
+                    <strong class="red-text">{{ error|escape }}</strong>
+                    {% endfor %}
+                </ol>
+                {% endif %}
             </label>
         </div>
     </div>
     <div class="row">
         <div class="input-field col s12">
             <label>
-                <input id="vegan" name="vegan" class="filled-in" type="checkbox" />
-                <span>Vegan</span>
+                {{ form.vegan }}
+                <span>{{ form.vegan.label }}</span>
+
+                {% if form.vegan.errors %}
+                <ol>
+                    {% for error in form.vegan.errors %}
+                    <strong class="red-text">{{ error|escape }}</strong>
+                    {% endfor %}
+                </ol>
+                {% endif %}
             </label>
         </div>
     </div>
     <div class="row">
         <div class="input-field col s12">
-            <input id="expiration_date" name="expiration_date" type="text" class="datepicker" required>
-            <label for="expiration_date">Date d'expiration</label>
+            {{ form.expiration_date }}
+            <label for="expiration_date">{{ form.expiration_date.label }}</label>
+
+            {% if form.expiration_date.errors %}
+            <ol>
+                {% for error in form.expiration_date.errors %}
+                <strong class="red-text">{{ error|escape }}</strong>
+                {% endfor %}
+            </ol>
+            {% endif %}
         </div>
     </div>
     <div class="row">
-      <button class="btn waves-effect waves-light col s12" type="submit" name="action">Valider</button>
+        <button class="btn waves-effect waves-light col s12" type="submit" name="action">Valider</button>
     </div>
 </form>
 {% endblock %}

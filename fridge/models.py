@@ -4,7 +4,7 @@ from django.conf import settings
 from datetime import datetime
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-
+from .validators import phone_number_validator, NPA_validator, expiration_date_validator
 
 #####################################
 #              Fridge               #
@@ -15,9 +15,11 @@ class Fridge(models.Model):
     '''Fridge model'''
     name = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
-    NPA = models.CharField(max_length=45)
-    phone_number = models.CharField(max_length=12)
-    image = models.ImageField(upload_to='images/', null=True, blank=True)
+    NPA = models.CharField(max_length=45, validators=[NPA_validator])
+    phone_number = models.CharField(
+        max_length=12, validators=[phone_number_validator])
+    image = models.ImageField(
+        upload_to='images/', default="images/store-default.png")
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -43,16 +45,11 @@ class Food(models.Model):
     name = models.CharField(max_length=45)
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
-    expiration_date = models.DateField()
+    expiration_date = models.DateField(validators=[expiration_date_validator])
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        if self.expiration_date < datetime.now():
-            raise ValidationError("Incorrect hour")
-        super().save(*args, **kwargs)
 
     def is_reserve(self):
         return Reservation.objects.filter(food=self).count() != 0
@@ -106,7 +103,7 @@ WEEKDAYS = [
 class OpeningHour(models.Model):
     '''OpeningHour model'''
     weekday = models.PositiveSmallIntegerField(
-        choices=WEEKDAYS)
+        choices=WEEKDAYS, default=1)
     from_hour = models.TimeField()
     to_hour = models.TimeField()
     fridge = models.ForeignKey(

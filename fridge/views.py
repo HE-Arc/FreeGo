@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Fridge, Food, OpeningHour, SpecialDay, Reservation, User
-from .forms import FoodForm, OpeningHourForm, SpecialDayForm, RegisterForm
+from .forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm, RegisterForm
 from django.contrib.auth import login, authenticate, logout
 
 from datetime import datetime
@@ -60,18 +60,42 @@ class StoreDetailView(LoginRequiredMixin, generic.TemplateView):
 #               Fridge               #
 ######################################
 
-class FridgeCreateView(LoginRequiredMixin, generic.CreateView):
-    login_url = LOGIN_URL
-    model = Fridge
+# class FridgeCreateView(LoginRequiredMixin, View):
+#     login_url = LOGIN_URL
+#     model = Fridge
+#     template_name = 'fridge/fridge_form.html'
+#     fields = ['name', 'address', 'NPA', 'phone_number', 'image', 'user']
+#     success_url = reverse_lazy('fridge:myadmin')
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['user_all'] = User.objects.all()
+#         return context
+
+class FridgeCreateView(LoginRequiredMixin, View):
+    form_class = FridgeForm
     template_name = 'fridge/fridge_form.html'
-    fields = ['name', 'address', 'NPA', 'phone_number', 'image', 'user']
-    success_url = reverse_lazy('fridge:myadmin')
+    initial = {}
+    login_url = LOGIN_URL
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['user_all'] = User.objects.all()
-        return context
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
 
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            fridge = Fridge(
+                name=form.cleaned_data['name'],
+                address=form.cleaned_data['address'],
+                NPA=form.cleaned_data['NPA'],
+                phone_number=form.cleaned_data['NPA'],
+                image=form.cleaned_data['image'],
+                user=form.cleaned_data['user']
+            )
+            fridge.save()
+            return redirect('fridge:myadmin')
+        return render(request, self.template_name, {'form': form})
 
 class FridgeListView(generic.TemplateView):
     template_name = 'fridge/fridge_list.html'
@@ -107,8 +131,7 @@ class FridgeUpdateView(LoginRequiredMixin, generic.UpdateView):
 class FoodCreateView(LoginRequiredMixin, View):
     form_class = FoodForm
     template_name = 'fridge/food_form.html'
-    initial = {'name': 'n', 'vegetarian': True,
-               'vegan': False, 'expiration_date': '2020-04-04'}
+    initial = {}
     login_url = LOGIN_URL
 
     def get(self, request, *args, **kwargs):
@@ -122,8 +145,7 @@ class FoodCreateView(LoginRequiredMixin, View):
                 name=form.cleaned_data['name'],
                 vegetarian=form.cleaned_data['vegetarian'],
                 vegan=form.cleaned_data['vegan'],
-                expiration_date=datetime.strptime(
-                    form.cleaned_data['expiration_date'], DATE_FORMAT),
+                expiration_date=form.cleaned_data['expiration_date'],
                 fridge=Fridge.objects.filter(user=request.user).first(),
                 user=request.user
             )
@@ -159,7 +181,7 @@ class OpeningHourCreateView(LoginRequiredMixin, View):
     form_class = OpeningHourForm
     template_name = 'fridge/opening_hour_form.html'
     login_url = LOGIN_URL
-    initial = {'weekday': 1, 'from_hour': '08:00', 'to_hour': '16:00'}
+    initial = {}
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
@@ -167,7 +189,6 @@ class OpeningHourCreateView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
-
         if form.is_valid():
             opening_hour = OpeningHour(
                 weekday=form.cleaned_data['weekday'],
@@ -175,6 +196,7 @@ class OpeningHourCreateView(LoginRequiredMixin, View):
                 to_hour=form.cleaned_data['to_hour'],
                 fridge=Fridge.objects.filter(user=request.user).first()
             )
+
             opening_hour.save()
 
             return redirect('fridge:store-detail')
@@ -198,8 +220,7 @@ class SpecialDayCreateView(LoginRequiredMixin, View):
     form_class = SpecialDayForm
     template_name = 'fridge/special_day_form.html'
     login_url = LOGIN_URL
-    initial = {'holiday_date': '2020-04-04', 'closed': True,
-               'from_hour': '16:00', 'to_hour': '16:00'}
+    initial = {}
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
@@ -210,14 +231,12 @@ class SpecialDayCreateView(LoginRequiredMixin, View):
 
         if form.is_valid():
             if form.cleaned_data['to_date']:
-                to_date = datetime.strptime(
-                    form.cleaned_data['to_date'], DATE_FORMAT)
+                to_date = form.cleaned_data['to_date']
             else:
                 to_date = None
 
             special_day = SpecialDay(
-                from_date=datetime.strptime(
-                    form.cleaned_data['from_date'], DATE_FORMAT),
+                from_date=form.cleaned_data['from_date'],
                 to_date=to_date,
                 from_hour=form.cleaned_data['from_hour'],
                 to_hour=form.cleaned_data['to_hour'],
@@ -244,6 +263,7 @@ class SpecialDayDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class FoodReservation(LoginRequiredMixin, View):
     login_url = LOGIN_URL
+
     def post(self, request, *args, **kwargs):
         food = Food.objects.get(pk=self.kwargs['pk'])
         reservation = Reservation(food=food, user=request.user)
@@ -256,6 +276,7 @@ class FoodReservation(LoginRequiredMixin, View):
 
 class FoodCancellation(LoginRequiredMixin, View):
     login_url = LOGIN_URL
+
     def post(self, request, *args, **kwargs):
         food = Food.objects.get(pk=self.kwargs['pk'])
         reservation = Reservation.objects.get(food=food)
@@ -276,6 +297,8 @@ class SettingsView(generic.TemplateView):
 ######################################
 #               Register             #
 ######################################
+
+
 class RegisterView(View):
     form_class = RegisterForm
     template_name = 'fridge/register.html'
@@ -301,6 +324,7 @@ class RegisterView(View):
 ######################################
 #               Login                #
 ######################################
+
 class LoginView(generic.TemplateView):
     template_name = 'fridge/login.html'
 
@@ -316,6 +340,8 @@ class LoginView(generic.TemplateView):
 ######################################
 #               Logout                #
 ######################################
+
+
 class LogoutView(LoginRequiredMixin, View):
     login_url = LOGIN_URL
 
@@ -326,6 +352,7 @@ class LogoutView(LoginRequiredMixin, View):
 ######################################
 #                TODO                #
 ######################################
+
 
 class HomeView(generic.TemplateView):
     template_name = 'fridge/home.html'
