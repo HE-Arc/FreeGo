@@ -115,7 +115,7 @@ class OpeningHour(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(WEEKDAYS[self.weekday][1]) + " : " + str(self.from_hour) + "-" + str(self.to_hour)
+        return str(WEEKDAYS[self.weekday][1]) + " : " + self.from_hour.strftime('%H:%M') + "-" + self.to_hour.strftime('%H:%M')
 
 
 class SpecialDay(models.Model):
@@ -139,4 +139,12 @@ class SpecialDay(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.from_date)
+        if self.to_date:
+            return  "Du " + self.from_date.strftime('%d/%m/%Y') + " aux " + self.from_date.strftime('%d/%m/%Y')
+        elif self.from_hour and self.to_hour:
+            return  "Le " + self.from_date.strftime('%d/%m/%Y') + " ouvert de " +self.from_hour.strftime('%H:%M') + " à " + self.to_hour.strftime('%H:%M')
+        elif self.from_hour:
+            return  "Le " + self.from_date.strftime('%d/%m/%Y') +  " ouvre à " + self.from_hour.strftime('%H:%M')
+        elif self.to_hour:
+            return  "Le " + self.from_date.strftime('%d/%m/%Y') + " ferme à " + self.to_hour.strftime('%H:%M')
+        return "Le " + self.from_date.strftime('%d/%m/%Y')
