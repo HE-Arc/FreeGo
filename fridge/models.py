@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, User
 from django.conf import settings
 from datetime import datetime
 from django.utils import timezone
@@ -21,7 +21,7 @@ class Fridge(models.Model):
     image = models.ImageField(
         upload_to='images/', default="images/store-default.png")
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
@@ -39,6 +39,13 @@ class Fridge(models.Model):
     def get_foods(self):
         return Food.objects.filter(fridge=self)
 
+    def get_available_food(self):
+        all_reservation = Reservation.objects.values_list('food_id')
+        return Food.objects.filter(fridge=self).exclude(id__in=all_reservation)
+
+    def get_reserved_food(self, user):
+        return [food for food in Food.objects.filter(fridge=self) if food.is_reserve_by_me(user) == True]
+
 
 class Food(models.Model):
     '''Food model'''
@@ -49,10 +56,10 @@ class Food(models.Model):
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
-    def is_reserve(self):
-        return Reservation.objects.filter(food=self).count() != 0
+    def is_reserve_by_me(self, current_user):
+        return Reservation.objects.filter(food=self).filter(user=current_user).count() != 0
 
     def __str__(self):
         return str(self.name)
@@ -65,7 +72,7 @@ class Reporting(models.Model):
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.title)
@@ -76,7 +83,7 @@ class Reservation(models.Model):
     food = models.ForeignKey(
         Food, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         r = Reservation.objects.filter(food=self.food)
@@ -140,11 +147,23 @@ class SpecialDay(models.Model):
 
     def __str__(self):
         if self.to_date:
-            return  "Du " + self.from_date.strftime('%d/%m/%Y') + " aux " + self.from_date.strftime('%d/%m/%Y')
+            return "Du " + self.from_date.strftime('%d/%m/%Y') + " aux " + self.from_date.strftime('%d/%m/%Y')
         elif self.from_hour and self.to_hour:
-            return  "Le " + self.from_date.strftime('%d/%m/%Y') + " ouvert de " +self.from_hour.strftime('%H:%M') + " à " + self.to_hour.strftime('%H:%M')
+            return "Le " + self.from_date.strftime('%d/%m/%Y') + " ouvert de " + self.from_hour.strftime('%H:%M') + " à " + self.to_hour.strftime('%H:%M')
         elif self.from_hour:
-            return  "Le " + self.from_date.strftime('%d/%m/%Y') +  " ouvre à " + self.from_hour.strftime('%H:%M')
+            return "Le " + self.from_date.strftime('%d/%m/%Y') + " ouvre à " + self.from_hour.strftime('%H:%M')
         elif self.to_hour:
-            return  "Le " + self.from_date.strftime('%d/%m/%Y') + " ferme à " + self.to_hour.strftime('%H:%M')
+            return "Le " + self.from_date.strftime('%d/%m/%Y') + " ferme à " + self.to_hour.strftime('%H:%M')
         return "Le " + self.from_date.strftime('%d/%m/%Y')
+
+
+#####################################
+#                User               #
+#####################################
+
+class User(AbstractUser):
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
+
+    def foods_reserved(self):
+        return Reservation.objects.filter(user=self).value_list('food')

@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'fridge',
 ]
 
+AUTH_USER_MODEL = 'fridge.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

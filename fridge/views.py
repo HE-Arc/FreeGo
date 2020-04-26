@@ -60,18 +60,6 @@ class StoreDetailView(LoginRequiredMixin, generic.TemplateView):
 #               Fridge               #
 ######################################
 
-# class FridgeCreateView(LoginRequiredMixin, View):
-#     login_url = LOGIN_URL
-#     model = Fridge
-#     template_name = 'fridge/fridge_form.html'
-#     fields = ['name', 'address', 'NPA', 'phone_number', 'image', 'user']
-#     success_url = reverse_lazy('fridge:myadmin')
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['user_all'] = User.objects.all()
-#         return context
-
 class FridgeCreateView(LoginRequiredMixin, View):
     form_class = FridgeForm
     template_name = 'fridge/fridge_form.html'
@@ -96,6 +84,7 @@ class FridgeCreateView(LoginRequiredMixin, View):
             fridge.save()
             return redirect('fridge:myadmin')
         return render(request, self.template_name, {'form': form})
+
 
 class FridgeListView(generic.TemplateView):
     template_name = 'fridge/fridge_list.html'
@@ -167,9 +156,13 @@ class FoodListView(generic.ListView):
     template_name = 'fridge/food_list.html'
     model = Food
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        return Food.objects.filter(fridge=fridge)
+        context['food_available'] = fridge.get_available_food()
+        context['food_reserve'] = fridge.get_reserved_food(self.request.user)
+        return context
 
 
 ######################################
@@ -310,7 +303,6 @@ class RegisterView(View):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
-            email = form.cleaned_data.get('email')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('fridge:home')

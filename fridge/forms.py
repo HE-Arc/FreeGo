@@ -3,7 +3,7 @@ from datetime import datetime, date
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Fridge, Food, OpeningHour, SpecialDay
+from .models import Fridge, Food, OpeningHour, SpecialDay, User
 from django.core.validators import RegexValidator
 from .validators import expiration_date_validator
 
