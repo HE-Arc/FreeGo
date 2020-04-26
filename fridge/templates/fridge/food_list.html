@@ -13,27 +13,13 @@
     <ul class="collection with-header">
         {% for food in food_available %}
         <li class="collection-item">
-            <div>{{ food.name }}
-                <a href="#" class="secondary-content">
-                    <i class="material-icons">eco</i></a><!-- TODO find better icons -->
-                <a href="#" class="secondary-content">
-                    <i class="material-icons">face</i></a><!-- TODO find better icons -->
-                <a href="{% url 'fridge:food-reservation' food.pk %}" class="secondary-content">
-                    <i class="material-icons">turned_in_not</i></a>
-            </div>
+            {% include "fridge/food_detail.html" %}
         </li>
         {% endfor %}
 
         {% for food in food_reserve %}
         <li class="collection-item">
-            <div>{{ food.name }}
-                <a href="#" class="secondary-content">
-                    <i class="material-icons">eco</i></a><!-- TODO find better icons -->
-                <a href="#" class="secondary-content">
-                    <i class="material-icons">face</i></a><!-- TODO find better icons -->
-                <a href="{% url 'fridge:food-cancellation' food.pk %}" class="secondary-content">
-                    <i class="material-icons">turned_in</i></a>
-            </div>
+            {% include "fridge/food_detail.html" %}
         </li>
         {% endfor %}
 

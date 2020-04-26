@@ -1,19 +1,20 @@
-<h1>{{food.name}}</h1>
-<div>
-    <p>{{food.pk}}</p>
-</div>
-<div>
-    <p>{{food.vegetarian}}</p>
-</div>
-<div>
-    <p>{{food.vegan}}</p>
-</div>
-<div>
-    <p>{{food.expiration_date}}</p>
-</div>
-<div>
-    <p>{{food.fridge}}</p>
-</div>
-<div>
-    <p>{{food.user}}</p>
+<div>{{ food.name }}
+    {% if food.vegetarian %}
+    <a href="#" class="secondary-content">
+        <i class="material-icons">eco</i></a><!-- TODO find better icons -->
+    {% endif %}
+    {% if food.vegan %}
+    <a href="#" class="secondary-content">
+        <i class="material-icons">face</i></a><!-- TODO find better icons -->
+    {% endif %}
+    {% if food.is_available %}
+    <a href="{% url 'fridge:food-reservation' food.pk %}" class="secondary-content">
+        <i class="material-icons">turned_in_not</i></a>
+    {% else %}
+    <a href="{% url 'fridge:food-cancellation' food.pk %}" class="secondary-content">
+        <i class="material-icons">turned_in</i></a>
+    {% endif %}
+    <div class="secondary-content">
+        {{food.expiration_date}}
+    </div>
 </div>

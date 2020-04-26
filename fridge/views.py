@@ -287,6 +287,22 @@ class FoodCancellation(LoginRequiredMixin, View):
 class SettingsView(generic.TemplateView):
     template_name = 'fridge/settings.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            context['has_fridge'] = self.request.user.has_fridge()
+
+        return context
+
+class ReservationListView(generic.TemplateView):
+    template_name = 'fridge/reservation_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reservation_list'] = self.request.user.get_reserved_food()
+        return context
+
 ######################################
 #               Register             #
 ######################################

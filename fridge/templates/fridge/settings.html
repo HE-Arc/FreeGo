@@ -6,8 +6,12 @@
 <div class="collection">
     <a href="#!" class="collection-item black-text">Mon profil</a>
     <a href="{% url 'fridge:myadmin' %}" class="collection-item black-text">Administration</a>
+
+    {% if user.has_fridge %}
     <a href="{% url 'fridge:store' %}" class="collection-item black-text">Mon Free Go</a>
-    <a href="#!" class="collection-item black-text">Réservations</a>
+    {% endif%}
+
+    <a href="{% url 'fridge:reservation-list' %}" class="collection-item black-text">Réservations</a>
     <a href="#!" class="collection-item black-text">Dons</a>
     <a href="#!" class="collection-item black-text">Aide</a>
     <a href="#!" class="collection-item black-text">Nous contacter</a>

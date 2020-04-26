@@ -19,7 +19,7 @@ class Fridge(models.Model):
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
     image = models.ImageField(
-        upload_to='images/', default="images/store-default.png")
+        upload_to='images/')
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -60,6 +60,9 @@ class Food(models.Model):
 
     def is_reserve_by_me(self, current_user):
         return Reservation.objects.filter(food=self).filter(user=current_user).count() != 0
+
+    def is_available(self):
+        return Reservation.objects.filter(food=self).count() == 0
 
     def __str__(self):
         return str(self.name)
@@ -165,5 +168,11 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
-    def foods_reserved(self):
-        return Reservation.objects.filter(user=self).value_list('food')
+    def has_fridge(self):
+        return Fridge.objects.filter(user=self).count() != 0
+
+    def get_reserved_food(self):
+        reserved_food = [food for food in Food.objects.all()
+                         if food.is_reserve_by_me(self)]
+        print(reserved_food)
+        return [food for food in Food.objects.all() if food.is_reserve_by_me(self)]
