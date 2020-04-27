@@ -2,7 +2,6 @@ from django.test import TestCase
 
 from .models import Fridge, Food, OpeningHour, SpecialDay, WEEKDAYS
 from .forms import FoodForm, OpeningHourForm, SpecialDayForm, User
-from django.contrib.auth.models import User
 from datetime import time, date, timedelta, datetime
 from django.core.exceptions import ValidationError
 import random
