@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col s1">
         <a href="{% url 'fridge:myadmin' %}">
-            <i class="material-icons black-text">undo</i></a>
+            <i class="material-icons black-text" data-feather="corner-up-left"></i></a>
     </div>
 </div>
 
@@ -14,31 +14,49 @@
 <form method="post" enctype="multipart/form-data" class="col s12">
     {% csrf_token %}
 
+    <ol>
+        {% for error in form.non_field_errors %}
+        <strong class="red-text">{{ error|escape }}</strong>
+        {% endfor %}
+    </ol>
+
     <div class="row">
         <div class="input-field col s12">
-            <input id="name" name="name" type="text" required />
-            <label for="name">Nom</label>
+            {{ form.name }}
+            <label for="name">{{ form.name.label }}</label>
+            <div class="red-text">
+                {{ form.name.errors }}
+            </div>
         </div>
     </div>
 
     <div class="row">
         <div class="input-field col s12">
-            <input id="address" name="address" type="text" required />
-            <label for="address">Adresse</label>
+            {{ form.address }}
+            <label for="address">{{ form.address.label }}</label>
+            <div class="red-text">
+                {{ form.address.errors }}
+            </div>
         </div>
     </div>
 
     <div class="row">
         <div class="input-field col s12">
-            <input id="NPA" name="NPA" type="text" required />
-            <label for="NPA">NPA</label>
+            {{ form.NPA }}
+            <label for="NPA">{{ form.NPA.label }}</label>
+            <div class="red-text">
+                {{ form.NPA.errors }}
+            </div>
         </div>
     </div>
 
     <div class="row">
         <div class="input-field col s12">
-            <input id="phone_number" name="phone_number" type="text" required />
-            <label for="phone_number">Numéro de téléphone</label>
+            {{ form.phone_number }}
+            <label for="phone_number">{{ form.phone_number.label }}</label>
+            <div class="red-text">
+                {{ form.phone_number.errors }}
+            </div>
         </div>
     </div>
 
@@ -46,25 +64,24 @@
         <div class="file-field input-field">
             <div class="btn">
                 <span>Images</span>
-                <input id="image" name="image" type="file">
+                {{ form.image }}
             </div>
             <div class="file-path-wrapper">
                 <input class="file-path validate" type="text">
+            </div>
+            <div class="red-text">
+                {{ form.image.errors }}
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="input-field col s6">
-            <select name="user" required>
-                <option value="" disabled selected>Utilisateur</option>
-
-                {% for user in user_all %}
-                <option value="{{ user.id  }}">{{ user.username }}</option>
-                {% endfor %}
-
-            </select>
-            <label>Sélection de l'utilisateur</label>
+        <div class="input-field col s12">
+            {{ form.user }}
+            <label>{{ form.user.label }}</label>
+            <div class="red-text">
+                {{ form.user.errors }}
+            </div>
         </div>
     </div>
 

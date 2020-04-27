@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'fridge',
 ]
 
+AUTH_USER_MODEL = 'fridge.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -99,6 +101,16 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# DATE_FORMAT = '%b %d, %Y'  # 'mmm dd, yyyy'
+TIME_FORMAT = '%I:%M %p'
+
+# DATE_INPUT_FORMATS = (
+#     '%b %d, %Y',     # May 13, 2020
+# )
+TIME_INPUT_FORMATS = (
+    '%I:%M %p',
+)
 
 
 # Static files (CSS, JavaScript, Images)

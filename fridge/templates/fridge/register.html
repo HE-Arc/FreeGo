@@ -32,7 +32,11 @@
     </div>
   </div>
   <div class="row">
-    <button class="btn waves-effect waves-light col s12" type="submit" name="action">Créer un compte</button>
+    <button class="btn col s12" type="submit" name="action">Créer un compte</button>
   </div>
 </form>
+
+<div class="row">
+  <a class="btn col s12 outline" href="{% url 'fridge:login' %}">J'ai déjà un compte</a>
+</div>
 {% endblock %}

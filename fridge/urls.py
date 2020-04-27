@@ -46,6 +46,8 @@ urlpatterns = [
          name='food-reservation'),
     path('food/<pk>/cancellation', views.FoodCancellation.as_view(),
          name='food-cancellation'),
+    path('reservation/list', views.ReservationListView.as_view(),
+         name='reservation-list'),
 
     # Settings
     path('settings', views.SettingsView.as_view(), name='settings'),
