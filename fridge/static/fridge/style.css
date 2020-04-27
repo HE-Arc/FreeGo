@@ -19,3 +19,15 @@ main {
     background-color: white;
     color: rgb(87, 161, 173);
 }
+
+.icons {
+    margin: 25px;
+}
+
+.nav-wrapper, .page-footer {
+    background-color: rgb(87, 161, 173);
+}
+
+.valign-wrapper {
+    height: 40rem;
+}

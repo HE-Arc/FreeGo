@@ -130,7 +130,7 @@ class OpeningHour(models.Model):
 
 class SpecialDay(models.Model):
     '''SpecialDay model'''
-    from_date = models.DateField(default=datetime.now)
+    from_date = models.DateField(null=True, blank=True)
     to_date = models.DateField(null=True, blank=True)
     from_hour = models.TimeField(null=True, blank=True)
     to_hour = models.TimeField(null=True, blank=True)

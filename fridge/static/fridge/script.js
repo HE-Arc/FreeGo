@@ -1,5 +1,8 @@
 $(document).ready(function () {
-    $('.datepicker').datepicker({'format': 'yyyy-mm-dd'});
+    $('.datepicker').datepicker({
+        'format': 'yyyy-mm-dd',
+        showClearBtn : true
+    });
 });
 
 $(document).ready(function () {
@@ -7,5 +10,7 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $('.timepicker').timepicker();
+    $('.timepicker').timepicker({
+        showClearBtn : true
+    });
 });
