@@ -1,12 +1,28 @@
 from freego.settings.common_settings import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$g+b++)$rxeitv#3h7+e0k%=a)4)w3*ba(a-8vu(jy*_77irgs'
+# SET environment variable SECRET_KEY on server
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
+                 '127.0.0.1', 'freego.srvz-webapp.he-arc.ch']
+
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+
+SECURE_SSL_REDIRECT = True
+
+SECURE_HSTS_SECONDS = 3800
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+SECURE_HSTS_PRELOAD = True
+
+SECURE_REFERRER_POLICY = 'no-referrer'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -14,10 +30,13 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'freego_db',
-        'USER':  'root',
-        'PASSWORD':'root',
-        'HOST': '127.0.0.1',
-        'PORT': '3307',
-    },
+        'NAME': os.environ.get('GROUPNAME'),
+        'USER': os.environ.get('GROUPNAME', 'root'),
+        'PASSWORD': os.environ.get('PASSWORD', ''),
+        'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
+        'PORT': os.environ.get('MYSQL_PORT', '3306'),
+        'OPTIONS': {
+            'charset': 'utf8mb4'
+        }
+    }
 }
