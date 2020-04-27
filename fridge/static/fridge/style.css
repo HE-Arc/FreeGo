@@ -1,0 +1,33 @@
+.page-footer {
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 997;
+}
+
+main {
+    padding-bottom: 3em;
+}
+
+.btn {
+    background-color: rgb(87, 161, 173);
+}
+
+.outline {
+    border: 2px solid rgb(87, 161, 173);
+    background-color: white;
+    color: rgb(87, 161, 173);
+}
+
+.icons {
+    margin: 25px;
+}
+
+.nav-wrapper, .page-footer {
+    background-color: rgb(87, 161, 173);
+}
+
+.valign-wrapper {
+    height: 40rem;
+}

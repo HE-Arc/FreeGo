@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <title>Free Go</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "fridge/style.css" %}" type="text/css">
+    <!-- JS -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <div class="navbar-fixed">
+        <nav class="nav-extended">
+            <div class="nav-wrapper">
+                <a href="{% url 'fridge:home' %}" class="brand-logo left" style="width: 4rem;height: 4rem;"><img
+                        src="{% static "fridge/logo.png" %}" style="width: 4rem;height: 4rem;" alt="logo"></a>
+                <ul class="brand-logo right">
+                    <li>
+                        <a href="{% url 'fridge:fridge-new' %}">
+                            <i class="large material-icons">add_circle</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        {% if form.errors %}
+        <div class="card red darken-1">
+            {% for field in form %}
+            {% for error in field.errors %}
+            <div class="card-content">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <div class="card-content white-text">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+
+        {% block content %}{% endblock %}
+
+        {% else %}
+
+        <section class="section">
+            <div class="container">
+                <p>Vous n'êtes pas authentifié !!</p>
+            </div>
+        </section>
+
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="{% static "fridge/script.js" %}"></script>
+
+
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        feather.replace()
+    </script>
+</body>
+
+</html>

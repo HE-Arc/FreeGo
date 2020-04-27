@@ -6,6 +6,7 @@ set :repo_url, "https://github.com/HE-Arc/FreeGo.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+set :branch, ENV['BRANCH'] if ENV['BRANCH']
 
 # Default deploy_to directory is /var/www/my_app_name
 # set :deploy_to, "/var/www/my_app_name"
@@ -39,6 +40,7 @@ set :repo_url, "https://github.com/HE-Arc/FreeGo.git"
 # set :ssh_options, verify_host_key: :secure
 
 after 'deploy:publishing', 'uwsgi:restart'
+
 
 namespace :uwsgi do
     desc 'Restart application'

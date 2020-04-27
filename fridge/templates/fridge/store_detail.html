@@ -1,0 +1,42 @@
+{% extends 'fridge/base_store.html' %}
+
+{% block content %}
+<h4>{{ fridge.name }}</h4>
+
+<h5>Adresse</h5>
+<p>{{ fridge.address }}, {{ fridge.NPA }}</p>
+
+<h5>Numéro de téléphone</h5>
+<p>{{ fridge.phone_number }}</p>
+
+<h5>Horaire</h5>
+{% for oh in fridge.get_opening_hours %}
+<div>
+    <p>{{ oh }}
+        <a href="{% url 'fridge:openinghour-delete' oh.pk %}" class="secondary-content">
+            <i class="material-icons" style="width: 1rem;height: 1rem;color: red;">remove_circle</i>
+        </a>
+    </p>
+</div>
+{% endfor %}
+<a href="{% url 'fridge:openinghour-form' %}">
+    <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
+</a>
+
+<h5>Horaire spéciaux</h5>
+{% for sh in fridge.get_special_day %}
+<div>
+    <p>{{ sh }}
+        <a href="{% url 'fridge:specialday-delete' sh.pk %}" class="secondary-content">
+            <i class="material-icons" style="width: 1rem;height: 1rem;color: red;">remove_circle</i>
+        </a>
+    </p>
+</div>
+{% endfor %}
+<a href="{% url 'fridge:specialday-form' %}">
+    <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
+</a>
+
+<h5>Utilisateur</h5>
+<p>{{ fridge.user }}</p>
+{% endblock %}
