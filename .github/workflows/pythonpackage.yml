@@ -59,6 +59,10 @@ jobs:
         run: coverage xml
       - name: Monitor coverage
         uses: slavcodev/coverage-monitor-action@1.1.0
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
+          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         with:
           clover_file: "coverage.xml"
           threshold_alert: 50
