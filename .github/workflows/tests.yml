@@ -45,11 +45,19 @@ jobs:
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         run: python manage.py migrate
-      - name: npm install, make test-coverage
+      - name: make test-coverage
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
+          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           coverage run --source='.' manage.py test
           coverage html
       - name: Coveralls
         uses: coverallsapp/github-action@master
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
+          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
