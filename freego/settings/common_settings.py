@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'fridge/static/fridge/js', 'serviceworker.js')
 
 # insta_project/settings.py
 MEDIA_URL = '/media/'
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fridge',
+    'pwa',
 ]
 
 AUTH_USER_MODEL = 'fridge.User'
@@ -118,3 +120,6 @@ TIME_INPUT_FORMATS = (
 
 STATIC_URL = '/static/'
 STATIC_ROOT = "/var/www/freego/current/static/"
+
+
+# PWA

@@ -60,7 +60,8 @@ urlpatterns = [
     # TODO (TB)
     path('', views.HomeView.as_view(), name='home'),
     path('map', views.MapView.as_view(), name='map'),
-    path('favorite', views.FavoriteView.as_view(), name='favorite')
+    path('favorite', views.FavoriteView.as_view(), name='favorite'),
+    path('offline', views.offline, name='offline')
 ]
 
 if settings.DEBUG:

@@ -295,6 +295,7 @@ class SettingsView(generic.TemplateView):
 
         return context
 
+
 class ReservationListView(generic.TemplateView):
     template_name = 'fridge/reservation_list.html'
 
@@ -372,3 +373,12 @@ class MapView(generic.TemplateView):
 
 class FavoriteView(generic.TemplateView):
     template_name = 'fridge/favorite.html'
+
+
+######################################
+#                PWA                 #
+######################################
+
+def offline(request):
+	template='fridge/home.html'
+	return render(request,template)
