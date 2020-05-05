@@ -7,6 +7,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      - name: Install mysqlclient
+        run: pip install mysqlclient
+      - name: Start MySQL
+        uses: samin/mysql-action@v1.3
+        with:
+          # The port of host
+          host port: 3306 # optional, default is 3306
+          # The port of container
+          container port: 3306 # optional, default is 3306
+          # --character-set-server - The character set of MySQL server
+          character set server: "utf8mb4" # optional, default is utf8mb4
+          # --collation-server - The character collation of MySQL server
+          collation server: "utf8mb4_general_ci" # optional, default is utf8mb4_general_ci
+          # Version of MySQL to use
+          mysql version: "latest" # optional, default is latest
+          # MYSQL_ROOT_PASSWORD - root superuser password
+          mysql root password: ${{ secrets.PASSWORD }} # optional, default is
+          # MYSQL_DATABASE - name for the default database that is created
+          mysql database: "freego_db" # ${{ secrets.NAME }} # optional, default is
+          # MYSQL_USER - create the specified user with superuser power for created database
+          mysql user: "root" # ${{ secrets.USER }} # optional, default is
+
+          # MYSQL_PASSWORD - specified superuser password which user is power for created database
+          mysql password: ${{ secrets.PASSWORD }} # ${{ secrets.PASSWORD }} # optional, default is
+      - name: Wait / Sleep
+        uses: jakejarvis/wait-action@v0.1.0
+        with:
+          time: "20s"
+      - name: Run migrations
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
+          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
+        run: python manage.py migrate
       - name: Test
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
