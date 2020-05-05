@@ -55,6 +55,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Test
         run: coverage run --source='.' manage.py test
+      - name: XML
+        run: coverage xml
       - name: Monitor coverage
         uses: slavcodev/coverage-monitor-action@1.1.0
         with:
