@@ -6,7 +6,13 @@ const FILES_TO_CACHE = [
     'fridge/list',
     '/map',
     '/favorite',
-    '/settings'
+    '/settings',
+    '/static/fridge/logos/icon-128x128.png',
+    '/static/fridge/logos/icon-144x144.png',
+    '/static/fridge/logos/icon-152x152.png',
+    '/static/fridge/logos/icon-192x192.png',
+    '/static/fridge/logos/icon-256x256.png',
+    '/static/fridge/logos/icon-512x512.png',
 ];
 
 // Cache on install

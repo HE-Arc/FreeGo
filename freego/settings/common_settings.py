@@ -127,10 +127,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'fridge', 'static'),
 ]
 
-print("STATICFILES_DIR " + STATICFILES_DIRS[0])
-
-# C:\DEV\3 annee\Bachelor\FreeGo\fridge\static\icon-128x128.png
-
 PWA_APP_NAME = 'FreeGo'
 PWA_APP_DESCRIPTION = "Application pour l'association Free Go"
 PWA_APP_THEME_COLOR = '#0A0302'
@@ -141,19 +137,19 @@ PWA_APP_ORIENTATION = 'any'
 PWA_APP_START_URL = '/'
 PWA_APP_ICONS = [
     {
-        'src': '/static/fridge/images/icon-192x192.png',
+        'src': '/static/fridge/logos/icon-192x192.png',
         'sizes': '192x192'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
-        'src': '/static/fridge/images/icon-192x192.png',
+        'src': '/static/fridge/logos/icon-192x192.png',
         'sizes': '192x192'
     }
 ]
 PWA_APP_SPLASH_SCREEN = [
     {
-        'src': '/static/fridge/images/icon-512x512.png',
+        'src': '/static/fridge/logos/icon-512x512.png',
         'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
     }
 ]

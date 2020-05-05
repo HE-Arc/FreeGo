@@ -11,6 +11,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install Python dependencies
         run: pip install -r requirements.txt
+      - name: Install mysqlclient
+        run: pip install mysqlclient
       - name: Start MySQL
         uses: samin/mysql-action@v1.3
         with:
