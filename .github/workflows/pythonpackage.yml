@@ -54,6 +54,10 @@ jobs:
         run: python manage.py test
       - name: Python Django Coverage GitHub Action
         uses: dc740/django-coveragepy-github-action@0.9
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
+          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         with:
           # Application
           django-app: fridge
