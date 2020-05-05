@@ -64,6 +64,7 @@ jobs:
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           clover_file: "coverage.xml"
           threshold_alert: 50
           threshold_warning: 80
