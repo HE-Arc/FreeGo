@@ -373,12 +373,3 @@ class MapView(generic.TemplateView):
 
 class FavoriteView(generic.TemplateView):
     template_name = 'fridge/favorite.html'
-
-
-######################################
-#                PWA                 #
-######################################
-
-def offline(request):
-	template='fridge/home.html'
-	return render(request,template)
