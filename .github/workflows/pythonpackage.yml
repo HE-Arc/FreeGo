@@ -52,15 +52,13 @@ jobs:
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         run: python manage.py test
-      - name: Python Django Coverage GitHub Action
-        uses: dc740/django-coveragepy-github-action@0.9
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
-          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
+      - uses: actions/checkout@v1
+      - name: Test
+        run: coverage run --source='.' manage.py test
+      - name: Monitor coverage
+        uses: slavcodev/coverage-monitor-action@1.1.0
         with:
-          # Application
-          django-app: 'fridge'
-          # Minimum allowed code coverage
-          minimum-coverage: '80'
+          clover_file: "coverage.xml"
+          threshold_alert: 50
+          threshold_warning: 80
         
