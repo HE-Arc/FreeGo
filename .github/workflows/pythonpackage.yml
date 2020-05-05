@@ -60,7 +60,7 @@ jobs:
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         with:
           # Application
-          django-app: fridge
+          django-app: 'fridge'
           # Minimum allowed code coverage
-          minimum-coverage: 80
+          minimum-coverage: '80'
         
