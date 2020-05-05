@@ -52,3 +52,11 @@ jobs:
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         run: python manage.py test
+      - name: Python Django Coverage GitHub Action
+        uses: dc740/django-coveragepy-github-action@0.9
+        with:
+          # Application
+          django-app: fridge
+          # Minimum allowed code coverage
+          minimum-coverage: 80
+        
