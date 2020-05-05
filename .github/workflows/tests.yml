@@ -58,13 +58,11 @@ jobs:
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         run: coverage xml
       - name: Monitor coverage
-        uses: slavcodev/coverage-monitor-action@1.1.0
+        uses: actions/python-django-coverage-gitHub-action@v1
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          clover_file: "coverage.xml"
-          threshold_alert: 50
-          threshold_warning: 80
+          django-app: 'fridge'
+          minimum-coverage: '50'
