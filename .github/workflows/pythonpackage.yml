@@ -44,7 +44,7 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
-        run: 
+        run: |
           python manage.py migrate
           python manage.py test
           coverage run --source='.' manage.py test
