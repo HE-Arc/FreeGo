@@ -39,16 +39,22 @@ jobs:
         uses: jakejarvis/wait-action@v0.1.0
         with:
           time: "20s"
-      - name: Run migrations
+      - name: Migrations and test
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
           DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
-
-        run: python manage.py migrate
-      - name: Run unit tests
+        run: 
+          python manage.py migrate
+          python manage.py test
+          coverage run --source='.' manage.py test
+          coverage xml -i
+      - uses: actions/checkout@v2
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DJANGO_SETTINGS_MODULE: ${{ secrets.DJANGO_SETTINGS_MODULE }}
-          DATABASE_PASSWORD: ${{ secrets.PASSWORD }}
-        run: python manage.py test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
