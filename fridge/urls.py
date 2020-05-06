@@ -59,6 +59,7 @@ urlpatterns = [
 
     # TODO (TB)
     path('', views.HomeView.as_view(), name='home'),
+    path('home', views.HomeView.as_view(), name='home'),
     path('map', views.MapView.as_view(), name='map'),
     path('favorite', views.FavoriteView.as_view(), name='favorite')
 ]

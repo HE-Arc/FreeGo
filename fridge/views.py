@@ -295,6 +295,7 @@ class SettingsView(generic.TemplateView):
 
         return context
 
+
 class ReservationListView(generic.TemplateView):
     template_name = 'fridge/reservation_list.html'
 

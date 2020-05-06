@@ -1,14 +1,17 @@
+{% load pwa %}
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
+  {% progressive_web_app_meta %}
   <title>Free Go</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="{% static "fridge/style.css" %}" type="text/css">
+  <link rel="stylesheet" href="{% static "fridge/css/style.css" %}" type="text/css">
   <!-- JS -->
   <script src="https://unpkg.com/feather-icons"></script>
   <!--Let browser know website is optimized for mobile-->
@@ -41,8 +44,9 @@
   <!-- JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
-      feather.replace()
+    feather.replace()
   </script>
+
 </body>
 
 </html>
