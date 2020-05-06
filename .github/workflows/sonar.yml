@@ -3,7 +3,7 @@ name: Python package
 on:
   push:
     branches:
-      - master
+      - dev
       - sonar
   pull_request:
       types: [opened, synchronize, reopened]
@@ -55,6 +55,9 @@ jobs:
           python manage.py test
           coverage run --source='.' manage.py test
           coverage xml -i
+  sonarcloud:
+      runs-on: ubuntu-latest
+      steps:
       - uses: actions/checkout@v2
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
