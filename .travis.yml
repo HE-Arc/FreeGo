@@ -3,13 +3,18 @@ rvm:
  - 3.7
  - python
 
-# safelist
-branches:
-  only:
-  - master
-  - dev
-  - sonar
+# # safelist
+# branches:
+#   only:
+#   - master
+#   - dev
+#   - sonar
 
+services:
+  - mysql
+
+env:
+  - DJANGO=3.0 DB=mysql
 addons:
   sonarcloud:
     organization: "gaelchriste"
@@ -19,10 +24,14 @@ addons:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+
+before_script:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS freego_db;'
+
 # command to run tests
 script:
-  - python manage.py migrate
-  - python manage.py test
+  - python manage.py migrate --settings=freego.settings.production_settings
+  - python manage.py test --settings=freego.settings.production_settings
   - coverage run --source='.' manage.py test
   - coverage xml -i
   - sonar-scanner
