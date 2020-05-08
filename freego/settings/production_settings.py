@@ -2,7 +2,7 @@ from freego.settings.common_settings import *
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SET environment variable SECRET_KEY on server
-SECRET_KEY = os.environ['SECRET_KEY']
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -43,6 +43,7 @@ if os.getenv('TRAVIS', None):
         }
     }
 else:
+    SECRET_KEY = os.environ['SECRET_KEY']
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
