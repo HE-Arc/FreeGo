@@ -14,7 +14,11 @@ services:
   - mysql
 
 env:
-  - DJANGO=3.0
+  global:
+    - BUILD_ON_TRAVIS=true
+  matrix:
+    - DJANGO=3.0 DB=mysql
+
 addons:
   sonarcloud:
     organization: "gaelchriste"
@@ -29,13 +33,15 @@ before_install:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+  - pip install mysql-python
 
 before_script:
-  - mysql -e 'CREATE DATABASE freego_db;'
+  - mysql -e 'CREATE DATABASE freego_db;' -uroot
+  - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';" -uroot
+  - python manage.py migrate
 
 # command to run tests
 script:
-  - python manage.py migrate
   - python manage.py test
   - coverage run --source='.' manage.py test
   - coverage xml -i
