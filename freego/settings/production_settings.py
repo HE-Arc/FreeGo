@@ -36,7 +36,7 @@ if os.getenv('TRAVIS', None):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'freego_db',
+            'NAME': 'myapp_test',
             'USER': 'travis',
             'PASSWORD': '',
             'HOST': '127.0.0.1',

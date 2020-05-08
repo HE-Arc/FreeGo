@@ -10,7 +10,7 @@ addons:
   sonarcloud:
     organization: "gaelchriste"
     token:
-      secure: "e3Ubi6JiqERI0C8Na/QKCr3TQfR1mj0lfouEHqdabOY3vcUWSnpC2P1caO4qsRhuO6kStEA39EBel6O7wX+/lMkMlqpjhvlalVck0zdXA5nX2+aBvWP+4DMyFRtnu/hTO6TytomZyPPXY/byC/Xn+XyixX5gEQ6txykZcSEgtegkOajaCwvmz8yy7QOJF8qn9M84mWYFryfORJ9ezFwOT2VNezDIUbskfk90J/KxCnS+qhIsbTqtdRTacm9nLZxq57vd9O740pTMRCaWzz9J+Aw1d3Aso6tWe6QX0Qcc3bYsrT0qfJvC0Glh1dOiwK9bR/UFZMSoVkZN6Pl51VFg5ZDnhCeKp/xWkiv4fxbIqVylxg/rX3vZrRSyF2tTjGKeas63F/ekUx28N2tSe9DEdVbU3MW3V0MttoLerAXQgzNUw9WTfCCzHuBP6uJedB2eG6Qe4B5nB/JOE7p62Kj4hqEBqxo6ABJRIihSDbJQKEBX2aVcNdYOTGfZbEoszHOrxZQdWqFwq3IS/r0WrAQU1Nc6foUSo9u8AhxQRnzNtoTUC7SgxagFejsjlNDtZvaHptxds8ZpqxZ/iiPQ3zFj8Oyhzd4oe6PgUgN8fZnQ4yhGA7KDIukX3jSChKwp0Qm4myuB9aCZfbyNdwWcL/z2l+l3TvkCZkbGZ8dYwFHBerc="
+      secure: "5ZnWjcRKOfiXJUDTfl8Zvy/J+0f9ujvq5j5o+Dk5OS8S6CvBsd1iGSFHujFG2yMVv/wleK20Gvx2BWeGq99FfKgS1S2ej2S4ULJzoycgKuAH/zCPsTO2F+4Pj4/kt+YSsT5YPCIh6SdG8Qq+i1r77pB+WDiJ59UKsZ98ZVDZJ0nYsd/hUr8j0pCHqSl0pZel5NVeICMs32LQ+C1VMsLFB32koGxpPlIVLdFesIRfxQfiGnrdd/I9gAZWoqb6RbmgiFO2DOezBNFphdmAX24XwnhAE8hYMTcegDzkPHYlFis/ND48X+AXuT8Td2KVWHtG6nGDLlvguzjdP3nXKYx6xqY3cps/MlE8wE22rAXNr1P3Or8m+bUjMlz6FJE6iJuIwy8+hBIqzesniNjNizDUJk1P1s0klLpHb4sX62rlC4yYnzGaVIIB69TaUI9k3/wCDWB2WLVnZIYVH8m2IWnHNmVFM8ozGoJONZaI9BRO0OY/znp9dtCotM/qXTLkn3A/gi4WMEBaX9lLP5UL+RryjU0Lfq3Ux2k6K6jzQNQTzMKHRkZ6ElLsiONEDOaJi+tvLruPR2g6HHkMHQz/CmQJxYKO8lFCmqmbqolKHrsIZdevJvhg5fEVcTpC3kd9sp9rwkx1rbHIiC1eoChmZ7VwJ3uHORRXBV2M1e+skERlaQA="
 before_install:
   - export DJANGO_SETTINGS_MODULE=freego.settings.production_settings
 
@@ -19,14 +19,16 @@ install:
   - pip install -r requirements.txt
   - pip install mysqlclient
 before_script:
-  - mysql -e 'CREATE DATABASE freego_db;'
+  - mysql -e 'CREATE DATABASE myapp_test;'
   - python manage.py migrate
-
 # command to run tests
 script:
+  - python manage.py migrate
   - python manage.py test
   - coverage run --source='.' manage.py test
   - coverage xml -i
   - sonar-scanner
 after_success:
   - coveralls
+
+  
