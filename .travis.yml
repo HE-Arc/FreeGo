@@ -3,6 +3,13 @@ rvm:
  - 3.7
  - python
 
+# safelist
+branches:
+  only:
+  - master
+  - dev
+  - sonar
+
 addons:
   sonarcloud:
     organization: "gaelchriste"
