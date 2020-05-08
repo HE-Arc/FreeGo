@@ -14,24 +14,29 @@ services:
   - mysql
 
 env:
-  - DJANGO=3.0 DB=mysql
+  - DJANGO=3.0
 addons:
   sonarcloud:
     organization: "gaelchriste"
     token:
       secure: "e3Ubi6JiqERI0C8Na/QKCr3TQfR1mj0lfouEHqdabOY3vcUWSnpC2P1caO4qsRhuO6kStEA39EBel6O7wX+/lMkMlqpjhvlalVck0zdXA5nX2+aBvWP+4DMyFRtnu/hTO6TytomZyPPXY/byC/Xn+XyixX5gEQ6txykZcSEgtegkOajaCwvmz8yy7QOJF8qn9M84mWYFryfORJ9ezFwOT2VNezDIUbskfk90J/KxCnS+qhIsbTqtdRTacm9nLZxq57vd9O740pTMRCaWzz9J+Aw1d3Aso6tWe6QX0Qcc3bYsrT0qfJvC0Glh1dOiwK9bR/UFZMSoVkZN6Pl51VFg5ZDnhCeKp/xWkiv4fxbIqVylxg/rX3vZrRSyF2tTjGKeas63F/ekUx28N2tSe9DEdVbU3MW3V0MttoLerAXQgzNUw9WTfCCzHuBP6uJedB2eG6Qe4B5nB/JOE7p62Kj4hqEBqxo6ABJRIihSDbJQKEBX2aVcNdYOTGfZbEoszHOrxZQdWqFwq3IS/r0WrAQU1Nc6foUSo9u8AhxQRnzNtoTUC7SgxagFejsjlNDtZvaHptxds8ZpqxZ/iiPQ3zFj8Oyhzd4oe6PgUgN8fZnQ4yhGA7KDIukX3jSChKwp0Qm4myuB9aCZfbyNdwWcL/z2l+l3TvkCZkbGZ8dYwFHBerc="
 
+
+before_install:
+  - export DJANGO_SETTINGS_MODULE=freego.settings.production_settings
+  - export PYTHONPATH=$HOME/builds/gaelchriste/freego
+  - export PIP_USE_MIRRORS=true
 # command to install dependencies
 install:
   - pip install -r requirements.txt
 
 before_script:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS freego_db;'
+  - mysql -e 'CREATE DATABASE freego_db;'
 
 # command to run tests
 script:
-  - python manage.py migrate --settings=freego.settings.production_settings
-  - python manage.py test --settings=freego.settings.production_settings
+  - python manage.py migrate
+  - python manage.py test
   - coverage run --source='.' manage.py test
   - coverage xml -i
   - sonar-scanner
