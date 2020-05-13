@@ -1,4 +1,7 @@
-# FreeGo
+FreeGo
+======
+[![Build Status](https://travis-ci.org/gaelchriste/SonarCloudTest.svg?branch=master)](https://travis-ci.org/gaelchriste/SonarCloudTest)
+
 FreeGo est une association neuchâteloise à but non lucratif qui à comme objectifs d'aider les personnes en situations de précarité, ainsi que de diminuer le gaspillage alimentaire.
 
 Pour ce faire, ils mêtent à disposition des frigos, mis en place grâce à des soutients (entreprises, privés, sponsors, etc.), où on peut donner nos invendus ou faire des dons alimentaires.
