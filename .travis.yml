@@ -17,20 +17,18 @@ before_install:
 
 # command to install dependencies
 install:
-  - pip install -r requirements.txt
-  - pip install mysqlclient
-  - pip install codecov
+  - pip install pipenv
+  - pipenv install
+  - pipenv install mysqlclient
+  - pipenv install coveralls
 before_script:
   - mysql -e 'CREATE DATABASE myapp_test;'
   - python manage.py migrate
 # command to run tests
 script:
-  - python manage.py migrate
-  - python manage.py test
   - coverage run --source='.' manage.py test
   - coverage xml -i
   - sonar-scanner
 after_success:
-  - codecov
-
+  - coveralls
   
