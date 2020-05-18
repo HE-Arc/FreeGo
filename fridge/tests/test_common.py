@@ -15,6 +15,7 @@ def passed_date():
 
 
 def create_fridge(name, user):
+    '''Create generic fridge with selectable name'''
     address = "Un adresse"
     NPA = "2000"
     phone_number = "0790000000"
@@ -30,6 +31,7 @@ def create_fridge(name, user):
 
 
 def create_food(name, fridge, user):
+    '''Create generic food with selectable name'''
     vegetarian = True
     vegan = True
     expiration_date = date(2021, 5, 10)
@@ -37,5 +39,6 @@ def create_food(name, fridge, user):
                                expiration_date=expiration_date, fridge=fridge, user=user)
 
 
-def create_user(name):
-    return User.objects.create_user(name, 'gael@gael.com', 'gael')
+def create_user(username):
+    '''Create generic user with selectable username'''
+    return User.objects.create_user(username, 'test@test.test', 'test')

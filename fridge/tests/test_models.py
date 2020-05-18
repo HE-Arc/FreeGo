@@ -13,12 +13,18 @@ class FridgeModelTest(TestCase):
         self.fridge = create_fridge("MonFreeGo", self.user)
 
     def test_delete(self):
+        """
+        Test delete method
+        """
         self.assertEqual(Fridge.objects.count(), 1)
         self.fridge.delete()
         self.assertEqual(Fridge.objects.count(), 0)
         # TODO check image is correctly delete in media/images
 
     def test_get_opening_hours(self):
+        """
+        Test get_opening_hours method
+        """
         from_hour = time(12, 0, 0)
         to_hour = time(16, 0, 0)
         oh1 = OpeningHour(weekday=1, from_hour=from_hour,
@@ -33,7 +39,10 @@ class FridgeModelTest(TestCase):
 
         self.assertEqual(self.fridge.get_opening_hours().count(), 3)
 
-    def test_get_special_day(self):
+    def test_get_special_days(self):
+        """
+        Test get_special_days method
+        """
         from_date1 = date(2020, 5, 10)
         sd1 = SpecialDay(from_date=from_date1, fridge=self.fridge)
         sd1.save()
@@ -44,12 +53,19 @@ class FridgeModelTest(TestCase):
         self.assertEqual(self.fridge.get_special_days().count(), 2)
 
     def test_get_foods(self):
+        """
+        Test get_foods method
+        """
         create_food("Banane", self.fridge, self.user)
         self.assertEqual(self.fridge.get_foods().count(), 1)
 
     def test_available_and_reserved_food(self):
+        """
+        Test get_available_food and get_reserved_food method
+        """
         food = create_food("Banane", self.fridge, self.user)
         self.assertEqual(self.fridge.get_available_food().count(), 1)
+        self.assertEqual(len(self.fridge.get_reserved_food(self.user)), 0)
 
         reservation = Reservation(food=food, user=self.user)
         reservation.save()
@@ -66,6 +82,9 @@ class FoodModel(TestCase):
         self.food = create_food("Banane", fridge, self.user)
 
     def test_is_reserved_by_me(self):
+        """
+        Test is_reserved_by_me method
+        """
         reservation = Reservation(food=self.food, user=self.user)
         reservation.save()
 
@@ -73,6 +92,9 @@ class FoodModel(TestCase):
         self.assertEqual(self.food.is_reserved_by_me(self.another_user), False)
 
     def test_is_available(self):
+        """
+        Test is_available method
+        """
         self.assertEqual(self.food.is_available(), True)
         reservation = Reservation(food=self.food, user=self.user)
         reservation.save()
@@ -203,6 +225,9 @@ class SpecialDayModelTests(TestCase):
             sd.save()
 
     def test_from_date(self):
+        """
+        Only from_date value
+        """
         from_date = date(2020, 5, 10)
         sd = SpecialDay(from_date=from_date, fridge=self.fridge)
         sd.save()
@@ -211,6 +236,9 @@ class SpecialDayModelTests(TestCase):
         self.assertEqual(len(SpecialDay.objects.all()), 1)
 
     def test_from_date_to_date(self):
+        """
+        Valide from_date and to_date values
+        """
         from_date = date(2020, 5, 10)
         to_date = date(2020, 6, 8)
         sd = SpecialDay(from_date=from_date,
@@ -221,6 +249,9 @@ class SpecialDayModelTests(TestCase):
         self.assertEqual(len(SpecialDay.objects.all()), 1)
 
     def test_from_date_from_hour(self):
+        """
+        Valide from_date and from_hour values
+        """
         from_date = date(2020, 5, 10)
         from_hour = time(5, 5, 5)
         sd = SpecialDay(from_date=from_date,
@@ -231,6 +262,9 @@ class SpecialDayModelTests(TestCase):
         self.assertEqual(len(SpecialDay.objects.all()), 1)
 
     def test_from_date_to_hour(self):
+        """
+        Valid from_date and to_hour values
+        """
         from_date = date(2020, 5, 10)
         to_hour = time(5, 5, 5)
         sd = SpecialDay(from_date=from_date,
