@@ -1,47 +1,10 @@
 from django.test import TestCase
 
-from .models import Fridge, Food, OpeningHour, SpecialDay, Reservation
-from .forms import FoodForm, OpeningHourForm, SpecialDayForm, User
-from datetime import time, date, timedelta
+from fridge.models import Fridge, OpeningHour, SpecialDay, Reservation
+from datetime import time, date
 from django.core.exceptions import ValidationError
-import random
-from django.core.files.uploadedfile import SimpleUploadedFile
 
-from django.core.files.images import ImageFile
-from PIL import Image
-from io import BytesIO
-
-
-def passed_date():
-    d = random.randint(1, 1000)
-    return date.today() - timedelta(days=d)
-
-
-def create_fridge(name, user):
-    address = "Un adresse"
-    NPA = "2000"
-    phone_number = "0790000000"
-
-    pil_image = Image.new('RGB', (100, 100))
-    f = BytesIO()
-    pil_image.save(f, 'PNG')
-
-    image = ImageFile(f)
-    image.filename = "test.png"
-    return Fridge.objects.create(name=name, address=address, NPA=NPA,
-                                 phone_number=phone_number, image=image, user=user)
-
-
-def create_food(name, fridge, user):
-    vegetarian = True
-    vegan = True
-    expiration_date = date(2021, 5, 10)
-    return Food.objects.create(name=name, vegetarian=vegetarian, vegan=vegan,
-                               expiration_date=expiration_date, fridge=fridge, user=user)
-
-
-def create_user(name):
-    return User.objects.create_user(name, 'gael@gael.com', 'gael')
+from fridge.tests.test_common import create_user, create_fridge, create_food
 
 
 class FridgeModelTest(TestCase):
@@ -114,7 +77,6 @@ class FoodModel(TestCase):
         reservation = Reservation(food=self.food, user=self.user)
         reservation.save()
         self.assertEqual(self.food.is_available(), False)
-
 
 
 class OpeningHourModelTests(TestCase):
@@ -277,70 +239,3 @@ class SpecialDayModelTests(TestCase):
 
         self.assertIsNotNone(sd)
         self.assertEqual(len(SpecialDay.objects.all()), 1)
-
-
-class FoodFormTest(TestCase):
-    def test_valid_date(self):
-        form_data = {'name': 'a name', 'vegetarian': True,
-                     'vegan': False, 'expiration_date': date.today()}
-        form = FoodForm(data=form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_invalid_date(self):
-        form_data = {'name': 'a name', 'vegetarian': True,
-                     'vegan': False, 'expiration_date': passed_date()}
-        form = FoodForm(data=form_data)
-        self.assertFalse(form.is_valid())
-
-
-class OpeningHourFormTest(TestCase):
-    def test_valid_hour(self):
-        from_hour = time(5, 5, 5)
-        to_hour = time(12, 8, 20)
-
-        form_data = {'weekday': 1, 'from_hour': from_hour,
-                     'to_hour': to_hour}
-        form = OpeningHourForm(data=form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_invalid_hour(self):
-        to_hour = time(5, 5, 5)
-        from_hour = time(12, 8, 20)
-
-        form_data = {'weekday': 1, 'from_hour': from_hour,
-                     'to_hour': to_hour}
-        form = OpeningHourForm(data=form_data)
-        self.assertFalse(form.is_valid())
-
-
-class SpecialDayFormTest(TestCase):
-    def test_valid_hour(self):
-        from_hour = time(5, 5, 5)
-        to_hour = time(12, 8, 20)
-
-        from_date = passed_date()
-
-        form_data = {'from_date': from_date,
-                     'from_hour': from_hour, 'to_hour': to_hour}
-        form = SpecialDayForm(data=form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_valid_date(self):
-        from_date = passed_date()
-        to_date = date.today()
-
-        form_data = {'from_date': from_date, 'to_date': to_date}
-        form = SpecialDayForm(data=form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_invalid_argument(self):
-        from_hour = time(5, 5, 5)
-        to_hour = time(12, 8, 20)
-
-        from_date = passed_date()
-        to_date = date.today()
-
-        form_data = {'from_date': from_date, 'to_date': to_date,
-                     'from_hour': from_hour, 'to_hour': to_hour}
-        form = SpecialDayForm(data=form_data)
-        self.assertFalse(form.is_valid())
