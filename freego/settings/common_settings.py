@@ -13,10 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(
-    os.path.dirname(os.path.abspath(__file__))))
-PWA_SERVICE_WORKER_PATH = os.path.join(
-    BASE_DIR, 'fridge/static/fridge/js', 'serviceworker.js')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'fridge/static/fridge/js', 'serviceworker.js')
 
 # insta_project/settings.py
 MEDIA_URL = '/media/'
@@ -116,7 +114,7 @@ TIME_INPUT_FORMATS = (
     '%I:%M %p',
 )
 
-APPEND_SLASH = False
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
