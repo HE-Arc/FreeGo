@@ -7,13 +7,14 @@ from django.utils import timezone
 
 class AdminIndexViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_admin', 'test_admin@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user(
+            'test_admin', 'test_admin@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
         If you are logout
         """
-        response = self.client.get(reverse('fridge:myadmin'))
+        response = self.client.get('/myadmin/')
         self.assertEqual(response.status_code, 302)
 
     def test_login_no_fridge(self):
@@ -21,7 +22,7 @@ class AdminIndexViewTest(TestCase):
         If you are login without friges
         """
         self.client.login(username='test_admin', password='SI3vOb*Fa8wY')
-        response = self.client.get(reverse('fridge:myadmin'))
+        response = self.client.get('/myadmin/')
 
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['fridges'], [])
@@ -34,7 +35,7 @@ class AdminIndexViewTest(TestCase):
 
         create_fridge(self.user, name='fridge1')
 
-        response = self.client.get(reverse('fridge:myadmin'))
+        response = self.client.get('/myadmin/')
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['fridges'], [
                                  '<Fridge: fridge1>'])
@@ -42,13 +43,14 @@ class AdminIndexViewTest(TestCase):
 
 class StoreIndexViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_store', 'test_store@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user(
+            'test_store', 'test_store@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
         If you are logout
         """
-        response = self.client.get(reverse('fridge:store'))
+        response = self.client.get('/store/')
         self.assertEqual(response.status_code, 302)
 
     def test_login(self):
@@ -57,7 +59,7 @@ class StoreIndexViewTest(TestCase):
         """
         self.client.login(username='test_store', password='SI3vOb*Fa8wY')
         create_fridge(self.user, name="MonFreeGo")
-        response = self.client.get(reverse('fridge:store'))
+        response = self.client.get('/store/')
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "MonFreeGo")
@@ -65,13 +67,14 @@ class StoreIndexViewTest(TestCase):
 
 class FridgeCreateViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_fridge', 'test_fridge@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user(
+            'test_fridge', 'test_fridge@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
         If you are logout
         """
-        response = self.client.get(reverse('fridge:fridge-new'))
+        response = self.client.get('/fridge/new/')
         self.assertEqual(response.status_code, 302)
 
     def test_login(self):
@@ -79,7 +82,7 @@ class FridgeCreateViewTest(TestCase):
         If you are login
         """
         self.client.login(username='test_fridge', password='SI3vOb*Fa8wY')
-        response = self.client.get(reverse('fridge:fridge-new'))
+        response = self.client.get('/fridge/new/')
 
         self.assertEqual(response.status_code, 200)
 
@@ -89,7 +92,7 @@ class FridgeListViewTest(TestCase):
         """
         If no fridges exist
         """
-        response = self.client.get(reverse('fridge:fridge-list'))
+        response = self.client.get('/fridge/list/')
         self.assertEqual(response.status_code, 200)
         # TODO display message
         self.assertQuerysetEqual(response.context['fridge_list'], [])
@@ -97,7 +100,8 @@ class FridgeListViewTest(TestCase):
 
 class FoodCreateViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_food_create', 'test_food_create@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user(
+            'test_food_create', 'test_food_create@test.test', 'SI3vOb*Fa8wY')
         self.fridge = create_fridge(self.user)
         self.food = Food(name="test", vegetarian=True, vegan=True,
                          expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
@@ -106,7 +110,7 @@ class FoodCreateViewTest(TestCase):
         """
         If you are logout
         """
-        response = self.client.get(reverse('fridge:food-form'))
+        response = self.client.get('/food/new/')
         self.assertEqual(response.status_code, 302)
 
     def test_login(self):
@@ -114,13 +118,14 @@ class FoodCreateViewTest(TestCase):
         If you are login
         """
         self.client.login(username='test_food_create', password='SI3vOb*Fa8wY')
-        response = self.client.get(reverse('fridge:food-form'))
+        response = self.client.get('/food/new/')
         self.assertEqual(response.status_code, 200)
 
 
 class FoodListViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_food_list', 'test_food_list@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user(
+            'test_food_list', 'test_food_list@test.test', 'SI3vOb*Fa8wY')
         self.fridge = create_fridge(self.user)
 
     def test_food_list_empty(self):
@@ -129,7 +134,7 @@ class FoodListViewTest(TestCase):
         """
         self.client.login(username='test_food_list', password='SI3vOb*Fa8wY')
         response = self.client.get(
-            reverse('fridge:food-list', args=(self.fridge.id,)))
+            '/food/1/list/')
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['food_available'], [])
         self.assertQuerysetEqual(response.context['food_reserve'], [])
@@ -141,7 +146,7 @@ class FoodListViewTest(TestCase):
         self.client.login(username='test_food_list', password='SI3vOb*Fa8wY')
         create_food(self.fridge, self.user)
         response = self.client.get(
-            reverse('fridge:food-list', args=(self.fridge.id,)))
+            '/food/1/list/')
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['food_available'], [
                                  '<Food: food_test>'])
@@ -155,7 +160,7 @@ class FoodListViewTest(TestCase):
         food = create_food(self.fridge, self.user)
         create_reservation(food, self.user)
         response = self.client.get(
-            reverse('fridge:food-list', args=(self.fridge.id,)))
+            '/food/1/list/')
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['food_available'], [])
         self.assertQuerysetEqual(response.context['food_reserve'], [
@@ -164,13 +169,14 @@ class FoodListViewTest(TestCase):
 
 class SettingsViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_settings', 'test_settings@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user(
+            'test_settings', 'test_settings@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
         If you are logout
         """
-        response = self.client.get(reverse('fridge:settings'))
+        response = self.client.get('/settings/')
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Vous n'avez pas encore de compte")
 
@@ -179,7 +185,7 @@ class SettingsViewTest(TestCase):
         You are login but didn't have FreeGo
         """
         self.client.login(username='test_settings', password='SI3vOb*Fa8wY')
-        response = self.client.get(reverse('fridge:settings'))
+        response = self.client.get('/settings/')
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
         self.assertNotContains(response, "Mon Free Go")
@@ -190,7 +196,7 @@ class SettingsViewTest(TestCase):
         """
         self.client.login(username='test_settings', password='SI3vOb*Fa8wY')
         create_fridge(self.user)
-        response = self.client.get(reverse('fridge:settings'))
+        response = self.client.get('/settings/')
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
         self.assertContains(response, "Mon Free Go")
