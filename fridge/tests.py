@@ -1,8 +1,8 @@
 from django.test import TestCase
 
-from .models import Fridge, Food, OpeningHour, SpecialDay, WEEKDAYS
+from .models import Fridge, OpeningHour, SpecialDay
 from .forms import FoodForm, OpeningHourForm, SpecialDayForm, User
-from datetime import time, date, timedelta, datetime
+from datetime import time, date, timedelta
 from django.core.exceptions import ValidationError
 import random
 

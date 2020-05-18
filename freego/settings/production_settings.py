@@ -27,7 +27,7 @@ SECURE_REFERRER_POLICY = 'no-referrer'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-#Use the following live settings to build on Travis CI
+# Use the following live settings to build on Travis CI
 if os.getenv('TRAVIS', None):
     SECRET_KEY = "n&g)n(y(rm3&k9e^2_=+70twpknh^(z&la1v)&8)dokmmiv1%q"
     DEBUG = False

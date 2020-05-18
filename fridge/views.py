@@ -1,14 +1,11 @@
-from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Fridge, Food, OpeningHour, SpecialDay, Reservation, User
+from .models import Fridge, Food, OpeningHour, SpecialDay, Reservation
 from .forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm, RegisterForm
 from django.contrib.auth import login, authenticate, logout
-
-from datetime import datetime
 
 # Constant
 LOGIN_URL = 'fridge:login'
