@@ -15,7 +15,7 @@ def passed_date():
     return date.today() - timedelta(days=d)
 
 
-def create_fridge(user, name="test_fridge", address="test_address", NPA="test_npa", phone_number="test_phone_number"):
+def create_fridge(user, name="test_fridge", address="test_address", NPA="2000", phone_number="0790000000"):
     '''Create generic fridge with selectable name'''
     # TODO add generic image
 
