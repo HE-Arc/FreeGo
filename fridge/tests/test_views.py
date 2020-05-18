@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class AdminIndexViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_admin', 'test@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
@@ -20,7 +20,7 @@ class AdminIndexViewTest(TestCase):
         """
         If you are login without friges
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_admin', password='SI3vOb*Fa8wY')
         response = self.client.get(reverse('fridge:myadmin'))
 
         self.assertEqual(response.status_code, 200)
@@ -30,7 +30,7 @@ class AdminIndexViewTest(TestCase):
         """
         If you are login and have fridges
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_admin', password='SI3vOb*Fa8wY')
 
         create_fridge(self.user, name='fridge1')
 
@@ -42,7 +42,7 @@ class AdminIndexViewTest(TestCase):
 
 class StoreIndexViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_store', 'test@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
@@ -55,7 +55,7 @@ class StoreIndexViewTest(TestCase):
         """
         If you are login
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_store', password='SI3vOb*Fa8wY')
         create_fridge(self.user, name="MonFreeGo")
         response = self.client.get(reverse('fridge:store'))
 
@@ -65,7 +65,7 @@ class StoreIndexViewTest(TestCase):
 
 class FridgeCreateViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_fridge', 'test@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
@@ -78,7 +78,7 @@ class FridgeCreateViewTest(TestCase):
         """
         If you are login
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_fridge', password='SI3vOb*Fa8wY')
         response = self.client.get(reverse('fridge:fridge-new'))
 
         self.assertEqual(response.status_code, 200)
@@ -97,7 +97,7 @@ class FridgeListViewTest(TestCase):
 
 class FoodCreateViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_food_create', 'test@test.test', 'SI3vOb*Fa8wY')
         self.fridge = create_fridge(self.user)
         self.food = Food(name="test", vegetarian=True, vegan=True,
                          expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
@@ -113,21 +113,21 @@ class FoodCreateViewTest(TestCase):
         """
         If you are login
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_food_create', password='SI3vOb*Fa8wY')
         response = self.client.get(reverse('fridge:food-form'))
         self.assertEqual(response.status_code, 200)
 
 
 class FoodListViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_food_list', 'test@test.test', 'SI3vOb*Fa8wY')
         self.fridge = create_fridge(self.user)
 
     def test_food_list_empty(self):
         """
         If you didn't have food
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_food_list', password='SI3vOb*Fa8wY')
         response = self.client.get(
             reverse('fridge:food-list', args=(self.fridge.id,)))
         self.assertEqual(response.status_code, 200)
@@ -138,7 +138,7 @@ class FoodListViewTest(TestCase):
         """
         If you have available food
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_food_list', password='SI3vOb*Fa8wY')
         create_food(self.fridge, self.user)
         response = self.client.get(
             reverse('fridge:food-list', args=(self.fridge.id,)))
@@ -151,7 +151,7 @@ class FoodListViewTest(TestCase):
         """
         If you have reserved food
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_food_list', password='SI3vOb*Fa8wY')
         food = create_food(self.fridge, self.user)
         create_reservation(food, self.user)
         response = self.client.get(
@@ -164,7 +164,7 @@ class FoodListViewTest(TestCase):
 
 class SettingsViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_settings', 'test@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
@@ -178,7 +178,7 @@ class SettingsViewTest(TestCase):
         """
         You are login but didn't have FreeGo
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_settings', password='SI3vOb*Fa8wY')
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
@@ -188,7 +188,7 @@ class SettingsViewTest(TestCase):
         """
         You are login and have FreeGo
         """
-        self.client.login(username='test', password='SI3vOb*Fa8wY')
+        self.client.login(username='test_settings', password='SI3vOb*Fa8wY')
         create_fridge(self.user)
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
