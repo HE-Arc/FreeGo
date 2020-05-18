@@ -1,6 +1,7 @@
 FreeGo
 ======
 [![Build Status](https://travis-ci.org/gaelchriste/SonarCloudTest.svg?branch=master)](https://travis-ci.org/gaelchriste/SonarCloudTest)
+[![Coverage Status](https://coveralls.io/repos/github/HE-Arc/FreeGo/badge.svg?branch=master)](https://coveralls.io/github/HE-Arc/FreeGo?branch=master)
 
 FreeGo est une association neuchâteloise à but non lucratif qui à comme objectifs d'aider les personnes en situations de précarité, ainsi que de diminuer le gaspillage alimentaire.
 
