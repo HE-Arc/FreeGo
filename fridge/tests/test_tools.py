@@ -41,22 +41,24 @@ def create_reservation(food, user):
 
 
 def create_opening_hour(fridge, from_hour=0, to_hour=1, weekday=1):
-    from_hour = timezone.now() + timedelta(hours=from_hour)
-    to_hour = timezone.now() + timedelta(hours=to_hour)
+    now = timezone.now()
+    from_hour = now + timedelta(hours=from_hour)
+    to_hour = now + timedelta(hours=to_hour)
     return OpeningHour.objects.create(
         weekday=weekday, from_hour=from_hour, to_hour=to_hour, fridge=fridge)
 
 
 def create_special_day(fridge, from_date=0, to_date=None, from_hour=None, to_hour=None):
-    from_date = timezone.now() + timedelta(days=from_date)
+    now = timezone.now()
+    from_date = now + timedelta(days=from_date)
     sd = SpecialDay(from_date=from_date, fridge=fridge)
 
     if to_date is not None:
-        sd.to_date = timezone.now() + timedelta(days=to_date)
+        sd.to_date = now + timedelta(days=to_date)
     if from_hour is not None:
-        sd.from_hour = timezone.now() + timedelta(hours=from_hour)
+        sd.from_hour = now + timedelta(hours=from_hour)
     if to_hour is not None:
-        sd.to_hour = timezone.now() + timedelta(hours=to_hour)
+        sd.to_hour = now + timedelta(hours=to_hour)
 
     sd.save()
     return sd
