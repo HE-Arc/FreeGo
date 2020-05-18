@@ -31,7 +31,7 @@ class Fridge(models.Model):
     def get_opening_hours(self):
         return OpeningHour.objects.filter(fridge=self)
 
-    def get_special_day(self):
+    def get_special_days(self):
         return SpecialDay.objects.filter(fridge=self)
 
     def get_foods(self):
@@ -42,7 +42,7 @@ class Fridge(models.Model):
         return Food.objects.filter(fridge=self).exclude(id__in=all_reservation)
 
     def get_reserved_food(self, user):
-        return [food for food in Food.objects.filter(fridge=self) if food.is_reserve_by_me(user) is True]
+        return [food for food in Food.objects.filter(fridge=self) if food.is_reserved_by_me(user) is True]
 
 
 class Food(models.Model):
@@ -56,7 +56,7 @@ class Food(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
-    def is_reserve_by_me(self, current_user):
+    def is_reserved_by_me(self, current_user):
         return Reservation.objects.filter(food=self).filter(user=current_user).count() != 0
 
     def is_available(self):
@@ -171,6 +171,6 @@ class User(AbstractUser):
 
     def get_reserved_food(self):
         reserved_food = [food for food in Food.objects.all()
-                         if food.is_reserve_by_me(self)]
+                         if food.is_reserved_by_me(self)]
         print(reserved_food)
-        return [food for food in Food.objects.all() if food.is_reserve_by_me(self)]
+        return [food for food in Food.objects.all() if food.is_reserved_by_me(self)]

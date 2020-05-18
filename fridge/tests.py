@@ -1,10 +1,15 @@
 from django.test import TestCase
 
-from .models import Fridge, OpeningHour, SpecialDay
+from .models import Fridge, Food, OpeningHour, SpecialDay, Reservation
 from .forms import FoodForm, OpeningHourForm, SpecialDayForm, User
 from datetime import time, date, timedelta
 from django.core.exceptions import ValidationError
 import random
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from django.core.files.images import ImageFile
+from PIL import Image
+from io import BytesIO
 
 
 def passed_date():
@@ -12,23 +17,120 @@ def passed_date():
     return date.today() - timedelta(days=d)
 
 
+def create_fridge(name, user):
+    address = "Un adresse"
+    NPA = "2000"
+    phone_number = "0790000000"
+
+    pil_image = Image.new('RGB', (100, 100))
+    f = BytesIO()
+    pil_image.save(f, 'PNG')
+
+    image = ImageFile(f)
+    image.filename = "test.png"
+    return Fridge.objects.create(name=name, address=address, NPA=NPA,
+                                 phone_number=phone_number, image=image, user=user)
+
+
+def create_food(name, fridge, user):
+    vegetarian = True
+    vegan = True
+    expiration_date = date(2021, 5, 10)
+    return Food.objects.create(name=name, vegetarian=vegetarian, vegan=vegan,
+                               expiration_date=expiration_date, fridge=fridge, user=user)
+
+
+def create_user(name):
+    return User.objects.create_user(name, 'gael@gael.com', 'gael')
+
+
+class FridgeModelTest(TestCase):
+    def setUp(self):
+        self.user = create_user("gael")
+        self.fridge = create_fridge("MonFreeGo", self.user)
+
+    def test_delete(self):
+        self.assertEqual(Fridge.objects.count(), 1)
+        self.fridge.delete()
+        self.assertEqual(Fridge.objects.count(), 0)
+        # TODO check image is correctly delete in media/images
+
+    def test_get_opening_hours(self):
+        from_hour = time(12, 0, 0)
+        to_hour = time(16, 0, 0)
+        oh1 = OpeningHour(weekday=1, from_hour=from_hour,
+                          to_hour=to_hour, fridge=self.fridge)
+        oh1.save()
+        oh2 = OpeningHour(weekday=2, from_hour=from_hour,
+                          to_hour=to_hour, fridge=self.fridge)
+        oh2.save()
+        oh3 = OpeningHour(weekday=3, from_hour=from_hour,
+                          to_hour=to_hour, fridge=self.fridge)
+        oh3.save()
+
+        self.assertEqual(self.fridge.get_opening_hours().count(), 3)
+
+    def test_get_special_day(self):
+        from_date1 = date(2020, 5, 10)
+        sd1 = SpecialDay(from_date=from_date1, fridge=self.fridge)
+        sd1.save()
+        from_date2 = date(2020, 6, 15)
+        sd2 = SpecialDay(from_date=from_date2, fridge=self.fridge)
+        sd2.save()
+
+        self.assertEqual(self.fridge.get_special_days().count(), 2)
+
+    def test_get_foods(self):
+        create_food("Banane", self.fridge, self.user)
+        self.assertEqual(self.fridge.get_foods().count(), 1)
+
+    def test_available_and_reserved_food(self):
+        food = create_food("Banane", self.fridge, self.user)
+        self.assertEqual(self.fridge.get_available_food().count(), 1)
+
+        reservation = Reservation(food=food, user=self.user)
+        reservation.save()
+
+        self.assertEqual(self.fridge.get_available_food().count(), 0)
+        self.assertEqual(len(self.fridge.get_reserved_food(self.user)), 1)
+
+
+class FoodModel(TestCase):
+    def setUp(self):
+        self.user = create_user("gael")
+        self.another_user = create_user("test")
+        fridge = create_fridge("MonFreeGo", self.user)
+        self.food = create_food("Banane", fridge, self.user)
+
+    def test_is_reserved_by_me(self):
+        reservation = Reservation(food=self.food, user=self.user)
+        reservation.save()
+
+        self.assertEqual(self.food.is_reserved_by_me(self.user), True)
+        self.assertEqual(self.food.is_reserved_by_me(self.another_user), False)
+
+    def test_is_available(self):
+        self.assertEqual(self.food.is_available(), True)
+        reservation = Reservation(food=self.food, user=self.user)
+        reservation.save()
+        self.assertEqual(self.food.is_available(), False)
+
+
+
 class OpeningHourModelTests(TestCase):
     def setUp(self):
-        user = User.objects.create_user('gael', 'gael@gael.com', 'gael')
-        Fridge.objects.create(name="monfridge", address="address",
-                              NPA="2504", phone_number="0790000000", user=user)
+        user = create_user("gael")
+        self.fridge = create_fridge("MonFreeGo", user)
 
     def test_to_hour_before_from_hour(self):
         """
         to_hour < from_hour : raise ValidationError exception
         """
 
-        fridge = Fridge.objects.get(name='monfridge')
-
         to_hour = time(12, 0, 0)
         from_hour = time(16, 0, 0)
         oh = OpeningHour(weekday=1, from_hour=from_hour,
-                         to_hour=to_hour, fridge=fridge)
+                         to_hour=to_hour, fridge=self.fridge)
 
         with self.assertRaises(ValidationError):
             oh.save()
@@ -37,12 +139,11 @@ class OpeningHourModelTests(TestCase):
         """
         from_hour < to_hour : dont raise exception
         """
-        fridge = Fridge.objects.get(name='monfridge')
 
         from_hour = time(12, 0, 0)
         to_hour = time(16, 0, 0)
         oh = OpeningHour(weekday=1, from_hour=from_hour,
-                         to_hour=to_hour, fridge=fridge)
+                         to_hour=to_hour, fridge=self.fridge)
 
         oh.save()
         self.assertIsNotNone(oh)
@@ -52,12 +153,10 @@ class OpeningHourModelTests(TestCase):
         """
         to_hour == from_hour : raise ValidationError exception
         """
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_hour = time(12, 0, 0)
         to_hour = time(12, 0, 0)
         oh = OpeningHour(weekday=1, from_hour=from_hour,
-                         to_hour=to_hour, fridge=fridge)
+                         to_hour=to_hour, fridge=self.fridge)
 
         with self.assertRaises(ValidationError):
             oh.save()
@@ -65,20 +164,17 @@ class OpeningHourModelTests(TestCase):
 
 class SpecialDayModelTests(TestCase):
     def setUp(self):
-        user = User.objects.create_user('gael', 'gael@gael.com', 'gael')
-        Fridge.objects.create(name="monfridge", address="address",
-                              NPA="2504", phone_number="0790000000", user=user)
+        user = create_user("gael")
+        self.fridge = create_fridge("MonFreeGo", user)
 
     def test_to_hour_before_from_hour(self):
         """
         to_hour < from_hour : raise ValidationError exception
         """
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_hour = time(16, 0, 0)
         to_hour = time(12, 0, 0)
         sd = SpecialDay(from_hour=from_hour,
-                        to_hour=to_hour, fridge=fridge)
+                        to_hour=to_hour, fridge=self.fridge)
 
         with self.assertRaises(ValidationError):
             sd.save()
@@ -87,12 +183,10 @@ class SpecialDayModelTests(TestCase):
         """
         to_hour = from_hour : raise ValidationError exception
         """
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_hour = time(12, 0, 0)
         to_hour = time(12, 0, 0)
         sd = SpecialDay(from_hour=from_hour,
-                        to_hour=to_hour, fridge=fridge)
+                        to_hour=to_hour, fridge=self.fridge)
 
         with self.assertRaises(ValidationError):
             sd.save()
@@ -101,12 +195,10 @@ class SpecialDayModelTests(TestCase):
         """
         to_date < from_date : raise ValidationError exception
         """
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_date = date(2020, 5, 10)
         to_date = date(2020, 5, 5)
         sd = SpecialDay(from_date=from_date,
-                        to_date=to_date, fridge=fridge)
+                        to_date=to_date, fridge=self.fridge)
 
         with self.assertRaises(ValidationError):
             sd.save()
@@ -115,12 +207,10 @@ class SpecialDayModelTests(TestCase):
         """
         to_date < from_date : raise ValidationError exception
         """
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_date = date(2020, 5, 10)
         to_date = date(2020, 5, 10)
         sd = SpecialDay(from_date=from_date,
-                        to_date=to_date, fridge=fridge)
+                        to_date=to_date, fridge=self.fridge)
 
         with self.assertRaises(ValidationError):
             sd.save()
@@ -129,14 +219,11 @@ class SpecialDayModelTests(TestCase):
         """
         if two date are selected, you can't select hour
         """
-
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_date = date(2020, 5, 10)
         to_date = date(2020, 5, 15)
         from_hour = time(5, 5, 5)
         sd = SpecialDay(from_date=from_date,
-                        to_date=to_date, fridge=fridge, from_hour=from_hour)
+                        to_date=to_date, fridge=self.fridge, from_hour=from_hour)
 
         with self.assertRaises(ValidationError):
             sd.save()
@@ -145,55 +232,47 @@ class SpecialDayModelTests(TestCase):
         """
         missing from_date
         """
-
-        fridge = Fridge.objects.get(name='monfridge')
-
         to_date = date(2020, 5, 15)
         from_hour = time(5, 5, 5)
-        sd = SpecialDay(to_date=to_date, fridge=fridge, from_hour=from_hour)
+        sd = SpecialDay(to_date=to_date, fridge=self.fridge,
+                        from_hour=from_hour)
 
         with self.assertRaises(ValidationError):
             sd.save()
 
     def test_from_date(self):
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_date = date(2020, 5, 10)
-        sd = SpecialDay(from_date=from_date, fridge=fridge)
+        sd = SpecialDay(from_date=from_date, fridge=self.fridge)
         sd.save()
 
         self.assertIsNotNone(sd)
         self.assertEqual(len(SpecialDay.objects.all()), 1)
 
     def test_from_date_to_date(self):
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_date = date(2020, 5, 10)
         to_date = date(2020, 6, 8)
-        sd = SpecialDay(from_date=from_date, to_date=to_date, fridge=fridge)
+        sd = SpecialDay(from_date=from_date,
+                        to_date=to_date, fridge=self.fridge)
         sd.save()
 
         self.assertIsNotNone(sd)
         self.assertEqual(len(SpecialDay.objects.all()), 1)
 
     def test_from_date_from_hour(self):
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_date = date(2020, 5, 10)
         from_hour = time(5, 5, 5)
         sd = SpecialDay(from_date=from_date,
-                        from_hour=from_hour, fridge=fridge)
+                        from_hour=from_hour, fridge=self.fridge)
         sd.save()
 
         self.assertIsNotNone(sd)
         self.assertEqual(len(SpecialDay.objects.all()), 1)
 
     def test_from_date_to_hour(self):
-        fridge = Fridge.objects.get(name='monfridge')
-
         from_date = date(2020, 5, 10)
         to_hour = time(5, 5, 5)
-        sd = SpecialDay(from_date=from_date, to_hour=to_hour, fridge=fridge)
+        sd = SpecialDay(from_date=from_date,
+                        to_hour=to_hour, fridge=self.fridge)
         sd.save()
 
         self.assertIsNotNone(sd)
