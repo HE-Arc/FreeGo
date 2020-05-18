@@ -8,7 +8,7 @@ from fridge.tests.test_tools import create_user, create_fridge, create_food, cre
 
 class FridgeModelTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_fridge_model', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user()
         self.fridge = create_fridge(self.user)
 
     def test_delete(self):
@@ -61,8 +61,8 @@ class FridgeModelTest(TestCase):
 
 class FoodModel(TestCase):
     def setUp(self):
-        self.user = create_user('test_food_model1', 'test@test.test', 'SI3vOb*Fa8wY')
-        self.another_user = create_user('test_food_model2', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user("test1")
+        self.another_user = create_user("test2")
         fridge = create_fridge(self.user)
         self.food = create_food(fridge, self.user)
 
@@ -86,7 +86,7 @@ class FoodModel(TestCase):
 
 class OpeningHourModelTests(TestCase):
     def setUp(self):
-        user = create_user('test_opening_hour', 'test@test.test', 'SI3vOb*Fa8wY')
+        user = create_user()
         self.fridge = create_fridge(user=user)
 
     def test_to_hour_before_from_hour(self):
@@ -116,7 +116,7 @@ class OpeningHourModelTests(TestCase):
 
 class SpecialDayModelTests(TestCase):
     def setUp(self):
-        user = create_user('test_special_day', 'test@test.test', 'SI3vOb*Fa8wY')
+        user = create_user()
         self.fridge = create_fridge(user)
 
     def test_to_hour_before_from_hour(self):

@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class AdminIndexViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_admin', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_admin', 'test_admin@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
@@ -42,7 +42,7 @@ class AdminIndexViewTest(TestCase):
 
 class StoreIndexViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_store', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_store', 'test_store@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
@@ -65,7 +65,7 @@ class StoreIndexViewTest(TestCase):
 
 class FridgeCreateViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_fridge', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_fridge', 'test_fridge@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
@@ -97,7 +97,7 @@ class FridgeListViewTest(TestCase):
 
 class FoodCreateViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_food_create', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_food_create', 'test_food_create@test.test', 'SI3vOb*Fa8wY')
         self.fridge = create_fridge(self.user)
         self.food = Food(name="test", vegetarian=True, vegan=True,
                          expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
@@ -120,7 +120,7 @@ class FoodCreateViewTest(TestCase):
 
 class FoodListViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_food_list', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_food_list', 'test_food_list@test.test', 'SI3vOb*Fa8wY')
         self.fridge = create_fridge(self.user)
 
     def test_food_list_empty(self):
@@ -164,7 +164,7 @@ class FoodListViewTest(TestCase):
 
 class SettingsViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test_settings', 'test@test.test', 'SI3vOb*Fa8wY')
+        self.user = create_user('test_settings', 'test_settings@test.test', 'SI3vOb*Fa8wY')
 
     def test_logout(self):
         """
