@@ -20,11 +20,8 @@ class AdminIndexViewTest(TestCase):
         """
         If you are login without friges
         """
-        url = reverse('fridge:myadmin')
-        print(url)
         self.client.login(username='test', password='test')
-        response = self.client.get(url)
-        print(response)
+        response = self.client.get(reverse('fridge:myadmin'))
 
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['fridges'], [])

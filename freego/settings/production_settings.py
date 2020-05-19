@@ -10,18 +10,6 @@ DEBUG = False
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
                  '127.0.0.1', 'freego.srvz-webapp.he-arc.ch']
 
-CSRF_COOKIE_SECURE = True
-
-SESSION_COOKIE_SECURE = True
-
-SECURE_SSL_REDIRECT = True
-
-SECURE_HSTS_SECONDS = 3600
-
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
-SECURE_HSTS_PRELOAD = True
-
 SECURE_REFERRER_POLICY = 'no-referrer'
 
 
