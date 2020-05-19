@@ -1,27 +1,19 @@
-var staticCacheName = "freego" + new Date().getTime();
+const CACHE_NAME = 'static-cache-v3';
+const DATA_CACHE_NAME = 'data-cache-v1';
 
-// CODELAB: Add list of files to cache here.
 const FILES_TO_CACHE = [
-    '/home',
-    'fridge/list',
-    '/map',
-    '/favorite',
-    '/settings',
-    '/static/fridge/logos/icon-128x128.png',
-    '/static/fridge/logos/icon-144x144.png',
-    '/static/fridge/logos/icon-152x152.png',
-    '/static/fridge/logos/icon-192x192.png',
-    '/static/fridge/logos/icon-256x256.png',
-    '/static/fridge/logos/icon-512x512.png',
+    '/offline-view',
 ];
+
 
 // Cache on install
 self.addEventListener('install', event => {
     this.skipWaiting();
     event.waitUntil(
-        caches.open(staticCacheName)
+        caches.open(CACHE_NAME)
             .then(cache => {
-                return cache.addAll(FILES_TO_CACHE);
+                return fetch('/offline-view')
+                    .then(response => cache.put('/offline-view', new Response(response.body)));
             })
     );
 });
@@ -43,12 +35,12 @@ self.addEventListener('activate', event => {
 // Serve from Cache
 self.addEventListener("fetch", event => {
     event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                return response || fetch(event.request);
-            })
+        fetch(event.request)
             .catch(() => {
-                return caches.match('offline');
+                return caches.open(CACHE_NAME)
+                    .then((cache) => {
+                        return cache.match('/offline-view');
+                    });
             })
     )
 });
