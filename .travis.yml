@@ -1,0 +1,34 @@
+language: python
+rvm:
+ - 3.7
+ - python
+services:
+  - mysql
+env:
+  - DJANGO=3.0 DB=mysql
+addons:
+  sonarcloud:
+    organization: "gaelchriste"
+    token:
+      secure: "IIyuDjlPuhwLp+OrJBecdAFErzoebu1JXuzeqeKCYMkRsuQoJXD1MisCZYGUDwgEVTiu8iGQYi8gQd+RoZIhiO02CHM7QCnDzYMRBETgocI5o/qKed99l1F2zj5lRcCWX3IabqRGB+pjI8h3M+vDI3UPDaoXELtwy25kF5VPh3UynoqVfitsL3b778jPwix0LVMxVwgtMgLASp6b4W6w2a+kzdsDsWXbDtOjaBic6ePNjXHqOXOyp6zWdwdLO1fCmdjAw0G1F7paCYxWOy8rxYV/he/ZujmrQ2E9GUZzRxCbrIHdbJuNF/kvKe0cn7zRdUmQXyN2E3KvR1AyYIJ1+ebTj6fkuB9rzD5LVAmI+k1aMpu445Fz9sK7WR7FAr4dHPEdcY6DyeZ8LrHqiK7mbEKOZELGDYLZ+qQ9llY8XAbDiUzQJp9zMr6A8ztGq6WeuASIacMts/RsQeu6hb6o8xGVjCWZPiIwG4l6P+qNwIlfuJMoSv/SuKiSAgZBIau9fKirZqTWJesQgx8p7E/tVZOeinEGA5vtQ1cZ4/dw2/3ikWjfA4+qVglShMN0tFBjcp5gka0ug9TkZwFc+IQREJ4j73js6hAg8BvxRnCBY1vJgW97lUAGo2bjuy4kCfQL1iyv6EjXPgrPjrRMhZ6/eqAWGtNVbMBn7X48I5TRRHM="
+
+before_install:
+  - export DJANGO_SETTINGS_MODULE=freego.settings.production_settings
+
+# command to install dependencies
+install:
+  - pip install pipenv
+  - pipenv install
+  - pipenv install mysqlclient
+  - pipenv install coveralls
+before_script:
+  - mysql -e 'CREATE DATABASE myapp_test;'
+  - python manage.py migrate
+# command to run tests
+script:
+  - coverage run --source='.' manage.py test
+  - coverage xml -i
+  - sonar-scanner
+after_success:
+  - coveralls
+  

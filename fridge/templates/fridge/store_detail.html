@@ -24,7 +24,7 @@
 </a>
 
 <h5>Horaire spéciaux</h5>
-{% for sh in fridge.get_special_day %}
+{% for sh in fridge.get_special_days %}
 <div>
     <p>{{ sh }}
         <a href="{% url 'fridge:specialday-delete' sh.pk %}" class="secondary-content">

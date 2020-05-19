@@ -1,10 +1,7 @@
 from django import forms
-from datetime import datetime, date
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from .models import Fridge, Food, OpeningHour, SpecialDay, User
-from django.core.validators import RegexValidator
 from .validators import expiration_date_validator
 
 # Constant
@@ -110,13 +107,13 @@ class SpecialDayForm(forms.ModelForm):
         to_hour = cleaned_data.get('to_hour')
         to_date = cleaned_data.get('to_date')
 
-        if to_date != None:
-            if to_hour != None or from_hour != None:
+        if to_date is not None:
+            if to_hour is not None or from_hour is not None:
                 raise ValidationError(
                     "Si deux dates sont sélecionnées, vous ne pouvez pas sélectionner une heure.")
             elif to_date <= from_date:
                 raise ValidationError("Date invalide")
-        elif from_hour != None and to_hour != None and to_hour <= from_hour:
+        elif from_hour is not None and to_hour is not None and to_hour <= from_hour:
             raise ValidationError("Heure invalide")
 
 
