@@ -1,9 +1,10 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
-    <title>Free Go</title>
+    <title>{% trans 'Free Go' %}</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -58,7 +59,7 @@
 
         <section class="section">
             <div class="container">
-                <p>Vous n'êtes pas authentifié !!</p>
+                <p>{% trans 'You are not authenticated' %}</p>
             </div>
         </section>
 
