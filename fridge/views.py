@@ -149,9 +149,10 @@ class FoodDeleteView(LoginRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
 
-class FoodListView(generic.ListView):
+class FoodListView(LoginRequiredMixin, generic.ListView):
     template_name = 'fridge/food_list.html'
     model = Food
+    login_url = LOGIN_URL
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
