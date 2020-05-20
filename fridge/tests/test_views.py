@@ -219,7 +219,7 @@ class SettingsViewTest(TestCase):
         """
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Vous n'avez pas encore de compte")
+        self.assertContains(response, "You do not have an account yet")
 
     def test_login_without_freego(self):
         """
@@ -229,7 +229,7 @@ class SettingsViewTest(TestCase):
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
-        self.assertNotContains(response, "Mon Free Go")
+        self.assertNotContains(response, "My Free Go")
 
     def test_login_with_freego(self):
         """
@@ -240,4 +240,4 @@ class SettingsViewTest(TestCase):
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
-        self.assertContains(response, "Mon Free Go")
+        self.assertContains(response, "My Free Go")

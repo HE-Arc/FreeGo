@@ -1,21 +1,22 @@
 {% extends 'fridge/base.html' %}
 {% load static %}
 {% block content %}
+{% load i18n %}
 
 {% if user.is_authenticated %}
 <div class="collection">
-    <a href="#!" class="collection-item black-text">Mon profil</a>
-    <a href="{% url 'fridge:myadmin' %}" class="collection-item black-text">Administration</a>
+    <a href="#!" class="collection-item black-text">{% trans 'My profil' %}</a>
+    <a href="{% url 'fridge:myadmin' %}" class="collection-item black-text">{% trans 'Administration' %}</a>
 
     {% if user.has_fridge %}
-    <a href="{% url 'fridge:store' %}" class="collection-item black-text">Mon Free Go</a>
+    <a href="{% url 'fridge:store' %}" class="collection-item black-text">{% trans 'My Free Go' %}</a>
     {% endif%}
 
-    <a href="{% url 'fridge:reservation-list' %}" class="collection-item black-text">Réservations</a>
-    <a href="#!" class="collection-item black-text">Dons</a>
-    <a href="#!" class="collection-item black-text">Aide</a>
-    <a href="#!" class="collection-item black-text">Nous contacter</a>
-    <a href="{% url 'fridge:logout' %}" class="collection-item black-text">Se déconnecter</a>
+    <a href="{% url 'fridge:reservation-list' %}" class="collection-item black-text">{% trans 'Reservation' %}</a>
+    <a href="#!" class="collection-item black-text">{% trans 'Donations' %}</a>
+    <a href="#!" class="collection-item black-text">{% trans 'Help' %}</a>
+    <a href="#!" class="collection-item black-text">{% trans 'Contact us' %}</a>
+    <a href="{% url 'fridge:logout' %}" class="collection-item black-text">{% trans 'Log out' %}</a>
 </div>
 {% else %}
 <div class="valign-wrapper">
@@ -23,17 +24,17 @@
         <div class="row center-align">
             <div class="row">
                 <div class="col s12">
-                    <h4>Vous n'avez pas encore de compte</h4>
+                    <h4>{% trans 'You do not have an account yet' %}</h4>
                 </div>
             </div>
             <div class="row">
                 <div class="col s12">
-                    <a href="{% url 'fridge:login' %}" class="btn col s12">Se connecter</a>
+                    <a href="{% url 'fridge:login' %}" class="btn col s12">{% trans 'Log in' %}</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col s12">
-                    <a href="{% url 'fridge:register' %}" class="btn col s12 outline">Créer un compte</a>
+                    <a href="{% url 'fridge:register' %}" class="btn col s12 outline">{% trans 'Create an account' %}</a>
                 </div>
             </div>
         </div>
