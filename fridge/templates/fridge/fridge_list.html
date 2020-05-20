@@ -1,6 +1,7 @@
 {% extends 'fridge/base.html' %}
 {% load static %}
 {% block content %}
+{% load i18n %}
 
 <div class="container">
   <div class="row">
@@ -15,15 +16,15 @@
           </div>
         </a>
         <div class="card-content">
-          <strong>Adresse</strong>
+          <strong>{% trans 'Address' %}</strong>
           <p>{{ fridge.address }}</p>
-          <strong>Horaire</strong><br>
+          <strong>{% trans 'Opening hour' %}</strong><br>
           {% for oh in fridge.get_opening_hours %}
           <div>
             <p>{{ oh }}</p>
           </div>
           {% endfor %}
-          <strong>Horaires spéciaux</strong><br>
+          <strong>{% trans 'Special day' %}</strong><br>
           {% for sd in fridge.get_special_days %}
           <div>
             <p>{{ sd }}</p>

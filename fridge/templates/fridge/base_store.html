@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     {% load static %}
-
+    {% load i18n %}
     <title>Free Go</title>
 
     <!-- CSS -->
@@ -74,7 +74,7 @@
 
         <section class="section">
             <div class="container">
-                <p>Vous n'êtes pas authentifié !!</p>
+                <p>{% trans 'You are not authenticated' %}</p>
             </div>
         </section>
 

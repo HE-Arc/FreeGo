@@ -4,6 +4,9 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from .validators import phone_number_validator, NPA_validator, expiration_date_validator
 
+from django.utils.translation import ugettext_lazy as _
+
+
 #####################################
 #              Fridge               #
 #####################################
@@ -89,7 +92,7 @@ class Reservation(models.Model):
     def save(self, *args, **kwargs):
         r = Reservation.objects.filter(food=self.food)
         if r and r[0].user == self.user:
-            raise ValidationError("Reservation error hour")
+            raise ValidationError(_("You can't reserve your own food."))
         super().save(*args, **kwargs)
 
 
@@ -98,13 +101,13 @@ class Reservation(models.Model):
 #####################################
 
 WEEKDAYS = [
-    (1, "Lundi"),
-    (2, "Mardi"),
-    (3, "Mercredi"),
-    (4, "Jeudi"),
-    (5, "Vendredi"),
-    (6, "Samedi"),
-    (7, "Dimanche"),
+    (1, _("Monday")),
+    (2, _("Tuesday")),
+    (3, _("Wednesday")),
+    (4, _("Thursday")),
+    (5, _("Friday")),
+    (6, _("Saturday")),
+    (7, _("Sunday")),
 ]
 
 
@@ -119,7 +122,7 @@ class OpeningHour(models.Model):
 
     def save(self, *args, **kwargs):
         if self.from_hour >= self.to_hour:
-            raise ValidationError("Heure invalide")
+            raise ValidationError(_("Invalid hour"))
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -139,23 +142,23 @@ class SpecialDay(models.Model):
         if self.to_date is not None:
             if self.to_hour is not None or self.from_hour is not None:
                 raise ValidationError(
-                    "Si deux dates sont sélecionnées, vous ne pouvez pas sélectionner une heure.")
+                    _("If two dates are selected, you can't select an hour."))
             elif self.to_date <= self.from_date:
-                raise ValidationError("Date invalide")
+                raise ValidationError(_("Invalid date"))
         elif self.from_hour is not None and self.to_hour is not None and self.to_hour <= self.from_hour:
-            raise ValidationError("Heure invalide")
+            raise ValidationError(_("Invalid hour"))
         super().save(*args, **kwargs)
 
     def __str__(self):
         if self.to_date:
-            return "Du " + self.from_date.strftime('%d/%m/%Y') + " aux " + self.from_date.strftime('%d/%m/%Y')
+            return _("From " + self.from_date.strftime('%d/%m/%Y') + " to " + self.from_date.strftime('%d/%m/%Y'))
         elif self.from_hour and self.to_hour:
-            return "Le " + self.from_date.strftime('%d/%m/%Y') + " ouvert de " + self.from_hour.strftime('%H:%M') + " à " + self.to_hour.strftime('%H:%M')
+            return _("The " + self.from_date.strftime('%d/%m/%Y') + " open from " + self.from_hour.strftime('%H:%M') + " to " + self.to_hour.strftime('%H:%M'))
         elif self.from_hour:
-            return "Le " + self.from_date.strftime('%d/%m/%Y') + " ouvre à " + self.from_hour.strftime('%H:%M')
+            return _("The " + self.from_date.strftime('%d/%m/%Y') + " open from " + self.from_hour.strftime('%H:%M'))
         elif self.to_hour:
-            return "Le " + self.from_date.strftime('%d/%m/%Y') + " ferme à " + self.to_hour.strftime('%H:%M')
-        return "Le " + self.from_date.strftime('%d/%m/%Y')
+            return _("The " + self.from_date.strftime('%d/%m/%Y') + " closed at " + self.to_hour.strftime('%H:%M'))
+        return _("The " + self.from_date.strftime('%d/%m/%Y'))
 
 
 #####################################

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     {% load static %}
-    <title>Free Go</title>
+    {% load i18n %}
+    <title>{% trans 'Free Go' %}</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'fridge/css/materialize.min.css' %}">
@@ -60,7 +61,7 @@
 
         <section class="section">
             <div class="container">
-                <p>Vous n'êtes pas authentifié !!</p>
+                <p>{% trans 'You are not authenticated' %}</p>
             </div>
         </section>
 
