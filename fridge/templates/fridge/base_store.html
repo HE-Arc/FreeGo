@@ -1,12 +1,13 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
+    {% load static %}
+
     <title>Free Go</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'fridge/css/materialize.css' %}">
+    <link rel="stylesheet" href="{% static 'fridge/css/materialize.min.css' %}">
     <link rel="stylesheet" href="{% static 'fridge/css/style.css' %}" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -83,7 +84,7 @@
 
     <!-- JS -->
     <script src="{% static 'fridge/js/jquery-3.5.1.min.js' %}"></script>
-    <script src="{% static 'fridge/js/materialize.js' %}"></script>
+    <script src="{% static 'fridge/js/materialize.min.js' %}"></script>
     <script src="{% static 'fridge/js/script.js' %}"></script>
 
     <script>
