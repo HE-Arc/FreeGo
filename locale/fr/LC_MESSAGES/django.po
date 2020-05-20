@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 12:34+0200\n"
+"POT-Creation-Date: 2020-05-20 13:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -230,8 +230,9 @@ msgstr "Mot de passe : "
 
 #: .\fridge\templates\fridge\login.html:29
 #: .\fridge\templates\fridge\reservation_list.html:28
-#: .\fridge\templates\fridge\settings.html:27
-msgid "I do not have account yet"
+#, fuzzy
+#| msgid "I do not have account yet"
+msgid "I do not have an account yet"
 msgstr "Je n'ai pas encore de compte"
 
 #: .\fridge\templates\fridge\register.html:7
@@ -289,6 +290,12 @@ msgstr "Nous contacter"
 msgid "Log out"
 msgstr "Se déconnecter"
 
+#: .\fridge\templates\fridge\settings.html:27
+#, fuzzy
+#| msgid "I do not have account yet"
+msgid "You do not have an account yet"
+msgstr "Vous n'avez pas encore de compte"
+
 #: .\fridge\templates\fridge\settings.html:32
 msgid "Log in"
 msgstr "Se connecter"
@@ -321,9 +328,4 @@ msgstr "Cette date d'expiration est déjà passé"
 #, fuzzy
 #~| msgid "I do not have account yet"
 #~ msgid "You didn not have reservation yet"
-#~ msgstr "Je n'ai pas encore de compte"
-
-#, fuzzy
-#~| msgid "I do not have account yet"
-#~ msgid "You did not have account yet"
 #~ msgstr "Je n'ai pas encore de compte"
