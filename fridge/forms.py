@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Fridge, Food, OpeningHour, SpecialDay, User
 from .validators import expiration_date_validator
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # Constant
 DATE_FORMAT = '%b %d, %Y'

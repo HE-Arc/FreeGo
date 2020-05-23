@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from .validators import phone_number_validator, NPA_validator, \
     expiration_date_validator
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 #####################################
