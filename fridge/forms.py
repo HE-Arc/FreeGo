@@ -115,7 +115,8 @@ class SpecialDayForm(forms.ModelForm):
                     _("If two dates are selected, you can't select an hour."))
             elif to_date <= from_date:
                 raise ValidationError(_("Invalid date"))
-        elif from_hour is not None and to_hour is not None and to_hour <= from_hour:
+        elif (from_hour is not None and to_hour is not None
+              and to_hour <= from_hour):
             raise ValidationError(_("Invalid hour"))
 
 

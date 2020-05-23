@@ -14,12 +14,17 @@ urlpatterns = [
 
     # Fridge
     path('fridge/new/', views.FridgeCreateView.as_view(), name='fridge-new'),
-    path('fridge/<pk>/delete/', views.FridgeDeleteView.as_view(), name='fridge-delete'),
-    path('fridge/<pk>/update/', views.FridgeUpdateView.as_view(), name='fridge-update'),
+    path(
+        'fridge/<pk>/delete/', views.FridgeDeleteView.as_view(),
+        name='fridge-delete'),
+    path(
+        'fridge/<pk>/update/', views.FridgeUpdateView.as_view(),
+        name='fridge-update'),
 
     # Store
     path('store/', views.StoreIndexView.as_view(), name='store'),
-    path('store/detail/', views.StoreDetailView.as_view(), name='store-detail'),
+    path('store/detail/',
+         views.StoreDetailView.as_view(), name='store-detail'),
 
     # Food
     path('food/new/', views.FoodCreateView.as_view(),

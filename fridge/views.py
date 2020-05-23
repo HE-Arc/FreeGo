@@ -4,16 +4,13 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Fridge, Food, OpeningHour, SpecialDay, Reservation
-from .forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm, RegisterForm
+from .forms import FridgeForm, FoodForm, OpeningHourForm, \
+    SpecialDayForm, RegisterForm
 from django.contrib.auth import login, authenticate, logout
 
 # Constant
 LOGIN_URL = 'fridge:login'
 DATE_FORMAT = '%b %d, %Y'
-
-######################################
-#               Admin                #
-######################################
 
 
 class AdminIndexView(LoginRequiredMixin, generic.TemplateView):
@@ -24,11 +21,6 @@ class AdminIndexView(LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context['fridges'] = Fridge.objects.all()
         return context
-
-
-######################################
-#               Store                #
-######################################
 
 
 class StoreIndexView(LoginRequiredMixin, generic.TemplateView):
@@ -52,10 +44,6 @@ class StoreDetailView(LoginRequiredMixin, generic.TemplateView):
             user=self.request.user).first()
         return context
 
-
-######################################
-#               Fridge               #
-######################################
 
 class FridgeCreateView(LoginRequiredMixin, View):
     form_class = FridgeForm
@@ -109,11 +97,6 @@ class FridgeUpdateView(LoginRequiredMixin, generic.UpdateView):
     login_url = LOGIN_URL
 
 
-######################################
-#                Food                #
-######################################
-
-
 class FoodCreateView(LoginRequiredMixin, View):
     form_class = FoodForm
     template_name = 'fridge/food_form.html'
@@ -163,11 +146,6 @@ class FoodListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-######################################
-#            Opening hour            #
-######################################
-
-
 class OpeningHourCreateView(LoginRequiredMixin, View):
     form_class = OpeningHourForm
     template_name = 'fridge/opening_hour_form.html'
@@ -202,10 +180,6 @@ class OpeningHourDeleteView(LoginRequiredMixin, generic.DeleteView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
-
-######################################
-#            Special day             #
-######################################
 
 class SpecialDayCreateView(LoginRequiredMixin, View):
     form_class = SpecialDayForm
@@ -247,11 +221,6 @@ class SpecialDayDeleteView(LoginRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
 
-######################################
-#            Reservation             #
-######################################
-
-
 class FoodReservation(LoginRequiredMixin, View):
     login_url = LOGIN_URL
 
@@ -278,10 +247,6 @@ class FoodCancellation(LoginRequiredMixin, View):
         return self.post(request, args, kwargs)  # TODO find a better solutions
 
 
-######################################
-#              Settings              #
-######################################
-
 class SettingsView(generic.TemplateView):
     template_name = 'fridge/settings.html'
 
@@ -301,10 +266,6 @@ class ReservationListView(generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context['reservation_list'] = self.request.user.get_reserved_food()
         return context
-
-######################################
-#               Register             #
-######################################
 
 
 class RegisterView(View):
@@ -328,10 +289,6 @@ class RegisterView(View):
         return render(request, self.template_name, {'form': form})
 
 
-######################################
-#               Login                #
-######################################
-
 class LoginView(generic.TemplateView):
     template_name = 'fridge/login.html'
 
@@ -344,10 +301,6 @@ class LoginView(generic.TemplateView):
             return redirect('fridge:home')
         return redirect('fridge:login')
 
-######################################
-#               Logout                #
-######################################
-
 
 class LogoutView(LoginRequiredMixin, View):
     login_url = LOGIN_URL
@@ -355,10 +308,6 @@ class LogoutView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect('fridge:settings')
-
-######################################
-#                TODO                #
-######################################
 
 
 class HomeView(generic.TemplateView):
@@ -371,10 +320,6 @@ class MapView(generic.TemplateView):
 
 class FavoriteView(generic.TemplateView):
     template_name = 'fridge/favorite.html'
-
-######################################
-#                PWA                 #
-######################################
 
 
 def offline_view(request):

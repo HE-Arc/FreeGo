@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from .validators import phone_number_validator, NPA_validator, expiration_date_validator
+from .validators import phone_number_validator, NPA_validator, \
+    expiration_date_validator
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -22,7 +23,8 @@ class Fridge(models.Model):
     image = models.ImageField(
         upload_to='images/')
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
@@ -45,7 +47,8 @@ class Fridge(models.Model):
         return Food.objects.filter(fridge=self).exclude(id__in=all_reservation)
 
     def get_reserved_food(self, user):
-        return [food for food in Food.objects.filter(fridge=self) if food.is_reserved_by_me(user) is True]
+        return [food for food in Food.objects.filter(fridge=self)
+                if food.is_reserved_by_me(user) is True]
 
 
 class Food(models.Model):
@@ -57,10 +60,12 @@ class Food(models.Model):
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        null=True, blank=True)
 
     def is_reserved_by_me(self, current_user):
-        return Reservation.objects.filter(food=self).filter(user=current_user).count() != 0
+        return Reservation.objects.filter(food=self) \
+            .filter(user=current_user).count() != 0
 
     def is_available(self):
         return Reservation.objects.filter(food=self).count() == 0
@@ -76,7 +81,8 @@ class Reporting(models.Model):
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        null=True, blank=True)
 
     def __str__(self):
         return str(self.title)
@@ -87,7 +93,8 @@ class Reservation(models.Model):
     food = models.ForeignKey(
         Food, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        null=True, blank=True)
 
     def save(self, *args, **kwargs):
         r = Reservation.objects.filter(food=self.food)
@@ -126,7 +133,9 @@ class OpeningHour(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(WEEKDAYS[self.weekday][1]) + " : " + self.from_hour.strftime('%H:%M') + "-" + self.to_hour.strftime('%H:%M')
+        return str(WEEKDAYS[self.weekday][1]) + " : " + \
+            + self.from_hour.strftime('%H:%M') + "-" + \
+            + self.to_hour.strftime('%H:%M')
 
 
 class SpecialDay(models.Model):
@@ -145,19 +154,25 @@ class SpecialDay(models.Model):
                     _("If two dates are selected, you can't select an hour."))
             elif self.to_date <= self.from_date:
                 raise ValidationError(_("Invalid date"))
-        elif self.from_hour is not None and self.to_hour is not None and self.to_hour <= self.from_hour:
+        elif (self.from_hour is not None and self.to_hour is not None and
+              self.to_hour <= self.from_hour):
             raise ValidationError(_("Invalid hour"))
         super().save(*args, **kwargs)
 
     def __str__(self):
         if self.to_date:
-            return _("From " + self.from_date.strftime('%d/%m/%Y') + " to " + self.from_date.strftime('%d/%m/%Y'))
+            return _("From " + self.from_date.strftime('%d/%m/%Y') +
+                     " to " + self.from_date.strftime('%d/%m/%Y'))
         elif self.from_hour and self.to_hour:
-            return _("The " + self.from_date.strftime('%d/%m/%Y') + " open from " + self.from_hour.strftime('%H:%M') + " to " + self.to_hour.strftime('%H:%M'))
+            return _("The " + self.from_date.strftime('%d/%m/%Y') +
+                     " open from " + self.from_hour.strftime('%H:%M') +
+                     " to " + self.to_hour.strftime('%H:%M'))
         elif self.from_hour:
-            return _("The " + self.from_date.strftime('%d/%m/%Y') + " open from " + self.from_hour.strftime('%H:%M'))
+            return _("The " + self.from_date.strftime('%d/%m/%Y') +
+                     " open from " + self.from_hour.strftime('%H:%M'))
         elif self.to_hour:
-            return _("The " + self.from_date.strftime('%d/%m/%Y') + " closed at " + self.to_hour.strftime('%H:%M'))
+            return _("The " + self.from_date.strftime('%d/%m/%Y') +
+                     " closed at " + self.to_hour.strftime('%H:%M'))
         return _("The " + self.from_date.strftime('%d/%m/%Y'))
 
 
@@ -176,4 +191,5 @@ class User(AbstractUser):
         reserved_food = [food for food in Food.objects.all()
                          if food.is_reserved_by_me(self)]
         print(reserved_food)
-        return [food for food in Food.objects.all() if food.is_reserved_by_me(self)]
+        return [food for food in Food.objects.all()
+                if food.is_reserved_by_me(self)]

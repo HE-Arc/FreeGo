@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
-from fridge.tests.test_tools import create_user, create_fridge, create_food, create_reservation
+from fridge.tests.test_tools import create_user, create_fridge, \
+    create_food, create_reservation
 from fridge.models import Food
 from django.utils import timezone
 
@@ -100,7 +101,8 @@ class FoodCreateViewTest(TestCase):
         self.user = create_user('test', 'test@test.test', 'test')
         self.fridge = create_fridge(self.user)
         self.food = Food(name="test", vegetarian=True, vegan=True,
-                         expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
+                         expiration_date=timezone.now(), user=self.user,
+                         fridge=self.fridge)
 
     def test_logout(self):
         """
@@ -161,6 +163,7 @@ class FoodListViewTest(TestCase):
         self.assertQuerysetEqual(response.context['food_reserve'], [
                                  '<Food: food_test>'])
 
+
 class OpeningHourCreateView(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
@@ -183,12 +186,14 @@ class OpeningHourCreateView(TestCase):
 
     # TODO : improve get and test post
 
+
 class SpecialDayCreateViewTest(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
         self.fridge = create_fridge(self.user)
         self.food = Food(name="test", vegetarian=True, vegan=True,
-                         expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
+                         expiration_date=timezone.now(), user=self.user,
+                         fridge=self.fridge)
 
     def test_logout(self):
         """
@@ -206,7 +211,6 @@ class SpecialDayCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     # TODO : improve get and test post
-    
 
 
 class SettingsViewTest(TestCase):
@@ -241,3 +245,6 @@ class SettingsViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
         self.assertContains(response, "My Free Go")
+
+
+# TODO : improve all tests
