@@ -326,7 +326,7 @@ class FavoriteView(generic.TemplateView):
 
 
 def offline_view(request):
-    template = 'fridge/fridge_list.html'
+    template = 'fridge/offline.html'
     return render(request, template)
 
 
