@@ -4,21 +4,21 @@
 {% load i18n %}
 
 <div class="container">
-  <div class="row">
+  <div id="main" class="row">
 
-    {% for fridge in fridge_list %}
-    <div class="col s10 offset-s1 m4">
+    <div id="fridge-template" class="col s10 offset-s1 m4" hidden>
+      <div id="card-last-updated" hidden></div>
       <div class="card">
-        <a href="{% url 'fridge:food-list' fridge.pk %}">
+        <a href="#">
           <div class="card-image">
-            <img src="{{ fridge.image.url}}" alt="{{ fridge.title }}">
-            <span class="card-title">{{ fridge.name }}</span>
+            <img id="image" src="">
+            <span id="name" class="card-title"></span>
           </div>
         </a>
         <div class="card-content">
           <strong>{% trans 'Address' %}</strong>
-          <p>{{ fridge.address }}</p>
-          <strong>{% trans 'Opening hour' %}</strong><br>
+          <p id="address"></p>
+          {% comment %} <strong>{% trans 'Opening hour' %}</strong><br>
           {% for oh in fridge.get_opening_hours %}
           <div>
             <p>{{ oh }}</p>
@@ -29,11 +29,14 @@
           <div>
             <p>{{ sd }}</p>
           </div>
-          {% endfor %}
+          {% endfor %} {% endcomment %}
         </div>
       </div>
     </div>
-    {% endfor %}
+
+    {% comment %} <div id="addDialogContainer">
+      <!-- the news will get displayed here from indexedDB in offline mode -->
+    </div> {% endcomment %}
 
   </div>
 </div>

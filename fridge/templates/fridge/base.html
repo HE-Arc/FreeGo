@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
+{% load pwa %}
 
 <head>
-  {% load pwa %}
   {% load static %}
   {% progressive_web_app_meta %}
   <title>Free Go</title>
@@ -48,6 +48,8 @@
   <script>
     feather.replace()
   </script>
+  <script type="text/javascript" src="{% static 'fridge/js/idb.js' %}"></script>
+  <script type="text/javascript" src="{% static 'fridge/js/idbop.js' %}"></script>
 
 </body>
 

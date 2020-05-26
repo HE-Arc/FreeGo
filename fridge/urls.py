@@ -7,19 +7,17 @@ from . import views
 app_name = 'fridge'
 
 urlpatterns = [
-    path('fridge/list/', views.FridgeListView.as_view(), name='fridge-list'),
-
+    path('fridge/list', views.FridgeListView.as_view(),
+         name='fridge-list'),
     # Admin
     path('myadmin/', views.AdminIndexView.as_view(), name='myadmin'),
 
     # Fridge
     path('fridge/new/', views.FridgeCreateView.as_view(), name='fridge-new'),
-    path(
-        'fridge/<pk>/delete/', views.FridgeDeleteView.as_view(),
-        name='fridge-delete'),
-    path(
-        'fridge/<pk>/update/', views.FridgeUpdateView.as_view(),
-        name='fridge-update'),
+    path('fridge/<pk>/delete/', views.FridgeDeleteView.as_view(),
+         name='fridge-delete'),
+    path('fridge/<pk>/update/', views.FridgeUpdateView.as_view(),
+         name='fridge-update'),
 
     # Store
     path('store/', views.StoreIndexView.as_view(), name='store'),
@@ -31,7 +29,8 @@ urlpatterns = [
          name='food-form'),
     path('food/<pk>/delete/', views.FoodDeleteView.as_view(),
          name='food-delete'),
-    path('food/<pk>/list/', views.FoodListView.as_view(), name='food-list'),
+    path('food/<pk>/list/', views.FoodListView.as_view(),
+         name='food-list'),  # TODO PWA
 
     # Opening Day
     path('openinghour/new/', views.OpeningHourCreateView.as_view(),
@@ -47,19 +46,19 @@ urlpatterns = [
 
     # Reservation
     path('food/<pk>/reservation/', views.FoodReservation.as_view(),
-         name='food-reservation'),
+         name='food-reservation'),  # TODO PWA
     path('food/<pk>/cancellation/', views.FoodCancellation.as_view(),
-         name='food-cancellation'),
+         name='food-cancellation'),  # TODO PWA
     path('reservation/list/', views.ReservationListView.as_view(),
-         name='reservation-list'),
+         name='reservation-list'),  # TODO PWA
 
     # Settings
     path('settings/', views.SettingsView.as_view(), name='settings'),
 
     # Login/Register/Logout
-    path('register/', views.RegisterView.as_view(), name='register'),
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('register/', views.RegisterView.as_view(), name='register'),  # TODO PWA
+    path('login/', views.LoginView.as_view(), name='login'),  # TODO PWA
+    path('logout/', views.LogoutView.as_view(), name='logout'),  # TODO PWA
 
     # TODO (TB)
     path('', views.HomeView.as_view(), name='home'),
@@ -68,7 +67,8 @@ urlpatterns = [
     path('favorite/', views.FavoriteView.as_view(), name='favorite'),
 
     # PWA
-    path('offline-view/', views.offline_view, name='offline-view')
+    path('offline-view/', views.offline_view, name='offline-view'),
+    path('getdata/', views.getdata, name='getdata')
 ]
 
 if settings.DEBUG:

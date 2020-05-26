@@ -7,6 +7,8 @@ from .models import Fridge, Food, OpeningHour, SpecialDay, Reservation
 from .forms import FridgeForm, FoodForm, OpeningHourForm, \
     SpecialDayForm, RegisterForm
 from django.contrib.auth import login, authenticate, logout
+from django.core import serializers
+from django.http import HttpResponse
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -76,7 +78,8 @@ class FridgeListView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['fridge_list'] = Fridge.objects.all()
+        results = Fridge.objects.all()
+        context['fridge_list'] = results  # TODO put results ???
         return context
 
 
@@ -323,5 +326,11 @@ class FavoriteView(generic.TemplateView):
 
 
 def offline_view(request):
-    template = 'fridge/offline.html'
+    template = 'fridge/fridge_list.html'
     return render(request, template)
+
+
+def getdata(request):
+    results = Fridge.objects.all()
+    jsondata = serializers.serialize('json', results)
+    return HttpResponse(jsondata)

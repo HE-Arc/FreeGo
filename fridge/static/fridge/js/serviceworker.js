@@ -1,18 +1,30 @@
-const CACHE_NAME = 'static-cache-v3';
+const CACHE_NAME = 'freego-pwa-v1';
 const DATA_CACHE_NAME = 'data-cache-v1';
 
 const FILES_TO_CACHE = [
-    '/offline-view',
-    'fridge/css/style.css',
-    'fridge/icons/vegan-icon.png',
-    'fridge/icons/vegetarian-icon.png',
-    'fridge/js/script.js',
-    'fridge/logos/icon-128x128.png',
-    'fridge/logos/icon-144x144.png',
-    'fridge/logos/icon-152x152.png',
-    'fridge/logos/icon-192x192.png',
-    'fridge/logos/icon-256x256.png',
-    'fridge/logos/icon-512x512.png',
+    //urls
+    '/fridge/list',
+    //css
+    '/static/fridge/css/materialize.min.css',
+    '/static/fridge/css/style.css',
+    //icons
+    '/static/fridge/icons/vegan-icon.png',
+    '/static/fridge/icons/vegetarian-icon.png',
+    '/static/fridge/icons/feather/corner-up-left.svg',
+    //js
+    '/static/fridge/js/feather.min.js',
+    '/static/fridge/js/jquery-3.5.1.min.js',
+    '/static/fridge/js/materialize.min.js',
+    '/static/fridge/js/script.js',
+    '/static/fridge/js/idb.js',
+    '/static/fridge/js/idbop.js',
+    //logos
+    '/static/fridge/logos/icon-128x128.png',
+    '/static/fridge/logos/icon-144x144.png',
+    '/static/fridge/logos/icon-152x152.png',
+    '/static/fridge/logos/icon-192x192.png',
+    '/static/fridge/logos/icon-256x256.png',
+    '/static/fridge/logos/icon-512x512.png',
 ];
 
 
@@ -22,8 +34,7 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                return fetch('/offline-view')
-                    .then(response => cache.put('/offline-view', new Response(response.body)));
+                return cache.addAll(FILES_TO_CACHE);
             })
     );
 });
@@ -31,26 +42,28 @@ self.addEventListener('install', event => {
 // Clear cache on activate
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames
-                    .filter(cacheName => (cacheName.startsWith("django-pwa-")))
-                    .filter(cacheName => (cacheName !== staticCacheName))
-                    .map(cacheName => caches.delete(cacheName))
-            );
+        caches.keys().then((keyList) => {
+            return Promise.all(keyList.map((key) => {
+                if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
+                    return caches.delete(key);
+                }
+            }));
         })
     );
 });
 
 // Serve from Cache
 self.addEventListener("fetch", event => {
+    var requestUrl = new URL(event.request.url);
+    if (requestUrl.origin === location.origin) {
+        if ((requestUrl.pathname === '/fridge/list')) {
+            event.respondWith(caches.match('/fridge/list'));
+            return;
+        }
+    }
     event.respondWith(
-        fetch(event.request)
-            .catch(() => {
-                return caches.open(CACHE_NAME)
-                    .then((cache) => {
-                        return cache.match('/offline-view');
-                    });
-            })
-    )
+        caches.match(event.request).then(function (response) {
+            return response || fetch(event.request);
+        })
+    );
 });
