@@ -28,8 +28,8 @@ dbPromise.then(function (db) {
     for (var field in cursor.value) {
         if (field == 'fields') {
             const card = document.getElementById('fridge-template').cloneNode(true);
-            console.log(card);
             fridgesData = cursor.value[field];
+
             for (var key in fridgesData) {
                 if (key == 'name') {
                     card.querySelector('#name').textContent = fridgesData[key];
@@ -40,7 +40,9 @@ dbPromise.then(function (db) {
                 if (key == 'image') {
                     card.querySelector('#image').src = "/media/" + fridgesData[key];
                 }
+
             }
+            card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
             document.querySelector('#main').appendChild(card);
             card.removeAttribute('hidden');
         }

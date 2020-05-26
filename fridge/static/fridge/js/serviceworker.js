@@ -4,6 +4,10 @@ const DATA_CACHE_NAME = 'data-cache-v1';
 const FILES_TO_CACHE = [
     //urls
     '/fridge/list',
+    '/',
+    '/home',
+    '/map',
+    '/favorite',
     //css
     '/static/fridge/css/materialize.min.css',
     '/static/fridge/css/style.css',
@@ -54,16 +58,18 @@ self.addEventListener('activate', event => {
 
 // Serve from Cache
 self.addEventListener("fetch", event => {
-    var requestUrl = new URL(event.request.url);
-    if (requestUrl.origin === location.origin) {
-        if ((requestUrl.pathname === '/fridge/list')) {
-            event.respondWith(caches.match('/fridge/list'));
-            return;
-        }
-    }
     event.respondWith(
-        caches.match(event.request).then(function (response) {
-            return response || fetch(event.request);
-        })
-    );
+        caches.open(DATA_CACHE_NAME).then((cache) => {
+            return fetch(event.request)
+                .then((response) => {
+                    // If the response was good, clone it and store it in the cache.
+                    if (response.status === 200) {
+                        cache.put(event.request.url, response.clone());
+                    }
+                    return response;
+                }).catch((err) => {
+                    // Network request failed, try to get it from the cache.
+                    return cache.match(event.request);
+                });
+        }));
 });
