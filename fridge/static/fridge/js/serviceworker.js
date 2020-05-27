@@ -1,7 +1,7 @@
-const CACHE_NAME = 'freego-pwa-v1';
+const cacheName = 'freego-pwa-v1';
 const DATA_CACHE_NAME = 'data-cache-v1';
 
-const FILES_TO_CACHE = [
+const precacheResources = [
     //urls
     '/fridge/list',
     '/',
@@ -21,7 +21,7 @@ const FILES_TO_CACHE = [
     '/static/fridge/js/materialize.min.js',
     '/static/fridge/js/script.js',
     '/static/fridge/js/idb.js',
-    '/static/fridge/js/idbop.js',
+    '/static/fridge/js/app.js',
     //logos
     '/static/fridge/logos/icon-128x128.png',
     '/static/fridge/logos/icon-144x144.png',
@@ -36,9 +36,9 @@ const FILES_TO_CACHE = [
 self.addEventListener('install', event => {
     this.skipWaiting();
     event.waitUntil(
-        caches.open(CACHE_NAME)
+        caches.open(cacheName)
             .then(cache => {
-                return cache.addAll(FILES_TO_CACHE);
+                return cache.addAll(precacheResources);
             })
     );
 });
@@ -48,7 +48,7 @@ self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then((keyList) => {
             return Promise.all(keyList.map((key) => {
-                if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
+                if (key !== cacheName && key !== DATA_CACHE_NAME) {
                     return caches.delete(key);
                 }
             }));
@@ -76,7 +76,7 @@ self.addEventListener("fetch", event => {
     //     return;
     // }
     event.respondWith(
-        caches.open(CACHE_NAME).then((cache) => {
+        caches.open(cacheName).then((cache) => {
             return cache.match(event.request)
                 .then((response) => {
                     return response || fetch(event.request);
