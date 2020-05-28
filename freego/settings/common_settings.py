@@ -153,12 +153,20 @@ PWA_APP_ICONS = [
     {
         'src': '/static/fridge/logos/icon-192x192.png',
         'sizes': '192x192'
+    },
+    {
+        'src': '/static/fridge/logos/icon-512x512.png',
+        'sizes': '512x512'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
         'src': '/static/fridge/logos/icon-192x192.png',
         'sizes': '192x192'
+    },
+    {
+        'src': '/static/fridge/logos/icon-512x512.png',
+        'sizes': '512x512'
     }
 ]
 PWA_APP_SPLASH_SCREEN = [

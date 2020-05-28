@@ -135,17 +135,18 @@ class FoodDeleteView(LoginRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
 
-class FoodListView(generic.ListView):
+class FoodListView(LoginRequiredMixin, generic.ListView):
     template_name = 'fridge/food_list.html'
     model = Food
+    login_url = LOGIN_URL
 
-    # def get(self, request, *args, **kwargs):
-    #     fridge_id = request.GET['fridge_id']
-    #     return super().get(request, *args, **kwargs)
-    # login_url = LOGIN_URL
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    # def get_queryset(self):
-    #     return list(super().get_queryset())
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        context['food_available'] = fridge.get_available_food()
+        context['food_reserve'] = fridge.get_reserved_food(self.request.user)
+        return context
 
 
 class OpeningHourCreateView(LoginRequiredMixin, View):
@@ -233,7 +234,7 @@ class FoodReservation(LoginRequiredMixin, View):
         return redirect('fridge:food-list', food.fridge.pk)
 
     def get(self, request, *args, **kwargs):
-        return self.post(request, args, kwargs)  # TODO find a better solutions
+        return self.post(request, args, kwargs)
 
 
 class FoodCancellation(LoginRequiredMixin, View):
@@ -246,7 +247,7 @@ class FoodCancellation(LoginRequiredMixin, View):
         return redirect('fridge:food-list', food.fridge.pk)
 
     def get(self, request, *args, **kwargs):
-        return self.post(request, args, kwargs)  # TODO find a better solutions
+        return self.post(request, args, kwargs)
 
 
 class SettingsView(generic.TemplateView):
@@ -336,19 +337,6 @@ def get_foods_data(request):
     return HttpResponse(jsondata)
 
 
-def get_reservations_data(request):
-    results = Reservation.objects.all()
-    jsondata = serializers.serialize('json', results)
-    return HttpResponse(jsondata)
-
-
-def get_openinghours_data(request):
-    results = OpeningHour.objects.all()
-    jsondata = serializers.serialize('json', results)
-    return HttpResponse(jsondata)
-
-
-def get_specialdays_data(request):
-    results = SpecialDay.objects.all()
-    jsondata = serializers.serialize('json', results)
-    return HttpResponse(jsondata)
+def offline_view(request):
+    template = "fridge/offline.html"
+    return render(request, template)

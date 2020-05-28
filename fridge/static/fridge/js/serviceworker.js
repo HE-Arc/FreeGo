@@ -7,9 +7,8 @@ const precacheResources = [
     '/',
     '/home',
     '/map',
-    '/settings',
     '/favorite',
-    '/food/list',
+    '/offline',
     //css
     '/static/fridge/css/materialize.min.css',
     '/static/fridge/css/style.css',
@@ -60,33 +59,23 @@ self.addEventListener('activate', event => {
 
 // Serve from Cache
 self.addEventListener("fetch", event => {
-    if (event.request.url.includes('/forecast/')) {
-        event.respondWith(
-            caches.open(DATA_CACHE_NAME).then((cache) => {
-                return fetch(event.request)
-                    .then((response) => {
-                        // If the response was good, clone it and store it in the cache.
-                        if (response.status === 200) {
-                            cache.put(event.request.url, response.clone());
-                        }
-                        return response;
-                    }).catch((err) => {
-                        // Network request failed, try to get it from the cache.
-                        return cache.match(event.request);
-                    });
-            }));
-        return;
-    }
     event.respondWith(
-        caches.open(cacheName).then((cache) => {
-            return cache.match(event.request)
-                .then((response) => {
-                    return response || fetch(event.request);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    console.log("You are not connecte to the internet!!");
-                });
-        })
-    );
+        caches.match(event.request)
+            .then(response => {
+                return response || fetch(event.request);
+            })
+            .catch(() => {
+                return caches.match('offline');
+            })
+    )
+
+    // event.respondWith(
+    //     caches.open(cacheName).then((cache) => {
+    //         return cache.match(event.request)
+    //             .then((response) => {
+    //                 return response || fetch(event.request);
+    //             });
+    //     })
+    // );
+
 });

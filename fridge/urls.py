@@ -29,7 +29,7 @@ urlpatterns = [
          name='food-form'),
     path('food/<pk>/delete', views.FoodDeleteView.as_view(),
          name='food-delete'),
-    path('food/<pk>/list', views.FoodListView.as_view(),
+    path('food/<pk>/list/', views.FoodListView.as_view(),
          name='food-list'),  # TODO PWA
 
     # Opening Day
@@ -70,9 +70,7 @@ urlpatterns = [
     path('forecast/get-fridges-data',
          views.get_fridges_data, name='get-fridges-data'),
     path('forecast/get-foods-data', views.get_foods_data, name='get-foods-data'),
-
-    # TODO find better solutions
-    path('food/list', views.FoodListView.as_view(), name='list-food')
+    path('offline', views.offline_view, name='offline')
 ]
 
 if settings.DEBUG:

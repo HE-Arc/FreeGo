@@ -80,7 +80,7 @@ var idbApp = (function () {
                         }
 
                     }
-                    card.querySelector('#reference').href = "/food/list"; // TODO find better solution
+                    card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
                     document.querySelector('#main').appendChild(card);
                     card.removeAttribute('hidden');
                 }
