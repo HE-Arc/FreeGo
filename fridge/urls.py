@@ -67,8 +67,12 @@ urlpatterns = [
     path('favorite', views.FavoriteView.as_view(), name='favorite'),
 
     # PWA
-    path('offline-view', views.offline_view, name='offline-view'),
-    path('getdata', views.getdata, name='getdata')
+    path('forecast/get-fridges-data',
+         views.get_fridges_data, name='get-fridges-data'),
+    path('forecast/get-foods-data', views.get_foods_data, name='get-foods-data'),
+
+    # TODO find better solutions
+    path('food/list', views.FoodListView.as_view(), name='list-food')
 ]
 
 if settings.DEBUG:

@@ -6,7 +6,7 @@ var idbApp = (function () {
         return;
     }
 
-    var dbPromise = idb.open('freego_db', 4, function (upgradeDb) {
+    var dbPromise = idb.open('freego_db', 5, function (upgradeDb) {
         switch (upgradeDb.oldVersion) {
             case 0:
             // a placeholder case so that the switch block will 
@@ -15,12 +15,23 @@ var idbApp = (function () {
             case 1:
                 console.log('Creating the fridges object store');
                 upgradeDb.createObjectStore('fridges', { keyPath: 'pk' });
-                getFridges();
+                addFridgesFromNetwork();
+
+            case 2:
+                console.log('Creating the foods object store');
+                upgradeDb.createObjectStore('foods', { keyPath: 'pk' });
+                addFoodsFromNetwork();
+
+            case 3:
+                console.log('Creating fridge index in foods');
+                var store = upgradeDb.transaction.objectStore('foods');
+                store.createIndex('fridge', 'fields.fridge');
         }
     });
 
-    function getFridges() {
-        fetch('/getdata').then(function (response) {
+    // Fridges 
+    function addFridgesFromNetwork() {
+        fetch('/forecast/get-fridges-data').then(function (response) {
             return response.json();
         }).then(function (jsondata) {
             dbPromise.then(function (db) {
@@ -39,12 +50,17 @@ var idbApp = (function () {
         });
     }
 
-    function displayFridges() {
-        dbPromise.then(function (db) {
+    function getFridges() {
+        addFridgesFromNetwork();
+        return dbPromise.then(function (db) {
             var tx = db.transaction('fridges', 'readonly');
             var store = tx.objectStore('fridges');
             return store.openCursor();
-        }).then(function showRange(cursor) {
+        })
+    }
+
+    function displayFridges() {
+        getFridges().then(function showRange(cursor) {
             if (!cursor) { return; }
             console.log('Cursored at:', cursor.value.name);
             for (var field in cursor.value) {
@@ -64,7 +80,7 @@ var idbApp = (function () {
                         }
 
                     }
-                    card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
+                    card.querySelector('#reference').href = "/food/list"; // TODO find better solution
                     document.querySelector('#main').appendChild(card);
                     card.removeAttribute('hidden');
                 }
@@ -73,9 +89,72 @@ var idbApp = (function () {
         });
     }
 
+    // Foods
+    function addFoodsFromNetwork() {
+        fetch('/forecast/get-foods-data').then(function (response) {
+            return response.json();
+        }).then(function (jsondata) {
+            dbPromise.then(function (db) {
+                var tx = db.transaction('foods', 'readwrite');
+                var store = tx.objectStore('foods');
+                return Promise.all(jsondata.map(function (item) {
+                    console.log('Adding item: ', item);
+                    return store.add(item);
+                })).catch(function (e) {
+                    tx.abort();
+                    console.log(e);
+                }).then(function () {
+                    console.log('All items added successfully');
+                });
+            });
+        });
+    }
+
+    function getFoodsByFridge(key) {
+        return dbPromise.then(function (db) {
+            var tx = db.transaction('foods', 'readonly');
+            var store = tx.objectStore('foods');
+            var index = store.index('fridge');
+
+            var test = index.get(key);
+            console.log(index);
+
+            return test
+        });
+    }
+
+    function displayFoodsByFridge() {
+        var key = 1;
+
+        getFoodsByFridge(key).then(function (object) {
+            if (!object) { return; }
+            const card = document.getElementById('food-detail').cloneNode(true);
+            var foodsData = object['fields'];
+            for (var key in foodsData) {
+                if (key == "name") {
+                    card.querySelector('#food-name').textContent = foodsData[key];
+                }
+                else if (key == "vegetarian" && foodsData["vegetarian"] == true) {
+                    card.querySelector('#food-vegetarian').removeAttribute('hidden');
+                }
+                else if (key == "vegan" && foodsData["vegan"] == true) {
+                    card.querySelector('#food-vegan').removeAttribute('hidden');
+                }
+                else if (key == "expiration_date") {
+                    card.querySelector('#food-expiration-date').textContent = foodsData[key];
+                }
+            }
+            // TODO add reservations
+            document.querySelector('#main').appendChild(card);
+            card.removeAttribute('hidden');
+        });
+    }
+
     return {
         dbPromise: (dbPromise),
-        getFridges: (getFridges),
-        displayFridges: (displayFridges)
+        getFridges: (addFridgesFromNetwork),
+        displayFridges: (displayFridges),
+        getFoodsByFridge: (getFoodsByFridge),
+        displayFoodsByFridge: (displayFoodsByFridge)
     };
 })();
