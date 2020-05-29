@@ -4,6 +4,7 @@ from fridge.tests.test_tools import create_user, create_fridge, \
     create_food, create_reservation
 from fridge.models import Food
 from django.utils import timezone
+from django.shortcuts import resolve_url as r
 
 
 class AdminIndexViewTest(TestCase):
@@ -246,5 +247,46 @@ class SettingsViewTest(TestCase):
         self.assertContains(response, "Administration")
         self.assertContains(response, "My Free Go")
 
+
+class ServiceWorkerTest(TestCase):
+    def setUp(self):
+        self.response = self.client.get(r('serviceworker'))
+
+    def test_get(self):
+        """GET /serviceworker.js should return status code 200"""
+        self.assertEqual(200, self.response.status_code)
+
+
+class ManifestTest(TestCase):
+    def setUp(self):
+        self.response = self.client.get(r('manifest'), format='json')
+
+    def test_get(self):
+        """GET /manifest.json Should return status code 200"""
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_template(self):
+        """Must have the template manifest.json"""
+        self.assertTemplateUsed(self.response, 'manifest.json')
+
+    def test_manifest_contains(self):
+        """Must be the attributes to manitesf.json"""
+        contents = [
+            '"name":',
+            '"short_name":',
+            '"description":',
+            '"start_url":',
+            '"display":',
+            '"scope":',
+            '"background_color":',
+            '"theme_color":',
+            '"orientation":',
+            '"icons":',
+            '"dir":',
+            '"lang":'
+        ]
+        for expected in contents:
+            with self.subTest():
+                self.assertContains(self.response, expected)
 
 # TODO : improve all tests
