@@ -66,6 +66,8 @@ class OpeningHourForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        print("TEEEEESSSSSSSSSTTTTTTTTTTT")
+        print(cleaned_data)
         from_hour = to_hour = None
         from_hour = cleaned_data.get('from_hour')
         to_hour = cleaned_data.get('to_hour')
@@ -88,8 +90,8 @@ class SpecialDayForm(forms.ModelForm):
         }
 
         widgets = {
-            'from_date': forms.TimeInput(attrs={'class': 'datepicker'}),
-            'to_date': forms.TimeInput(attrs={'class': 'datepicker'}),
+            'from_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'to_date': forms.DateInput(attrs={'class': 'datepicker'}),
             'from_hour': forms.TimeInput(attrs={'class': 'timepicker'}),
             'to_hour': forms.TimeInput(attrs={'class': 'timepicker'})
         }
@@ -98,12 +100,10 @@ class SpecialDayForm(forms.ModelForm):
             'to_date': False,
             'from_hour': False,
             'to_hour': False
-
         }
 
     def clean(self):
         cleaned_data = super().clean()
-
         from_date = cleaned_data.get('from_date')
         from_hour = cleaned_data.get('from_hour')
         to_hour = cleaned_data.get('to_hour')

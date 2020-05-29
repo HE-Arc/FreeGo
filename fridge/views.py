@@ -70,6 +70,7 @@ class FridgeCreateView(LoginRequiredMixin, View):
             )
             fridge.save()
             return redirect('fridge:myadmin')
+
         return render(request, self.template_name, {'form': form})
 
 
@@ -161,6 +162,7 @@ class OpeningHourCreateView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+
         if form.is_valid():
             opening_hour = OpeningHour(
                 weekday=form.cleaned_data['weekday'],

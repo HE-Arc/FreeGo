@@ -17,17 +17,20 @@ def passed_date():
 def create_fridge(user, name="test_fridge", address="test_address",
                   NPA="2000", phone_number="0790000000"):
     '''Create generic fridge with selectable name'''
-    # TODO add generic image
+    image = get_test_image()
+    return Fridge.objects.create(name=name, address=address, NPA=NPA,
+                                 phone_number=phone_number, image=image,
+                                 user=user)
 
-    pil_image = Image.new('RGB', (100, 100))
+
+def get_test_image():
+    pil_image = Image.open('fridge/static/fridge/test/test.png')
     f = BytesIO()
     pil_image.save(f, 'PNG')
 
     image = ImageFile(f)
-    image.filename = name
-    return Fridge.objects.create(name=name, address=address, NPA=NPA,
-                                 phone_number=phone_number, image=image,
-                                 user=user)
+    image.filename = "test_image"
+    return image
 
 
 def create_food(fridge, user, name="food_test",

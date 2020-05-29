@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 10:19+0200\n"
+"POT-Creation-Date: 2020-05-29 15:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,7 +77,7 @@ msgstr "De l'heure"
 msgid "To hour"
 msgstr "À l'heure"
 
-#: .\fridge\forms.py:74 .\fridge\forms.py:120 .\fridge\models.py:132
+#: .\fridge\forms.py:74 .\fridge\forms.py:119 .\fridge\models.py:132
 #: .\fridge\models.py:159
 msgid "Invalid hour"
 msgstr "Heure invalide"
@@ -90,16 +90,16 @@ msgstr "De la date"
 msgid "To date"
 msgstr "À la date"
 
-#: .\fridge\forms.py:115 .\fridge\models.py:154
+#: .\fridge\forms.py:114 .\fridge\models.py:154
 msgid "If two dates are selected, you can't select an hour."
 msgstr ""
 "Si deux dates sont sélectionné, vous ne pouvez pas sélectionné une heure"
 
-#: .\fridge\forms.py:117 .\fridge\models.py:156
+#: .\fridge\forms.py:116 .\fridge\models.py:156
 msgid "Invalid date"
 msgstr "Date invalide"
 
-#: .\fridge\forms.py:125
+#: .\fridge\forms.py:124
 msgid "Required. Fill an valid email address."
 msgstr "Requis. Remplissez une adresse email valide"
 
@@ -136,13 +136,29 @@ msgid "Sunday"
 msgstr "Dimanche"
 
 #: .\fridge\models.py:164
-msgid "From "
-msgstr "De "
+#, python-format
+msgid "From %(from_date)s to %(to_date)s"
+msgstr "Du %(from_date)s aux %(to_date)s"
 
-#: .\fridge\models.py:167 .\fridge\models.py:171 .\fridge\models.py:174
-#: .\fridge\models.py:176
-msgid "The "
-msgstr "Le "
+#: .\fridge\models.py:168
+#, python-format
+msgid "The %(from_date)s open from %(from_hour)s to %(to_hour)s"
+msgstr "Le %(from_date)s ouvre à %(from_hour)s jusqu'à %(to_hour)s"
+
+#: .\fridge\models.py:173
+#, python-format
+msgid "The %(from_date)s open from %(from_hour)s"
+msgstr "Le %(from_date)s ouvre à %(from_hour)s"
+
+#: .\fridge\models.py:177
+#, python-format
+msgid "The %(from_date)s closed at %(to_hour)s"
+msgstr "Le %(from_date)s ferme à %(to_hour)s"
+
+#: .\fridge\models.py:180
+#, python-format
+msgid "The %(from_date)s"
+msgstr "Le %(from_date)s"
 
 #: .\fridge\templates\fridge\base_admin.html:7
 #: .\fridge\templates\fridge\base_login.html:7
@@ -168,7 +184,7 @@ msgstr "Ajout de nourriture"
 #: .\fridge\templates\fridge\fridge_update_form.html:59
 #: .\fridge\templates\fridge\opening_hour_form.html:40
 msgid "Validate"
-msgstr "Date invalide"
+msgstr "Valider"
 
 #: .\fridge\templates\fridge\fridge_form.html:14
 msgid "Creation of a Free Go"
