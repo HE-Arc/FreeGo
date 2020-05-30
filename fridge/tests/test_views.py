@@ -1,8 +1,12 @@
 from django.test import TestCase
 from django.urls import reverse
-from fridge.tests.test_tools import create_user, create_fridge, create_food, create_reservation
-from fridge.models import Food
+from fridge.tests.test_tools import create_user, create_fridge, \
+    create_food, create_reservation
+from fridge.models import Food, Fridge, SpecialDay, OpeningHour
 from django.utils import timezone
+from django.shortcuts import resolve_url as r
+from django.core.files.uploadedfile import SimpleUploadedFile
+from datetime import timedelta, date
 
 
 class AdminIndexViewTest(TestCase):
@@ -66,21 +70,29 @@ class StoreIndexViewTest(TestCase):
 class FridgeCreateViewTest(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
-
-    def test_logout(self):
-        """
-        If you are logout
-        """
-        response = self.client.get(reverse('fridge:fridge-new'))
-        self.assertEqual(response.status_code, 302)
-
-    def test_login(self):
-        """
-        If you are login
-        """
         self.client.login(username='test', password='test')
-        response = self.client.get(reverse('fridge:fridge-new'))
 
+    def test_post(self):
+        image = SimpleUploadedFile(name='test.png', content=open(
+            'fridge/static/fridge/test/test.png', 'rb').read(),
+            content_type='image/png')
+        json = {
+            'name': 'A Fridge',
+            'address': 'Une adresse 21',
+            'NPA': '2000',
+            'phone_number': '0790000000',
+            'image': image,
+            'user': self.user.pk
+        }
+
+        response = self.client.post(reverse('fridge:fridge-new'), json)
+
+        self.assertRedirects(response, reverse('fridge:myadmin'))
+        self.assertEqual(len(Fridge.objects.all()), 1)
+        self.assertEqual(Fridge.objects.last().name, 'A Fridge')
+
+    def test_get(self):
+        response = self.client.get(reverse('fridge:fridge-new'))
         self.assertEqual(response.status_code, 200)
 
 
@@ -98,22 +110,23 @@ class FridgeListViewTest(TestCase):
 class FoodCreateViewTest(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
-        self.fridge = create_fridge(self.user)
-        self.food = Food(name="test", vegetarian=True, vegan=True,
-                         expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
-
-    def test_logout(self):
-        """
-        If you are logout
-        """
-        response = self.client.get(reverse('fridge:food-form'))
-        self.assertEqual(response.status_code, 302)
-
-    def test_login(self):
-        """
-        If you are login
-        """
         self.client.login(username='test', password='test')
+        self.fridge = create_fridge(self.user)
+
+    def test_post(self):
+        json = {
+            'name': 'An aliment',
+            'vegetarian': True,
+            'vegan': False,
+            'expiration_date': date.today() + timedelta(days=1)
+        }
+        response = self.client.post(reverse('fridge:food-form'), json)
+
+        self.assertRedirects(response, reverse('fridge:store'))
+        self.assertEqual(len(Food.objects.all()), 1)
+        self.assertEqual(Food.objects.last().name, 'An aliment')
+
+    def test_get(self):
         response = self.client.get(reverse('fridge:food-form'))
         self.assertEqual(response.status_code, 200)
 
@@ -161,6 +174,102 @@ class FoodListViewTest(TestCase):
         self.assertQuerysetEqual(response.context['food_reserve'], [
                                  '<Food: food_test>'])
 
+class OpeningHourCreateView(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.fridge = create_fridge(self.user)
+
+    def test_logout(self):
+        """
+        If you are logout
+        """
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_login_get(self):
+        """
+        If you are login
+        """
+        self.client.login(username='test', password='test')
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 200)
+
+    # TODO : improve get and test post
+
+class SpecialDayCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.fridge = create_fridge(self.user)
+        self.food = Food(name="test", vegetarian=True, vegan=True,
+                         expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
+
+    def test_logout(self):
+        """
+        If you are logout
+        """
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_login_get(self):
+        """
+        If you are login
+        """
+        self.client.login(username='test', password='test')
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 200)
+
+    # TODO : improve get and test post
+    
+
+
+class OpeningHourCreateView(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(self.user)
+
+    def test_post(self):
+        json = {
+            'weekday': 1,
+            'from_hour': "08:00 AM",
+            'to_hour': "10:00 AM"
+        }
+        response = self.client.post(reverse('fridge:openinghour-form'), json)
+
+        self.assertRedirects(response, reverse('fridge:store-detail'))
+        self.assertEqual(len(OpeningHour.objects.all()), 1)
+        self.assertEqual(OpeningHour.objects.last().weekday, 1)
+
+    def test_get(self):
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 200)
+
+
+class SpecialDayCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(self.user)
+
+    def test_post(self):
+        from_date = (timezone.now() + timedelta(days=0)).date().isoformat()
+        to_date = (timezone.now() + timedelta(days=1)).date().isoformat()
+        json = {
+            'from_date': from_date,
+            'to_date': to_date
+        }
+
+        response = self.client.post(reverse('fridge:specialday-form'), json)
+
+        self.assertRedirects(response, reverse('fridge:store-detail'))
+        self.assertEqual(len(SpecialDay.objects.all()), 1)
+        self.assertEqual(SpecialDay.objects.last().from_date,
+                         date.today())
+
+    def test_get(self):
+        response = self.client.get(reverse('fridge:specialday-form'))
+        self.assertEqual(response.status_code, 200)
+
 
 class SettingsViewTest(TestCase):
     def setUp(self):
@@ -172,7 +281,7 @@ class SettingsViewTest(TestCase):
         """
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Vous n'avez pas encore de compte")
+        self.assertContains(response, "You do not have an account yet")
 
     def test_login_without_freego(self):
         """
@@ -182,7 +291,7 @@ class SettingsViewTest(TestCase):
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
-        self.assertNotContains(response, "Mon Free Go")
+        self.assertNotContains(response, "My Free Go")
 
     def test_login_with_freego(self):
         """
@@ -193,4 +302,48 @@ class SettingsViewTest(TestCase):
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
-        self.assertContains(response, "Mon Free Go")
+        self.assertContains(response, "My Free Go")
+
+
+class ServiceWorkerTest(TestCase):
+    def setUp(self):
+        self.response = self.client.get(r('serviceworker'))
+
+    def test_get(self):
+        """GET /serviceworker.js should return status code 200"""
+        self.assertEqual(200, self.response.status_code)
+
+
+class ManifestTest(TestCase):
+    def setUp(self):
+        self.response = self.client.get(r('manifest'), format='json')
+
+    def test_get(self):
+        """GET /manifest.json Should return status code 200"""
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_template(self):
+        """Must have the template manifest.json"""
+        self.assertTemplateUsed(self.response, 'manifest.json')
+
+    def test_manifest_contains(self):
+        """Must be the attributes to manitesf.json"""
+        contents = [
+            '"name":',
+            '"short_name":',
+            '"description":',
+            '"start_url":',
+            '"display":',
+            '"scope":',
+            '"background_color":',
+            '"theme_color":',
+            '"orientation":',
+            '"icons":',
+            '"dir":',
+            '"lang":'
+        ]
+        for expected in contents:
+            with self.subTest():
+                self.assertContains(self.response, expected)
+
+# TODO : improve all tests

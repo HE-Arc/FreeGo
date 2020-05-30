@@ -3,7 +3,8 @@ from django.test import TestCase
 from fridge.models import Fridge, OpeningHour, SpecialDay
 from django.core.exceptions import ValidationError
 
-from fridge.tests.test_tools import create_user, create_fridge, create_food, create_opening_hour, create_special_day, create_reservation
+from fridge.tests.test_tools import create_user, create_fridge, create_food, \
+    create_opening_hour, create_special_day, create_reservation
 
 
 class FridgeModelTest(TestCase):

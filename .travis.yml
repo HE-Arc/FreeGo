@@ -26,7 +26,7 @@ before_script:
   - python manage.py migrate
 # command to run tests
 script:
-  - coverage run --source='.' manage.py test
+  - coverage run -m pytest
   - coverage xml -i
   - sonar-scanner
 after_success:

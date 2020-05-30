@@ -1,15 +1,16 @@
 {% extends 'fridge/base_store.html' %}
+{% load i18n %}
 
 {% block content %}
 <h4>{{ fridge.name }}</h4>
 
-<h5>Adresse</h5>
+<h5>{% trans 'Address' %}</h5>
 <p>{{ fridge.address }}, {{ fridge.NPA }}</p>
 
-<h5>Numéro de téléphone</h5>
+<h5>{% trans 'Phone number' %}</h5>
 <p>{{ fridge.phone_number }}</p>
 
-<h5>Horaire</h5>
+<h5>{% trans 'Opening Hour' %}</h5>
 {% for oh in fridge.get_opening_hours %}
 <div>
     <p>{{ oh }}
@@ -23,7 +24,7 @@
     <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
 </a>
 
-<h5>Horaire spéciaux</h5>
+<h5>{% trans 'Special Day' %}</h5>
 {% for sh in fridge.get_special_days %}
 <div>
     <p>{{ sh }}
@@ -37,6 +38,6 @@
     <i class="small material-icons" style="color: rgb(87, 161, 173);">add_circle</i>
 </a>
 
-<h5>Utilisateur</h5>
+<h5>{% trans 'User' %}</h5>
 <p>{{ fridge.user }}</p>
 {% endblock %}

@@ -1,12 +1,29 @@
-var staticCacheName = "freego" + new Date().getTime();
+const cacheName = 'freego-pwa-v1';
+const DATA_CACHE_NAME = 'data-cache-v1';
 
-// CODELAB: Add list of files to cache here.
-const FILES_TO_CACHE = [
+const precacheResources = [
+    //urls
+    '/fridge/list',
+    '/',
     '/home',
-    'fridge/list',
     '/map',
     '/favorite',
-    '/settings',
+    '/offline',
+    //css
+    '/static/fridge/css/materialize.min.css',
+    '/static/fridge/css/style.css',
+    //icons
+    '/static/fridge/icons/vegan-icon.png',
+    '/static/fridge/icons/vegetarian-icon.png',
+    '/static/fridge/icons/feather/corner-up-left.svg',
+    //js
+    '/static/fridge/js/feather.min.js',
+    '/static/fridge/js/jquery-3.5.1.min.js',
+    '/static/fridge/js/materialize.min.js',
+    '/static/fridge/js/script.js',
+    '/static/fridge/js/idb.js',
+    '/static/fridge/js/app.js',
+    //logos
     '/static/fridge/logos/icon-128x128.png',
     '/static/fridge/logos/icon-144x144.png',
     '/static/fridge/logos/icon-152x152.png',
@@ -15,13 +32,15 @@ const FILES_TO_CACHE = [
     '/static/fridge/logos/icon-512x512.png',
 ];
 
+
 // Cache on install
 self.addEventListener('install', event => {
     this.skipWaiting();
     event.waitUntil(
-        caches.open(staticCacheName)
+        caches.open(cacheName)
             .then(cache => {
-                return cache.addAll(FILES_TO_CACHE);
+                return cache.addAll(precacheResources);
+
             })
     );
 });
@@ -29,13 +48,12 @@ self.addEventListener('install', event => {
 // Clear cache on activate
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames
-                    .filter(cacheName => (cacheName.startsWith("django-pwa-")))
-                    .filter(cacheName => (cacheName !== staticCacheName))
-                    .map(cacheName => caches.delete(cacheName))
-            );
+        caches.keys().then((keyList) => {
+            return Promise.all(keyList.map((key) => {
+                if (key !== cacheName && key !== DATA_CACHE_NAME) {
+                    return caches.delete(key);
+                }
+            }));
         })
     );
 });
@@ -43,12 +61,22 @@ self.addEventListener('activate', event => {
 // Serve from Cache
 self.addEventListener("fetch", event => {
     event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                return response || fetch(event.request);
-            })
+        fetch(event.request)
             .catch(() => {
-                return caches.match('offline');
+                return caches.open(CACHE_NAME)
+                    .then((cache) => {
+                        return cache.match('/offline-view');
+                    });
             })
     )
+
+    // event.respondWith(
+    //     caches.open(cacheName).then((cache) => {
+    //         return cache.match(event.request)
+    //             .then((response) => {
+    //                 return response || fetch(event.request);
+    //             });
+    //     })
+    // );
+
 });
