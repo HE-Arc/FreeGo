@@ -30,7 +30,7 @@ urlpatterns = [
     path('food/<pk>/delete', views.FoodDeleteView.as_view(),
          name='food-delete'),
     path('food/<pk>/list/', views.FoodListView.as_view(),
-         name='food-list'),  # TODO PWA
+         name='food-list'),
 
     # Opening Day
     path('openinghour/new', views.OpeningHourCreateView.as_view(),
@@ -46,21 +46,21 @@ urlpatterns = [
 
     # Reservation
     path('food/<pk>/reservation', views.FoodReservation.as_view(),
-         name='food-reservation'),  # TODO PWA
+         name='food-reservation'),
     path('food/<pk>/cancellation', views.FoodCancellation.as_view(),
-         name='food-cancellation'),  # TODO PWA
+         name='food-cancellation'),
     path('reservation/list', views.ReservationListView.as_view(),
-         name='reservation-list'),  # TODO PWA
+         name='reservation-list'),
 
     # Settings
     path('settings', views.SettingsView.as_view(), name='settings'),
 
     # Login/Register/Logout
-    path('register', views.RegisterView.as_view(), name='register'),  # TODO PWA
-    path('login', views.LoginView.as_view(), name='login'),  # TODO PWA
-    path('logout', views.LogoutView.as_view(), name='logout'),  # TODO PWA
+    path('register', views.RegisterView.as_view(), name='register'),
+    path('login', views.LoginView.as_view(), name='login'),
+    path('logout', views.LogoutView.as_view(), name='logout'),
 
-    # TODO (TB)
+    # Home
     path('', views.HomeView.as_view(), name='home'),
     path('home', views.HomeView.as_view(), name='home'),
     path('map', views.MapView.as_view(), name='map'),
@@ -69,8 +69,11 @@ urlpatterns = [
     # PWA
     path('forecast/get-fridges-data',
          views.get_fridges_data, name='get-fridges-data'),
-    path('forecast/get-foods-data', views.get_foods_data, name='get-foods-data'),
+    path('forecast/get-foods-data',
+         views.get_foods_data, name='get-foods-data'),
     path('offline', views.offline_view, name='offline')
+]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

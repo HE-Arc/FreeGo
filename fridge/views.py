@@ -79,8 +79,8 @@ class FridgeListView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        results = Fridge.objects.all()
-        context['fridge_list'] = results  # TODO put results ???
+        fridge_list = Fridge.objects.all()
+        context['fridge_list'] = fridge_list
         return context
 
 
@@ -325,7 +325,7 @@ class MapView(generic.TemplateView):
 
 class FavoriteView(generic.TemplateView):
     template_name = 'fridge/favorite.html'
-    
+
 
 def get_fridges_data(request):
     results = Fridge.objects.all()
