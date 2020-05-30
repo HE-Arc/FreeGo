@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 13:00+0200\n"
+"POT-Creation-Date: 2020-05-29 15:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\freego\settings\common_settings.py:59
+#: .\freego\settings\common_settings.py:61
 msgid "English"
 msgstr "Anglais"
 
-#: .\freego\settings\common_settings.py:60
+#: .\freego\settings\common_settings.py:62
 msgid "French"
 msgstr "Français"
 
@@ -30,7 +30,7 @@ msgstr "Français"
 msgid "Name"
 msgstr "Nom"
 
-#: .\fridge\forms.py:21 .\fridge\templates\fridge\fridge_list.html:19
+#: .\fridge\forms.py:21 .\fridge\templates\fridge\fridge_list.html:18
 #: .\fridge\templates\fridge\fridge_update_form.html:28
 #: .\fridge\templates\fridge\store_detail.html:7
 msgid "Address"
@@ -77,8 +77,8 @@ msgstr "De l'heure"
 msgid "To hour"
 msgstr "À l'heure"
 
-#: .\fridge\forms.py:74 .\fridge\forms.py:119 .\fridge\models.py:125
-#: .\fridge\models.py:149
+#: .\fridge\forms.py:74 .\fridge\forms.py:119 .\fridge\models.py:132
+#: .\fridge\models.py:159
 msgid "Invalid hour"
 msgstr "Heure invalide"
 
@@ -90,12 +90,12 @@ msgstr "De la date"
 msgid "To date"
 msgstr "À la date"
 
-#: .\fridge\forms.py:115 .\fridge\models.py:145
+#: .\fridge\forms.py:114 .\fridge\models.py:154
 msgid "If two dates are selected, you can't select an hour."
 msgstr ""
 "Si deux dates sont sélectionné, vous ne pouvez pas sélectionné une heure"
 
-#: .\fridge\forms.py:117 .\fridge\models.py:147
+#: .\fridge\forms.py:116 .\fridge\models.py:156
 msgid "Invalid date"
 msgstr "Date invalide"
 
@@ -103,54 +103,70 @@ msgstr "Date invalide"
 msgid "Required. Fill an valid email address."
 msgstr "Requis. Remplissez une adresse email valide"
 
-#: .\fridge\models.py:95
+#: .\fridge\models.py:102
 msgid "You can't reserve your own food."
 msgstr "Vous ne pouvez pas réservé votre propre nourriture"
 
-#: .\fridge\models.py:104
+#: .\fridge\models.py:111
 msgid "Monday"
 msgstr "Lundi"
 
-#: .\fridge\models.py:105
+#: .\fridge\models.py:112
 msgid "Tuesday"
 msgstr "Mardi"
 
-#: .\fridge\models.py:106
+#: .\fridge\models.py:113
 msgid "Wednesday"
 msgstr "Mercredi"
 
-#: .\fridge\models.py:107
+#: .\fridge\models.py:114
 msgid "Thursday"
 msgstr "Jeudi"
 
-#: .\fridge\models.py:108
+#: .\fridge\models.py:115
 msgid "Friday"
 msgstr "Vendredi"
 
-#: .\fridge\models.py:109
+#: .\fridge\models.py:116
 msgid "Saturday"
 msgstr "Samedi"
 
-#: .\fridge\models.py:110
+#: .\fridge\models.py:117
 msgid "Sunday"
 msgstr "Dimanche"
 
-#: .\fridge\models.py:154
-msgid "From "
-msgstr "De "
+#: .\fridge\models.py:164
+#, python-format
+msgid "From %(from_date)s to %(to_date)s"
+msgstr "Du %(from_date)s aux %(to_date)s"
 
-#: .\fridge\models.py:156 .\fridge\models.py:158 .\fridge\models.py:160
-#: .\fridge\models.py:161
-msgid "The "
-msgstr "Le "
+#: .\fridge\models.py:168
+#, python-format
+msgid "The %(from_date)s open from %(from_hour)s to %(to_hour)s"
+msgstr "Le %(from_date)s ouvre à %(from_hour)s jusqu'à %(to_hour)s"
+
+#: .\fridge\models.py:173
+#, python-format
+msgid "The %(from_date)s open from %(from_hour)s"
+msgstr "Le %(from_date)s ouvre à %(from_hour)s"
+
+#: .\fridge\models.py:177
+#, python-format
+msgid "The %(from_date)s closed at %(to_hour)s"
+msgstr "Le %(from_date)s ferme à %(to_hour)s"
+
+#: .\fridge\models.py:180
+#, python-format
+msgid "The %(from_date)s"
+msgstr "Le %(from_date)s"
 
 #: .\fridge\templates\fridge\base_admin.html:7
 #: .\fridge\templates\fridge\base_login.html:7
 msgid "Free Go"
 msgstr "Free Go"
 
-#: .\fridge\templates\fridge\base_admin.html:62
-#: .\fridge\templates\fridge\base_store.html:75
+#: .\fridge\templates\fridge\base_admin.html:64
+#: .\fridge\templates\fridge\base_store.html:77
 msgid "You are not authenticated"
 msgstr "Vous n'êtes pas authentifé"
 
@@ -167,10 +183,8 @@ msgstr "Ajout de nourriture"
 #: .\fridge\templates\fridge\fridge_form.html:90
 #: .\fridge\templates\fridge\fridge_update_form.html:59
 #: .\fridge\templates\fridge\opening_hour_form.html:40
-#, fuzzy
-#| msgid "Invalid date"
 msgid "Validate"
-msgstr "Date invalide"
+msgstr "Valider"
 
 #: .\fridge\templates\fridge\fridge_form.html:14
 msgid "Creation of a Free Go"
@@ -178,19 +192,8 @@ msgstr "Création d'un Free Go"
 
 #: .\fridge\templates\fridge\fridge_form.html:67
 #: .\fridge\templates\fridge\fridge_update_form.html:49
-#, fuzzy
-#| msgid "Image"
 msgid "Images"
 msgstr "Images"
-
-#: .\fridge\templates\fridge\fridge_list.html:21
-#: .\fridge\templates\fridge\opening_hour_form.html:13
-msgid "Opening hour"
-msgstr "Horaire d'ouverture"
-
-#: .\fridge\templates\fridge\fridge_list.html:27
-msgid "Special day"
-msgstr "Horaire spéciaux"
 
 #: .\fridge\templates\fridge\fridge_update_form.html:14
 msgid "Modification of a Free Go"
@@ -230,10 +233,12 @@ msgstr "Mot de passe : "
 
 #: .\fridge\templates\fridge\login.html:29
 #: .\fridge\templates\fridge\reservation_list.html:28
-#, fuzzy
-#| msgid "I do not have account yet"
 msgid "I do not have an account yet"
 msgstr "Je n'ai pas encore de compte"
+
+#: .\fridge\templates\fridge\opening_hour_form.html:13
+msgid "Opening hour"
+msgstr "Horaire d'ouverture"
 
 #: .\fridge\templates\fridge\register.html:7
 msgid "Register"
@@ -265,10 +270,8 @@ msgid "Administration"
 msgstr "Administration"
 
 #: .\fridge\templates\fridge\settings.html:12
-#, fuzzy
-#| msgid "Free Go"
 msgid "My Free Go"
-msgstr "Free Go"
+msgstr "Mon Free Go"
 
 #: .\fridge\templates\fridge\settings.html:15
 msgid "Reservation"
@@ -291,8 +294,6 @@ msgid "Log out"
 msgstr "Se déconnecter"
 
 #: .\fridge\templates\fridge\settings.html:27
-#, fuzzy
-#| msgid "I do not have account yet"
 msgid "You do not have an account yet"
 msgstr "Vous n'avez pas encore de compte"
 
@@ -324,8 +325,3 @@ msgstr "Ce NPA n'est pas valide"
 #: .\fridge\validators.py:16
 msgid "The expiration date is already passed."
 msgstr "Cette date d'expiration est déjà passé"
-
-#, fuzzy
-#~| msgid "I do not have account yet"
-#~ msgid "You didn not have reservation yet"
-#~ msgstr "Je n'ai pas encore de compte"

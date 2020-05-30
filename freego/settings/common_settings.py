@@ -11,11 +11,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'fridge/static/fridge/js', 'serviceworker.js')
+BASE_DIR = os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))))
+PWA_SERVICE_WORKER_PATH = os.path.join(
+    BASE_DIR, 'fridge/static/fridge/js', 'serviceworker.js')
 
 # insta_project/settings.py
 MEDIA_URL = '/media/'
@@ -151,12 +153,20 @@ PWA_APP_ICONS = [
     {
         'src': '/static/fridge/logos/icon-192x192.png',
         'sizes': '192x192'
+    },
+    {
+        'src': '/static/fridge/logos/icon-512x512.png',
+        'sizes': '512x512'
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
         'src': '/static/fridge/logos/icon-192x192.png',
         'sizes': '192x192'
+    },
+    {
+        'src': '/static/fridge/logos/icon-512x512.png',
+        'sizes': '512x512'
     }
 ]
 PWA_APP_SPLASH_SCREEN = [

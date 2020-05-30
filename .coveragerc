@@ -19,3 +19,4 @@ omit =
     fridge/migrations/*
     manage.py
     venv/*
+    */site-packages/*
