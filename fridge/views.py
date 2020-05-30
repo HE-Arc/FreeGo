@@ -69,8 +69,9 @@ class FridgeCreateView(LoginRequiredMixin, View):
                 user=form.cleaned_data['user']
             )
             fridge.save()
+            print("TEST1")
             return redirect('fridge:myadmin')
-
+        print("TEST2")
         return render(request, self.template_name, {'form': form})
 
 

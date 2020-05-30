@@ -82,7 +82,7 @@ class FridgeCreateViewTest(TestCase):
             'NPA': '2000',
             'phone_number': '0790000000',
             'image': image,
-            'user': 1
+            'user': self.user.pk
         }
 
         response = self.client.post(reverse('fridge:fridge-new'), json)
