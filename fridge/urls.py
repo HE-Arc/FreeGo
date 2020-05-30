@@ -71,7 +71,6 @@ urlpatterns = [
          views.get_fridges_data, name='get-fridges-data'),
     path('forecast/get-foods-data', views.get_foods_data, name='get-foods-data'),
     path('offline', views.offline_view, name='offline')
-]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

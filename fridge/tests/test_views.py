@@ -174,6 +174,53 @@ class FoodListViewTest(TestCase):
         self.assertQuerysetEqual(response.context['food_reserve'], [
                                  '<Food: food_test>'])
 
+class OpeningHourCreateView(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.fridge = create_fridge(self.user)
+
+    def test_logout(self):
+        """
+        If you are logout
+        """
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_login_get(self):
+        """
+        If you are login
+        """
+        self.client.login(username='test', password='test')
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 200)
+
+    # TODO : improve get and test post
+
+class SpecialDayCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.fridge = create_fridge(self.user)
+        self.food = Food(name="test", vegetarian=True, vegan=True,
+                         expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
+
+    def test_logout(self):
+        """
+        If you are logout
+        """
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_login_get(self):
+        """
+        If you are login
+        """
+        self.client.login(username='test', password='test')
+        response = self.client.get(reverse('fridge:openinghour-form'))
+        self.assertEqual(response.status_code, 200)
+
+    # TODO : improve get and test post
+    
+
 
 class OpeningHourCreateView(TestCase):
     def setUp(self):

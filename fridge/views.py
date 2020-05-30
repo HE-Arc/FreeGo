@@ -325,7 +325,7 @@ class MapView(generic.TemplateView):
 
 class FavoriteView(generic.TemplateView):
     template_name = 'fridge/favorite.html'
-
+    
 
 def get_fridges_data(request):
     results = Fridge.objects.all()
