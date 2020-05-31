@@ -1,0 +1,22 @@
+[report]
+exclude_lines =
+    def __str__
+    if self.debug:
+    if settings.DEBUG
+
+
+[run]
+omit =
+    freego/asgi.py
+    freego/wsgi.py
+    freego/settings/*
+    freego/urls.py
+    fridge/admin.py
+    fridge/apps.py
+    fridge/urls.py
+    fridge/tests.py
+    */__init__.py*
+    fridge/migrations/*
+    manage.py
+    venv/*
+    */site-packages/*

@@ -1,28 +1,31 @@
 {% extends 'fridge/base_login.html' %}
 {% load static %}
 {% block content %}
-<h4 class="center-align">Connexion</h4>
+{% load i18n %}
+
+<h4 class="center-align">{% trans 'Connection' %}</h4>
 <div class="row">
     <form method="post" class="col s12">
         {% csrf_token %}
+
         <div class="row">
             <div class="input-field col s12">
                 <input id="username" name="username" type="text" required />
-                <label for="username">Nom d'utilisateur : </label>
+                <label for="username">{% trans 'Username : ' %}</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s12">
                 <input id="password" name="password" type="password" required />
-                <label for="password">Mot de passe : </label>
+                <label for="password">{% trans 'Password : ' %}</label>
             </div>
         </div>
         <div class="row">
-            <button class="btn waves-effect waves-light col s12" type="submit" name="action">Connexion</button>
+            <button class="btn waves-effect waves-light col s12" type="submit" name="action">{% trans 'Connection' %}</button>
         </div>
     </form>
 </div>
 <div class="row">
-    <a class="btn col s12 outline" href="{% url 'fridge:register' %}">Je n'ai pas de compte</a>
+    <a class="btn col s12 outline" href="{% url 'fridge:register' %}">{% trans 'I do not have an account yet' %}</a>
 </div>
 {% endblock %}

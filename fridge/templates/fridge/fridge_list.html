@@ -1,39 +1,41 @@
 {% extends 'fridge/base.html' %}
 {% load static %}
 {% block content %}
+{% load i18n %}
 
 <div class="container">
-  <div class="row">
-
-    {% for fridge in fridge_list %}
-    <div class="col s10 offset-s1 m4">
+  <div id="main" class="row">
+    <div id="fridge-template" class="col s10 offset-s1 m4" hidden>
+      <div id="card-last-updated" hidden></div>
       <div class="card">
-        <a href="{% url 'fridge:food-list' fridge.pk %}">
+        <a id="reference" href="#">
           <div class="card-image">
-            <img src="{{ fridge.image.url}}" alt="{{ fridge.title }}">
-            <span class="card-title">{{ fridge.name }}</span>
+            <img id="image" src="">
+            <span id="name" class="card-title"></span>
           </div>
         </a>
         <div class="card-content">
-          <strong>Adresse</strong>
-          <p>{{ fridge.address }}</p>
-          <strong>Horaire</strong><br>
+          <strong>{% trans 'Address' %}</strong>
+          <p id="address"></p>
+          <!-- TODO add opening hours-->
+          {% comment %} <strong>{% trans 'Opening hour' %}</strong><br>
           {% for oh in fridge.get_opening_hours %}
           <div>
             <p>{{ oh }}</p>
           </div>
           {% endfor %}
-          <strong>Horaires spéciaux</strong><br>
-          {% for sd in fridge.get_special_day %}
+          <strong>{% trans 'Special day' %}</strong><br>
+          {% for sd in fridge.get_special_days %}
           <div>
             <p>{{ sd }}</p>
           </div>
-          {% endfor %}
+          {% endfor %} {% endcomment %}
         </div>
       </div>
     </div>
-    {% endfor %}
-
   </div>
 </div>
+<script>
+  idbApp.displayFridges();
+</script>
 {% endblock %}

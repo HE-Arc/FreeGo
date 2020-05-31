@@ -8,9 +8,8 @@
             <i class="material-icons black-text" data-feather="corner-up-left"></i></a>
     </div>
 </div>
-
 <div class="container">
-    <ul class="collection with-header">
+    <ul class="collection with-header" id="main">
         {% for food in food_available %}
         <li class="collection-item">
             {% include "fridge/food_detail.html" %}
@@ -22,7 +21,6 @@
             {% include "fridge/food_detail.html" %}
         </li>
         {% endfor %}
-
     </ul>
 </div>
 {% endblock %}
