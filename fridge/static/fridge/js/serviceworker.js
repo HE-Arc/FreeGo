@@ -1,5 +1,5 @@
-const cacheName = 'freego-pwa-v1';
-const DATA_CACHE_NAME = 'data-cache-v1';
+const cacheName = 'freego-pwa-v2';
+const DATA_CACHE_NAME = 'data-cache-v2';
 
 const precacheResources = [
     //urls
