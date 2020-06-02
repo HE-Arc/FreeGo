@@ -1,0 +1,12 @@
+{% extends 'fridge/base.html' %}
+{% load static %}
+{% block content %}
+{% load i18n %}
+
+<div class="container">
+    <div class="valign-wrapper center-align">
+        <h2>{% trans 'You are offline' %}</h2>
+    </div>
+</div>
+
+{% endblock %}

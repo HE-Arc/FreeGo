@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))))
+PWA_SERVICE_WORKER_PATH = os.path.join(
+    BASE_DIR, 'fridge/static/fridge/js', 'serviceworker.js')
 
 # insta_project/settings.py
 MEDIA_URL = '/media/'
@@ -35,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fridge',
+    'pwa',
 ]
 
 AUTH_USER_MODEL = 'fridge.User'
@@ -47,7 +52,19 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
+
+LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = (
+    ('en-us', _('English')),
+    ('fr', _('French')),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
 
 ROOT_URLCONF = 'freego.urls'
 
@@ -92,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -118,3 +134,46 @@ TIME_INPUT_FORMATS = (
 
 STATIC_URL = '/static/'
 STATIC_ROOT = "/var/www/freego/current/static/"
+
+
+# PWA
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'fridge', 'static'),
+]
+
+PWA_APP_NAME = 'FreeGo'
+PWA_APP_DESCRIPTION = "Application pour l'association Free Go"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/fridge/logos/icon-192x192.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/fridge/logos/icon-512x512.png',
+        'sizes': '512x512'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/fridge/logos/icon-192x192.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/fridge/logos/icon-512x512.png',
+        'sizes': '512x512'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': '/static/fridge/logos/icon-512x512.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'fr'

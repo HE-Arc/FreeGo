@@ -3,12 +3,12 @@
 <div>{{ food.name }}
     {% if food.vegetarian %}
     <a href="#" class="secondary-content">
-        <i class="material-icons"><img src={% static "fridge/vegetarian-icon.png" %} alt="vegetarian logo"
+        <i class="material-icons"><img src={% static "fridge/icons/vegetarian-icon.png" %} alt="vegetarian logo"
                 style="width: 2rem;height: 2rem;"></i></a>
     {% endif %}
     {% if food.vegan %}
     <a href="#" class="secondary-content">
-        <i><img src={% static "fridge/vegan-icon.png" %} alt="vegan logo"
+        <i><img src={% static "fridge/icons/vegan-icon.png" %} alt="vegan logo"
                 style="width: 2rem;height: 2rem; margin: 0 5px;"></i></a>
     {% endif %}
     {% if food.is_available %}
