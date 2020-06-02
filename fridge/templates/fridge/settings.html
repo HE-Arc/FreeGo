@@ -6,7 +6,10 @@
 {% if user.is_authenticated %}
 <div class="collection">
     <a href="#!" class="collection-item black-text">{% trans 'My profil' %}</a>
+
+    {% if perms.fridge.admin %}
     <a href="{% url 'fridge:myadmin' %}" class="collection-item black-text">{% trans 'Administration' %}</a>
+    {% endif %}
 
     {% if user.has_fridge %}
     <a href="{% url 'fridge:store' %}" class="collection-item black-text">{% trans 'My Free Go' %}</a>
@@ -34,7 +37,8 @@
             </div>
             <div class="row">
                 <div class="col s12">
-                    <a href="{% url 'fridge:register' %}" class="btn col s12 outline">{% trans 'Create an account' %}</a>
+                    <a href="{% url 'fridge:register' %}"
+                        class="btn col s12 outline">{% trans 'Create an account' %}</a>
                 </div>
             </div>
         </div>
