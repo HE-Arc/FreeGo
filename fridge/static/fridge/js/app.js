@@ -31,12 +31,13 @@ var idbApp = (function () {
 
     // Fridges 
     function addFridgesFromNetwork() {
-        fetch('/forecast/get-fridges-data').then(function (response) {
+        return fetch('/forecast/get-fridges-data').then(function (response) {
             return response.json();
         }).then(function (jsondata) {
-            dbPromise.then(function (db) {
+            return dbPromise.then(function (db) {
                 var tx = db.transaction('fridges', 'readwrite');
                 var store = tx.objectStore('fridges');
+                store.clear(); // clear old datas
                 return Promise.all(jsondata.map(function (item) {
                     console.log('Adding item: ', item);
                     return store.add(item);
@@ -44,7 +45,7 @@ var idbApp = (function () {
                     tx.abort();
                     console.log(e);
                 }).then(function () {
-                    console.log('All items added successfully');
+                    return store.openCursor();
                 });
             });
         });
@@ -61,6 +62,33 @@ var idbApp = (function () {
 
     function displayFridges() {
         getFridges().then(function showRange(cursor) {
+            if (!cursor) { return; }
+            console.log('Cursored at:', cursor.value.name);
+            for (var field in cursor.value) {
+                if (field == 'fields') {
+                    const card = document.getElementById('fridge-template').cloneNode(true);
+                    var fridgesData = cursor.value[field];
+
+                    for (var key in fridgesData) {
+                        if (key == 'name') {
+                            card.querySelector('#name').textContent = fridgesData[key];
+                        }
+                        if (key == 'address') {
+                            card.querySelector('#address').textContent = fridgesData[key];
+                        }
+                        if (key == 'image') {
+                            card.querySelector('#image').src = "/media/" + fridgesData[key];
+                        }
+
+                    }
+                    card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
+                    document.querySelector('#main').appendChild(card);
+                    card.removeAttribute('hidden');
+                }
+            }
+            return cursor.continue().then(showRange);
+        });
+        addFridgesFromNetwork().then(function showRange(cursor) {
             if (!cursor) { return; }
             console.log('Cursored at:', cursor.value.name);
             for (var field in cursor.value) {
@@ -115,11 +143,9 @@ var idbApp = (function () {
             var tx = db.transaction('foods', 'readonly');
             var store = tx.objectStore('foods');
             var index = store.index('fridge');
+            var food = index.get(key);
 
-            var test = index.get(key);
-            console.log(index);
-
-            return test
+            return food
         });
     }
 
@@ -152,7 +178,7 @@ var idbApp = (function () {
 
     return {
         dbPromise: (dbPromise),
-        getFridges: (addFridgesFromNetwork),
+        addFridgesFromNetwork: (addFridgesFromNetwork),
         displayFridges: (displayFridges),
         getFoodsByFridge: (getFoodsByFridge),
         displayFoodsByFridge: (displayFoodsByFridge)

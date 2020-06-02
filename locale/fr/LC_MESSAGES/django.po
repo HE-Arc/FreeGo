@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 15:56+0200\n"
+"POT-Creation-Date: 2020-06-02 12:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,37 +69,37 @@ msgstr "Date d'expiration"
 msgid "Week day"
 msgstr "Jour de la semaine"
 
-#: .\fridge\forms.py:58 .\fridge\forms.py:86
+#: .\fridge\forms.py:58 .\fridge\forms.py:88
 msgid "From hour"
 msgstr "De l'heure"
 
-#: .\fridge\forms.py:59 .\fridge\forms.py:87
+#: .\fridge\forms.py:59 .\fridge\forms.py:89
 msgid "To hour"
 msgstr "À l'heure"
 
-#: .\fridge\forms.py:74 .\fridge\forms.py:119 .\fridge\models.py:132
+#: .\fridge\forms.py:76 .\fridge\forms.py:120 .\fridge\models.py:132
 #: .\fridge\models.py:159
 msgid "Invalid hour"
 msgstr "Heure invalide"
 
-#: .\fridge\forms.py:84
+#: .\fridge\forms.py:86
 msgid "From date"
 msgstr "De la date"
 
-#: .\fridge\forms.py:85
+#: .\fridge\forms.py:87
 msgid "To date"
 msgstr "À la date"
 
-#: .\fridge\forms.py:114 .\fridge\models.py:154
+#: .\fridge\forms.py:115 .\fridge\models.py:154
 msgid "If two dates are selected, you can't select an hour."
 msgstr ""
 "Si deux dates sont sélectionné, vous ne pouvez pas sélectionné une heure"
 
-#: .\fridge\forms.py:116 .\fridge\models.py:156
+#: .\fridge\forms.py:117 .\fridge\models.py:156
 msgid "Invalid date"
 msgstr "Date invalide"
 
-#: .\fridge\forms.py:124
+#: .\fridge\forms.py:125
 msgid "Required. Fill an valid email address."
 msgstr "Requis. Remplissez une adresse email valide"
 
@@ -236,6 +236,10 @@ msgstr "Mot de passe : "
 msgid "I do not have an account yet"
 msgstr "Je n'ai pas encore de compte"
 
+#: .\fridge\templates\fridge\offline.html:8
+msgid "You are offline"
+msgstr "Vous êtes hors-ligne"
+
 #: .\fridge\templates\fridge\opening_hour_form.html:13
 msgid "Opening hour"
 msgstr "Horaire d'ouverture"
@@ -253,7 +257,7 @@ msgid "Password confirmation : "
 msgstr "Confirmationd de mot de passe : "
 
 #: .\fridge\templates\fridge\register.html:36
-#: .\fridge\templates\fridge\settings.html:37
+#: .\fridge\templates\fridge\settings.html:41
 msgid "Create an account"
 msgstr "Création d'un compte"
 
@@ -265,39 +269,39 @@ msgstr "J'ai déjà un compte"
 msgid "My profil"
 msgstr "Mon profil"
 
-#: .\fridge\templates\fridge\settings.html:9
+#: .\fridge\templates\fridge\settings.html:11
 msgid "Administration"
 msgstr "Administration"
 
-#: .\fridge\templates\fridge\settings.html:12
+#: .\fridge\templates\fridge\settings.html:15
 msgid "My Free Go"
 msgstr "Mon Free Go"
 
-#: .\fridge\templates\fridge\settings.html:15
+#: .\fridge\templates\fridge\settings.html:18
 msgid "Reservation"
 msgstr "Réservation"
 
-#: .\fridge\templates\fridge\settings.html:16
+#: .\fridge\templates\fridge\settings.html:19
 msgid "Donations"
 msgstr "Donations"
 
-#: .\fridge\templates\fridge\settings.html:17
+#: .\fridge\templates\fridge\settings.html:20
 msgid "Help"
 msgstr "Aide"
 
-#: .\fridge\templates\fridge\settings.html:18
+#: .\fridge\templates\fridge\settings.html:21
 msgid "Contact us"
 msgstr "Nous contacter"
 
-#: .\fridge\templates\fridge\settings.html:19
+#: .\fridge\templates\fridge\settings.html:22
 msgid "Log out"
 msgstr "Se déconnecter"
 
-#: .\fridge\templates\fridge\settings.html:27
+#: .\fridge\templates\fridge\settings.html:30
 msgid "You do not have an account yet"
 msgstr "Vous n'avez pas encore de compte"
 
-#: .\fridge\templates\fridge\settings.html:32
+#: .\fridge\templates\fridge\settings.html:35
 msgid "Log in"
 msgstr "Se connecter"
 

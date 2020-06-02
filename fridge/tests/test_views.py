@@ -7,11 +7,14 @@ from django.utils import timezone
 from django.shortcuts import resolve_url as r
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import timedelta, date
+from django.contrib.auth.models import Permission
 
 
 class AdminIndexViewTest(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
+        permission = Permission.objects.get(codename="admin")
+        self.user.user_permissions.add(permission)
 
     def test_logout(self):
         """
@@ -47,6 +50,8 @@ class AdminIndexViewTest(TestCase):
 class StoreIndexViewTest(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
+        permission = Permission.objects.get(codename="store")
+        self.user.user_permissions.add(permission)
 
     def test_logout(self):
         """
@@ -71,6 +76,8 @@ class FridgeCreateViewTest(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
         self.client.login(username='test', password='test')
+        permission = Permission.objects.get(codename="admin")
+        self.user.user_permissions.add(permission)
 
     def test_post(self):
         image = SimpleUploadedFile(name='test.png', content=open(
@@ -110,6 +117,8 @@ class FridgeListViewTest(TestCase):
 class FoodCreateViewTest(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
+        permission = Permission.objects.get(codename="store")
+        self.user.user_permissions.add(permission)
         self.client.login(username='test', password='test')
         self.fridge = create_fridge(self.user)
 
@@ -174,57 +183,12 @@ class FoodListViewTest(TestCase):
         self.assertQuerysetEqual(response.context['food_reserve'], [
                                  '<Food: food_test>'])
 
-class OpeningHourCreateView(TestCase):
-    def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'test')
-        self.fridge = create_fridge(self.user)
-
-    def test_logout(self):
-        """
-        If you are logout
-        """
-        response = self.client.get(reverse('fridge:openinghour-form'))
-        self.assertEqual(response.status_code, 302)
-
-    def test_login_get(self):
-        """
-        If you are login
-        """
-        self.client.login(username='test', password='test')
-        response = self.client.get(reverse('fridge:openinghour-form'))
-        self.assertEqual(response.status_code, 200)
-
-    # TODO : improve get and test post
-
-class SpecialDayCreateViewTest(TestCase):
-    def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'test')
-        self.fridge = create_fridge(self.user)
-        self.food = Food(name="test", vegetarian=True, vegan=True,
-                         expiration_date=timezone.now(), user=self.user, fridge=self.fridge)
-
-    def test_logout(self):
-        """
-        If you are logout
-        """
-        response = self.client.get(reverse('fridge:openinghour-form'))
-        self.assertEqual(response.status_code, 302)
-
-    def test_login_get(self):
-        """
-        If you are login
-        """
-        self.client.login(username='test', password='test')
-        response = self.client.get(reverse('fridge:openinghour-form'))
-        self.assertEqual(response.status_code, 200)
-
-    # TODO : improve get and test post
-    
-
 
 class OpeningHourCreateView(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
+        permission = Permission.objects.get(codename="store")
+        self.user.user_permissions.add(permission)
         self.client.login(username='test', password='test')
         self.fridge = create_fridge(self.user)
 
@@ -248,6 +212,8 @@ class OpeningHourCreateView(TestCase):
 class SpecialDayCreateViewTest(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
+        permission = Permission.objects.get(codename="store")
+        self.user.user_permissions.add(permission)
         self.client.login(username='test', password='test')
         self.fridge = create_fridge(self.user)
 
@@ -273,7 +239,15 @@ class SpecialDayCreateViewTest(TestCase):
 
 class SettingsViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'test')
+        self.user1 = create_user(
+            'test_store', 'test_store@test.test', 'test_store')
+        permission = Permission.objects.get(codename="store")
+        self.user1.user_permissions.add(permission)
+
+        self.user2 = create_user(
+            'test_admin', 'test_admin@test.test', 'test_admin')
+        permission = Permission.objects.get(codename="admin")
+        self.user2.user_permissions.add(permission)
 
     def test_logout(self):
         """
@@ -283,22 +257,43 @@ class SettingsViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "You do not have an account yet")
 
-    def test_login_without_freego(self):
+    def test_login_without_freego_store(self):
         """
         You are login but didn't have FreeGo
         """
-        self.client.login(username='test', password='test')
+        self.client.login(username='test_store', password='test_store')
+        response = self.client.get(reverse('fridge:settings'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "Administration")
+        self.assertNotContains(response, "My Free Go")
+
+    def test_login_without_freego_admin(self):
+        """
+        You are login but didn't have FreeGo
+        """
+        self.client.login(username='test_admin', password='test_admin')
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
         self.assertNotContains(response, "My Free Go")
 
-    def test_login_with_freego(self):
+    def test_login_with_freego_store(self):
         """
         You are login and have FreeGo
         """
-        self.client.login(username='test', password='test')
-        create_fridge(self.user)
+        self.client.login(username='test_store', password='test_store')
+        create_fridge(self.user1)
+        response = self.client.get(reverse('fridge:settings'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "Administration")
+        self.assertContains(response, "My Free Go")
+
+    def test_login_with_freego_admin(self):
+        """
+        You are login and have FreeGo
+        """
+        self.client.login(username='test_admin', password='test_admin')
+        create_fridge(self.user2)
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
