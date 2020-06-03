@@ -11,7 +11,7 @@
     <li class="collection-item">
         <div>{{ food.name }}
             <a href="{% url 'fridge:food-delete' food.pk %}" class="secondary-content">
-                <i class="material-icons">remove_circle</i>
+                <i class="material-icons" aria-hidden="true">remove_circle</i>
             </a>
         </div>
     </li>

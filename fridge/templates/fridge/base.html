@@ -16,7 +16,7 @@
   <script type="text/javascript" src="{% static 'fridge/js/feather.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'fridge/js/idb.js' %}"></script>
   <script type="text/javascript" src="{% static 'fridge/js/app.js' %}"></script>
-  
+
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
@@ -35,11 +35,30 @@
   <!-- NAVBAR BOTTOM-->
   <footer class="page-footer">
     <ul class="tabs tabs-transparent">
-      <li class="tab"><a href="{% url 'fridge:home' %}"><i class="material-icons">home</i></a></li>
-      <li class="tab"><a href="{% url 'fridge:fridge-list' %}"><i class="material-icons">list</i></a></li>
-      <li class="tab"><a href="{% url 'fridge:map' %}"><i class="material-icons">map</i></a></li>
-      <li class="tab"><a href="{% url 'fridge:favorite' %}"><i class="material-icons">favorite</i></a></li>
-      <li class="tab"><a href="{% url 'fridge:settings' %}"><i class="material-icons">account_circle</i></a>
+      <li class="tab">
+        <a href="{% url 'fridge:home' %}">
+          <i class="material-icons" aria-hidden="true">home</i>
+        </a>
+      </li>
+      <li class="tab">
+        <a href="{% url 'fridge:fridge-list' %}">
+          <i class="material-icons" aria-hidden="true">list</i>
+        </a>
+      </li>
+      <li class="tab">
+        <a href="{% url 'fridge:map' %}">
+          <i class="material-icons" aria-hidden="true">map</i>
+        </a>
+      </li>
+      <li class="tab">
+        <a href="{% url 'fridge:favorite' %}">
+          <i class="material-icons" aria-hidden="true">favorite</i>
+        </a>
+      </li>
+      <li class="tab">
+        <a href="{% url 'fridge:settings' %}">
+          <i class="material-icons" aria-hidden="true">account_circle</i>
+        </a>
       </li>
     </ul>
   </footer>

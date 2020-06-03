@@ -7,7 +7,7 @@
 <div class="row">
     <div class="col s1">
         <a href="{% url 'fridge:store-detail' %}">
-            <i class="material-icons black-text" data-feather="corner-up-left"></i></a>
+            <i class="material-icons black-text" data-feather="corner-up-left" aria-hidden="true"></i></a>
     </div>
 </div>
 
@@ -47,7 +47,7 @@
         <div class="file-field input-field">
             <div class="btn">
                 <span>{% trans 'Images' %}</span>
-                <input id="image" name="image" type="file" value="{{fridge.image}}" >
+                <input id="image" name="image" type="file" value="{{fridge.image}}">
             </div>
             <div class="file-path-wrapper">
                 <input class="file-path validate" type="text">
