@@ -9,27 +9,23 @@ var idbApp = (function () {
     var dbPromise = idb.open('freego_db', 5, function (upgradeDb) {
         switch (upgradeDb.oldVersion) {
             case 0:
-                // a placeholder case so that the switch block will 
-                // execute when the database is first created
-                // (oldVersion is 0)
-                break;
+            // a placeholder case so that the switch block will 
+            // execute when the database is first created
+            // (oldVersion is 0)
             case 1:
                 console.log('Creating the fridges object store');
                 upgradeDb.createObjectStore('fridges', { keyPath: 'pk' });
                 addFridgesFromNetwork();
-                break;
 
             case 2:
                 console.log('Creating the foods object store');
                 upgradeDb.createObjectStore('foods', { keyPath: 'pk' });
                 addFoodsFromNetwork();
-                break;
 
             case 3:
                 console.log('Creating fridge index in foods');
                 var store = upgradeDb.transaction.objectStore('foods');
                 store.createIndex('fridge', 'fields.fridge');
-                break;
         }
     });
 
@@ -67,58 +63,47 @@ var idbApp = (function () {
     function displayFridges() {
         getFridges().then(function showRange(cursor) {
             if (!cursor) { return; }
-            console.log('Cursored at:', cursor.value.name);
-            for (var field in cursor.value) {
-                if (field == 'fields') {
-                    const card = document.getElementById('fridge-template').cloneNode(true);
-                    var fridgesData = cursor.value[field];
 
-                    for (var key in fridgesData) {
-                        if (key == 'name') {
-                            card.querySelector('#name').textContent = fridgesData[key];
-                        }
-                        if (key == 'address') {
-                            card.querySelector('#address').textContent = fridgesData[key];
-                        }
-                        if (key == 'image') {
-                            card.querySelector('#image').src = "/media/" + fridgesData[key];
-                        }
-
-                    }
-                    card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
-                    document.querySelector('#main').appendChild(card);
-                    card.removeAttribute('hidden');
-                }
-            }
+            renderFridgeTemplate(cursor);
             return cursor.continue().then(showRange);
         });
         addFridgesFromNetwork().then(function showRange(cursor) {
             if (!cursor) { return; }
-            console.log('Cursored at:', cursor.value.name);
-            for (var field in cursor.value) {
-                if (field == 'fields') {
-                    const card = document.getElementById('fridge-template').cloneNode(true);
-                    var fridgesData = cursor.value[field];
 
-                    for (var key in fridgesData) {
-                        if (key == 'name') {
-                            card.querySelector('#name').textContent = fridgesData[key];
-                        }
-                        if (key == 'address') {
-                            card.querySelector('#address').textContent = fridgesData[key];
-                        }
-                        if (key == 'image') {
-                            card.querySelector('#image').src = "/media/" + fridgesData[key];
-                        }
-
-                    }
-                    card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
-                    document.querySelector('#main').appendChild(card);
-                    card.removeAttribute('hidden');
-                }
+            var elements = document.getElementsByClassName("fridge");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].remove();
             }
+
+            renderFridgeTemplate(cursor);
             return cursor.continue().then(showRange);
         });
+    }
+
+    function renderFridgeTemplate(cursor) {
+        for (var field in cursor.value) {
+            if (field == 'fields') {
+                const card = document.getElementById('fridge-template').cloneNode(true);
+                var fridgesData = cursor.value[field];
+
+                for (var key in fridgesData) {
+                    if (key == 'name') {
+                        card.querySelector('#name').textContent = fridgesData[key];
+                    }
+                    if (key == 'address') {
+                        card.querySelector('#address').textContent = fridgesData[key];
+                    }
+                    if (key == 'image') {
+                        card.querySelector('#image').src = "/media/" + fridgesData[key];
+                    }
+
+                }
+                card.className = "fridge";
+                card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
+                document.querySelector('#main').appendChild(card);
+                card.removeAttribute('hidden');
+            }
+        }
     }
 
     // Foods
@@ -154,9 +139,9 @@ var idbApp = (function () {
     }
 
     function displayFoodsByFridge() {
-        var fridgeId = 1;
+        var key = 1;
 
-        getFoodsByFridge(fridgeId).then(function (object) {
+        getFoodsByFridge(key).then(function (object) {
             if (!object) { return; }
             const card = document.getElementById('food-detail').cloneNode(true);
             var foodsData = object['fields'];
