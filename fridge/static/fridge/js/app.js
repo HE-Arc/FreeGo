@@ -9,23 +9,27 @@ var idbApp = (function () {
     var dbPromise = idb.open('freego_db', 5, function (upgradeDb) {
         switch (upgradeDb.oldVersion) {
             case 0:
-            // a placeholder case so that the switch block will 
-            // execute when the database is first created
-            // (oldVersion is 0)
+                // a placeholder case so that the switch block will 
+                // execute when the database is first created
+                // (oldVersion is 0)
+                break;
             case 1:
                 console.log('Creating the fridges object store');
                 upgradeDb.createObjectStore('fridges', { keyPath: 'pk' });
                 addFridgesFromNetwork();
+                break;
 
             case 2:
                 console.log('Creating the foods object store');
                 upgradeDb.createObjectStore('foods', { keyPath: 'pk' });
                 addFoodsFromNetwork();
+                break;
 
             case 3:
                 console.log('Creating fridge index in foods');
                 var store = upgradeDb.transaction.objectStore('foods');
                 store.createIndex('fridge', 'fields.fridge');
+                break;
         }
     });
 
@@ -150,9 +154,9 @@ var idbApp = (function () {
     }
 
     function displayFoodsByFridge() {
-        var key = 1;
+        var fridgeId = 1;
 
-        getFoodsByFridge(key).then(function (object) {
+        getFoodsByFridge(fridgeId).then(function (object) {
             if (!object) { return; }
             const card = document.getElementById('food-detail').cloneNode(true);
             var foodsData = object['fields'];

@@ -118,12 +118,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-# DATE_FORMAT = '%b %d, %Y'  # 'mmm dd, yyyy'
 TIME_FORMAT = '%I:%M %p'
 
-# DATE_INPUT_FORMATS = (
-#     '%b %d, %Y',     # May 13, 2020
-# )
 TIME_INPUT_FORMATS = (
     '%I:%M %p',
 )
