@@ -15,11 +15,13 @@ class FridgeForm(forms.ModelForm):
 
     class Meta:
         model = Fridge
-        fields = ('name', 'address', 'NPA', 'phone_number', 'image', 'user')
+        fields = ('name', 'address', 'NPA', 'city',
+                  'phone_number', 'image', 'user')
         labels = {
             'name': _('Name'),
             'address': _('Address'),
             'NPA': _('NPA'),
+            'city': _('City'),
             'phone_number': _('Phone number'),
             'image': _('Image'),
             'user': _('User')

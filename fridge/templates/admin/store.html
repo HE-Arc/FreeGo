@@ -1,13 +1,16 @@
-{% extends 'fridge/base_admin.html' %}
+{% extends 'admin/base_store.html' %}
 
 {% block content %}
 {% load static %}
 
+
+<h4>{{ fridge.name }}</h4>
+
 <ul class="collection with-header">
-    {% for fridge in fridges %}
+    {% for food in fridge.get_foods %}
     <li class="collection-item">
-        <div>{{ fridge.name }}
-            <a href="{% url 'fridge:fridge-delete' fridge.pk %}" class="secondary-content">
+        <div>{{ food.name }}
+            <a href="{% url 'fridge:food-delete' food.pk %}" class="secondary-content">
                 <i class="material-icons" aria-hidden="true">remove_circle</i>
             </a>
         </div>

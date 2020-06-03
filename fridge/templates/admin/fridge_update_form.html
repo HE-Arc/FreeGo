@@ -1,4 +1,4 @@
-{% extends 'fridge/base_store.html' %}
+{% extends 'admin/base_store.html' %}
 
 {% block content %}
 {% load static %}
@@ -18,35 +18,42 @@
     <div class="row">
         <div class="input-field col s12">
             <input id="name" name="name" type="text" value="{{fridge.name}}" required />
-            <label for="name">{% trans 'Name' %}</label>
+            <label for="name">{{ form.name.label }}</label>
         </div>
     </div>
 
     <div class="row">
         <div class="input-field col s12">
             <input id="address" name="address" type="text" value="{{fridge.address}}" required />
-            <label for="address">{% trans 'Address' %}</label>
+            <label for="address">{{ form.address.label }}</label>
         </div>
     </div>
 
     <div class="row">
         <div class="input-field col s12">
             <input id="NPA" name="NPA" type="text" value="{{fridge.NPA}}" required />
-            <label for="NPA">{% trans 'NPA' %}</label>
+            <label for="NPA">{{ form.NPA.label }}</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <input id="city" name="city" type="text" value="{{fridge.city}}" required />
+            <label for="city">{{ form.city.label }}</label>
         </div>
     </div>
 
     <div class="row">
         <div class="input-field col s12">
             <input id="phone_number" name="phone_number" type="text" value="{{fridge.phone_number}}" required />
-            <label for="phone_number">{% trans 'Phone number' %}</label>
+            <label for="phone_number">{{ form.phone_number.label }}</label>
         </div>
     </div>
 
     <div class="row">
         <div class="file-field input-field">
             <div class="btn">
-                <span>{% trans 'Images' %}</span>
+                <span>{{ form.image.label }}</span>
                 <input id="image" name="image" type="file" value="{{fridge.image}}">
             </div>
             <div class="file-path-wrapper">

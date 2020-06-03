@@ -1,11 +1,11 @@
-{% extends 'fridge/base.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% block content %}
 {% load i18n %}
 
 {% if user.is_authenticated %}
 <div class="collection">
-    <a href="#!" class="collection-item black-text">{% trans 'My profil' %}</a>
+    <a href="{% url 'fridge:profile' user.pk %}" class="collection-item black-text">{% trans 'My profil' %}</a>
 
     {% if perms.fridge.admin %}
     <a href="{% url 'fridge:myadmin' %}" class="collection-item black-text">{% trans 'Administration' %}</a>

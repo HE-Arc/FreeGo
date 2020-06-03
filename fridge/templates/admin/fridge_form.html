@@ -1,4 +1,4 @@
-{% extends 'fridge/base_admin.html' %}
+{% extends 'admin/base_admin.html' %}
 
 {% block content %}
 {% load static %}
@@ -53,6 +53,16 @@
 
     <div class="row">
         <div class="input-field col s12">
+            {{ form.city }}
+            <label for="city">{{ form.city.label }}</label>
+            <div class="red-text">
+                {{ form.city.errors }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
             {{ form.phone_number }}
             <label for="phone_number">{{ form.phone_number.label }}</label>
             <div class="red-text">
@@ -64,7 +74,7 @@
     <div class="row">
         <div class="file-field input-field">
             <div class="btn">
-                <span>{% trans 'Images' %}</span>
+                <span>{{ form.image.label }}</span>
                 {{ form.image }}
             </div>
             <div class="file-path-wrapper">

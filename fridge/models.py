@@ -18,6 +18,7 @@ class Fridge(models.Model):
     name = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
     NPA = models.CharField(max_length=45, validators=[NPA_validator])
+    city = models.CharField(max_length=45)
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
     image = models.ImageField(

@@ -1,0 +1,22 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+{% load i18n %}
+
+<h5 class="container">{% trans 'Account details' %}</h5>
+<div class="collection">
+    <a href="{% url 'fridge:user-username-update' user.pk %}" class="collection-item black-text">{% trans 'Name' %}
+        <span class="secondary-content">{{ object.username }}</span>
+    </a>
+    <a href="#!" class="collection-item black-text">{% trans 'Email' %}
+        <span class="secondary-content">{{ object.email }}</span>
+    </a>
+</div>
+<h5 class="container">{% trans 'Parameters' %}</h5>
+<div class="collection">
+    <a href="#!" class="collection-item black-text">{% trans 'Change password' %}
+        <i class="material-icons secondary-content">send</i>
+    </a>
+</div>
+
+{% endblock %}
