@@ -1,7 +1,6 @@
-const cacheName = 'freego-pwa-v2';
-const DATA_CACHE_NAME = 'data-cache-v2';
+const cacheName = 'freego-pwa-v3';
 
-const precacheResources = [
+const filesToCache = [
     //urls
     '/fridge/list',
     '/',
@@ -39,7 +38,7 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(cacheName)
             .then(cache => {
-                return cache.addAll(precacheResources);
+                return cache.addAll(filesToCache);
 
             })
     );
@@ -48,28 +47,26 @@ self.addEventListener('install', event => {
 // Clear cache on activate
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then((keyList) => {
-            return Promise.all(keyList.map((key) => {
-                if (key !== cacheName && key !== DATA_CACHE_NAME) {
-                    return caches.delete(key);
-                }
-            }));
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames
+                    .filter(cacheName => (cacheName.startsWith("django-pwa-")))
+                    .filter(cacheName => (cacheName !== staticCacheName))
+                    .map(cacheName => caches.delete(cacheName))
+            );
         })
     );
 });
 
 // Serve from Cache
 self.addEventListener("fetch", event => {
-    self.addEventListener("fetch", event => {
-        event.respondWith(
-            caches.match(event.request)
-                .then(response => {
-                    return response || fetch(event.request);
-                })
-                .catch(() => {
-                    return caches.match('offline');
-                })
-        )
-    });
-
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                return response || fetch(event.request);
+            })
+            .catch(() => {
+                return caches.match('offline');
+            })
+    )
 });

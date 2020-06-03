@@ -63,58 +63,47 @@ var idbApp = (function () {
     function displayFridges() {
         getFridges().then(function showRange(cursor) {
             if (!cursor) { return; }
-            console.log('Cursored at:', cursor.value.name);
-            for (var field in cursor.value) {
-                if (field == 'fields') {
-                    const card = document.getElementById('fridge-template').cloneNode(true);
-                    var fridgesData = cursor.value[field];
 
-                    for (var key in fridgesData) {
-                        if (key == 'name') {
-                            card.querySelector('#name').textContent = fridgesData[key];
-                        }
-                        if (key == 'address') {
-                            card.querySelector('#address').textContent = fridgesData[key];
-                        }
-                        if (key == 'image') {
-                            card.querySelector('#image').src = "/media/" + fridgesData[key];
-                        }
-
-                    }
-                    card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
-                    document.querySelector('#main').appendChild(card);
-                    card.removeAttribute('hidden');
-                }
-            }
+            renderFridgeTemplate(cursor);
             return cursor.continue().then(showRange);
         });
         addFridgesFromNetwork().then(function showRange(cursor) {
             if (!cursor) { return; }
-            console.log('Cursored at:', cursor.value.name);
-            for (var field in cursor.value) {
-                if (field == 'fields') {
-                    const card = document.getElementById('fridge-template').cloneNode(true);
-                    var fridgesData = cursor.value[field];
 
-                    for (var key in fridgesData) {
-                        if (key == 'name') {
-                            card.querySelector('#name').textContent = fridgesData[key];
-                        }
-                        if (key == 'address') {
-                            card.querySelector('#address').textContent = fridgesData[key];
-                        }
-                        if (key == 'image') {
-                            card.querySelector('#image').src = "/media/" + fridgesData[key];
-                        }
-
-                    }
-                    card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
-                    document.querySelector('#main').appendChild(card);
-                    card.removeAttribute('hidden');
-                }
+            var elements = document.getElementsByClassName("fridge");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].remove();
             }
+
+            renderFridgeTemplate(cursor);
             return cursor.continue().then(showRange);
         });
+    }
+
+    function renderFridgeTemplate(cursor) {
+        for (var field in cursor.value) {
+            if (field == 'fields') {
+                const card = document.getElementById('fridge-template').cloneNode(true);
+                var fridgesData = cursor.value[field];
+
+                for (var key in fridgesData) {
+                    if (key == 'name') {
+                        card.querySelector('#name').textContent = fridgesData[key];
+                    }
+                    if (key == 'address') {
+                        card.querySelector('#address').textContent = fridgesData[key];
+                    }
+                    if (key == 'image') {
+                        card.querySelector('#image').src = "/media/" + fridgesData[key];
+                    }
+
+                }
+                card.className = "fridge";
+                card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
+                document.querySelector('#main').appendChild(card);
+                card.removeAttribute('hidden');
+            }
+        }
     }
 
     // Foods
