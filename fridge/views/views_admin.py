@@ -99,13 +99,13 @@ class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
 
-class FridgeUpdateView(PermissionRequiredMixin, generic.UpdateView):
-    model = Fridge
-    template_name = 'admin/fridge_update_form.html'
-    permission_required = 'fridge.store'
-    success_url = reverse_lazy('fridge:store-detail')
-    fields = ['name', 'address', 'NPA', 'phone_number', 'image']
-    login_url = LOGIN_URL
+# class FridgeUpdateView(PermissionRequiredMixin, generic.UpdateView):
+#     model = Fridge
+#     template_name = 'admin/fridge_update_form.html'
+#     permission_required = 'fridge.store'
+#     success_url = reverse_lazy('fridge:store-detail')
+#     fields = ['name', 'address', 'NPA', 'phone_number', 'image']
+#     login_url = LOGIN_URL
 
 
 class FoodCreateView(PermissionRequiredMixin, View):
@@ -223,6 +223,30 @@ class OpeningHourDeleteView(PermissionRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
 
+class OpeningHourListView(LoginRequiredMixin, generic.ListView):
+    template_name = 'admin/opening_hour_list.html'
+    model = Fridge
+    login_url = LOGIN_URL
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        context['opening_hour_list'] = fridge.get_opening_hours()
+        return context
+
+
+class SpecialDayListView(LoginRequiredMixin, generic.ListView):
+    template_name = 'admin/special_day_list.html'
+    model = Fridge
+    login_url = LOGIN_URL
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        context['special_day_list'] = fridge.get_special_days()
+        return context
+
+
 class SpecialDayCreateView(PermissionRequiredMixin, View):
     form_class = SpecialDayForm
     template_name = 'admin/special_day_form.html'
@@ -263,3 +287,12 @@ class SpecialDayDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class FridgeUpdateView(PermissionRequiredMixin, generic.UpdateView):
+    model = Fridge
+    template_name = 'user/user_update_form.html'
+    permission_required = 'fridge.store'
+
+    def get_success_url(self):
+        return reverse_lazy('fridge:store-detail')

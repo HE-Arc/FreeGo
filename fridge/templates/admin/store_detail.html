@@ -2,42 +2,45 @@
 {% load i18n %}
 
 {% block content %}
-<h4>{{ fridge.name }}</h4>
 
-<h5>{% trans 'Address' %}</h5>
-<p>{{ fridge.address }}, {{ fridge.NPA }}</p>
-
-<h5>{% trans 'Phone number' %}</h5>
-<p>{{ fridge.phone_number }}</p>
-
-<h5>{% trans 'Opening Hour' %}</h5>
-{% for oh in fridge.get_opening_hours %}
-<div>
-    <p>{{ oh }}
-        <a href="{% url 'fridge:openinghour-delete' oh.pk %}" class="secondary-content">
-            <i class="material-icons" aria-hidden="true" style="width: 1rem;height: 1rem;color: red;">remove_circle</i>
-        </a>
-    </p>
+<h5 class="container">{{ fridge.name }}</h5>
+<div class="collection">
+    <a href="{% url 'fridge:change-address' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Address' %}</strong>
+        <span class="secondary-content">{{ fridge.address }}, {{ fridge.NPA }} {{ fridge.city }}</span>
+    </a>
+    <a href="{% url 'fridge:change-phone-number' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Phone number' %}</strong>
+        <span class="secondary-content">{{ fridge.phone_number }}</span>
+    </a>
+    <a href="{% url 'fridge:opening-hour-list' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Opening Hour' %}</strong>
+        <i class="material-icons secondary-content">send</i>
+        <p>
+            {% for oh in fridge.get_opening_hour %}
+            {{ oh }}<br>
+            {% endfor %}
+        </p>
+    </a>
+    <a href="{% url 'fridge:special-day-list' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Special Day' %}</strong>
+        <i class="material-icons secondary-content">send</i>
+        <p>
+            {% for sd in fridge.get_special_days %}
+            {{ sd }}<br>
+            {% endfor %}
+        </p>
+    </a>
+    <a href="{% url 'fridge:change-user' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'User' %}</strong>
+        <span class="secondary-content">{{ fridge.user }}</span>
+    </a>
 </div>
-{% endfor %}
-<a href="{% url 'fridge:openinghour-form' %}">
-    <i class="small material-icons" aria-hidden="true" style="color: rgb(87, 161, 173);">add_circle</i>
-</a>
 
-<h5>{% trans 'Special Day' %}</h5>
-{% for sh in fridge.get_special_days %}
-<div>
-    <p>{{ sh }}
-        <a href="{% url 'fridge:specialday-delete' sh.pk %}" class="secondary-content">
-            <i class="material-icons" aria-hidden="true" style="width: 1rem;height: 1rem;color: red;">remove_circle</i>
-        </a>
-    </p>
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large freego-color" href="{% url 'fridge:store' %}">
+        <i class="material-icons" style="font-size: 3rem;" aria-hidden="true">home</i>
+    </a>
 </div>
-{% endfor %}
-<a href="{% url 'fridge:specialday-form' %}">
-    <i class="small material-icons" aria-hidden="true" style="color: rgb(87, 161, 173);">add_circle</i>
-</a>
 
-<h5>{% trans 'User' %}</h5>
-<p>{{ fridge.user }}</p>
 {% endblock %}

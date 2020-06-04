@@ -22,65 +22,13 @@
     <div class="navbar-fixed">
         <nav class="nav-extended">
             <div class="nav-wrapper">
-                <a href="{% url 'fridge:home' %}" class="brand-logo left" style="width: 4rem;height: 4rem;">
-                    <img src="{% static 'fridge/logos/logo.png' %}" style="width: 4rem;height: 4rem;" alt="logo"></a>
-
-                <ul class="right">
-                    {% url 'fridge:store-detail' as store_detail %}
-                    {% url 'fridge:food-form' as food_form %}
-                    {% if request.path == store_detail or request.path == food_form %}
-                    <li>
-                        <a href="{% url 'fridge:store' %}">
-                            <i class="large material-icons" aria-hidden="true">home</i>
-                        </a>
-                    </li>
-                    {% endif %}
-
-                    {% if request.path == store_detail %}
-                    <li>
-                        <a href="{% url 'fridge:fridge-update'  fridge.pk %}">
-                            <i class="large material-icons" aria-hidden="true">settings</i>
-                        </a>
-                    </li>
-                    {% endif %}
-
-                    {% url 'fridge:store' as store %}
-                    {% if request.path == store %}
-                    <li>
-                        <a href="{% url 'fridge:store-detail' %}">
-                            <i class="large material-icons" aria-hidden="true">info</i>
-                        </a>
-                    </li>
-                    {% endif %}
-
-                    {% if request.path == store or  request.path == store_detail %}
-                    <li>
-                        <a href="{% url 'fridge:food-form' %}">
-                            <i class="large material-icons" aria-hidden="true">add_circle</i>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
+                <a onClick="javascript:history.go(-1);">
+                    <i class="material-icons black-text" style="font-size: 3rem;" aria-hidden="true">arrow_back</i></a>
             </div>
         </nav>
     </div>
 
-    <div class="container">
-        {% if user.is_authenticated %}
-
-        {% block content %}{% endblock %}
-
-        {% else %}
-
-        <section class="section">
-            <div class="container">
-                <p>{% trans 'You are not authenticated' %}</p>
-            </div>
-        </section>
-
-        {% endif %}
-    </div>
-
+    {% block content %}{% endblock %}
 
     <!-- JS -->
     <script src="{% static 'fridge/js/jquery-3.5.1.min.js' %}"></script>

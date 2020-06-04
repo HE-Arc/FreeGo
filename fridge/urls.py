@@ -24,6 +24,15 @@ urlpatterns = [
     path('store', views_admin.StoreIndexView.as_view(), name='store'),
     path('store/detail',
          views_admin.StoreDetailView.as_view(), name='store-detail'),
+    path('change/address/<pk>',
+         views_admin.FridgeUpdateView.as_view(
+             fields=['address']), name='change-address'),
+    path('change/phone-number/<pk>',
+         views_admin.FridgeUpdateView.as_view(
+             fields=['phone_number']), name='change-phone-number'),
+    path('change/user/<pk>',
+         views_admin.FridgeUpdateView.as_view(
+             fields=['user']), name='change-user'),
 
     # Food
     path('food/new', views_admin.FoodCreateView.as_view(),
@@ -39,12 +48,17 @@ urlpatterns = [
     path('openinghour/<pk>/delete',
          views_admin.OpeningHourDeleteView.as_view(),
          name='openinghour-delete'),
+    path('openinghour/<pk>/list',
+         views_admin.OpeningHourListView.as_view(),
+         name='opening-hour-list'),
 
     # Special Day
     path('specialday/new', views_admin.SpecialDayCreateView.as_view(),
          name='specialday-form'),
     path('specialday/<pk>/delete', views_admin.SpecialDayDeleteView.as_view(),
          name='specialday-delete'),
+    path('specialday/<pk>/list', views_admin.SpecialDayListView.as_view(),
+         name='special-day-list'),
 
     # Reservation
     path('food/<pk>/reservation', views_admin.FoodReservation.as_view(),
@@ -59,10 +73,15 @@ urlpatterns = [
     path('register', views_user.RegisterView.as_view(), name='register'),
     path('login', views_user.LoginView.as_view(), name='login'),
     path('logout', views_user.LogoutView.as_view(), name='logout'),
-    path('profile/<pk>', views_user.ProfileView.as_view(), name='profile'),
-    path('user/<pk>/username/update',
-         views_user.UserUsernameUpdateView.as_view(),
-         name='user-username-update'),
+    path('profile', views_user.ProfileView.as_view(), name='profile'),
+    path('change/username/<pk>',
+         views_user.UserUpdateView.as_view(fields=['username']),
+         name='change-username'),
+    path('change/email/<pk>',
+         views_user.UserUpdateView.as_view(fields=['email']),
+         name='change-email'),
+    path('change/password', views_user.UserPasswordUpdateView.as_view(),
+         name='change-password'),
 
     # Home
     path('', views_home.HomeView.as_view(), name='home'),

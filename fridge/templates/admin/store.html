@@ -3,19 +3,31 @@
 {% block content %}
 {% load static %}
 
+<div class="container">
 
-<h4>{{ fridge.name }}</h4>
+    <h4>{{ fridge.name }}</h4>
 
-<ul class="collection with-header">
-    {% for food in fridge.get_foods %}
-    <li class="collection-item">
-        <div>{{ food.name }}
-            <a href="{% url 'fridge:food-delete' food.pk %}" class="secondary-content">
-                <i class="material-icons" aria-hidden="true">remove_circle</i>
-            </a>
-        </div>
-    </li>
-    {% endfor %}
-</ul>
+    <ul class="collection with-header">
+        {% for food in fridge.get_foods %}
+        <li class="collection-item">
+            <div>{{ food.name }}
+                <a href="{% url 'fridge:food-delete' food.pk %}" class="secondary-content">
+                    <i class="material-icons" aria-hidden="true">remove_circle</i>
+                </a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
 
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large freego-color" href="{% url 'fridge:food-form' %}">
+            <i class="material-icons" style="font-size: 3rem;" aria-hidden="true">add</i>
+        </a>
+    </div>
+    <div class="fixed-action-btn-left">
+        <a class="btn-floating btn-large freego-color" href="{% url 'fridge:store-detail' %}">
+            <i class="material-icons" style="font-size: 3rem;" aria-hidden="true">settings</i>
+        </a>
+    </div>
+</div>
 {% endblock %}
