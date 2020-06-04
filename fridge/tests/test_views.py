@@ -88,6 +88,7 @@ class FridgeCreateViewTest(TestCase):
             'address': 'Une adresse 21',
             'NPA': '2000',
             'phone_number': '0790000000',
+            'city': 'Neuchatel',
             'image': image,
             'user': self.user.pk
         }
