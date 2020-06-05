@@ -201,7 +201,8 @@ class OpeningHourCreateView(TestCase):
         }
         response = self.client.post(reverse('fridge:openinghour-form'), json)
 
-        self.assertRedirects(response, reverse('fridge:store-detail'))
+        self.assertRedirects(response, reverse(
+            'fridge:fridge-detail', self.fridge.pk))
         self.assertEqual(len(OpeningHour.objects.all()), 1)
         self.assertEqual(OpeningHour.objects.last().weekday, 1)
 
@@ -228,7 +229,8 @@ class SpecialDayCreateViewTest(TestCase):
 
         response = self.client.post(reverse('fridge:specialday-form'), json)
 
-        self.assertRedirects(response, reverse('fridge:store-detail'))
+        self.assertRedirects(response, reverse(
+            'fridge:fridge-detail', self.fridge.pk))
         self.assertEqual(len(SpecialDay.objects.all()), 1)
         self.assertEqual(SpecialDay.objects.last().from_date,
                          date.today())

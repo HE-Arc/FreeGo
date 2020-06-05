@@ -22,11 +22,11 @@ urlpatterns = [
 
     # Store
     path('store', views_admin.StoreIndexView.as_view(), name='store'),
-    path('store/detail',
-         views_admin.StoreDetailView.as_view(), name='store-detail'),
+    path('fridge/detail/<pk>',
+         views_admin.FridgeDetailView.as_view(), name='fridge-detail'),
     path('change/address/<pk>',
          views_admin.FridgeUpdateView.as_view(
-             fields=['address']), name='change-address'),
+             fields=['address', 'NPA', 'city']), name='change-address'),
     path('change/phone-number/<pk>',
          views_admin.FridgeUpdateView.as_view(
              fields=['phone_number']), name='change-phone-number'),

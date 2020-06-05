@@ -17,7 +17,7 @@
         class="collection-item black-text"><strong>{% trans 'Opening Hour' %}</strong>
         <i class="material-icons secondary-content">send</i>
         <p>
-            {% for oh in fridge.get_opening_hour %}
+            {% for oh in fridge.get_opening_hours %}
             {{ oh }}<br>
             {% endfor %}
         </p>
