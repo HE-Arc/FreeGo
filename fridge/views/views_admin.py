@@ -30,8 +30,9 @@ class StoreIndexView(PermissionRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['fridge'] = Fridge.objects.filter(
-            user=self.request.user).first()
+        fridge = Fridge.objects.filter(user=self.request.user).first()
+        context['fridge'] = fridge
+        context['food_reserved'] = fridge.get_reserved_food()
         return context
 
 
@@ -121,6 +122,16 @@ class FoodCreateView(PermissionRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
+class FoodUpdateView(PermissionRequiredMixin, generic.UpdateView):
+    model = Food
+    template_name = 'admin/food_update_form.html'
+    permission_required = 'fridge.store'
+    fields = ['name', 'vegetarian', 'vegan', 'expiration_date']
+
+    def get_success_url(self):
+        return reverse_lazy('fridge:profile')
+
+
 class FoodDeleteView(PermissionRequiredMixin, generic.DeleteView):
     model = Food
     success_url = reverse_lazy('fridge:store')
@@ -141,7 +152,7 @@ class FoodListView(LoginRequiredMixin, generic.ListView):
 
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
         context['food_available'] = fridge.get_available_food()
-        context['food_reserve'] = fridge.get_reserved_food(self.request.user)
+        context['food_reserve'] = self.request.user.get_reserved_food()
         return context
 
 
@@ -261,7 +272,8 @@ class SpecialDayCreateView(PermissionRequiredMixin, View):
                 to_date=to_date,
                 from_hour=form.cleaned_data['from_hour'],
                 to_hour=form.cleaned_data['to_hour'],
-                fridge=Fridge.objects.filter(user=request.user).first() # TODO change for sd.pk
+                fridge=Fridge.objects.filter(
+                    user=request.user).first()  # TODO change for sd.pk
             )
             special_day.save()
             return redirect('fridge:fridge-detail', special_day.fridge.pk)

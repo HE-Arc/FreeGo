@@ -4,7 +4,7 @@
 {% block content %}
 
 <h5 class="container">{{ fridge.name }}</h5>
-<div class="collection">
+<ul class="collection">
     <a href="{% url 'fridge:change-address' fridge.pk %}"
         class="collection-item black-text"><strong>{% trans 'Address' %}</strong>
         <span class="secondary-content">{{ fridge.address }}, {{ fridge.NPA }} {{ fridge.city }}</span>
@@ -35,7 +35,7 @@
         class="collection-item black-text"><strong>{% trans 'User' %}</strong>
         <span class="secondary-content">{{ fridge.user }}</span>
     </a>
-</div>
+</ul>
 
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large freego-color" href="{% url 'fridge:store' %}">

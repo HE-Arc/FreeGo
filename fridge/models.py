@@ -47,9 +47,9 @@ class Fridge(models.Model):
         all_reservation = Reservation.objects.values_list('food_id')
         return Food.objects.filter(fridge=self).exclude(id__in=all_reservation)
 
-    def get_reserved_food(self, user):
+    def get_reserved_food(self):
         return [food for food in Food.objects.filter(fridge=self)
-                if food.is_reserved_by_me(user) is True]
+                if food.is_reserved() is True]
 
 
 class Food(models.Model):
@@ -63,6 +63,9 @@ class Food(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True)
+
+    def is_reserved(self):
+        return Reservation.objects.filter(food=self).count() != 0
 
     def is_reserved_by_me(self, current_user):
         return Reservation.objects.filter(food=self) \

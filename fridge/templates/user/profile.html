@@ -4,19 +4,19 @@
 {% load i18n %}
 
 <h5 class="container">{% trans 'Account details' %}</h5>
-<div class="collection">
+<ul class="collection">
     <a href="{% url 'fridge:change-user' user.pk %}" class="collection-item black-text">{% trans 'Name' %}
         <span class="secondary-content">{{ user.username }}</span>
     </a>
     <a href="{% url 'fridge:change-email' user.pk %}" class="collection-item black-text">{% trans 'Email' %}
         <span class="secondary-content">{{ user.email }}</span>
     </a>
-</div>
+</ul>
 <h5 class="container">{% trans 'Parameters' %}</h5>
-<div class="collection">
+<ul class="collection">
     <a href="{% url 'fridge:change-password' %}" class="collection-item black-text">{% trans 'Change password' %}
         <i class="material-icons secondary-content">send</i>
     </a>
-</div>
+</ul>
 
 {% endblock %}
