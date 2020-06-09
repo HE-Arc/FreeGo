@@ -2,76 +2,102 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from . import views
+from .views import views_admin, views_home, views_user
 
 app_name = 'fridge'
 
 urlpatterns = [
-    path('fridge/list', views.FridgeListView.as_view(),
+    path('fridge/list', views_admin.FridgeListView.as_view(),
          name='fridge-list'),
     # Admin
-    path('myadmin', views.AdminIndexView.as_view(), name='myadmin'),
+    path('myadmin', views_admin.AdminIndexView.as_view(), name='myadmin'),
 
     # Fridge
-    path('fridge/new', views.FridgeCreateView.as_view(), name='fridge-new'),
-    path('fridge/<pk>/delete', views.FridgeDeleteView.as_view(),
+    path('fridge/new',
+         views_admin.FridgeCreateView.as_view(), name='fridge-new'),
+    path('fridge/<pk>/delete', views_admin.FridgeDeleteView.as_view(),
          name='fridge-delete'),
-    path('fridge/<pk>/update', views.FridgeUpdateView.as_view(),
+    path('fridge/<pk>/update', views_admin.FridgeUpdateView.as_view(),
          name='fridge-update'),
 
     # Store
-    path('store', views.StoreIndexView.as_view(), name='store'),
-    path('store/detail',
-         views.StoreDetailView.as_view(), name='store-detail'),
+    path('store', views_admin.StoreIndexView.as_view(), name='store'),
+    path('fridge/detail/<pk>',
+         views_admin.FridgeDetailView.as_view(), name='fridge-detail'),
+    path('change/address/<pk>',
+         views_admin.FridgeUpdateView.as_view(
+             fields=['address', 'NPA', 'city']), name='change-address'),
+    path('change/phone-number/<pk>',
+         views_admin.FridgeUpdateView.as_view(
+             fields=['phone_number']), name='change-phone-number'),
+    path('change/user/<pk>',
+         views_admin.FridgeUpdateView.as_view(
+             fields=['user']), name='change-user'),
 
     # Food
-    path('food/new', views.FoodCreateView.as_view(),
+    path('food/new', views_admin.FoodCreateView.as_view(),
          name='food-form'),
-    path('food/<pk>/delete', views.FoodDeleteView.as_view(),
+    path('food/<pk>/delete', views_admin.FoodDeleteView.as_view(),
          name='food-delete'),
-    path('food/<pk>/list/', views.FoodListView.as_view(),
+    path('food/<pk>/list/', views_admin.FoodListView.as_view(),
          name='food-list'),
+    path('food/<pk>/update/', views_admin.FoodUpdateView.as_view(),
+         name='food-update'),
 
     # Opening Day
-    path('openinghour/new', views.OpeningHourCreateView.as_view(),
+    path('openinghour/new', views_admin.OpeningHourCreateView.as_view(),
          name='openinghour-form'),
-    path('openinghour/<pk>/delete', views.OpeningHourDeleteView.as_view(),
+    path('openinghour/<pk>/delete',
+         views_admin.OpeningHourDeleteView.as_view(),
          name='openinghour-delete'),
+    path('openinghour/<pk>/list',
+         views_admin.OpeningHourListView.as_view(),
+         name='opening-hour-list'),
 
     # Special Day
-    path('specialday/new', views.SpecialDayCreateView.as_view(),
+    path('specialday/new', views_admin.SpecialDayCreateView.as_view(),
          name='specialday-form'),
-    path('specialday/<pk>/delete', views.SpecialDayDeleteView.as_view(),
+    path('specialday/<pk>/delete', views_admin.SpecialDayDeleteView.as_view(),
          name='specialday-delete'),
+    path('specialday/<pk>/list', views_admin.SpecialDayListView.as_view(),
+         name='special-day-list'),
 
     # Reservation
-    path('food/<pk>/reservation', views.FoodReservation.as_view(),
+    path('food/<pk>/reservation', views_admin.FoodReservation.as_view(),
          name='food-reservation'),
-    path('food/<pk>/cancellation', views.FoodCancellation.as_view(),
+    path('food/<pk>/cancellation', views_admin.FoodCancellation.as_view(),
          name='food-cancellation'),
-    path('reservation/list', views.ReservationListView.as_view(),
+    path('reservation/list', views_user.ReservationListView.as_view(),
          name='reservation-list'),
 
-    # Settings
-    path('settings', views.SettingsView.as_view(), name='settings'),
 
     # Login/Register/Logout
-    path('register', views.RegisterView.as_view(), name='register'),
-    path('login', views.LoginView.as_view(), name='login'),
-    path('logout', views.LogoutView.as_view(), name='logout'),
+    path('register', views_user.RegisterView.as_view(), name='register'),
+    path('login', views_user.LoginView.as_view(), name='login'),
+    path('logout', views_user.LogoutView.as_view(), name='logout'),
+    path('profile', views_user.ProfileView.as_view(), name='profile'),
+    path('change/username/<pk>',
+         views_user.UserUpdateView.as_view(fields=['username']),
+         name='change-username'),
+    path('change/email/<pk>',
+         views_user.UserUpdateView.as_view(fields=['email']),
+         name='change-email'),
+    path('change/password', views_user.UserPasswordUpdateView.as_view(),
+         name='change-password'),
 
     # Home
-    path('', views.HomeView.as_view(), name='home'),
-    path('home', views.HomeView.as_view(), name='home'),
-    path('map', views.MapView.as_view(), name='map'),
-    path('favorite', views.FavoriteView.as_view(), name='favorite'),
+    path('', views_home.HomeView.as_view(), name='home'),
+    path('home', views_home.HomeView.as_view(), name='home'),
+    path('map', views_home.MapView.as_view(), name='map'),
+    path('favorite', views_home.FavoriteView.as_view(), name='favorite'),
+    path('settings', views_home.SettingsView.as_view(), name='settings'),
 
     # PWA
     path('forecast/get-fridges-data',
-         views.get_fridges_data, name='get-fridges-data'),
+         views_home.get_fridges_data, name='get-fridges-data'),
     path('forecast/get-foods-data',
-         views.get_foods_data, name='get-foods-data'),
-    path('offline', views.offline_view, name='offline')
+         views_home.get_foods_data, name='get-foods-data'),
+    path('offline', views_home.offline_view, name='offline')
 ]
 
 

@@ -1,4 +1,4 @@
-{% extends 'fridge/base.html' %}
+{% extends 'admin/base_store.html' %}
 {% load static %}
 {% block content %}
 {% load i18n %}
@@ -15,7 +15,7 @@
     <ul class="collection with-header">
         {% for food in reservation_list %}
         <li class="collection-item">
-            {% include "fridge/food_detail.html" %}
+            {% include "admin/food_detail.html" %}
         </li>
         {% endfor %}
 

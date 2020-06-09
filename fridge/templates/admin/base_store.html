@@ -4,7 +4,7 @@
 <head>
     {% load static %}
     {% load i18n %}
-    <title>{% trans 'Free Go' %}</title>
+    <title>Free Go</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'fridge/css/materialize.min.css' %}">
@@ -19,34 +19,22 @@
 </head>
 
 <body>
-    <!-- NAVBAR HEADER -->
-    {% include "fridge/header.html" %}
-
-    <!-- BODY -->
-    <div class="container">
-        {% if form.errors %}
-        <div class="card red darken-1">
-            {% for field in form %}
-            {% for error in field.errors %}
-            <div class="card-content">
-                <strong>{{ error|escape }}</strong>
+    <div class="navbar-fixed">
+        <nav class="nav-extended">
+            <div class="nav-wrapper">
+                <a onClick="javascript:history.go(-1);">
+                    <i class="material-icons black-text" style="font-size: 3rem;" aria-hidden="true">arrow_back</i></a>
             </div>
-            {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-            <div class="card-content white-text">
-                <strong>{{ error|escape }}</strong>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        {% block content %}{% endblock %}
+        </nav>
     </div>
+
+    {% block content %}{% endblock %}
 
     <!-- JS -->
     <script src="{% static 'fridge/js/jquery-3.5.1.min.js' %}"></script>
     <script src="{% static 'fridge/js/materialize.min.js' %}"></script>
+    <script src="{% static 'fridge/js/script.js' %}"></script>
+
     <script>
         feather.replace()
     </script>

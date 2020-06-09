@@ -24,7 +24,13 @@
 <body>
   <!-- NAVBAR HEADER -->
   <header>
-    {% include "fridge/header.html" %}
+    <div class="navbar-fixed">
+      <nav class="nav-extended">
+        <div class="nav-wrapper">
+          <a href="{% url 'fridge:home' %}" class="brand-logo">Free Go</a>
+        </div>
+      </nav>
+    </div>
   </header>
 
   <!-- BODY -->

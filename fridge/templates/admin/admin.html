@@ -1,0 +1,24 @@
+{% extends 'admin/base_store.html' %}
+
+{% block content %}
+{% load static %}
+
+<ul class="collection">
+    {% for fridge in fridges %}
+    <li class="collection-item">
+        <a href="{% url 'fridge:fridge-detail' fridge.pk %}" class="black-text">{{ fridge.name }}
+        </a>
+        <a href="{% url 'fridge:fridge-delete' fridge.pk %}" class="secondary-content">
+            <i class="material-icons" aria-hidden="true">remove_circle</i>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large freego-color" href="{% url 'fridge:food-form' %}">
+        <i class="material-icons" style="font-size: 3rem;" aria-hidden="true">add</i>
+    </a>
+</div>
+
+{% endblock %}
