@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
     create_food, create_reservation
 from fridge.models import Food, Fridge, SpecialDay, OpeningHour
@@ -8,6 +8,7 @@ from django.shortcuts import resolve_url as r
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import timedelta, date
 from django.contrib.auth.models import Permission
+from django.shortcuts import redirect
 
 
 class AdminIndexViewTest(TestCase):
@@ -201,8 +202,9 @@ class OpeningHourCreateView(TestCase):
         }
         response = self.client.post(reverse('fridge:openinghour-form'), json)
 
-        self.assertRedirects(response, reverse(
-            'fridge:fridge-detail', self.fridge.pk))
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:fridge-detail',
+                                          kwargs={'pk': self.fridge.pk}))
         self.assertEqual(len(OpeningHour.objects.all()), 1)
         self.assertEqual(OpeningHour.objects.last().weekday, 1)
 
@@ -229,8 +231,9 @@ class SpecialDayCreateViewTest(TestCase):
 
         response = self.client.post(reverse('fridge:specialday-form'), json)
 
-        self.assertRedirects(response, reverse(
-            'fridge:fridge-detail', self.fridge.pk))
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:fridge-detail',
+                                          kwargs={'pk': self.fridge.pk}))
         self.assertEqual(len(SpecialDay.objects.all()), 1)
         self.assertEqual(SpecialDay.objects.last().from_date,
                          date.today())

@@ -199,6 +199,5 @@ class User(AbstractUser):
     def get_reserved_food(self):
         reserved_food = [food for food in Food.objects.all()
                          if food.is_reserved_by_me(self)]
-        print(reserved_food)
         return [food for food in Food.objects.all()
                 if food.is_reserved_by_me(self)]

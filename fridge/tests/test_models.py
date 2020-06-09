@@ -53,11 +53,11 @@ class FridgeModelTest(TestCase):
         """
         food = create_food(self.fridge, self.user)
         self.assertEqual(self.fridge.get_available_food().count(), 1)
-        self.assertEqual(len(self.fridge.get_reserved_food(self.user)), 0)
+        self.assertEqual(len(self.fridge.get_reserved_food()), 0)
 
         create_reservation(food, self.user)
         self.assertEqual(self.fridge.get_available_food().count(), 0)
-        self.assertEqual(len(self.fridge.get_reserved_food(self.user)), 1)
+        self.assertEqual(len(self.fridge.get_reserved_food()), 1)
 
 
 class FoodModel(TestCase):
