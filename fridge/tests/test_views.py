@@ -2,13 +2,13 @@ from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
     create_food, create_reservation
-from fridge.models import Food, Fridge, SpecialDay, OpeningHour
+from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
+    User
 from django.utils import timezone
 from django.shortcuts import resolve_url as r
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import timedelta, date
 from django.contrib.auth.models import Permission
-from django.shortcuts import redirect
 
 
 class AdminIndexViewTest(TestCase):
@@ -347,4 +347,39 @@ class ManifestTest(TestCase):
             with self.subTest():
                 self.assertContains(self.response, expected)
 
-# TODO : improve all tests
+
+class RegisterViewTest(TestCase):
+    def test_get(self):
+        response = self.client.get(reverse('fridge:register'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post(self):
+        json = {
+            'username': 'test',
+            'email': 'test@test.test',
+            'password1': 'neFDE234r',
+            'password2': 'neFDE234r'
+        }
+        response = self.client.post(reverse('fridge:register'), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:home'))
+        # the new one and the admin
+        self.assertEqual(len(User.objects.all()), 2)
+        self.assertEqual(User.objects.last().username, 'test')
+
+
+class LoginViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+
+    def test_post(self):
+        json = {
+            'username': 'test',
+            'password': 'test'
+        }
+        response = self.client.post(reverse('fridge:login'), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:home'))
