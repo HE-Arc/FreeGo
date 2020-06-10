@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
-    create_food, create_reservation
+    create_food, create_reservation, create_favorite
 from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
     User
 from django.utils import timezone
@@ -383,3 +383,48 @@ class LoginViewTest(TestCase):
 
         self.assertRedirects(response,
                              reverse_lazy('fridge:home'))
+
+
+class FridgeFollowingCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(self.user)
+
+    def test_post(self):
+        json = {
+            'fridge': self.fridge,
+            'user': self.user
+        }
+        self.assertEqual(self.fridge.is_favorite(self.user), False)
+        response = self.client.post(
+            reverse_lazy('fridge:fridge-follow',
+                         kwargs={'pk': self.fridge.pk}), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:food-list',
+                                          kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(self.fridge.is_favorite(self.user), True)
+
+
+class FridgeFollowingDeleteViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(self.user)
+        create_favorite(user=self.user, fridge=self.fridge)
+
+    def test_post(self):
+        self.assertEqual(self.fridge.is_favorite(self.user), True)
+        json = {
+            'fridge': self.fridge,
+            'user': self.user
+        }
+        response = self.client.post(
+            reverse_lazy('fridge:fridge-unfollow',
+                         kwargs={'pk': self.fridge.pk}), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:food-list',
+                                          kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(self.fridge.is_favorite(self.user), False)

@@ -22,8 +22,20 @@
     <div class="navbar-fixed">
         <nav class="nav-extended">
             <div class="nav-wrapper">
-                <a onClick="javascript:history.go(-1);">
+                <a class="left" onClick="javascript:history.go(-1);">
                     <i class="material-icons black-text" style="font-size: 3rem;" aria-hidden="true">arrow_back</i></a>
+
+                {% url 'fridge:food-list' fridge.pk as food_list %}
+                {% if request.path == food_list %}
+                {% if is_favorite %}
+                <a class="right" href="{% url 'fridge:fridge-unfollow' fridge.pk %}">
+                    <i class="material-icons black-text" style="font-size: 3rem;" aria-hidden="true">favorite</i></a>
+                {% else %}
+                <a class="right" href="{% url 'fridge:fridge-follow' fridge.pk %}">
+                    <i class="material-icons black-text" style="font-size: 3rem;"
+                        aria-hidden="true">favorite_border</i></a>
+                {% endif %}
+                {% endif %}
             </div>
         </nav>
     </div>
