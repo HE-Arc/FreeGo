@@ -97,7 +97,14 @@ urlpatterns = [
          views_home.get_fridges_data, name='get-fridges-data'),
     path('forecast/get-foods-data',
          views_home.get_foods_data, name='get-foods-data'),
-    path('offline', views_home.offline_view, name='offline')
+    path('offline', views_home.offline_view, name='offline'),
+
+    path('fridge-follow/<pk>',
+         views_user.FridgeFollowingCreateView.as_view(),
+         name='fridge-follow'),
+    path('fridge-unfollow/<pk>',
+         views_user.FridgeFollowingDeleteView.as_view(),
+         name='fridge-unfollow')
 ]
 
 

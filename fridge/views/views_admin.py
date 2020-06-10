@@ -155,6 +155,8 @@ class FoodListView(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
 
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        context['fridge'] = fridge
+        context['is_favorite'] = fridge.is_favorite(self.request.user)
         context['food_available'] = fridge.get_available_food()
         context['food_reserve'] = self.request.user.get_reserved_food()
         return context
@@ -305,3 +307,35 @@ class FridgeUpdateView(PermissionRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         return reverse_lazy('fridge:fridge-detail',
                             kwargs={'pk': self.object.pk})
+
+
+class FridgeDemandCreateView(PermissionRequiredMixin, generic.CreateView):
+    form_class = FridgeForm
+    template_name = 'admin/fridge_demand_form.html'
+    permission_required = 'fridge.store'
+    initial = {}
+    login_url = LOGIN_URL
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            fridge = Fridge(
+                name=form.cleaned_data['name'],
+                address=form.cleaned_data['address'],
+                NPA=form.cleaned_data['NPA'],
+                city=form.cleaned_data['city'],
+                phone_number=form.cleaned_data['phone_number'],
+                image=form.cleaned_data['image'],
+                user=request.user
+            )
+            fridge.save()
+
+            permission = Permission.objects.get(codename='store')
+            fridge.user.user_permissions.add(permission)
+            return redirect('fridge:myadmin')
+
+        return render(request, self.template_name, {'form': form})

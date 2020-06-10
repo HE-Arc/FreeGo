@@ -3,7 +3,7 @@ from django.views import generic, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from fridge.models import User
+from fridge.models import User, FridgeFollowing, Fridge
 from fridge.forms import RegisterForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.views import PasswordChangeView
@@ -85,3 +85,29 @@ class ReservationListView(generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context['reservation_list'] = self.request.user.get_reserved_food()
         return context
+
+
+class FridgeFollowingCreateView(LoginRequiredMixin, View):
+    login_url = LOGIN_URL
+
+    def post(self, request, *args, **kwargs):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        fridge_following = FridgeFollowing(fridge=fridge, user=request.user)
+        fridge_following.save()
+        return redirect('fridge:food-list', fridge.pk)
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, args, kwargs)
+
+
+class FridgeFollowingDeleteView(LoginRequiredMixin, View):
+    login_url = LOGIN_URL
+
+    def post(self, request, *args, **kwargs):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        fridge_following = FridgeFollowing.objects.get(fridge=fridge)
+        fridge_following.delete()
+        return redirect('fridge:food-list', fridge.pk)
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, args, kwargs)
