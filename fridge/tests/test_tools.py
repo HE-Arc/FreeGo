@@ -1,4 +1,4 @@
-from fridge.models import Fridge, Food, Reservation, OpeningHour, SpecialDay
+from fridge.models import Fridge, Food, Reservation, OpeningHour, SpecialDay, FridgeFollowing
 from fridge.forms import User
 from datetime import timedelta, date
 from django.utils import timezone
@@ -75,3 +75,7 @@ def create_user(username="test", email='test@test.test', password='test'):
     '''Create generic user with selectable username'''
     return User.objects.create_user(username=username, email=email,
                                     password=password)
+
+
+def create_favorite(user, fridge):
+    return FridgeFollowing.objects.create(user=user, fridge=fridge)

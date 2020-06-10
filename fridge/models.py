@@ -165,8 +165,7 @@ class SpecialDay(models.Model):
                 {'from_date': self.from_date.strftime('%d/%m/%Y'),
                  'to_date': self.to_date.strftime('%d/%m/%Y')}
         elif self.from_hour and self.to_hour:
-            return
-            _("The %(from_date)s open from %(from_hour)s to %(to_hour)s") % \
+            return _("The %(from_date)s open from %(from_hour)s to %(to_hour)s") % \
                 {'from_date': self.from_date.strftime('%d/%m/%Y'),
                  'from_hour': self.from_hour.strftime('%H:%M'),
                  'to_hour':  self.to_hour.strftime('%H:%M')}

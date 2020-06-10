@@ -118,9 +118,6 @@ class FoodCreateView(PermissionRequiredMixin, View):
                 fridge=Fridge.objects.filter(user=request.user).first(),
                 user=request.user
             )
-
-            print(food)
-            print(form.cleaned_data['image'])
             food.save()
             return redirect('fridge:store')
         return render(request, self.template_name, {'form': form})
@@ -309,33 +306,33 @@ class FridgeUpdateView(PermissionRequiredMixin, generic.UpdateView):
                             kwargs={'pk': self.object.pk})
 
 
-class FridgeDemandCreateView(PermissionRequiredMixin, generic.CreateView):
-    form_class = FridgeForm
-    template_name = 'admin/fridge_demand_form.html'
-    permission_required = 'fridge.store'
-    initial = {}
-    login_url = LOGIN_URL
+# class FridgeDemandCreateView(PermissionRequiredMixin, generic.CreateView):
+#     form_class = FridgeForm
+#     template_name = 'admin/fridge_demand_form.html'
+#     permission_required = 'fridge.store'
+#     initial = {}
+#     login_url = LOGIN_URL
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+#     def get(self, request, *args, **kwargs):
+#         form = self.form_class(initial=self.initial)
+#         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST, request.FILES)
-        if form.is_valid():
-            fridge = Fridge(
-                name=form.cleaned_data['name'],
-                address=form.cleaned_data['address'],
-                NPA=form.cleaned_data['NPA'],
-                city=form.cleaned_data['city'],
-                phone_number=form.cleaned_data['phone_number'],
-                image=form.cleaned_data['image'],
-                user=request.user
-            )
-            fridge.save()
+#     def post(self, request, *args, **kwargs):
+#         form = self.form_class(request.POST, request.FILES)
+#         if form.is_valid():
+#             fridge = Fridge(
+#                 name=form.cleaned_data['name'],
+#                 address=form.cleaned_data['address'],
+#                 NPA=form.cleaned_data['NPA'],
+#                 city=form.cleaned_data['city'],
+#                 phone_number=form.cleaned_data['phone_number'],
+#                 image=form.cleaned_data['image'],
+#                 user=request.user
+#             )
+#             fridge.save()
 
-            permission = Permission.objects.get(codename='store')
-            fridge.user.user_permissions.add(permission)
-            return redirect('fridge:myadmin')
+#             permission = Permission.objects.get(codename='store')
+#             fridge.user.user_permissions.add(permission)
+#             return redirect('fridge:myadmin')
 
-        return render(request, self.template_name, {'form': form})
+#         return render(request, self.template_name, {'form': form})
