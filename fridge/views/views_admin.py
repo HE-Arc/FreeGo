@@ -107,16 +107,20 @@ class FoodCreateView(PermissionRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             food = Food(
                 name=form.cleaned_data['name'],
                 vegetarian=form.cleaned_data['vegetarian'],
                 vegan=form.cleaned_data['vegan'],
                 expiration_date=form.cleaned_data['expiration_date'],
+                image=form.cleaned_data['image'],
                 fridge=Fridge.objects.filter(user=request.user).first(),
                 user=request.user
             )
+
+            print(food)
+            print(form.cleaned_data['image'])
             food.save()
             return redirect('fridge:store')
         return render(request, self.template_name, {'form': form})
@@ -126,7 +130,7 @@ class FoodUpdateView(PermissionRequiredMixin, generic.UpdateView):
     model = Food
     template_name = 'admin/food_update_form.html'
     permission_required = 'fridge.store'
-    fields = ['name', 'vegetarian', 'vegan', 'expiration_date']
+    fields = ['name', 'vegetarian', 'vegan', 'expiration_date', 'image']
 
     def get_success_url(self):
         return reverse_lazy('fridge:profile')

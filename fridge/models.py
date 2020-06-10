@@ -21,8 +21,7 @@ class Fridge(models.Model):
     city = models.CharField(max_length=45)
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
-    image = models.ImageField(
-        upload_to='images/')
+    image = models.ImageField(upload_to='images/')
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True)
@@ -58,6 +57,8 @@ class Food(models.Model):
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
     expiration_date = models.DateField(validators=[expiration_date_validator])
+    image = models.ImageField(
+        upload_to='images/', default='default.JPG')
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
@@ -197,7 +198,5 @@ class User(AbstractUser):
         return Fridge.objects.filter(user=self).count() != 0
 
     def get_reserved_food(self):
-        reserved_food = [food for food in Food.objects.all()
-                         if food.is_reserved_by_me(self)]
         return [food for food in Food.objects.all()
                 if food.is_reserved_by_me(self)]

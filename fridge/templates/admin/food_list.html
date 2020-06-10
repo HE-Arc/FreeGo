@@ -9,18 +9,14 @@
     </div>
 </div>
 <div class="container">
-    <ul class="collection with-header" id="main">
+    <div class="row" id="main">
         {% for food in food_available %}
-        <li class="collection-item">
-            {% include "admin/food_detail.html" %}
-        </li>
+        {% include "admin/food_detail.html" %}
         {% endfor %}
 
         {% for food in food_reserve %}
-        <li class="collection-item">
-            {% include "admin/food_detail.html" %}
-        </li>
+        {% include "admin/food_detail.html" %}
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}
