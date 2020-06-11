@@ -104,7 +104,13 @@ urlpatterns = [
          name='fridge-follow'),
     path('fridge-unfollow/<pk>',
          views_user.FridgeFollowingDeleteView.as_view(),
-         name='fridge-unfollow')
+         name='fridge-unfollow'),
+    path('fridge/demand', views_admin.FridgeDemandCreateView.as_view(),
+         name='fridge-demand'),
+    path('fridge/valid/<pk>', views_admin.FridgeValidDemand.as_view(),
+         name='fridge-valid'),
+    path('fridge/refuse/<pk>', views_admin.FridgeRefuseDemand.as_view(),
+         name='fridge-refuse')
 ]
 
 

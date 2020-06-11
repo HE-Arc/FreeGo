@@ -20,6 +20,7 @@ class Fridge(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)

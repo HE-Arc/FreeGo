@@ -31,7 +31,7 @@ class SettingsView(generic.TemplateView):
 
 
 def get_fridges_data(request):
-    results = Fridge.objects.all()
+    results = Fridge.objects.filter(is_active=True)
     jsondata = serializers.serialize('json', results)
     return HttpResponse(jsondata)
 

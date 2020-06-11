@@ -4,6 +4,24 @@
 {% load static %}
 
 <ul class="collection">
+    {% for fridge in fridges_to_valid %}
+    <li class="collection-item">
+        <div>
+            <a href="{% url 'fridge:fridge-detail' fridge.pk %}" class="black-text">
+                {{ fridge.name }}
+            </a>
+            <a href="{% url 'fridge:fridge-valid' fridge.pk %}" class="secondary-content">
+                <i class="material-icons" aria-hidden="true">check</i>
+            </a>
+            <a href="{% url 'fridge:fridge-refuse' fridge.pk %}" class="secondary-content">
+                <i class="material-icons" aria-hidden="true">clear</i>
+            </a>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+<ul class="collection">
     {% for fridge in fridges %}
     <li class="collection-item">
         <a href="{% url 'fridge:fridge-detail' fridge.pk %}" class="black-text">{{ fridge.name }}
