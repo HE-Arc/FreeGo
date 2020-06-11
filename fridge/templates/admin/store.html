@@ -2,9 +2,13 @@
 
 {% block content %}
 {% load static %}
+{% load i18n %}
 
 <div class="container">
     <h4>{{ fridge.name }}</h4>
+    {% if not fridge.is_active %}
+    <strong class="red-text">{% trans 'Waiting for validation' %}</strong>
+    {% endif %}
 </div>
 
 <ul class="collection">

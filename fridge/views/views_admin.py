@@ -20,6 +20,7 @@ class AdminIndexView(PermissionRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['fridges'] = Fridge.objects.all()
+        context['fridges_to_valid'] = Fridge.objects.filter(is_active=False)
         return context
 
 
@@ -64,7 +65,8 @@ class FridgeCreateView(PermissionRequiredMixin, View):
                 city=form.cleaned_data['city'],
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
-                user=form.cleaned_data['user']
+                user=form.cleaned_data['user'],
+                is_active=True
             )
             fridge.save()
 
@@ -80,7 +82,7 @@ class FridgeListView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        fridge_list = Fridge.objects.all()
+        fridge_list = Fridge.objects.filter(is_active=True)
         context['fridge_list'] = fridge_list
         return context
 
@@ -306,33 +308,61 @@ class FridgeUpdateView(PermissionRequiredMixin, generic.UpdateView):
                             kwargs={'pk': self.object.pk})
 
 
-# class FridgeDemandCreateView(PermissionRequiredMixin, generic.CreateView):
-#     form_class = FridgeForm
-#     template_name = 'admin/fridge_demand_form.html'
-#     permission_required = 'fridge.store'
-#     initial = {}
-#     login_url = LOGIN_URL
+class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
+    form_class = FridgeForm
+    template_name = 'admin/fridge_demand_form.html'
+    initial = {}
+    login_url = LOGIN_URL
 
-#     def get(self, request, *args, **kwargs):
-#         form = self.form_class(initial=self.initial)
-#         return render(request, self.template_name, {'form': form})
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
 
-#     def post(self, request, *args, **kwargs):
-#         form = self.form_class(request.POST, request.FILES)
-#         if form.is_valid():
-#             fridge = Fridge(
-#                 name=form.cleaned_data['name'],
-#                 address=form.cleaned_data['address'],
-#                 NPA=form.cleaned_data['NPA'],
-#                 city=form.cleaned_data['city'],
-#                 phone_number=form.cleaned_data['phone_number'],
-#                 image=form.cleaned_data['image'],
-#                 user=request.user
-#             )
-#             fridge.save()
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            fridge = Fridge(
+                name=form.cleaned_data['name'],
+                address=form.cleaned_data['address'],
+                NPA=form.cleaned_data['NPA'],
+                city=form.cleaned_data['city'],
+                phone_number=form.cleaned_data['phone_number'],
+                image=form.cleaned_data['image'],
+                user=request.user
+            )
+            fridge.save()
 
-#             permission = Permission.objects.get(codename='store')
-#             fridge.user.user_permissions.add(permission)
-#             return redirect('fridge:myadmin')
+            permission = Permission.objects.get(codename='store')
+            fridge.user.user_permissions.add(permission)
+            return redirect('fridge:settings')
 
-#         return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form})
+
+
+class FridgeValidDemand(PermissionRequiredMixin, View):
+    login_url = LOGIN_URL
+    permission_required = 'fridge.admin'
+
+    def post(self, request, *args, **kwargs):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        fridge.is_active = True
+        fridge.save()
+        return redirect('fridge:myadmin')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, args, kwargs)
+
+
+class FridgeRefuseDemand(PermissionRequiredMixin, View):
+    login_url = LOGIN_URL
+    permission_required = 'fridge.admin'
+
+    def post(self, request, *args, **kwargs):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        permission = Permission.objects.get(codename='store')
+        fridge.user.user_permissions.remove(permission)
+        fridge.delete()
+        return redirect('fridge:myadmin')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, args, kwargs)
