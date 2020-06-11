@@ -105,6 +105,36 @@ class FridgeCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class FridgeDemandCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+
+    def test_post(self):
+        image = SimpleUploadedFile(name='test.png', content=open(
+            'fridge/static/fridge/test/test.png', 'rb').read(),
+            content_type='image/png')
+        json = {
+            'name': 'A Fridge',
+            'address': 'Une adresse 21',
+            'NPA': '2000',
+            'phone_number': '0790000000',
+            'city': 'Neuchatel',
+            'image': image,
+            'user': self.user.pk
+        }
+
+        response = self.client.post(reverse('fridge:fridge-demand'), json)
+
+        self.assertRedirects(response, reverse('fridge:settings'))
+        self.assertEqual(len(Fridge.objects.all()), 1)
+        self.assertEqual(Fridge.objects.last().name, 'A Fridge')
+
+    def test_get(self):
+        response = self.client.get(reverse('fridge:fridge-demand'))
+        self.assertEqual(response.status_code, 200)
+
+
 class FridgeListViewTest(TestCase):
     def test_no_fridges(self):
         """
@@ -419,7 +449,6 @@ class SettingsViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Administration")
         self.assertContains(response, "My Free Go")
-
 
 
 class RegisterViewTest(TestCase):
