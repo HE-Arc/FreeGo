@@ -39,15 +39,10 @@ urlpatterns = [
          name='food-form'),
     path('food/<pk>/delete', views_admin.FoodDeleteView.as_view(),
          name='food-delete'),
-<<<<<<< HEAD
-    path('food/<pk>/list/', views.FoodListView.as_view(),
-         name='food-list'),
-=======
     path('food/<pk>/list/', views_admin.FoodListView.as_view(),
          name='food-list'),
     path('food/<pk>/update/', views_admin.FoodUpdateView.as_view(),
          name='food-update'),
->>>>>>> dev
 
     # Opening Day
     path('openinghour/new', views_admin.OpeningHourCreateView.as_view(),
