@@ -1,8 +1,9 @@
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
-    create_food, create_reservation
-from fridge.models import Food, Fridge, SpecialDay, OpeningHour
+    create_food, create_reservation, create_favorite
+from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
+    User, Reservation
 from django.utils import timezone
 from django.shortcuts import resolve_url as r
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -88,6 +89,7 @@ class FridgeCreateViewTest(TestCase):
             'address': 'Une adresse 21',
             'NPA': '2000',
             'phone_number': '0790000000',
+            'city': 'Neuchatel',
             'image': image,
             'user': self.user.pk
         }
@@ -103,6 +105,36 @@ class FridgeCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class FridgeDemandCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+
+    def test_post(self):
+        image = SimpleUploadedFile(name='test.png', content=open(
+            'fridge/static/fridge/test/test.png', 'rb').read(),
+            content_type='image/png')
+        json = {
+            'name': 'A Fridge',
+            'address': 'Une adresse 21',
+            'NPA': '2000',
+            'phone_number': '0790000000',
+            'city': 'Neuchatel',
+            'image': image,
+            'user': self.user.pk
+        }
+
+        response = self.client.post(reverse('fridge:fridge-demand'), json)
+
+        self.assertRedirects(response, reverse('fridge:settings'))
+        self.assertEqual(len(Fridge.objects.all()), 1)
+        self.assertEqual(Fridge.objects.last().name, 'A Fridge')
+
+    def test_get(self):
+        response = self.client.get(reverse('fridge:fridge-demand'))
+        self.assertEqual(response.status_code, 200)
+
+
 class FridgeListViewTest(TestCase):
     def test_no_fridges(self):
         """
@@ -112,6 +144,80 @@ class FridgeListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         # TODO display message
         self.assertQuerysetEqual(response.context['fridge_list'], [])
+
+
+class FridgeFollowingCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(self.user)
+
+    def test_post(self):
+        json = {
+            'fridge': self.fridge,
+            'user': self.user
+        }
+        self.assertEqual(self.fridge.is_favorite(self.user), False)
+        response = self.client.post(
+            reverse_lazy('fridge:fridge-follow',
+                         kwargs={'pk': self.fridge.pk}), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:food-list',
+                                          kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(self.fridge.is_favorite(self.user), True)
+
+
+class FridgeFollowingDeleteViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(self.user)
+        create_favorite(user=self.user, fridge=self.fridge)
+
+    def test_post(self):
+        self.assertEqual(self.fridge.is_favorite(self.user), True)
+        json = {
+            'fridge': self.fridge,
+            'user': self.user
+        }
+        response = self.client.post(
+            reverse_lazy('fridge:fridge-unfollow',
+                         kwargs={'pk': self.fridge.pk}), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:food-list',
+                                          kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(self.fridge.is_favorite(self.user), False)
+
+
+class FridgeValidDemandTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.fridge = create_fridge(self.user)
+        self.client.login(username='admin', password='admin')
+
+    def test_get(self):
+        self.assertEqual(self.fridge.is_active, False)
+        pk = self.fridge.pk
+        self.client.get(
+            reverse_lazy('fridge:fridge-valid', kwargs={'pk': self.fridge.pk}))
+        fridge = Fridge.objects.get(pk=pk)
+        self.assertEqual(fridge.is_active, True)
+
+
+class FridgeRefuseDemandTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.fridge = create_fridge(self.user, is_active=True)
+        self.client.login(username='admin', password='admin')
+
+    def test_get(self):
+        self.assertEqual(self.fridge.is_active, True)
+        pk = self.fridge.pk
+        self.client.get(reverse_lazy('fridge:fridge-refuse',
+                                     kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(Fridge.objects.filter(pk=pk).count(), 0)
 
 
 class FoodCreateViewTest(TestCase):
@@ -184,6 +290,47 @@ class FoodListViewTest(TestCase):
                                  '<Food: food_test>'])
 
 
+class FoodReservationTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.fridge = create_fridge(self.user, is_active=True)
+        self.food = create_food(fridge=self.fridge, user=self.user)
+        self.client.login(username='test', password='test')
+
+    def test_get(self):
+        pk = self.food.pk
+        self.assertEqual(self.food.is_reserved(), False)
+        self.assertEqual(Reservation.objects.count(), 0)
+        self.client.get(reverse_lazy('fridge:food-reservation',
+                                     kwargs={'pk': self.food.pk}))
+        food = Food.objects.get(pk=pk)
+        self.assertEqual(Reservation.objects.count(), 1)
+        self.assertEqual(food.is_reserved(), True)
+        self.assertEqual(food.is_reserved_by_me(self.user), True)
+        user2 = create_user(username="test2")
+        self.assertEqual(food.is_reserved_by_me(user2), False)
+
+
+class FoodCancellationTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.fridge = create_fridge(self.user, is_active=True)
+        self.food = create_food(fridge=self.fridge, user=self.user)
+        self.reservation = create_reservation(self.food, self.user)
+        self.client.login(username='test', password='test')
+
+    def test_get(self):
+        pk = self.food.pk
+        food = Food.objects.get(pk=pk)
+        self.assertEqual(self.food.is_reserved(), True)
+        self.assertEqual(Reservation.objects.count(), 1)
+        self.client.get(reverse_lazy('fridge:food-cancellation',
+                                     kwargs={'pk': self.food.pk}))
+        food = Food.objects.get(pk=pk)
+        self.assertEqual(Reservation.objects.count(), 0)
+        self.assertEqual(food.is_reserved(), False)
+
+
 class OpeningHourCreateView(TestCase):
     def setUp(self):
         self.user = create_user('test', 'test@test.test', 'test')
@@ -200,7 +347,9 @@ class OpeningHourCreateView(TestCase):
         }
         response = self.client.post(reverse('fridge:openinghour-form'), json)
 
-        self.assertRedirects(response, reverse('fridge:store-detail'))
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:fridge-detail',
+                                          kwargs={'pk': self.fridge.pk}))
         self.assertEqual(len(OpeningHour.objects.all()), 1)
         self.assertEqual(OpeningHour.objects.last().weekday, 1)
 
@@ -227,7 +376,9 @@ class SpecialDayCreateViewTest(TestCase):
 
         response = self.client.post(reverse('fridge:specialday-form'), json)
 
-        self.assertRedirects(response, reverse('fridge:store-detail'))
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:fridge-detail',
+                                          kwargs={'pk': self.fridge.pk}))
         self.assertEqual(len(SpecialDay.objects.all()), 1)
         self.assertEqual(SpecialDay.objects.last().from_date,
                          date.today())
@@ -300,6 +451,43 @@ class SettingsViewTest(TestCase):
         self.assertContains(response, "My Free Go")
 
 
+class RegisterViewTest(TestCase):
+    def test_get(self):
+        response = self.client.get(reverse('fridge:register'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post(self):
+        json = {
+            'username': 'test',
+            'email': 'test@test.test',
+            'password1': 'neFDE234r',
+            'password2': 'neFDE234r'
+        }
+        response = self.client.post(reverse('fridge:register'), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:home'))
+        # the new one and the admin
+        self.assertEqual(len(User.objects.all()), 2)
+        self.assertEqual(User.objects.last().username, 'test')
+
+
+class LoginViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+
+    def test_post(self):
+        json = {
+            'username': 'test',
+            'password': 'test'
+        }
+        response = self.client.post(reverse('fridge:login'), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:home'))
+
+
 class ServiceWorkerTest(TestCase):
     def setUp(self):
         self.response = self.client.get(r('serviceworker'))
@@ -340,5 +528,3 @@ class ManifestTest(TestCase):
         for expected in contents:
             with self.subTest():
                 self.assertContains(self.response, expected)
-
-# TODO : improve all tests

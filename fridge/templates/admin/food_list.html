@@ -1,0 +1,16 @@
+{% extends 'admin/base_store.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row" id="main">
+        {% for food in food_available %}
+        {% include "admin/food_detail.html" %}
+        {% endfor %}
+
+        {% for food in food_reserve %}
+        {% include "admin/food_detail.html" %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

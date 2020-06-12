@@ -15,11 +15,13 @@ class FridgeForm(forms.ModelForm):
 
     class Meta:
         model = Fridge
-        fields = ('name', 'address', 'NPA', 'phone_number', 'image', 'user')
+        fields = ('name', 'address', 'NPA', 'city',
+                  'phone_number', 'image', 'user')
         labels = {
             'name': _('Name'),
             'address': _('Address'),
             'NPA': _('NPA'),
+            'city': _('City'),
             'phone_number': _('Phone number'),
             'image': _('Image'),
             'user': _('User')
@@ -31,12 +33,13 @@ class FoodForm(forms.ModelForm):
 
     class Meta:
         model = Food
-        fields = ('name', 'vegetarian', 'vegan', 'expiration_date')
+        fields = ('name', 'vegetarian', 'vegan', 'expiration_date', 'image')
         labels = {
             'name': _('Name'),
             'vegetarian': _('Vegetarian'),
             'vegan': _('Vegan'),
-            'expiration_date': _('Expiration date')
+            'expiration_date': _('Expiration date'),
+            'image': _('Image'),
         }
 
         validators = {
