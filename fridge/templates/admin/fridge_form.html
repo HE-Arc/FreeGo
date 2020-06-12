@@ -1,0 +1,99 @@
+{% extends 'admin/base_store.html' %}
+
+{% block content %}
+{% load static %}
+{% load i18n %}
+
+<div class="container">
+    <h4>{% trans 'Creation of a Free Go' %}</h4>
+    <form method="post" enctype="multipart/form-data" class="col s12">
+        {% csrf_token %}
+
+        <ol>
+            {% for error in form.non_field_errors %}
+            <strong class="red-text">{{ error|escape }}</strong>
+            {% endfor %}
+        </ol>
+
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.name }}
+                <label for="name">{{ form.name.label }}</label>
+                <div class="red-text">
+                    {{ form.name.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.address }}
+                <label for="address">{{ form.address.label }}</label>
+                <div class="red-text">
+                    {{ form.address.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.NPA }}
+                <label for="NPA">{{ form.NPA.label }}</label>
+                <div class="red-text">
+                    {{ form.NPA.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.city }}
+                <label for="city">{{ form.city.label }}</label>
+                <div class="red-text">
+                    {{ form.city.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.phone_number }}
+                <label for="phone_number">{{ form.phone_number.label }}</label>
+                <div class="red-text">
+                    {{ form.phone_number.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>{{ form.image.label }}</span>
+                    {{ form.image }}
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+                <div class="red-text">
+                    {{ form.image.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.user }}
+                <label>{{ form.user.label }}</label>
+                <div class="red-text">
+                    {{ form.user.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <button class="btn waves-effect waves-light col s12" type="submit"
+                name="action">{% trans 'Validate' %}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

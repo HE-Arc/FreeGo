@@ -1,4 +1,5 @@
-from fridge.models import Fridge, Food, Reservation, OpeningHour, SpecialDay
+from fridge.models import Fridge, Food, Reservation, \
+    OpeningHour, SpecialDay, FridgeFollowing
 from fridge.forms import User
 from datetime import timedelta, date
 from django.utils import timezone
@@ -15,12 +16,12 @@ def passed_date():
 
 
 def create_fridge(user, name="test_fridge", address="test_address",
-                  NPA="2000", phone_number="0790000000"):
+                  NPA="2000", phone_number="0790000000", is_active=False):
     '''Create generic fridge with selectable name'''
     image = get_test_image()
     return Fridge.objects.create(name=name, address=address, NPA=NPA,
                                  phone_number=phone_number, image=image,
-                                 user=user)
+                                 user=user, is_active=is_active)
 
 
 def get_test_image():
@@ -75,3 +76,7 @@ def create_user(username="test", email='test@test.test', password='test'):
     '''Create generic user with selectable username'''
     return User.objects.create_user(username=username, email=email,
                                     password=password)
+
+
+def create_favorite(user, fridge):
+    return FridgeFollowing.objects.create(user=user, fridge=fridge)

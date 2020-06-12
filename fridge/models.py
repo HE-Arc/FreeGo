@@ -8,23 +8,19 @@ from .validators import phone_number_validator, NPA_validator, \
 from django.utils.translation import gettext_lazy as _
 
 
-#####################################
-#              Fridge               #
-#####################################
-
-
 class Fridge(models.Model):
     '''Fridge model'''
     name = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
     NPA = models.CharField(max_length=45, validators=[NPA_validator])
+    city = models.CharField(max_length=45)
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
-    image = models.ImageField(
-        upload_to='images/')
+    image = models.ImageField(upload_to='images/')
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)
@@ -46,9 +42,13 @@ class Fridge(models.Model):
         all_reservation = Reservation.objects.values_list('food_id')
         return Food.objects.filter(fridge=self).exclude(id__in=all_reservation)
 
-    def get_reserved_food(self, user):
+    def get_reserved_food(self):
         return [food for food in Food.objects.filter(fridge=self)
-                if food.is_reserved_by_me(user) is True]
+                if food.is_reserved() is True]
+
+    def is_favorite(self, user):
+        return FridgeFollowing.objects.filter(user=user) \
+            .filter(fridge=self).count() != 0
 
 
 class Food(models.Model):
@@ -57,11 +57,16 @@ class Food(models.Model):
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
     expiration_date = models.DateField(validators=[expiration_date_validator])
+    image = models.ImageField(
+        upload_to='images/', default='default.JPG')
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True)
+
+    def is_reserved(self):
+        return Reservation.objects.filter(food=self).count() != 0
 
     def is_reserved_by_me(self, current_user):
         return Reservation.objects.filter(food=self) \
@@ -102,10 +107,6 @@ class Reservation(models.Model):
             raise ValidationError(_("You can't reserve your own food."))
         super().save(*args, **kwargs)
 
-
-#####################################
-#           Opening Hours           #
-#####################################
 
 WEEKDAYS = [
     (1, _("Monday")),
@@ -181,10 +182,6 @@ class SpecialDay(models.Model):
             {'from_date': self.from_date.strftime('%d/%m/%Y')}
 
 
-#####################################
-#                User               #
-#####################################
-
 class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
@@ -193,8 +190,13 @@ class User(AbstractUser):
         return Fridge.objects.filter(user=self).count() != 0
 
     def get_reserved_food(self):
-        reserved_food = [food for food in Food.objects.all()
-                         if food.is_reserved_by_me(self)]
-        print(reserved_food)
         return [food for food in Food.objects.all()
                 if food.is_reserved_by_me(self)]
+
+
+class FridgeFollowing(models.Model):
+    '''FridgeFollowing class'''
+    fridge = models.ForeignKey(
+        Fridge, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

@@ -1,0 +1,57 @@
+{% extends 'admin/base_store.html' %}
+
+{% block content %}
+{% load static %}
+{% load i18n %}
+
+<div class="container">
+    <h4>{{ fridge.name }}</h4>
+    {% if not fridge.is_active %}
+    <strong class="red-text">{% trans 'Waiting for validation' %}</strong>
+    {% endif %}
+</div>
+
+<ul class="collection">
+    {% for food in fridge.get_reserved_food %}
+    <li class="collection-item">
+        <div>
+            <a href="{% url 'fridge:food-update' food.pk %}" class="black-text">
+                {{ food.name }}
+            </a>
+            <a href="{% url 'fridge:food-delete' food.pk %}" class="secondary-content">
+                <i class="material-icons" aria-hidden="true">check</i>
+            </a>
+            <a href="{% url 'fridge:food-cancellation' food.pk %}" class="secondary-content">
+                <i class="material-icons" aria-hidden="true">clear</i>
+            </a>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+<ul class="collection">
+    {% for food in fridge.get_foods %}
+    <li class="collection-item">
+        <div>
+            <a href="{% url 'fridge:food-update' food.pk %}" class="black-text">
+                {{ food.name }}
+            </a>
+            <a href="{% url 'fridge:food-delete' food.pk %}" class="secondary-content">
+                <i class="material-icons" aria-hidden="true">remove_circle</i>
+            </a>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large freego-color" href="{% url 'fridge:food-form' %}">
+        <i class="material-icons" style="font-size: 3rem;" aria-hidden="true">add</i>
+    </a>
+</div>
+<div class="fixed-action-btn-left">
+    <a class="btn-floating btn-large freego-color" href="{% url 'fridge:fridge-detail' fridge.pk %}">
+        <i class="material-icons" style="font-size: 3rem;" aria-hidden="true">settings</i>
+    </a>
+</div>
+{% endblock %}
