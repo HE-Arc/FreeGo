@@ -16,6 +16,9 @@ Django = ">=3.0.7"
 Pillow = "==7.1.1"
 flake8 = "*"
 pytest-django = "*"
+django-rest-framework = "*"
+geopy = "*"
+axios = "*"
 
 [requires]
 python_version = "3.8"

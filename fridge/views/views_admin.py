@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.models import Permission
+from rest_framework import viewsets
 
 from fridge.models import Fridge, Food, OpeningHour, SpecialDay, Reservation
 from fridge.forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.models import Permission
+from fridge.serializers import FridgeSerializer
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -44,7 +46,6 @@ class FridgeDetailView(PermissionRequiredMixin, generic.DetailView):
     model = Fridge
 
 
-
 class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = FridgeForm
     template_name = 'admin/fridge_demand_form.html'
@@ -67,6 +68,7 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
                 image=form.cleaned_data['image'],
                 user=request.user
             )
+            fridge.longitude, fridge.latitude = fridge.get_longitude_latitude()
             fridge.save()
 
             permission = Permission.objects.get(codename='store')
@@ -93,6 +95,7 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
                 user=form.cleaned_data['user'],
                 is_active=True
             )
+            fridge.longitude, fridge.latitude = fridge.get_longitude_latitude()
             fridge.save()
 
             permission = Permission.objects.get(codename='store')
@@ -120,6 +123,11 @@ class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class FridgesViewSet(viewsets.ModelViewSet):
+    queryset = Fridge.objects.all()
+    serializer_class = FridgeSerializer
 
 
 class FoodCreateView(PermissionRequiredMixin, View):
