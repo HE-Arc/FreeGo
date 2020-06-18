@@ -5,7 +5,6 @@ const filesToCache = [
     '/fridge/list',
     '/',
     '/home',
-    '/map',
     '/favorite',
     '/offline',
     //css
