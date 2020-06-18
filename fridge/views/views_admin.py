@@ -68,7 +68,6 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
                 image=form.cleaned_data['image'],
                 user=request.user
             )
-            fridge.longitude, fridge.latitude = fridge.get_longitude_latitude()
             fridge.save()
 
             permission = Permission.objects.get(codename='store')
@@ -95,7 +94,6 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
                 user=form.cleaned_data['user'],
                 is_active=True
             )
-            fridge.longitude, fridge.latitude = fridge.get_longitude_latitude()
             fridge.save()
 
             permission = Permission.objects.get(codename='store')

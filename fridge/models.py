@@ -60,6 +60,16 @@ class Fridge(models.Model):
         location = geolocator.geocode(address)
         return location.longitude, location.latitude
 
+    def save(self, *args, **kwargs):
+        geolocator = Nominatim(user_agent=self.name)
+        address = "{}, {} {}".format(self.address, self.NPA, self.city)
+        location = geolocator.geocode(address)
+        if not location:
+            raise ValidationError(_("Invalid address"))
+        self.latitude = location.latitude
+        self.longitude = location.longitude
+        super().save(*args, **kwargs)
+
 
 class Food(models.Model):
     '''Food model'''
