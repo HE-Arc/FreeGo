@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.models import Permission
+from rest_framework import viewsets
 
 from fridge.models import Fridge, Food, OpeningHour, SpecialDay, Reservation
 from fridge.forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.models import Permission
+from fridge.serializers import FridgeSerializer
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -42,7 +44,6 @@ class FridgeDetailView(PermissionRequiredMixin, generic.DetailView):
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
     model = Fridge
-
 
 
 class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
@@ -120,6 +121,11 @@ class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class FridgesViewSet(viewsets.ModelViewSet):
+    queryset = Fridge.objects.all()
+    serializer_class = FridgeSerializer
 
 
 class FoodCreateView(PermissionRequiredMixin, View):

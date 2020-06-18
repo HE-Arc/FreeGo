@@ -86,10 +86,10 @@ class FridgeCreateViewTest(TestCase):
             content_type='image/png')
         json = {
             'name': 'A Fridge',
-            'address': 'Une adresse 21',
-            'NPA': '2000',
+            'address': 'Citadelle 5',
+            'NPA': '2525',
             'phone_number': '0790000000',
-            'city': 'Neuchatel',
+            'city': 'Le Landeron',
             'image': image,
             'user': self.user.pk
         }
@@ -116,10 +116,10 @@ class FridgeDemandCreateViewTest(TestCase):
             content_type='image/png')
         json = {
             'name': 'A Fridge',
-            'address': 'Une adresse 21',
-            'NPA': '2000',
+            'address': 'Citadelle 5',
+            'NPA': '2525',
             'phone_number': '0790000000',
-            'city': 'Neuchatel',
+            'city': 'Le Landeron',
             'image': image,
             'user': self.user.pk
         }
@@ -140,7 +140,8 @@ class FridgeListViewTest(TestCase):
         """
         If no fridges exist
         """
-        response = self.client.get(reverse('fridge:fridge-list'))
+        response = self.client.get(
+            '/fridge/list')  # self.client.get(reverse('fridge:fridge-list'))
         self.assertEqual(response.status_code, 200)
         # TODO display message
         self.assertQuerysetEqual(response.context['fridge_list'], [])

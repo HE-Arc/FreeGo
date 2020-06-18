@@ -1,10 +1,15 @@
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 from .views import views_admin, views_home, views_user
+from rest_framework import routers
 
 app_name = 'fridge'
+
+router = routers.DefaultRouter()
+router.register('fridges', views_admin.FridgesViewSet)
+
 
 urlpatterns = [
     path('fridge/list', views_admin.FridgeListView.as_view(),
@@ -19,6 +24,7 @@ urlpatterns = [
          name='fridge-delete'),
     path('fridge/<pk>/update', views_admin.FridgeUpdateView.as_view(),
          name='fridge-update'),
+    path('api/', include(router.urls)),
 
     # Store
     path('store', views_admin.StoreIndexView.as_view(), name='store'),
