@@ -31,13 +31,59 @@
 <body>
   <!-- NAVBAR HEADER -->
   <header>
-    <div class="navbar-fixed">
-      <nav class="nav-extended">
-        <div class="nav-wrapper">
-          <a href="{% url 'fridge:home' %}" class="brand-logo">Free Go</a>
-        </div>
-      </nav>
+    <div id="app-base">
+      <div class="navbar-fixed">
+
+        <!-- DROPDOWN STRUCTURE-->
+        <ul id="dropdown1" class="dropdown-content">
+          <li v-for="notification in notifications" v-bind:key="notification.id">
+            <a href="#">[[ notification.verb ]]</a>
+          </li>
+        </ul>
+
+        <nav class="nav-extended">
+          <div class="nav-wrapper">
+            <a href="{% url 'fridge:home' %}" class="brand-logo">Free Go</a>
+            <ul v-if="notifications.length != 0" class="right">
+              <li>
+                <a class="dropdown-trigger" href="#!" data-target="dropdown1">
+                  [[ notifications.length ]]
+                  <i class="material-icons right" aria-hidden="true">notifications</i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
     </div>
+    <script>
+      var app = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app-base',
+        data: () => ({
+          notifications: [],
+          unread_notifications: []
+        }),
+        mounted() {
+          this.getNotifications()
+        },
+        methods: {
+          getNotifications: function () {
+            let api_url = "http://127.0.0.1:8000/api/notifications/";
+            axios
+              .get(api_url)
+              .then(response => {
+                this.notifications = response.data;
+                this.unread_notifications = this.notifications.filter(notification => notification.unread == true);
+                console.log(this.unread_notifications);
+              })
+              .catch(err => {
+                console.log(err);
+              })
+          }
+        }
+      });
+    </script>
   </header>
 
   <!-- BODY -->
@@ -80,9 +126,11 @@
   <!-- JS -->
   <script src="{% static 'fridge/js/jquery-3.5.1.min.js' %}"></script>
   <script src="{% static 'fridge/js/materialize.min.js' %}"></script>
+  <script src="{% static 'fridge/js/script.js' %}"></script>
   <script src="{% static 'fridge/js/install.js' %}"></script>
 
   <script>
+
     feather.replace()
   </script>
 

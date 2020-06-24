@@ -18,6 +18,7 @@ flake8 = "*"
 pytest-django = "*"
 django-rest-framework = "*"
 geopy = "*"
+django-notifications-hq = "*"
 
 [requires]
 python_version = "3.8"

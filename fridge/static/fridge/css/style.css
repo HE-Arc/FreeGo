@@ -70,3 +70,7 @@ i.medium {
 i.large {
     font-size: 6rem;
 }
+
+.dropdown-content {
+    min-width: 200px;
+  }

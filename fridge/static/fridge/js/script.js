@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $('.datepicker').datepicker({
         'format': 'yyyy-mm-dd',
-        showClearBtn : true
+        showClearBtn: true
     });
 });
 
@@ -11,6 +11,14 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('.timepicker').timepicker({
-        showClearBtn : true
+        showClearBtn: true
     });
 });
+
+$(document).ready(function () {
+    $(".dropdown-trigger").dropdown({
+        hover: false
+    });
+});
+
+

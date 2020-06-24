@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "726c7cd72b22bb57fc7c507c8789d28d819b7dce9fea3f627309fbc9e79e394f"
+            "sha256": "2b96953244bc1f1765dbf813757d8c4f58f42681317d48c995cd12f39444d713"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -92,6 +92,21 @@
             "index": "pypi",
             "version": "==3.0.7"
         },
+        "django-model-utils": {
+            "hashes": [
+                "sha256:9cf882e5b604421b62dbe57ad2b18464dc9c8f963fc3f9831badccae66c1139c",
+                "sha256:adf09e5be15122a7f4e372cb5a6dd512bbf8d78a23a90770ad0983ee9d909061"
+            ],
+            "version": "==4.0.0"
+        },
+        "django-notifications-hq": {
+            "hashes": [
+                "sha256:debeb71b7076b08487b40bf07664d1cc43b9977c4480bbc969b30236dda7a461",
+                "sha256:dfc6f8bd4034ceae91143bc3802ddfb6e276eaec90e63dd23e2584c052561576"
+            ],
+            "index": "pypi",
+            "version": "==1.6.0"
+        },
         "django-pwa": {
             "hashes": [
                 "sha256:88a844095ec3dc38ec8edc8d1f95247eccaebefeb41484fb94c10631881b0eb7",
@@ -136,6 +151,13 @@
             ],
             "index": "pypi",
             "version": "==1.22.0"
+        },
+        "jsonfield": {
+            "hashes": [
+                "sha256:7e4e84597de21eeaeeaaa7cc5da08c61c48a9b64d0c446b2d71255d01812887a",
+                "sha256:df857811587f252b97bafba42e02805e70a398a7a47870bc6358a0308dd689ed"
+            ],
+            "version": "==3.1.0"
         },
         "mccabe": {
             "hashes": [
@@ -258,6 +280,13 @@
             ],
             "index": "pypi",
             "version": "==0.3.1"
+        },
+        "swapper": {
+            "hashes": [
+                "sha256:51651018fb027354dd27ff38d5eb47a225d3e642c99b04cff878ae65b1872f64",
+                "sha256:f3bc7b77b76daf46fcbd41fda9b2f599974ac8c564e129f2a9bae73871c4116e"
+            ],
+            "version": "==1.1.2.post1"
         },
         "wcwidth": {
             "hashes": [
