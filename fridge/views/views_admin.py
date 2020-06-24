@@ -6,9 +6,14 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Permission
 from rest_framework import viewsets
 
-from fridge.models import Fridge, Food, OpeningHour, SpecialDay, Reservation
+from fridge.models import Fridge, Food, OpeningHour, \
+    SpecialDay, Reservation, FridgeFollowing, User
 from fridge.forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm
-from fridge.serializers import FridgeSerializer
+from fridge.serializers import FridgeSerializer, NotificationSerializer
+from notifications.signals import notify
+from django.utils.translation import gettext_lazy as _
+from notifications.models import Notification
+
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -152,6 +157,16 @@ class FoodCreateView(PermissionRequiredMixin, View):
                 user=request.user
             )
             food.save()
+            user = request.user
+
+            user_list = FridgeFollowing.objects.filter(
+                fridge=food.fridge).values_list('user')
+            recipient = User.objects.filter(id__in=user_list)
+            verb = _("You have new notifications from fridge %(fridge)s") % {
+                'fridge': food.fridge}
+
+            notify.send(user, recipient=recipient,
+                        verb=verb)
             return redirect('fridge:store')
         return render(request, self.template_name, {'form': form})
 
@@ -366,3 +381,8 @@ class FridgeRefuseDemand(PermissionRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, args, kwargs)
+
+
+class NotificationsViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer

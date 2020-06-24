@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'fridge',
     'pwa',
     'rest_framework',
+    'notifications',
 ]
 
 AUTH_USER_MODEL = 'fridge.User'

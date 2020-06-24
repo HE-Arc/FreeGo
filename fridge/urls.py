@@ -9,6 +9,7 @@ app_name = 'fridge'
 
 router = routers.DefaultRouter()
 router.register('fridges', views_admin.FridgesViewSet)
+router.register('notifications', views_admin.NotificationsViewSet)
 
 
 urlpatterns = [
