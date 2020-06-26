@@ -65,13 +65,35 @@
           unread_notifications: []
         }),
         mounted() {
-          this.getNotifications()
+          this.login();
+          this.getNotifications();
         },
         methods: {
-          getNotifications: function () {
-            let api_url = "http://127.0.0.1:8000/api/notifications/";
+          login: function (user, pw) {
+            // TODO change this
+            const payload = {
+              username: 'test',
+              password: 'test'
+            }
+            let api_url = "http://127.0.0.1:8000/api/token/";
             axios
-              .get(api_url)
+              .post(api_url, payload)
+              .then(response => {
+                localStorage.setItem('access', response.data.access);
+                localStorage.setItem('refresh', response.data.refresh);
+              })
+              .catch(err => {
+                console.log(err);
+              })
+          },
+          getNotifications: function () {
+            const payload = {
+              headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
+            }
+
+            let api_url = "http://127.0.0.1:8000/api/notifications/by_user/";
+            axios
+              .get(api_url, payload)
               .then(response => {
                 this.notifications = response.data;
                 this.unread_notifications = this.notifications.filter(notification => notification.unread == true);

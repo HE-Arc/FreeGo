@@ -13,6 +13,8 @@ from fridge.serializers import FridgeSerializer, NotificationSerializer
 from notifications.signals import notify
 from django.utils.translation import gettext_lazy as _
 from notifications.models import Notification
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 
 # Constant
@@ -386,3 +388,10 @@ class FridgeRefuseDemand(PermissionRequiredMixin, View):
 class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+
+    @action(detail=False)
+    def by_user(self, request):
+        notifications = Notification.objects.filter(
+            recipient=self.request.user)
+        serializer = self.get_serializer(notifications, many=True)
+        return Response(serializer.data)
