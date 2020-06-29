@@ -14,8 +14,8 @@ router.register('fridges', views_admin.FridgesViewSet)
 router.register('notifications', views_admin.NotificationsViewSet)
 
 urlpatterns = [
-    path('fridge/list', views_admin.FridgeListView.as_view(),
-         name='fridge-list'),
+    path('list', views_admin.FridgeListView.as_view(),
+         name='list'),
     # Admin
     path('myadmin', views_admin.AdminIndexView.as_view(), name='myadmin'),
 

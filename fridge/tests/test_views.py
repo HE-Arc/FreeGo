@@ -140,8 +140,7 @@ class FridgeListViewTest(TestCase):
         """
         If no fridges exist
         """
-        response = self.client.get(
-            '/fridge/list')  # self.client.get(reverse('fridge:fridge-list'))
+        response = self.client.get(reverse('fridge:list'))
         self.assertEqual(response.status_code, 200)
         # TODO display message
         self.assertQuerysetEqual(response.context['fridge_list'], [])

@@ -134,6 +134,14 @@ class FridgesViewSet(viewsets.ModelViewSet):
     queryset = Fridge.objects.all()
     serializer_class = FridgeSerializer
 
+    @action(detail=False)
+    def favorites(self, request):
+        reserved_fridges = FridgeFollowing.objects.filter(
+            user=request.user).values_list('fridge_id')
+        favorites = Fridge.objects.filter(id__in=reserved_fridges)
+        serializer = self.get_serializer(favorites, many=True)
+        return Response(serializer.data)
+
 
 class FoodCreateView(PermissionRequiredMixin, View):
     form_class = FoodForm

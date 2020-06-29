@@ -2,7 +2,7 @@ const cacheName = 'freego-pwa-v3';
 
 const filesToCache = [
     //urls
-    '/fridge/list',
+    '/list',
     // '/',
     // '/home',
     '/favorite',

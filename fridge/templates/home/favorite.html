@@ -1,11 +1,125 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% block content %}
+{% load i18n %}
 
-<div class="container">
-    <div class="valign-wrapper center-align">
-        <h2>Work in progress</h2>
+<div class="container" id="app-favorite">
+    <div id="main" class="row">
+        <div v-for="favorite in favorites" v-bind:key="favorite.id" class="col s10 offset-s1 m4">
+            <div class="card">
+                <a id="reference" href="#">
+                    <div class="card-image">
+                        <img id="image" :src="favorite.image" alt="fridge image">
+                        <span id="name" class="card-title">[[favorite.name]]</span>
+                    </div>
+                </a>
+                <div class="card-content">
+                    <strong>{% trans 'Address' %}</strong>
+                    <p id="address">[[favorite.address]]</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    const DB_NAME = 'freego_db2';
+    const DB_VERSION = 2;
+    let DB;
+
+    var appFavorite = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app-favorite',
+        data: () => ({
+            db: null,
+            favorites: [],
+        }),
+        async created() {
+            this.db = await this.getDb();
+            if (navigator.onLine) {
+                await this.getFarvoritesFromNetwork();
+            }
+            await this.getFarvoritesFromDb();
+        },
+        methods: {
+            async getDb() {
+                if (!('indexedDB' in window)) {
+                    console.log('This browser doesn\'t support IndexedDB');
+                    return;
+                }
+
+                return new Promise((resolve, reject) => {
+
+                    if (DB) { return resolve(DB); }
+                    console.log('OPENING DB', DB);
+                    let request = window.indexedDB.open(DB_NAME, DB_VERSION);
+
+                    request.onerror = e => {
+                        console.log('Error opening db', e);
+                        reject('Error');
+                    };
+
+                    request.onsuccess = e => {
+                        DB = e.target.result;
+                        resolve(DB);
+                    };
+
+                    request.onupgradeneeded = e => {
+                        console.log('onupgradeneeded');
+                        let db = e.target.result;
+                        db.createObjectStore('fridges', { autoIncrement: true, keyPath: 'pk' });
+                        db.createObjectStore("favorites", { autoIncrement: true, keyPath: 'id' });
+                    };
+                });
+            },
+            async getFarvoritesFromDb() {
+                let db = await this.getDb();
+
+                return new Promise(resolve => {
+                    var tx = db.transaction(['favorites'], 'readonly');
+                    var store = tx.objectStore('favorites');
+                    let favorites = [];
+                    store.openCursor().onsuccess = function (event) {
+                        var cursor = event.target.result;
+                        if (cursor) {
+                            favorites.push(cursor.value);
+                            cursor.continue();
+                        }
+                    };
+                    this.favorites = favorites;
+                });
+
+            },
+            async getFarvoritesFromNetwork() {
+                let db = await this.getDb();
+
+                const payload = {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
+                }
+                let api_url = "http://127.0.0.1:8000/api/fridges/favorites";
+                axios
+                    .get(api_url, payload)
+                    .then(response => {
+                        // this.favorites = response.data;
+                        return new Promise((resolve, reject) => {
+                            var tx = db.transaction('favorites', 'readwrite');
+                            var store = tx.objectStore('favorites');
+                            store.clear(); // clear old datas
+
+                            return Promise.all(response.data.map(function (item) {
+                                return store.add(item);
+                            })).catch(function (e) {
+                                tx.abort();
+                            });
+
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+        }
+    });
+</script>
 
 {% endblock %}
