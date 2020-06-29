@@ -32,22 +32,13 @@
   <div id="app-base">
     <!-- NAVBAR HEADER -->
     <header>
-
       <div class="navbar-fixed">
-
-        <!-- DROPDOWN STRUCTURE-->
-        <ul id="dropdown1" class="dropdown-content">
-          <li v-for="notification in notifications" v-bind:key="notification.id">
-            <a href="#">[[ notification.verb ]]</a>
-          </li>
-        </ul>
-
         <nav class="nav-extended">
           <div class="nav-wrapper">
             <a href="{% url 'fridge:home' %}" class="brand-logo">Free Go</a>
             <ul v-if="notifications.length != 0" class="right">
               <li>
-                <a class="dropdown-trigger" href="#!" data-target="dropdown1">
+                <a href="{% url 'fridge:notifications' %}">
                   [[ notifications.length ]]
                   <i class="material-icons right" aria-hidden="true">notifications</i>
                 </a>
@@ -72,7 +63,6 @@
           </a>
         </li>
         <li class="tab">
-          <!-- TODO FIND ERROR -->
           <a href="{% url 'fridge:list' %}">
             <i class="material-icons" aria-hidden="true">list</i>
           </a>
@@ -96,6 +86,11 @@
     </footer>
   </div>
   <!-- JS -->
+  <script>
+    let access = "{{access}}";
+    let refresh = "{{refresh}}";
+  </script>
+
   <script src="{% static 'fridge/js/jquery-3.5.1.min.js' %}"></script>
   <script src="{% static 'fridge/js/materialize.min.js' %}"></script>
   <script src="{% static 'fridge/js/script.js' %}"></script>
@@ -105,11 +100,6 @@
   <script>
     feather.replace()
   </script>
-
-  <script>
-
-  </script>
-
 </body>
 
 </html>

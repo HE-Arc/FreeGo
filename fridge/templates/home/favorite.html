@@ -7,7 +7,7 @@
     <div id="main" class="row">
         <div v-for="favorite in favorites" v-bind:key="favorite.id" class="col s10 offset-s1 m4">
             <div class="card">
-                <a id="reference" href="#">
+                <a id="reference" :href="'/food/' + favorite.id + '/list'">
                     <div class="card-image">
                         <img id="image" :src="favorite.image" alt="fridge image">
                         <span id="name" class="card-title">[[favorite.name]]</span>

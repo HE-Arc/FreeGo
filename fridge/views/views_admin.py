@@ -400,6 +400,6 @@ class NotificationsViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def by_user(self, request):
         notifications = Notification.objects.filter(
-            recipient=self.request.user)
+            recipient=self.request.user).filter(unread=True)
         serializer = self.get_serializer(notifications, many=True)
         return Response(serializer.data)

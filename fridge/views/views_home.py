@@ -30,6 +30,10 @@ class SettingsView(generic.TemplateView):
         return context
 
 
+class NotificationsView(generic.TemplateView):
+    template_name = 'home/notifications.html'
+
+
 def offline_view(request):
     template = "home/offline.html"
     return render(request, template)

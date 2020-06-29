@@ -15,10 +15,4 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    $(".dropdown-trigger").dropdown({
-        hover: false
-    });
-});
-
 

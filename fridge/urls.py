@@ -118,6 +118,9 @@ urlpatterns = [
          name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
          name='token_refresh'),
+    path('notifications', views_home.NotificationsView.as_view(),
+         name='notifications'),
+
 ]
 
 

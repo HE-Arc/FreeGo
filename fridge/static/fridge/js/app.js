@@ -10,7 +10,14 @@ var appFridges = new Vue({
         fridges: [],
         favorites: [],
         notifications: [],
-        unread_notifications: []
+        unread_notifications: [],
+
+        //map
+        selectedFeatures: [],
+        zoom: 15,
+        center: [7.6451, 47.5227],
+        rotation: 0,
+        geolocPosition: undefined,
     }),
     async created() {
         await this.login();
@@ -53,21 +60,11 @@ var appFridges = new Vue({
                 };
             });
         },
-        async login(user, pw) {
-            const payload = {
-                username: 'test',
-                password: 'test'
+        async login() {
+            if (typeof access != "undefined" && typeof refresh != "undefined") {
+                localStorage.setItem('access', access);
+                localStorage.setItem('refresh', refresh);
             }
-            let api_url = "http://127.0.0.1:8000/api/token/";
-            await axios
-                .post(api_url, payload)
-                .then(response => {
-                    localStorage.setItem('access', response.data.access);
-                    localStorage.setItem('refresh', response.data.refresh);
-                })
-                .catch(err => {
-                    console.error(err);
-                })
         },
         async getFridgesFromDb() {
             let db = await this.getDb();
@@ -81,6 +78,8 @@ var appFridges = new Vue({
                     if (cursor) {
                         cursor.value['reference'] = "/food/" + cursor.value.id + "/list"
                         fridges.push(cursor.value);
+                        console.log(fridges);
+
                         cursor.continue();
                     }
                 };
@@ -119,13 +118,11 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-
             let api_url = "http://127.0.0.1:8000/api/notifications/by_user/";
             axios
                 .get(api_url, payload)
                 .then(response => {
                     this.notifications = response.data;
-                    this.unread_notifications = this.notifications.filter(notification => notification.unread == true);
                 })
                 .catch(err => {
                     console.error(err);
@@ -177,6 +174,13 @@ var appFridges = new Vue({
                 .catch(err => {
                     console.error(err);
                 })
+        },
+        clickOnFridge: function (evt) {
+            evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+                console.log(feature.getId())
+                window.location.href = 'http://127.0.0.1:8000/food/' + feature.getId() + "/list";
+            })
         }
+
     }
 });

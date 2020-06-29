@@ -472,22 +472,6 @@ class RegisterViewTest(TestCase):
         self.assertEqual(User.objects.last().username, 'test')
 
 
-class LoginViewTest(TestCase):
-    def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'test')
-        self.client.login(username='test', password='test')
-
-    def test_post(self):
-        json = {
-            'username': 'test',
-            'password': 'test'
-        }
-        response = self.client.post(reverse('fridge:login'), json)
-
-        self.assertRedirects(response,
-                             reverse_lazy('fridge:home'))
-
-
 class ServiceWorkerTest(TestCase):
     def setUp(self):
         self.response = self.client.get(r('serviceworker'))
