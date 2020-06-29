@@ -100,10 +100,6 @@ urlpatterns = [
     path('settings', views_home.SettingsView.as_view(), name='settings'),
 
     # PWA
-    path('forecast/get-fridges-data',
-         views_home.get_fridges_data, name='get-fridges-data'),
-    path('forecast/get-foods-data',
-         views_home.get_foods_data, name='get-foods-data'),
     path('offline', views_home.offline_view, name='offline'),
 
     path('fridge-follow/<pk>',

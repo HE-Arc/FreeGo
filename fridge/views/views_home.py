@@ -30,18 +30,6 @@ class SettingsView(generic.TemplateView):
         return context
 
 
-def get_fridges_data(request):
-    results = Fridge.objects.filter(is_active=True)
-    jsondata = serializers.serialize('json', results)
-    return HttpResponse(jsondata)
-
-
-def get_foods_data(request):
-    results = Food.objects.all()
-    jsondata = serializers.serialize('json', results)
-    return HttpResponse(jsondata)
-
-
 def offline_view(request):
     template = "home/offline.html"
     return render(request, template)

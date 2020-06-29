@@ -7,7 +7,7 @@
   <div id="main" class="row">
     <div v-for="fridge in fridges" v-bind:key="fridge.id" class="col s10 offset-s1 m4">
       <div class="card">
-        <a id="reference" href="#">
+        <a id="reference" :href="fridge.reference">
           <div class="card-image">
             <img id="image" :src="fridge.image" alt="fridge image">
             <span id="name" class="card-title">[[fridge.name]]</span>
@@ -22,107 +22,5 @@
   </div>
 </div>
 
-<script>
-  // idbApp.displayFridges();
 
-  const DB_NAME = 'freego_db2';
-  const DB_VERSION = 2;
-  let DB;
-
-  var appFridges = new Vue({
-    delimiters: ['[[', ']]'],
-    el: '#app-fridges',
-    data: () => ({
-      db: null,
-      fridges: [],
-    }),
-    async created() {
-      this.db = await this.getDb();
-      if (navigator.onLine) {
-        await this.getFridgesFromNetwork();
-      }
-      await this.getFridgesFromDb();
-      console.log(this.fridges);
-
-    },
-    methods: {
-      async getDb() {
-        if (!('indexedDB' in window)) {
-          console.log('This browser doesn\'t support IndexedDB');
-          return;
-        }
-
-        return new Promise((resolve, reject) => {
-
-          if (DB) { return resolve(DB); }
-          console.log('OPENING DB', DB);
-          let request = window.indexedDB.open(DB_NAME, DB_VERSION);
-
-          request.onerror = e => {
-            console.log('Error opening db', e);
-            reject('Error');
-          };
-
-          request.onsuccess = e => {
-            DB = e.target.result;
-            resolve(DB);
-          };
-
-          request.onupgradeneeded = e => {
-            console.log('onupgradeneeded');
-            let db = e.target.result;
-            db.createObjectStore('fridges', { autoIncrement: true, keyPath: 'pk' });
-            db.createObjectStore("favorites", { autoIncrement: true, keyPath: 'id' });
-          };
-        });
-      },
-      async getFridgesFromDb() {
-        let db = await this.getDb();
-
-        return new Promise(resolve => {
-          var tx = db.transaction(['fridges'], 'readonly');
-          var store = tx.objectStore('fridges');
-          let fridges = [];
-          store.openCursor().onsuccess = function (event) {
-            var cursor = event.target.result;
-            if (cursor) {
-              fridges.push(cursor.value);
-              cursor.continue();
-            }
-          };
-          this.fridges = fridges;
-        });
-
-      },
-      async getFridgesFromNetwork() {
-        let db = await this.getDb();
-
-        const payload = {
-          headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
-        }
-        let api_url = "http://127.0.0.1:8000/api/fridges";
-        axios
-          .get(api_url, payload)
-          .then(response => {
-            // this.favorites = response.data;
-            return new Promise((resolve, reject) => {
-              var tx = db.transaction('fridges', 'readwrite');
-              var store = tx.objectStore('fridges');
-              store.clear(); // clear old datas
-
-              return Promise.all(response.data.map(function (item) {
-                return store.add(item);
-              })).catch(function (e) {
-                tx.abort();
-              });
-
-            });
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      }
-    }
-  });
-</script>
 {% endblock %}
