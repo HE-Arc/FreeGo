@@ -1,175 +1,186 @@
-var idbApp = (function () {
-    'use strict';
+const DB_NAME = 'freego_db';
+const DB_VERSION = 2;
+let DB;
 
-    if (!('indexedDB' in window)) {
-        console.log('This browser doesn\'t support IndexedDB');
-        return;
-    }
+var appFridges = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#app-base',
+    data: () => ({
+        db: null,
+        fridges: [],
+        favorites: [],
+        notifications: [],
+        unread_notifications: [],
 
-    var dbPromise = idb.open('freego_db', 5, function (upgradeDb) {
-        switch (upgradeDb.oldVersion) {
-            case 0:
-            // a placeholder case so that the switch block will 
-            // execute when the database is first created
-            // (oldVersion is 0)
-            case 1:
-                console.log('Creating the fridges object store');
-                upgradeDb.createObjectStore('fridges', { keyPath: 'pk' });
-                addFridgesFromNetwork();
+        //map
+        selectedFeatures: [],
+        zoom: 15,
+        center: [7.6451, 47.5227],
+        rotation: 0,
+        geolocPosition: undefined,
+    }),
+    async created() {
+        await this.login();
+        await this.getNotifications();
+        this.db = await this.getDb();
 
-            case 2:
-                console.log('Creating the foods object store');
-                upgradeDb.createObjectStore('foods', { keyPath: 'pk' });
-                addFoodsFromNetwork();
+        this.getFridgesFromDb();
+        this.getFarvoritesFromDb();
 
-            case 3:
-                console.log('Creating fridge index in foods');
-                var store = upgradeDb.transaction.objectStore('foods');
-                store.createIndex('fridge', 'fields.fridge');
+        if (navigator.onLine) {
+            this.getFridgesFromNetwork();
+            this.getFarvoritesFromNetwork();
         }
-    });
+    },
+    methods: {
+        async getDb() {
+            if (!('indexedDB' in window)) {
+                console.error('This browser doesn\'t support IndexedDB');
+                return;
+            }
 
-    // Fridges 
-    function addFridgesFromNetwork() {
-        return fetch('/forecast/get-fridges-data').then(function (response) {
-            return response.json();
-        }).then(function (jsondata) {
-            return dbPromise.then(function (db) {
-                var tx = db.transaction('fridges', 'readwrite');
+            return new Promise((resolve, reject) => {
+                if (DB) { return resolve(DB); }
+                let request = window.indexedDB.open(DB_NAME, DB_VERSION);
+
+                request.onerror = e => {
+                    console.error('Error opening db', e);
+                    reject('Error');
+                };
+
+                request.onsuccess = e => {
+                    DB = e.target.result;
+                    resolve(DB);
+                };
+
+                request.onupgradeneeded = e => {
+                    let db = e.target.result;
+                    db.createObjectStore('fridges', { autoIncrement: true, keyPath: 'pk' });
+                    db.createObjectStore("favorites", { autoIncrement: true, keyPath: 'pk' });
+                };
+            });
+        },
+        async login() {
+            if (typeof access != "undefined" && typeof refresh != "undefined") {
+                localStorage.setItem('access', access);
+                localStorage.setItem('refresh', refresh);
+            }
+        },
+        async getFridgesFromDb() {
+            let db = await this.getDb();
+
+            return new Promise(resolve => {
+                var tx = db.transaction(['fridges'], 'readonly');
                 var store = tx.objectStore('fridges');
-                store.clear(); // clear old datas
-                return Promise.all(jsondata.map(function (item) {
-                    console.log('Adding item: ', item);
-                    return store.add(item);
-                })).catch(function (e) {
-                    tx.abort();
-                    console.log(e);
-                }).then(function () {
-                    return store.openCursor();
-                });
+                let fridges = [];
+                store.openCursor().onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        cursor.value['reference'] = "/food/" + cursor.value.id + "/list"
+                        fridges.push(cursor.value);
+                        console.log(fridges);
+
+                        cursor.continue();
+                    }
+                };
+                this.fridges = fridges;
             });
-        });
-    }
+        },
+        async getFridgesFromNetwork() {
+            let db = await this.getDb();
 
-    function getFridges() {
-        addFridgesFromNetwork();
-        return dbPromise.then(function (db) {
-            var tx = db.transaction('fridges', 'readonly');
-            var store = tx.objectStore('fridges');
-            return store.openCursor();
-        })
-    }
-
-    function displayFridges() {
-        getFridges().then(function showRange(cursor) {
-            if (!cursor) { return; }
-
-            renderFridgeTemplate(cursor);
-            return cursor.continue().then(showRange);
-        });
-        addFridgesFromNetwork().then(function showRange(cursor) {
-            if (!cursor) { return; }
-
-            var elements = document.getElementsByClassName("fridge");
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].remove();
+            const payload = {
+                headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
+            let api_url = "http://127.0.0.1:8000/api/fridges";
+            axios
+                .get(api_url, payload)
+                .then(response => {
+                    this.fridges = response.data;
+                    return new Promise((resolve, reject) => {
+                        var tx = db.transaction('fridges', 'readwrite');
+                        var store = tx.objectStore('fridges');
+                        store.clear(); // clear old datas
 
-            renderFridgeTemplate(cursor);
-            return cursor.continue().then(showRange);
-        });
-    }
+                        return Promise.all(response.data.map(function (item) {
+                            return store.add(item);
+                        })).catch(function (e) {
+                            tx.abort();
+                        });
 
-    function renderFridgeTemplate(cursor) {
-        for (var field in cursor.value) {
-            if (field == 'fields') {
-                const card = document.getElementById('fridge-template').cloneNode(true);
-                var fridgesData = cursor.value[field];
-
-                for (var key in fridgesData) {
-                    if (key == 'name') {
-                        card.querySelector('#name').textContent = fridgesData[key];
-                    }
-                    if (key == 'address') {
-                        card.querySelector('#address').textContent = fridgesData[key];
-                    }
-                    if (key == 'image') {
-                        card.querySelector('#image').src = "/media/" + fridgesData[key];
-                    }
-
-                }
-                card.className = "fridge";
-                card.querySelector('#reference').href = "/food/" + cursor.key + "/list"; // TODO find better solution
-                document.querySelector('#main').appendChild(card);
-                card.removeAttribute('hidden');
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
+        async getNotifications() {
+            const payload = {
+                headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
+            let api_url = "http://127.0.0.1:8000/api/notifications/by_user/";
+            axios
+                .get(api_url, payload)
+                .then(response => {
+                    this.notifications = response.data;
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
+        async getFarvoritesFromDb() {
+            let db = await this.getDb();
+
+            return new Promise(resolve => {
+                var tx = db.transaction(['favorites'], 'readonly');
+                var store = tx.objectStore('favorites');
+                let favorites = [];
+                store.openCursor().onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        cursor.value['reference'] = "/food/" + cursor.value.id + "/list"
+                        favorites.push(cursor.value);
+                        cursor.continue();
+                    }
+                };
+                this.favorites = favorites;
+            });
+
+        },
+        async getFarvoritesFromNetwork() {
+            let db = await this.getDb();
+
+            const payload = {
+                headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
+            }
+            let api_url = "http://127.0.0.1:8000/api/fridges/favorites";
+            axios
+                .get(api_url, payload)
+                .then(response => {
+                    this.favorites = response.data;
+                    return new Promise((resolve, reject) => {
+                        var tx = db.transaction('favorites', 'readwrite');
+                        var store = tx.objectStore('favorites');
+                        store.clear(); // clear old datas
+
+                        return Promise.all(response.data.map(function (item) {
+                            return store.add(item);
+                        })).catch(function (e) {
+                            tx.abort();
+                        });
+
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
+        clickOnFridge: function (evt) {
+            evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+                console.log(feature.getId())
+                window.location.href = 'http://127.0.0.1:8000/food/' + feature.getId() + "/list";
+            })
         }
+
     }
-
-    // Foods
-    function addFoodsFromNetwork() {
-        fetch('/forecast/get-foods-data').then(function (response) {
-            return response.json();
-        }).then(function (jsondata) {
-            dbPromise.then(function (db) {
-                var tx = db.transaction('foods', 'readwrite');
-                var store = tx.objectStore('foods');
-                return Promise.all(jsondata.map(function (item) {
-                    console.log('Adding item: ', item);
-                    return store.add(item);
-                })).catch(function (e) {
-                    tx.abort();
-                    console.log(e);
-                }).then(function () {
-                    console.log('All items added successfully');
-                });
-            });
-        });
-    }
-
-    function getFoodsByFridge(key) {
-        return dbPromise.then(function (db) {
-            var tx = db.transaction('foods', 'readonly');
-            var store = tx.objectStore('foods');
-            var index = store.index('fridge');
-            var food = index.get(key);
-
-            return food
-        });
-    }
-
-    function displayFoodsByFridge() {
-        var key = 1;
-
-        getFoodsByFridge(key).then(function (object) {
-            if (!object) { return; }
-            const card = document.getElementById('food-detail').cloneNode(true);
-            var foodsData = object['fields'];
-            for (var key in foodsData) {
-                if (key == "name") {
-                    card.querySelector('#food-name').textContent = foodsData[key];
-                }
-                else if (key == "vegetarian" && foodsData["vegetarian"] == true) {
-                    card.querySelector('#food-vegetarian').removeAttribute('hidden');
-                }
-                else if (key == "vegan" && foodsData["vegan"] == true) {
-                    card.querySelector('#food-vegan').removeAttribute('hidden');
-                }
-                else if (key == "expiration_date") {
-                    card.querySelector('#food-expiration-date').textContent = foodsData[key];
-                }
-            }
-            // TODO add reservations
-            document.querySelector('#main').appendChild(card);
-            card.removeAttribute('hidden');
-        });
-    }
-
-    return {
-        dbPromise: (dbPromise),
-        addFridgesFromNetwork: (addFridgesFromNetwork),
-        displayFridges: (displayFridges),
-        getFoodsByFridge: (getFoodsByFridge),
-        displayFoodsByFridge: (displayFoodsByFridge)
-    };
-})();
+});

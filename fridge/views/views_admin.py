@@ -13,6 +13,8 @@ from fridge.serializers import FridgeSerializer, NotificationSerializer
 from notifications.signals import notify
 from django.utils.translation import gettext_lazy as _
 from notifications.models import Notification
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 
 # Constant
@@ -131,6 +133,14 @@ class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
 class FridgesViewSet(viewsets.ModelViewSet):
     queryset = Fridge.objects.all()
     serializer_class = FridgeSerializer
+
+    @action(detail=False)
+    def favorites(self, request):
+        reserved_fridges = FridgeFollowing.objects.filter(
+            user=request.user).values_list('fridge_id')
+        favorites = Fridge.objects.filter(id__in=reserved_fridges)
+        serializer = self.get_serializer(favorites, many=True)
+        return Response(serializer.data)
 
 
 class FoodCreateView(PermissionRequiredMixin, View):
@@ -386,3 +396,10 @@ class FridgeRefuseDemand(PermissionRequiredMixin, View):
 class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+
+    @action(detail=False)
+    def by_user(self, request):
+        notifications = Notification.objects.filter(
+            recipient=self.request.user).filter(unread=True)
+        serializer = self.get_serializer(notifications, many=True)
+        return Response(serializer.data)

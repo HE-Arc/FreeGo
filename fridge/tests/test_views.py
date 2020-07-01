@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
@@ -140,8 +141,7 @@ class FridgeListViewTest(TestCase):
         """
         If no fridges exist
         """
-        response = self.client.get(
-            '/fridge/list')  # self.client.get(reverse('fridge:fridge-list'))
+        response = self.client.get(reverse('fridge:list'))
         self.assertEqual(response.status_code, 200)
         # TODO display message
         self.assertQuerysetEqual(response.context['fridge_list'], [])
@@ -475,18 +475,16 @@ class RegisterViewTest(TestCase):
 
 class LoginViewTest(TestCase):
     def setUp(self):
-        self.user = create_user('test', 'test@test.test', 'test')
-        self.client.login(username='test', password='test')
+        self.user = create_user()
 
     def test_post(self):
         json = {
             'username': 'test',
-            'password': 'test'
+            'password': 'test',
         }
-        response = self.client.post(reverse('fridge:login'), json)
 
-        self.assertRedirects(response,
-                             reverse_lazy('fridge:home'))
+        response = self.client.post(reverse('fridge:login'), json)
+        self.assertEqual(response.status_code, 200)
 
 
 class ServiceWorkerTest(TestCase):

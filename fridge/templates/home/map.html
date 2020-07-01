@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<div id="app" class="valign-wrapper center-align">
+<div id="app-map" class="valign-wrapper center-align">
     <vl-map :load-tiles-while-animating="true" :load-tiles-while-interacting="true" data-projection="EPSG:4326"
         @click="clickOnFridge">
         <vl-view :zoom.sync="zoom" :center.sync="geolocPosition" :rotation.sync="rotation"></vl-view>
@@ -33,51 +33,5 @@
         </vl-feature>
     </vl-map>
 </div>
-
-<script>
-    const routes = []
-
-    const router = new VueRouter({
-        routes // short for `routes: routes`
-    })
-
-    new Vue({
-        el: '#app',
-        router,
-        data() {
-            return {
-                fridges: [],
-                selectedFeatures: [],
-                zoom: 15,
-                center: [7.6451, 47.5227],
-                rotation: 0,
-                geolocPosition: undefined,
-            }
-        },
-        mounted() {
-            this.getFridges()
-        },
-        methods: {
-            getFridges: function () {
-                let api_url = "http://127.0.0.1:8000/api/fridges/";
-                axios
-                    .get(api_url)
-                    .then(response => {
-                        this.fridges = response.data;
-                        console.log(this.fridges)
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            },
-            clickOnFridge: function (evt) {
-                evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-                    console.log(feature.getId())
-                    window.location.href = 'http://127.0.0.1:8000/food/' + feature.getId() + "/list";
-                })
-            }
-        }
-    });
-</script>
 
 {% endblock %}
