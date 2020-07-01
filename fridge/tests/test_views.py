@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
@@ -470,6 +471,20 @@ class RegisterViewTest(TestCase):
         # the new one and the admin
         self.assertEqual(len(User.objects.all()), 2)
         self.assertEqual(User.objects.last().username, 'test')
+
+
+class LoginViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user()
+
+    def test_post(self):
+        json = {
+            'username': 'test',
+            'password': 'test',
+        }
+
+        response = self.client.post(reverse('fridge:login'), json)
+        self.assertEqual(response.status_code, 200)
 
 
 class ServiceWorkerTest(TestCase):
