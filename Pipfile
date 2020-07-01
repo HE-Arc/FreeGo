@@ -16,6 +16,10 @@ Django = ">=3.0.7"
 Pillow = "==7.1.1"
 flake8 = "*"
 pytest-django = "*"
+django-rest-framework = "*"
+geopy = "*"
+django-notifications-hq = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.8"

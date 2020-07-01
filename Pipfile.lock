@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ef281397c6cdf09f73cc9010b51dad899e87316705ae827539b1765c7071d456"
+            "sha256": "4eac0b281f7046e2d5e69f1e793b1229813dbc814d523bde0da92fab75eec0b0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -92,6 +92,21 @@
             "index": "pypi",
             "version": "==3.0.7"
         },
+        "django-model-utils": {
+            "hashes": [
+                "sha256:9cf882e5b604421b62dbe57ad2b18464dc9c8f963fc3f9831badccae66c1139c",
+                "sha256:adf09e5be15122a7f4e372cb5a6dd512bbf8d78a23a90770ad0983ee9d909061"
+            ],
+            "version": "==4.0.0"
+        },
+        "django-notifications-hq": {
+            "hashes": [
+                "sha256:debeb71b7076b08487b40bf07664d1cc43b9977c4480bbc969b30236dda7a461",
+                "sha256:dfc6f8bd4034ceae91143bc3802ddfb6e276eaec90e63dd23e2584c052561576"
+            ],
+            "index": "pypi",
+            "version": "==1.6.0"
+        },
         "django-pwa": {
             "hashes": [
                 "sha256:88a844095ec3dc38ec8edc8d1f95247eccaebefeb41484fb94c10631881b0eb7",
@@ -100,6 +115,28 @@
             "index": "pypi",
             "version": "==1.0.8"
         },
+        "django-rest-framework": {
+            "hashes": [
+                "sha256:47a8f496fa69e3b6bd79f68dd7a1527d907d6b77f009e9db7cf9bb21cc565e4a"
+            ],
+            "index": "pypi",
+            "version": "==0.1.0"
+        },
+        "djangorestframework": {
+            "hashes": [
+                "sha256:05809fc66e1c997fd9a32ea5730d9f4ba28b109b9da71fccfa5ff241201fd0a4",
+                "sha256:e782087823c47a26826ee5b6fa0c542968219263fb3976ec3c31edab23a4001f"
+            ],
+            "version": "==3.11.0"
+        },
+        "djangorestframework-simplejwt": {
+            "hashes": [
+                "sha256:288ee78618d906f26abf6282b639b8f1806ce1d9a7578897a125cf79c609f259",
+                "sha256:c315be70aa12a5f5790c0ab9acd426c3a58eebea65a77d0893248c5144a5080c"
+            ],
+            "index": "pypi",
+            "version": "==4.4.0"
+        },
         "flake8": {
             "hashes": [
                 "sha256:15e351d19611c887e482fb960eae4d44845013cc142d42896e9862f775d8cf5c",
@@ -107,6 +144,28 @@
             ],
             "index": "pypi",
             "version": "==3.8.3"
+        },
+        "geographiclib": {
+            "hashes": [
+                "sha256:12bd46ee7ec25b291ea139b17aa991e7ef373e21abd053949b75c0e9ca55c632",
+                "sha256:51cfa698e7183792bce27d8fb63ac8e83689cd8170a730bf35e1a5c5bf8849b9"
+            ],
+            "version": "==1.50"
+        },
+        "geopy": {
+            "hashes": [
+                "sha256:d0adba79a4c50a0e253d4a9d2d86aea4a3c1c2ec0889c5c61500ea914dafb9a5",
+                "sha256:f860fd1d68d5951551c676a871a7a2eee0ad3f1da2f2eb318b28fb45b19ad74b"
+            ],
+            "index": "pypi",
+            "version": "==1.22.0"
+        },
+        "jsonfield": {
+            "hashes": [
+                "sha256:7e4e84597de21eeaeeaaa7cc5da08c61c48a9b64d0c446b2d71255d01812887a",
+                "sha256:df857811587f252b97bafba42e02805e70a398a7a47870bc6358a0308dd689ed"
+            ],
+            "version": "==3.1.0"
         },
         "mccabe": {
             "hashes": [
@@ -117,10 +176,10 @@
         },
         "more-itertools": {
             "hashes": [
-                "sha256:558bb897a2232f5e4f8e2399089e35aecb746e1f9191b6584a151647e89267be",
-                "sha256:7818f596b1e87be009031c7653d01acc46ed422e6656b394b0f765ce66ed4982"
+                "sha256:68c70cc7167bdf5c7c9d8f6954a7837089c6a36bf565383919bb595efb8a17e5",
+                "sha256:b78134b2063dd214000685165d81c154522c3ee0a1c0d4d113c80361c234c5a2"
             ],
-            "version": "==8.3.0"
+            "version": "==8.4.0"
         },
         "packaging": {
             "hashes": [
@@ -166,10 +225,10 @@
         },
         "py": {
             "hashes": [
-                "sha256:5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa",
-                "sha256:c20fdd83a5dbc0af9efd622bee9a5564e278f6380fffcacc43ba6f43db2813b0"
+                "sha256:a673fa23d7000440cc885c17dbd34fafcb7d7a6e230b29f6766400de36a33c44",
+                "sha256:f3b3a4c36512a4c4f024041ab51866f11761cc169670204b235f6b20523d4e6b"
             ],
-            "version": "==1.8.1"
+            "version": "==1.8.2"
         },
         "pycodestyle": {
             "hashes": [
@@ -184,6 +243,13 @@
                 "sha256:35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8"
             ],
             "version": "==2.2.0"
+        },
+        "pyjwt": {
+            "hashes": [
+                "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e",
+                "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"
+            ],
+            "version": "==1.7.1"
         },
         "pyparsing": {
             "hashes": [
@@ -230,12 +296,19 @@
             "index": "pypi",
             "version": "==0.3.1"
         },
+        "swapper": {
+            "hashes": [
+                "sha256:51651018fb027354dd27ff38d5eb47a225d3e642c99b04cff878ae65b1872f64",
+                "sha256:f3bc7b77b76daf46fcbd41fda9b2f599974ac8c564e129f2a9bae73871c4116e"
+            ],
+            "version": "==1.1.2.post1"
+        },
         "wcwidth": {
             "hashes": [
-                "sha256:79375666b9954d4a1a10739315816324c3e73110af9d0e102d906fdb0aec009f",
-                "sha256:8c6b5b6ee1360b842645f336d9e5d68c55817c26d3050f46b235ef2bc650e48f"
+                "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784",
+                "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"
             ],
-            "version": "==0.2.4"
+            "version": "==0.2.5"
         }
     },
     "develop": {

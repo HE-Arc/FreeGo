@@ -1,0 +1,12 @@
+{% extends 'admin/base_store.html' %}
+{% load static %}
+{% block content %}
+{% load i18n %}
+
+<div id="app-base">
+    <ul class="collection">
+        <a v-for="notification in notifications" href="#" class="collection-item black-text">[[ notification.verb ]]</a>
+    </ul>
+</div>
+
+{% endblock %}

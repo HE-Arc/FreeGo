@@ -7,6 +7,8 @@ from .validators import phone_number_validator, NPA_validator, \
 
 from django.utils.translation import gettext_lazy as _
 
+from geopy.geocoders import Nominatim
+
 
 class Fridge(models.Model):
     '''Fridge model'''
@@ -16,6 +18,8 @@ class Fridge(models.Model):
     city = models.CharField(max_length=45)
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     image = models.ImageField(upload_to='images/')
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
@@ -49,6 +53,22 @@ class Fridge(models.Model):
     def is_favorite(self, user):
         return FridgeFollowing.objects.filter(user=user) \
             .filter(fridge=self).count() != 0
+
+    def get_longitude_latitude(self):
+        geolocator = Nominatim(user_agent="freego")
+        address = "{}, {} {}".format(self.address, self.NPA, self.city)
+        location = geolocator.geocode(address)
+        return location.longitude, location.latitude
+
+    def save(self, *args, **kwargs):
+        geolocator = Nominatim(user_agent=self.name)
+        address = "{}, {} {}".format(self.address, self.NPA, self.city)
+        location = geolocator.geocode(address)
+        if not location:
+            raise ValidationError(_("Invalid address"))
+        self.latitude = location.latitude
+        self.longitude = location.longitude
+        super().save(*args, **kwargs)
 
 
 class Food(models.Model):

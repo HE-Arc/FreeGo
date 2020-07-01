@@ -2,11 +2,20 @@ from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-from fridge.models import Fridge, Food, OpeningHour, SpecialDay, Reservation
-from fridge.forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Permission
+from rest_framework import viewsets
+
+from fridge.models import Fridge, Food, OpeningHour, \
+    SpecialDay, Reservation, FridgeFollowing, User
+from fridge.forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm
+from fridge.serializers import FridgeSerializer, NotificationSerializer
+from notifications.signals import notify
+from django.utils.translation import gettext_lazy as _
+from notifications.models import Notification
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -42,7 +51,6 @@ class FridgeDetailView(PermissionRequiredMixin, generic.DetailView):
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
     model = Fridge
-
 
 
 class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
@@ -122,6 +130,19 @@ class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
 
+class FridgesViewSet(viewsets.ModelViewSet):
+    queryset = Fridge.objects.all()
+    serializer_class = FridgeSerializer
+
+    @action(detail=False)
+    def favorites(self, request):
+        reserved_fridges = FridgeFollowing.objects.filter(
+            user=request.user).values_list('fridge_id')
+        favorites = Fridge.objects.filter(id__in=reserved_fridges)
+        serializer = self.get_serializer(favorites, many=True)
+        return Response(serializer.data)
+
+
 class FoodCreateView(PermissionRequiredMixin, View):
     form_class = FoodForm
     template_name = 'admin/food_form.html'
@@ -146,6 +167,16 @@ class FoodCreateView(PermissionRequiredMixin, View):
                 user=request.user
             )
             food.save()
+            user = request.user
+
+            user_list = FridgeFollowing.objects.filter(
+                fridge=food.fridge).values_list('user')
+            recipient = User.objects.filter(id__in=user_list)
+            verb = _("You have new notifications from fridge %(fridge)s") % {
+                'fridge': food.fridge}
+
+            notify.send(user, recipient=recipient,
+                        verb=verb)
             return redirect('fridge:store')
         return render(request, self.template_name, {'form': form})
 
@@ -360,3 +391,15 @@ class FridgeRefuseDemand(PermissionRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, args, kwargs)
+
+
+class NotificationsViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+    @action(detail=False)
+    def by_user(self, request):
+        notifications = Notification.objects.filter(
+            recipient=self.request.user).filter(unread=True)
+        serializer = self.get_serializer(notifications, many=True)
+        return Response(serializer.data)

@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'fridge',
     'pwa',
+    'rest_framework',
+    'notifications',
 ]
 
 AUTH_USER_MODEL = 'fridge.User'
@@ -144,7 +146,7 @@ PWA_APP_BACKGROUND_COLOR = '#ffffff'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
 PWA_APP_ORIENTATION = 'any'
-PWA_APP_START_URL = '/'
+PWA_APP_START_URL = '/home'
 PWA_APP_ICONS = [
     {
         'src': '/static/fridge/logos/icon-192x192.png',
@@ -173,3 +175,9 @@ PWA_APP_SPLASH_SCREEN = [
 ]
 PWA_APP_DIR = 'ltr'
 PWA_APP_LANG = 'fr'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}

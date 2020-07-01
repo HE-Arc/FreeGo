@@ -29,7 +29,7 @@ main {
 }
 
 .valign-wrapper {
-    height: 40rem;
+    height: 50rem;
 }
 
 .freego-color {
@@ -70,3 +70,7 @@ i.medium {
 i.large {
     font-size: 6rem;
 }
+
+.dropdown-content {
+    min-width: 200px;
+  }

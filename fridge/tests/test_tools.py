@@ -15,13 +15,13 @@ def passed_date():
     return date.today() - timedelta(days=d)
 
 
-def create_fridge(user, name="test_fridge", address="test_address",
-                  NPA="2000", phone_number="0790000000", is_active=False):
+def create_fridge(user, name="test_fridge", address="5th Avenue",
+                  NPA="175", phone_number="0790000000", city="NYC", is_active=False):
     '''Create generic fridge with selectable name'''
     image = get_test_image()
     return Fridge.objects.create(name=name, address=address, NPA=NPA,
                                  phone_number=phone_number, image=image,
-                                 user=user, is_active=is_active)
+                                 user=user, city=city, is_active=is_active)
 
 
 def get_test_image():

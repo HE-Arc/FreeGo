@@ -1,3 +1,4 @@
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
@@ -42,7 +43,11 @@ class LoginView(generic.TemplateView):
         user = authenticate(username=username, password=raw_password)
         if user is not None:
             login(request, user)
-            return redirect('fridge:home')
+            refresh = RefreshToken.for_user(user)
+            return render(request, 'home/home.html', {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
         return redirect('fridge:login')
 
 

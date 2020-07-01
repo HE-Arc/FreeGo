@@ -1,14 +1,21 @@
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .views import views_admin, views_home, views_user
+from fridge.views import views_admin, views_home, views_user
+from rest_framework import routers
+
+from rest_framework_simplejwt import views as jwt_views
 
 app_name = 'fridge'
 
+router = routers.DefaultRouter()
+router.register('fridges', views_admin.FridgesViewSet)
+router.register('notifications', views_admin.NotificationsViewSet)
+
 urlpatterns = [
-    path('fridge/list', views_admin.FridgeListView.as_view(),
-         name='fridge-list'),
+    path('list', views_admin.FridgeListView.as_view(),
+         name='list'),
     # Admin
     path('myadmin', views_admin.AdminIndexView.as_view(), name='myadmin'),
 
@@ -19,6 +26,7 @@ urlpatterns = [
          name='fridge-delete'),
     path('fridge/<pk>/update', views_admin.FridgeUpdateView.as_view(),
          name='fridge-update'),
+    path('api/', include(router.urls)),
 
     # Store
     path('store', views_admin.StoreIndexView.as_view(), name='store'),
@@ -70,7 +78,6 @@ urlpatterns = [
     path('reservation/list', views_user.ReservationListView.as_view(),
          name='reservation-list'),
 
-
     # Login/Register/Logout
     path('register', views_user.RegisterView.as_view(), name='register'),
     path('login', views_user.LoginView.as_view(), name='login'),
@@ -93,10 +100,6 @@ urlpatterns = [
     path('settings', views_home.SettingsView.as_view(), name='settings'),
 
     # PWA
-    path('forecast/get-fridges-data',
-         views_home.get_fridges_data, name='get-fridges-data'),
-    path('forecast/get-foods-data',
-         views_home.get_foods_data, name='get-foods-data'),
     path('offline', views_home.offline_view, name='offline'),
 
     path('fridge-follow/<pk>',
@@ -110,7 +113,14 @@ urlpatterns = [
     path('fridge/valid/<pk>', views_admin.FridgeValidDemand.as_view(),
          name='fridge-valid'),
     path('fridge/refuse/<pk>', views_admin.FridgeRefuseDemand.as_view(),
-         name='fridge-refuse')
+         name='fridge-refuse'),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
+         name='token_refresh'),
+    path('notifications', views_home.NotificationsView.as_view(),
+         name='notifications'),
+
 ]
 
 
