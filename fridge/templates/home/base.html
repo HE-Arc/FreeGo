@@ -4,6 +4,7 @@
 
 <head>
   {% load static %}
+  {% load i18n %}
   {% progressive_web_app_meta %}
   <title>Free Go</title>
 
@@ -25,7 +26,25 @@
       <div class="navbar-fixed">
         <nav class="nav-extended">
           <div class="nav-wrapper">
-            <a href="{% url 'fridge:home' %}" class="brand-logo">Free Go</a>
+            {% url 'fridge:home' as home %}
+            {% url 'fridge:list' as list %}
+            {% url 'fridge:map' as map %}
+            {% url 'fridge:favorite' as favorite %}
+            {% url 'fridge:settings' as settings %}
+            {% if request.path == home %}
+            <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Home' %}</a>
+            {% elif request.path == list %}
+            <a href="{% url 'fridge:list' %}" class="brand-logo">{% trans 'List' %}</a>
+            {% elif request.path == map %}
+            <a href="{% url 'fridge:map' %}" class="brand-logo">{% trans 'Map' %}</a>
+            {% elif request.path == favorite %}
+            <a href="{% url 'fridge:favorite' %}" class="brand-logo">{% trans 'Favorite' %}</a>
+            {% elif request.path == settings %}
+            <a href="{% url 'fridge:settings' %}" class="brand-logo">{% trans 'Settings' %}</a>
+            {% else %}
+            <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Home' %}</a>
+            {% endif %}
+
             <ul v-if="notifications.length != 0" class="right">
               <li>
                 <a href="{% url 'fridge:notifications' %}">
@@ -82,6 +101,7 @@
   </script>
 
   <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   <script type="text/javascript"
     src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v5.3.0/build/ol.js"></script>
   <script type="text/javascript" src="https://unpkg.com/vuelayers/lib/index.umd.js"></script>

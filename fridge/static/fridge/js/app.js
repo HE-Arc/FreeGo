@@ -3,9 +3,18 @@ const DB_VERSION = 7;
 let DB;
 // const URL = "https://freego.srvz-webapp.he-arc.ch"
 const DEV_URL = "http://127.0.0.1:8000"
+const routes = []
+
+// 3. Create the router instance and pass the `routes` option
+// You can pass in additional options here, but let's
+// keep it simple for now.
+const router = new VueRouter({
+    routes // short for `routes: routes`
+})
 
 var appFridges = new Vue({
     delimiters: ['[[', ']]'],
+    router,
     el: '#app-base',
     data: () => ({
         db: null,
@@ -63,10 +72,14 @@ var appFridges = new Vue({
             });
         },
         async login() {
-            if (typeof access != "undefined" && typeof refresh != "undefined") {
+            if (access != "" && refresh != "") {
                 localStorage.setItem('access', access);
                 localStorage.setItem('refresh', refresh);
             }
+        },
+        async logout() {
+            localStorage.clear();
+            return true;
         },
         async getFridgesFromDb() {
             let db = await this.getDb();
@@ -182,6 +195,9 @@ var appFridges = new Vue({
                 console.log(feature.getId())
                 window.location.href = DEV_URL + '/food/' + feature.getId() + "/list";
             })
+        },
+        goBack: function () {
+            window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
         }
 
     }

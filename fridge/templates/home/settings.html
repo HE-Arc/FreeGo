@@ -22,7 +22,7 @@
     <a href="#!" class="collection-item black-text">{% trans 'Donations' %}</a>
     <a href="#!" class="collection-item black-text">{% trans 'Help' %}</a>
     <a href="#!" class="collection-item black-text">{% trans 'Contact us' %}</a>
-    <a href="{% url 'fridge:logout' %}" class="collection-item black-text">{% trans 'Log out' %}</a>
+    <a href="{% url 'fridge:logout' %}" @click="logout" class="collection-item black-text">{% trans 'Log out' %}</a>
 </ul>
 {% else %}
 <div class="container">
