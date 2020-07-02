@@ -1,5 +1,5 @@
 const DB_NAME = 'freego_db';
-const DB_VERSION = 2;
+const DB_VERSION = 7;
 let DB;
 
 var appFridges = new Vue({
@@ -92,7 +92,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = "http://127.0.0.1:8000/api/fridges";
+            let api_url = "https://freego.srvz-webapp.he-arc.ch/api/fridges";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -118,7 +118,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = "http://127.0.0.1:8000/api/notifications/by_user/";
+            let api_url = "https://freego.srvz-webapp.he-arc.ch/api/notifications/by_user/";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -153,7 +153,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = "http://127.0.0.1:8000/api/fridges/favorites";
+            let api_url = "https://freego.srvz-webapp.he-arc.ch/api/fridges/favorites";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -178,7 +178,7 @@ var appFridges = new Vue({
         clickOnFridge: function (evt) {
             evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
                 console.log(feature.getId())
-                window.location.href = 'http://127.0.0.1:8000/food/' + feature.getId() + "/list";
+                window.location.href = 'https://freego.srvz-webapp.he-arc.ch/food/' + feature.getId() + "/list";
             })
         }
 
