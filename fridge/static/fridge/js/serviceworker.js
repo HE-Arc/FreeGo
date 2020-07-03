@@ -5,7 +5,7 @@ const filesToCache = [
     '/list',
     '/',
     '/home',
-    '/favorite',
+    // '/favorite',
     '/offline',
     //css
     '/static/fridge/css/materialize.min.css',

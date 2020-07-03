@@ -3,6 +3,7 @@
 {% block content %}
 {% load i18n %}
 
+{% if user.is_authenticated %}
 <div class="container" id="app-favorite">
     <div id="main" class="row">
         <div v-for="favorite in favorites" v-bind:key="favorite.id" class="col s10 offset-s1 m4">
@@ -21,4 +22,9 @@
         </div>
     </div>
 </div>
+{% else %}
+
+{% include 'user/login_options.html' %}
+
+{% endif %}
 {% endblock %}
