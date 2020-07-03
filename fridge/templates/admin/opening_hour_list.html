@@ -16,7 +16,7 @@
     </div>
     {% endfor %}
 
-    <a href="{% url 'fridge:openinghour-form' %}">
+    <a href="{% url 'fridge:openinghour-form' fridge.pk %}">
         <i class="small material-icons" aria-hidden="true" style="color: rgb(87, 161, 173);">add_circle</i>
     </a>
 </div>

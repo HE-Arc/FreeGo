@@ -12,7 +12,7 @@
     {% endif %}
 
     {% if user.has_fridge %}
-    <a href="{% url 'fridge:store' %}" class="collection-item black-text">{% trans 'My Free Go' %}</a>
+    <a href="{% url 'fridge:store' fridge.pk %}" class="collection-item black-text">{% trans 'My Free Go' %}</a>
     {% else %}
     <a href="{% url 'fridge:fridge-demand' %}"
         class="collection-item black-text">{% trans 'Ask for become a Free Go' %}</a>
