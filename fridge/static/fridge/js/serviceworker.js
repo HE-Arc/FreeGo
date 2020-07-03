@@ -3,9 +3,9 @@ const cacheName = 'freego-pwa-v5';
 const filesToCache = [
     //urls
     '/list',
-    // '/',
-    // '/home',
-    '/favorite',
+    '/',
+    '/home',
+    // '/favorite',
     '/offline',
     //css
     '/static/fridge/css/materialize.min.css',
@@ -35,8 +35,8 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(cacheName)
             .then(cache => {
+                console.log('[ServiceWorker] Pre-caching offline page');
                 return cache.addAll(filesToCache);
-
             })
     );
 });
@@ -44,14 +44,22 @@ self.addEventListener('install', event => {
 // Clear cache on activate
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames
-                    .filter(cacheName => (cacheName.startsWith("django-pwa-")))
-                    .filter(cacheName => (cacheName !== staticCacheName))
-                    .map(cacheName => caches.delete(cacheName))
-            );
+        caches.keys().then(keyList => {
+            return Promise.all(keyList.map(key => {
+                if(key !== cacheName){
+                    console.log('[ServiceWorker] Removing old cache', key);
+                    return caches.delete(key);
+                }
+            }));
         })
+        // caches.keys().then(cacheNames => {
+        //     return Promise.all(
+        //         cacheNames
+        //             .filter(cacheName => (cacheName.startsWith("django-pwa-")))
+        //             .filter(cacheName => (cacheName !== staticCacheName))
+        //             .map(cacheName => caches.delete(cacheName))
+        //     );
+        // })
     );
 });
 

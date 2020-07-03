@@ -5,6 +5,7 @@ from .models import Fridge, Food, OpeningHour, SpecialDay, User
 from .validators import expiration_date_validator
 
 from django.utils.translation import gettext_lazy as _
+from geopy.geocoders import Nominatim
 
 # Constant
 DATE_FORMAT = '%b %d, %Y'
@@ -26,6 +27,18 @@ class FridgeForm(forms.ModelForm):
             'image': _('Image'),
             'user': _('User')
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        address = cleaned_data.get('address')
+        NPA = cleaned_data.get('NPA')
+        city = cleaned_data.get('city')
+        address = "{}, {} {}".format(address, NPA, city)
+        geolocator = Nominatim(user_agent=name)
+        location = geolocator.geocode(address)
+        if not location:
+            raise ValidationError(_("Invalid address"))
 
 
 class FoodForm(forms.ModelForm):

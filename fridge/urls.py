@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
 
     # Store
-    path('store', views_admin.StoreIndexView.as_view(), name='store'),
+    path('store/<pk>', views_admin.StoreIndexView.as_view(), name='store'),
     path('fridge/detail/<pk>',
          views_admin.FridgeDetailView.as_view(), name='fridge-detail'),
     path('change/address/<pk>',
@@ -53,7 +53,7 @@ urlpatterns = [
          name='food-update'),
 
     # Opening Day
-    path('openinghour/new', views_admin.OpeningHourCreateView.as_view(),
+    path('openinghour/<pk>/new', views_admin.OpeningHourCreateView.as_view(),
          name='openinghour-form'),
     path('openinghour/<pk>/delete',
          views_admin.OpeningHourDeleteView.as_view(),
@@ -63,7 +63,7 @@ urlpatterns = [
          name='opening-hour-list'),
 
     # Special Day
-    path('specialday/new', views_admin.SpecialDayCreateView.as_view(),
+    path('specialday/<pk>/new', views_admin.SpecialDayCreateView.as_view(),
          name='specialday-form'),
     path('specialday/<pk>/delete', views_admin.SpecialDayDeleteView.as_view(),
          name='specialday-delete'),

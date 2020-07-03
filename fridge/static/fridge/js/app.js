@@ -1,9 +1,20 @@
 const DB_NAME = 'freego_db';
 const DB_VERSION = 7;
 let DB;
+// const SERVER_URL = "https://freego.srvz-webapp.he-arc.ch"
+const SERVER_URL = "http://127.0.0.1:8000"
+const routes = []
+
+// 3. Create the router instance and pass the `routes` option
+// You can pass in additional options here, but let's
+// keep it simple for now.
+const router = new VueRouter({
+    routes // short for `routes: routes`
+})
 
 var appFridges = new Vue({
     delimiters: ['[[', ']]'],
+    router,
     el: '#app-base',
     data: () => ({
         db: null,
@@ -61,10 +72,14 @@ var appFridges = new Vue({
             });
         },
         async login() {
-            if (typeof access != "undefined" && typeof refresh != "undefined") {
+            if (typeof access != "undefined" && typeof refresh != "undefined" && access != "" && refresh != "") {
                 localStorage.setItem('access', access);
                 localStorage.setItem('refresh', refresh);
             }
+        },
+        async logout() {
+            localStorage.clear();
+            return true;
         },
         async getFridgesFromDb() {
             let db = await this.getDb();
@@ -92,7 +107,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = "https://freego.srvz-webapp.he-arc.ch/api/fridges";
+            let api_url = SERVER_URL + "/api/fridges";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -118,7 +133,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = "https://freego.srvz-webapp.he-arc.ch/api/notifications/by_user/";
+            let api_url = SERVER_URL + "/api/notifications/by_user/";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -153,7 +168,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = "https://freego.srvz-webapp.he-arc.ch/api/fridges/favorites";
+            let api_url = SERVER_URL + "/api/fridges/favorites";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -178,8 +193,11 @@ var appFridges = new Vue({
         clickOnFridge: function (evt) {
             evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
                 console.log(feature.getId())
-                window.location.href = 'https://freego.srvz-webapp.he-arc.ch/food/' + feature.getId() + "/list";
+                window.location.href = SERVER_URL + '/food/' + feature.getId() + "/list";
             })
+        },
+        goBack: function () {
+            window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
         }
 
     }
