@@ -1,4 +1,3 @@
-import json
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
@@ -466,9 +465,7 @@ class RegisterViewTest(TestCase):
         }
         response = self.client.post(reverse('fridge:register'), json)
 
-        self.assertRedirects(response,
-                             reverse_lazy('fridge:home'))
-        # the new one and the admin
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(User.objects.all()), 2)
         self.assertEqual(User.objects.last().username, 'test')
 

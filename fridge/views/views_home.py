@@ -1,9 +1,5 @@
-from django.http import HttpResponse
-from django.core import serializers
 from django.shortcuts import render
 from django.views import generic
-
-from fridge.models import Fridge, Food
 
 
 class HomeView(generic.TemplateView):
