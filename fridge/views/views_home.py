@@ -1,9 +1,6 @@
-from django.http import HttpResponse
-from django.core import serializers
 from django.shortcuts import render
 from django.views import generic
-
-from fridge.models import Fridge, Food
+from fridge.models import Fridge
 
 
 class HomeView(generic.TemplateView):
@@ -26,6 +23,8 @@ class SettingsView(generic.TemplateView):
 
         if self.request.user.is_authenticated:
             context['has_fridge'] = self.request.user.has_fridge()
+            context['fridge'] = Fridge.objects.filter(
+                user=self.request.user).first()
 
         return context
 

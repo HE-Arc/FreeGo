@@ -26,7 +26,11 @@ class RegisterView(View):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('fridge:home')
+            refresh = RefreshToken.for_user(user)
+            return render(request, 'home/home.html', {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
         return render(request, self.template_name, {'form': form})
 
     def get(self, request, *args, **kwargs):

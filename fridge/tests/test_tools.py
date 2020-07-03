@@ -16,7 +16,8 @@ def passed_date():
 
 
 def create_fridge(user, name="test_fridge", address="5th Avenue",
-                  NPA="175", phone_number="0790000000", city="NYC", is_active=False):
+                  NPA="175", phone_number="0790000000", city="NYC",
+                  is_active=False):
     '''Create generic fridge with selectable name'''
     image = get_test_image()
     return Fridge.objects.create(name=name, address=address, NPA=NPA,

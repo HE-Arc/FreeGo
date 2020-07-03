@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
@@ -33,24 +34,56 @@ class AdminIndexView(PermissionRequiredMixin, generic.TemplateView):
         return context
 
 
-class StoreIndexView(PermissionRequiredMixin, generic.TemplateView):
+class StoreIndexView(UserPassesTestMixin, generic.TemplateView):
     template_name = 'admin/store.html'
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        fridge = Fridge.objects.filter(user=self.request.user).first()
+        pk = self.kwargs['pk']
+        fridge = Fridge.objects.filter(pk=pk).first()
         context['fridge'] = fridge
         context['food_reserved'] = fridge.get_reserved_food()
         return context
 
+    def test_func(self):
+        pk = self.kwargs['pk']
+        fridge = Fridge.objects.filter(pk=pk).first()
+        return self.request.user == fridge.user or \
+            self.request.user.has_perm('fridge.admin')
 
-class FridgeDetailView(PermissionRequiredMixin, generic.DetailView):
+
+class ValidFridgeUser(UserPassesTestMixin):
+    def test_func(self):
+        obj = super().get_object()
+        return self.request.user == obj.user or \
+            self.request.user.has_perm('fridge.admin')
+
+
+class FridgeDetailView(ValidFridgeUser, generic.DetailView):
     template_name = 'admin/fridge_detail.html'
-    permission_required = 'fridge.store'
     login_url = LOGIN_URL
     model = Fridge
+
+
+class FridgeUpdateView(ValidFridgeUser, generic.UpdateView):
+    model = Fridge
+    template_name = 'user/user_update_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('fridge:fridge-detail',
+                            kwargs={'pk': self.object.pk})
+
+
+class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
+    model = Fridge
+    success_url = reverse_lazy('fridge:myadmin')
+    permission_required = 'fridge.admin'
+    login_url = LOGIN_URL
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
 class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
@@ -120,18 +153,37 @@ class FridgeListView(generic.TemplateView):
         return context
 
 
-class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
-    model = Fridge
-    success_url = reverse_lazy('fridge:myadmin')
-    permission_required = 'fridge.admin'
+class FridgeValidDemand(PermissionRequiredMixin, View):
     login_url = LOGIN_URL
+    permission_required = 'fridge.admin'
+
+    def post(self, request, *args, **kwargs):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        fridge.is_active = True
+        fridge.save()
+        return redirect('fridge:myadmin')
 
     def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
+        return self.post(request, args, kwargs)
+
+
+class FridgeRefuseDemand(PermissionRequiredMixin, View):
+    login_url = LOGIN_URL
+    permission_required = 'fridge.admin'
+
+    def post(self, request, *args, **kwargs):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        permission = Permission.objects.get(codename='store')
+        fridge.user.user_permissions.remove(permission)
+        fridge.delete()
+        return redirect('fridge:myadmin')
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, args, kwargs)
 
 
 class FridgesViewSet(viewsets.ModelViewSet):
-    queryset = Fridge.objects.all()
+    queryset = Fridge.objects.filter(is_active=True)
     serializer_class = FridgeSerializer
 
     @action(detail=False)
@@ -177,28 +229,29 @@ class FoodCreateView(PermissionRequiredMixin, View):
 
             notify.send(user, recipient=recipient,
                         verb=verb)
-            return redirect('fridge:store')
+            return redirect('fridge:store', food.fridge.pk)
         return render(request, self.template_name, {'form': form})
 
 
-class FoodUpdateView(PermissionRequiredMixin, generic.UpdateView):
+class FoodUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Food
     template_name = 'admin/food_update_form.html'
-    permission_required = 'fridge.store'
     fields = ['name', 'vegetarian', 'vegan', 'expiration_date', 'image']
 
     def get_success_url(self):
         return reverse_lazy('fridge:profile')
 
 
-class FoodDeleteView(PermissionRequiredMixin, generic.DeleteView):
+class FoodDeleteView(ValidFridgeUser, generic.DeleteView):
     model = Food
-    success_url = reverse_lazy('fridge:store')
-    permission_required = 'fridge.store'
     login_url = LOGIN_URL
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('fridge:store',
+                            kwargs={'pk': self.object.fridge.pk})
 
 
 class FoodListView(LoginRequiredMixin, generic.ListView):
@@ -262,7 +315,7 @@ class OpeningHourCreateView(PermissionRequiredMixin, View):
                 weekday=form.cleaned_data['weekday'],
                 from_hour=form.cleaned_data['from_hour'],
                 to_hour=form.cleaned_data['to_hour'],
-                fridge=Fridge.objects.filter(user=request.user).first()
+                fridge=Fridge.objects.get(pk=self.kwargs['pk'])
             )
 
             opening_hour.save()
@@ -292,6 +345,7 @@ class OpeningHourListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        context['fridge'] = fridge
         context['opening_hour_list'] = fridge.get_opening_hours()
         return context
 
@@ -304,6 +358,7 @@ class SpecialDayListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        context['fridge'] = fridge
         context['special_day_list'] = fridge.get_special_days()
         return context
 
@@ -333,8 +388,7 @@ class SpecialDayCreateView(PermissionRequiredMixin, View):
                 to_date=to_date,
                 from_hour=form.cleaned_data['from_hour'],
                 to_hour=form.cleaned_data['to_hour'],
-                fridge=Fridge.objects.filter(
-                    user=request.user).first()  # TODO change for sd.pk
+                fridge=Fridge.objects.get(pk=self.kwargs['pk'])
             )
             special_day.save()
             return redirect('fridge:fridge-detail', special_day.fridge.pk)
@@ -352,45 +406,6 @@ class SpecialDayDeleteView(PermissionRequiredMixin, generic.DeleteView):
     def get_success_url(self):
         return reverse_lazy('fridge:fridge-detail',
                             kwargs={'pk': self.object.fridge.pk})
-
-
-class FridgeUpdateView(PermissionRequiredMixin, generic.UpdateView):
-    model = Fridge
-    template_name = 'user/user_update_form.html'
-    permission_required = 'fridge.store'
-
-    def get_success_url(self):
-        return reverse_lazy('fridge:fridge-detail',
-                            kwargs={'pk': self.object.pk})
-
-
-class FridgeValidDemand(PermissionRequiredMixin, View):
-    login_url = LOGIN_URL
-    permission_required = 'fridge.admin'
-
-    def post(self, request, *args, **kwargs):
-        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        fridge.is_active = True
-        fridge.save()
-        return redirect('fridge:myadmin')
-
-    def get(self, request, *args, **kwargs):
-        return self.post(request, args, kwargs)
-
-
-class FridgeRefuseDemand(PermissionRequiredMixin, View):
-    login_url = LOGIN_URL
-    permission_required = 'fridge.admin'
-
-    def post(self, request, *args, **kwargs):
-        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        permission = Permission.objects.get(codename='store')
-        fridge.user.user_permissions.remove(permission)
-        fridge.delete()
-        return redirect('fridge:myadmin')
-
-    def get(self, request, *args, **kwargs):
-        return self.post(request, args, kwargs)
 
 
 class NotificationsViewSet(viewsets.ModelViewSet):
