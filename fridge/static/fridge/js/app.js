@@ -1,8 +1,8 @@
 const DB_NAME = 'freego_db';
 const DB_VERSION = 7;
 let DB;
-// const URL = "https://freego.srvz-webapp.he-arc.ch"
-const DEV_URL = "http://127.0.0.1:8000"
+// const SERVER_URL = "https://freego.srvz-webapp.he-arc.ch"
+const SERVER_URL = "http://127.0.0.1:8000"
 const routes = []
 
 // 3. Create the router instance and pass the `routes` option
@@ -72,7 +72,7 @@ var appFridges = new Vue({
             });
         },
         async login() {
-            if (access != "" && refresh != "") {
+            if (typeof access != "undefined" && typeof refresh != "undefined" && access != "" && refresh != "") {
                 localStorage.setItem('access', access);
                 localStorage.setItem('refresh', refresh);
             }
@@ -107,7 +107,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = DEV_URL + "/api/fridges";
+            let api_url = SERVER_URL + "/api/fridges";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -133,7 +133,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = DEV_URL + "/api/notifications/by_user/";
+            let api_url = SERVER_URL + "/api/notifications/by_user/";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -168,7 +168,7 @@ var appFridges = new Vue({
             const payload = {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
             }
-            let api_url = DEV_URL + "/api/fridges/favorites";
+            let api_url = SERVER_URL + "/api/fridges/favorites";
             axios
                 .get(api_url, payload)
                 .then(response => {
@@ -193,7 +193,7 @@ var appFridges = new Vue({
         clickOnFridge: function (evt) {
             evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
                 console.log(feature.getId())
-                window.location.href = DEV_URL + '/food/' + feature.getId() + "/list";
+                window.location.href = SERVER_URL + '/food/' + feature.getId() + "/list";
             })
         },
         goBack: function () {

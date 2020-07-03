@@ -3,8 +3,8 @@ const cacheName = 'freego-pwa-v5';
 const filesToCache = [
     //urls
     '/list',
-    // '/',
-    // '/home',
+    '/',
+    '/home',
     '/favorite',
     '/offline',
     //css
