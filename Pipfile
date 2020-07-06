@@ -20,6 +20,7 @@ django-rest-framework = "*"
 geopy = "*"
 django-notifications-hq = "*"
 djangorestframework-simplejwt = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.8"

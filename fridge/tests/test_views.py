@@ -231,9 +231,9 @@ class FoodCreateViewTest(TestCase):
         response = self.client.post(reverse('fridge:food-form'), json)
         print(response)
 
-        # self.assertRedirects(response,
-        #                      reverse_lazy('fridge:store',
-        #                                   kwargs={'pk': self.fridge.pk}))
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:store',
+                                          kwargs={'pk': self.fridge.pk}))
         self.assertEqual(len(Food.objects.all()), 1)
         self.assertEqual(Food.objects.last().name, 'An aliment')
 
