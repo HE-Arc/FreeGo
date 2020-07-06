@@ -6,6 +6,8 @@ from fridge.views import views_admin, views_home, views_user
 from rest_framework import routers
 
 from rest_framework_simplejwt import views as jwt_views
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
 
 app_name = 'fridge'
 
@@ -89,8 +91,37 @@ urlpatterns = [
     path('change/email/<pk>',
          views_user.UserUpdateView.as_view(fields=['email']),
          name='change-email'),
-    path('change/password', views_user.UserPasswordUpdateView.as_view(),
-         name='change-password'),
+    path('change/password', auth_views.PasswordChangeView.as_view(
+        template_name='user/user_update_form.html',
+        success_url=reverse_lazy('fridge:profile')
+    ),
+        name='change-password'),
+
+    path('password-reset/',
+         auth_views.PasswordResetView.as_view(
+             template_name='user/password_reset_form.html',
+             subject_template_name='user/password_reset_subject.txt',
+             email_template_name='user/password_reset_email.html',
+             success_url=reverse_lazy('fridge:password_reset_done')
+         ),
+         name='password_reset'),
+    path('password-reset/done/',
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='user/password_reset_done.html'
+         ),
+         name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='user/password_reset_confirm.html',
+             success_url=reverse_lazy('fridge:password_reset_complete')
+         ),
+         name='password_reset_confirm'),
+    path('password-reset-complete/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='user/password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
+    path('contact', views_home.ContactView.as_view(), name='contact'),
 
     # Home
     path('', views_home.HomeView.as_view(), name='home'),

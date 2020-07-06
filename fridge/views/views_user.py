@@ -80,13 +80,6 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
         return reverse_lazy('fridge:profile')
 
 
-class UserPasswordUpdateView(LoginRequiredMixin, PasswordChangeView):
-    template_name = 'user/user_update_form.html'
-
-    def get_success_url(self):
-        return reverse_lazy('fridge:profile')
-
-
 class ReservationListView(generic.TemplateView):
     template_name = 'user/reservation_list.html'
 

@@ -30,5 +30,8 @@
     <div class="row">
         <a class="btn col s12 outline" href="{% url 'fridge:register' %}">{% trans 'I do not have an account yet' %}</a>
     </div>
+    <div class="row">
+        <a class="btn col s12 outline" href="{% url 'fridge:password_reset' %}">{% trans 'Forget password' %}</a>
+    </div>
 </div>
 {% endblock %}
