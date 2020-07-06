@@ -229,8 +229,6 @@ class FoodCreateViewTest(TestCase):
             'expiration_date': date.today() + timedelta(days=1)
         }
         response = self.client.post(reverse('fridge:food-form'), json)
-        print(response)
-
         self.assertRedirects(response,
                              reverse_lazy('fridge:store',
                                           kwargs={'pk': self.fridge.pk}))
