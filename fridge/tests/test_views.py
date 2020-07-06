@@ -482,6 +482,20 @@ class LoginViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class ContactTest(TestCase):
+    def setUp(self):
+        self.user = create_user(username="test", password="test")
+        self.client.login(username='test', password='test')
+
+    def test_post(self):
+        json = {
+            'subject': 'My subject',
+            'message': 'My description'
+        }
+        response = self.client.post(reverse('fridge:contact'), json)
+        self.assertRedirects(response, reverse('fridge:home'))
+
+
 class ServiceWorkerTest(TestCase):
     def setUp(self):
         self.response = self.client.get(r('serviceworker'))
