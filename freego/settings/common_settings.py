@@ -188,3 +188,9 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=100),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=200),
 }
+
+# email
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = 'e8047ddbd3b91e'
+EMAIL_HOST_PASSWORD = '955a848e134c6a'
+EMAIL_PORT = '2525'
