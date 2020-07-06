@@ -60,6 +60,10 @@ class ContactView(View):
         return render(request, self.template_name, {'form': form})
 
 
+class DonationView(generic.TemplateView):
+    template_name = 'home/donation.html'
+
+
 def offline_view(request):
     template = "home/offline.html"
     return render(request, template)
