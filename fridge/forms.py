@@ -82,8 +82,6 @@ class OpeningHourForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        print("TEEEEESSSSSSSSSTTTTTTTTTTT")
-        print(cleaned_data)
         from_hour = to_hour = None
         from_hour = cleaned_data.get('from_hour')
         to_hour = cleaned_data.get('to_hour')

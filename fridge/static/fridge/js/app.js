@@ -1,8 +1,8 @@
 const DB_NAME = 'freego_db';
 const DB_VERSION = 7;
 let DB;
-const SERVER_URL = "https://freego.srvz-webapp.he-arc.ch"
-// const SERVER_URL = "http://127.0.0.1:8000"
+// const SERVER_URL = "https://freego.srvz-webapp.he-arc.ch"
+const SERVER_URL = "http://127.0.0.1:8000"
 const routes = []
 
 // 3. Create the router instance and pass the `routes` option
