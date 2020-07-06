@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 11:44+0200\n"
+"POT-Creation-Date: 2020-07-03 13:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,147 +17,154 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\freego\settings\common_settings.py:61
+#: .\freego\settings\common_settings.py:64
 msgid "English"
 msgstr "Anglais"
 
-#: .\freego\settings\common_settings.py:62
+#: .\freego\settings\common_settings.py:65
 msgid "French"
 msgstr "Français"
 
-#: .\fridge\forms.py:21 .\fridge\forms.py:38
+#: .\fridge\forms.py:22 .\fridge\forms.py:51
 #: .\fridge\templates\user\profile.html:8
 msgid "Name"
 msgstr "Nom"
 
-#: .\fridge\forms.py:22 .\fridge\templates\admin\fridge_detail.html:9
-#: .\fridge\templates\admin\fridge_list.html:19
+#: .\fridge\forms.py:23 .\fridge\templates\admin\fridge_detail.html:9
+#: .\fridge\templates\admin\fridge_list.html:17
+#: .\fridge\templates\home\favorite.html:18
 msgid "Address"
 msgstr "Adresse"
 
-#: .\fridge\forms.py:23
+#: .\fridge\forms.py:24
 msgid "NPA"
 msgstr "NPA"
 
-#: .\fridge\forms.py:24
+#: .\fridge\forms.py:25
 msgid "City"
 msgstr "Ville"
 
-#: .\fridge\forms.py:25 .\fridge\templates\admin\fridge_detail.html:13
+#: .\fridge\forms.py:26 .\fridge\templates\admin\fridge_detail.html:13
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: .\fridge\forms.py:26 .\fridge\forms.py:42
+#: .\fridge\forms.py:27 .\fridge\forms.py:55
 msgid "Image"
 msgstr "Image"
 
-#: .\fridge\forms.py:27 .\fridge\templates\admin\fridge_detail.html:35
+#: .\fridge\forms.py:28 .\fridge\templates\admin\fridge_detail.html:35
 msgid "User"
 msgstr "Utilisateur"
 
-#: .\fridge\forms.py:39
+#: .\fridge\forms.py:41 .\fridge\models.py:68
+#, fuzzy
+#| msgid "Invalid date"
+msgid "Invalid address"
+msgstr "Date invalide"
+
+#: .\fridge\forms.py:52
 msgid "Vegetarian"
 msgstr "Végétarien"
 
-#: .\fridge\forms.py:40
+#: .\fridge\forms.py:53
 msgid "Vegan"
 msgstr "Végan"
 
-#: .\fridge\forms.py:41 .\fridge\templates\admin\food_detail.html:13
+#: .\fridge\forms.py:54 .\fridge\templates\admin\food_detail.html:13
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
-#: .\fridge\forms.py:60
+#: .\fridge\forms.py:73
 msgid "Week day"
 msgstr "Jour de la semaine"
 
-#: .\fridge\forms.py:61 .\fridge\forms.py:89
+#: .\fridge\forms.py:74 .\fridge\forms.py:104
 msgid "From hour"
 msgstr "De l'heure"
 
-#: .\fridge\forms.py:62 .\fridge\forms.py:90
+#: .\fridge\forms.py:75 .\fridge\forms.py:105
 msgid "To hour"
 msgstr "À l'heure"
 
-#: .\fridge\forms.py:77 .\fridge\forms.py:121 .\fridge\models.py:133
-#: .\fridge\models.py:160
+#: .\fridge\forms.py:92 .\fridge\forms.py:136 .\fridge\models.py:153
+#: .\fridge\models.py:180
 msgid "Invalid hour"
 msgstr "Heure invalide"
 
-#: .\fridge\forms.py:87
+#: .\fridge\forms.py:102
 msgid "From date"
 msgstr "De la date"
 
-#: .\fridge\forms.py:88
+#: .\fridge\forms.py:103
 msgid "To date"
 msgstr "À la date"
 
-#: .\fridge\forms.py:116 .\fridge\models.py:155
+#: .\fridge\forms.py:131 .\fridge\models.py:175
 msgid "If two dates are selected, you can't select an hour."
 msgstr ""
 "Si deux dates sont sélectionné, vous ne pouvez pas sélectionné une heure"
 
-#: .\fridge\forms.py:118 .\fridge\models.py:157
+#: .\fridge\forms.py:133 .\fridge\models.py:177
 msgid "Invalid date"
 msgstr "Date invalide"
 
-#: .\fridge\forms.py:126
+#: .\fridge\forms.py:141
 msgid "Required. Fill an valid email address."
 msgstr "Requis. Remplissez une adresse email valide"
 
-#: .\fridge\models.py:107
+#: .\fridge\models.py:127
 msgid "You can't reserve your own food."
 msgstr "Vous ne pouvez pas réservé votre propre nourriture"
 
-#: .\fridge\models.py:112
+#: .\fridge\models.py:132
 msgid "Monday"
 msgstr "Lundi"
 
-#: .\fridge\models.py:113
+#: .\fridge\models.py:133
 msgid "Tuesday"
 msgstr "Mardi"
 
-#: .\fridge\models.py:114
+#: .\fridge\models.py:134
 msgid "Wednesday"
 msgstr "Mercredi"
 
-#: .\fridge\models.py:115
+#: .\fridge\models.py:135
 msgid "Thursday"
 msgstr "Jeudi"
 
-#: .\fridge\models.py:116
+#: .\fridge\models.py:136
 msgid "Friday"
 msgstr "Vendredi"
 
-#: .\fridge\models.py:117
+#: .\fridge\models.py:137
 msgid "Saturday"
 msgstr "Samedi"
 
-#: .\fridge\models.py:118
+#: .\fridge\models.py:138
 msgid "Sunday"
 msgstr "Dimanche"
 
-#: .\fridge\models.py:165
+#: .\fridge\models.py:185
 #, python-format
 msgid "From %(from_date)s to %(to_date)s"
 msgstr "Du %(from_date)s aux %(to_date)s"
 
-#: .\fridge\models.py:169
+#: .\fridge\models.py:189
 #, python-format
 msgid "The %(from_date)s open from %(from_hour)s to %(to_hour)s"
 msgstr "Le %(from_date)s ouvre à %(from_hour)s jusqu'à %(to_hour)s"
 
-#: .\fridge\models.py:174
+#: .\fridge\models.py:194
 #, python-format
 msgid "The %(from_date)s open from %(from_hour)s"
 msgstr "Le %(from_date)s ouvre à %(from_hour)s"
 
-#: .\fridge\models.py:178
+#: .\fridge\models.py:198
 #, python-format
 msgid "The %(from_date)s closed at %(to_hour)s"
 msgstr "Le %(from_date)s ferme à %(to_hour)s"
 
-#: .\fridge\models.py:181
+#: .\fridge\models.py:201
 #, python-format
 msgid "The %(from_date)s"
 msgstr "Le %(from_date)s"
@@ -210,6 +217,26 @@ msgstr "Sauvegarder"
 #: .\fridge\templates\admin\store.html:10
 msgid "Waiting for validation"
 msgstr "En attente de validation"
+
+#: .\fridge\templates\home\base.html:35 .\fridge\templates\home\base.html:45
+msgid "Home"
+msgstr "Accueil"
+
+#: .\fridge\templates\home\base.html:37
+msgid "List"
+msgstr "Liste"
+
+#: .\fridge\templates\home\base.html:39
+msgid "Map"
+msgstr "Carte"
+
+#: .\fridge\templates\home\base.html:41
+msgid "Favorite"
+msgstr "Favoris"
+
+#: .\fridge\templates\home\base.html:43
+msgid "Settings"
+msgstr "Paramètres"
 
 #: .\fridge\templates\home\home.html:9
 msgid "Welcome to the Free Go Association web application"
@@ -264,19 +291,6 @@ msgstr "Nous contacter"
 msgid "Log out"
 msgstr "Se déconnecter"
 
-#: .\fridge\templates\home\settings.html:34
-msgid "You do not have an account yet"
-msgstr "Vous n'avez pas encore de compte"
-
-#: .\fridge\templates\home\settings.html:39
-msgid "Log in"
-msgstr "Se connecter"
-
-#: .\fridge\templates\home\settings.html:45
-#: .\fridge\templates\user\register.html:15
-msgid "Create an account"
-msgstr "Création d'un compte"
-
 #: .\fridge\templates\user\login.html:7 .\fridge\templates\user\login.html:26
 msgid "Connection"
 msgstr "Connexion"
@@ -290,9 +304,22 @@ msgid "Password : "
 msgstr "Mot de passe : "
 
 #: .\fridge\templates\user\login.html:31
-#: .\fridge\templates\user\reservation_list.html:28
+#: .\fridge\templates\user\reservation_list.html:21
 msgid "I do not have an account yet"
 msgstr "Je n'ai pas encore de compte"
+
+#: .\fridge\templates\user\login_options.html:9
+msgid "You do not have an account yet"
+msgstr "Vous n'avez pas encore de compte"
+
+#: .\fridge\templates\user\login_options.html:14
+msgid "Log in"
+msgstr "Se connecter"
+
+#: .\fridge\templates\user\login_options.html:20
+#: .\fridge\templates\user\register.html:15
+msgid "Create an account"
+msgstr "Création d'un compte"
 
 #: .\fridge\templates\user\profile.html:6
 msgid "Account details"
@@ -329,6 +356,11 @@ msgstr "Ce NPA n'est pas valide"
 #: .\fridge\validators.py:16
 msgid "The expiration date is already passed."
 msgstr "Cette date d'expiration est déjà passé"
+
+#: .\fridge\views\views_admin.py:227
+#, python-format
+msgid "You have new notifications from fridge %(fridge)s"
+msgstr "Vous avez une nouvelle notification du freego %(fridge)s"
 
 #~ msgid "Free Go"
 #~ msgstr "Free Go"
