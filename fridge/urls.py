@@ -121,6 +121,7 @@ urlpatterns = [
              template_name='user/password_reset_complete.html'
          ),
          name='password_reset_complete'),
+    path('contact', views_home.ContactView.as_view(), name='contact'),
 
     # Home
     path('', views_home.HomeView.as_view(), name='home'),
