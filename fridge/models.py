@@ -232,3 +232,15 @@ class ReportContent(models.Model):
         Food, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class Sponsor(models.Model):
+    '''Sponsor class'''
+    name = models.CharField(max_length=45)
+    description = models.CharField(max_length=200, null=True, blank=True)
+    logo = models.ImageField(
+        upload_to='images/')
+    website = models.URLField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
