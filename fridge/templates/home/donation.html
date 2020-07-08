@@ -1,0 +1,38 @@
+{% extends 'admin/base_store.html' %}
+{% load static %}
+{% block content %}
+{% load i18n %}
+
+<div class="container">
+    <h3>{% trans "Donation" %}</h3>
+    <div class="row">
+        <div class="col s4">
+            <p><strong>{% trans "Twint" %}</strong></p>
+        </div>
+        <div class="col s8">
+            <p>{% trans "Sending by TWINT to the association number (078.669.10.01)" %}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s4">
+            <p><strong>{% trans "Bank transfer" %}</strong></p>
+        </div>
+        <div class="col s8">
+            <p>{% blocktrans %}<strong>IBAN :</strong> CH60 0076 6000 1032 7955 7{% endblocktrans %}</p>
+            <p>{% blocktrans %}<strong>Payement for :</strong><br>
+                Banque Cantonale neuchâteloise <br>
+                2000 Neuchâtel{% endblocktrans %}</p>
+            <p>{% blocktrans %}<strong>In favor of :​</strong><br>
+                Association Free Go <br>
+                Rue de Beau-Site 14, 2014 Bôle{% endblocktrans %}</p>
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+
+{% endblock %}

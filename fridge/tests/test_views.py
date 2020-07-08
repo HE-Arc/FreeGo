@@ -496,6 +496,20 @@ class ContactTest(TestCase):
         self.assertRedirects(response, reverse('fridge:home'))
 
 
+class ReportContentViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user(username="test", password="test")
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(self.user)
+        self.food = create_food(fridge=self.fridge, user=self.user)
+
+    def test_post(self):
+        response = self.client.post(
+            reverse_lazy('fridge:report_content',
+                         kwargs={'pk': self.food.pk}))
+        self.assertRedirects(response, reverse('fridge:home'))
+
+
 class ServiceWorkerTest(TestCase):
     def setUp(self):
         self.response = self.client.get(r('serviceworker'))

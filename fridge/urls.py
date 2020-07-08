@@ -129,6 +129,9 @@ urlpatterns = [
     path('map', views_home.MapView.as_view(), name='map'),
     path('favorite', views_home.FavoriteView.as_view(), name='favorite'),
     path('settings', views_home.SettingsView.as_view(), name='settings'),
+    path('donations', views_home.DonationView.as_view(), name='donation'),
+    path('report-content/<pk>', views_home.ReportContentView.as_view(),
+         name='report_content'),
 
     # PWA
     path('offline', views_home.offline_view, name='offline'),
