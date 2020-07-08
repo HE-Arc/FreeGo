@@ -213,6 +213,10 @@ class FoodCreateView(PermissionRequiredMixin, View):
                 name=form.cleaned_data['name'],
                 vegetarian=form.cleaned_data['vegetarian'],
                 vegan=form.cleaned_data['vegan'],
+                halal=form.cleaned_data['halal'],
+                lactose_free=form.cleaned_data['lactose_free'],
+                gluten_free=form.cleaned_data['gluten_free'],
+                bio=form.cleaned_data['bio'],
                 expiration_date=form.cleaned_data['expiration_date'],
                 image=form.cleaned_data['image'],
                 fridge=Fridge.objects.filter(user=request.user).first(),
@@ -236,7 +240,8 @@ class FoodCreateView(PermissionRequiredMixin, View):
 class FoodUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Food
     template_name = 'admin/food_update_form.html'
-    fields = ['name', 'vegetarian', 'vegan', 'expiration_date', 'image']
+    fields = ['name', 'vegetarian', 'vegan',  'halal', 'lactose_free',
+              'gluten_free', 'bio', 'expiration_date', 'image']
 
     def get_success_url(self):
         return reverse_lazy('fridge:profile')

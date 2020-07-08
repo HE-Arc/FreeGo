@@ -226,6 +226,10 @@ class FoodCreateViewTest(TestCase):
             'name': 'An aliment',
             'vegetarian': True,
             'vegan': False,
+            'halal': False,
+            'lactose_free': False,
+            'gluten_free': False,
+            'bio': False,
             'expiration_date': date.today() + timedelta(days=1)
         }
         response = self.client.post(reverse('fridge:food-form'), json)
