@@ -1,9 +1,10 @@
 from django.test import TestCase
 
-from fridge.forms import FoodForm, OpeningHourForm, SpecialDayForm
+from fridge.forms import FoodForm, OpeningHourForm, SpecialDayForm, SponsorForm
 from datetime import time, date
 
 from fridge.tests.test_tools import passed_date
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class FoodFormTest(TestCase):

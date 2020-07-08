@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from .models import Fridge, Food, OpeningHour, SpecialDay, User
+from .models import Fridge, Food, OpeningHour, SpecialDay, User, Sponsor
 from .validators import expiration_date_validator
 
 from django.utils.translation import gettext_lazy as _
@@ -151,3 +151,20 @@ class RegisterForm(UserCreationForm):
 class ContactForm(forms.Form):
     subject = forms.CharField(max_length=45)
     message = forms.CharField(max_length=500)
+
+
+class SponsorForm(forms.ModelForm):
+
+    class Meta:
+        model = Sponsor
+        fields = ('name', 'description', 'logo', 'website')
+        labels = {
+            'name': _('Name'),
+            'description': _('Description'),
+            'logo': _('Logo'),
+            'website': _('Website url')
+        }
+        required = {
+            'description': False,
+            'website': False
+        }
