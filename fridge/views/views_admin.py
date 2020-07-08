@@ -8,8 +8,9 @@ from django.contrib.auth.models import Permission
 from rest_framework import viewsets
 
 from fridge.models import Fridge, Food, OpeningHour, \
-    SpecialDay, Reservation, FridgeFollowing, User
-from fridge.forms import FridgeForm, FoodForm, OpeningHourForm, SpecialDayForm
+    SpecialDay, Reservation, FridgeFollowing, User, Sponsor
+from fridge.forms import FridgeForm, FoodForm, OpeningHourForm, \
+    SpecialDayForm, SponsorForm
 from fridge.serializers import FridgeSerializer, NotificationSerializer
 from notifications.signals import notify
 from django.utils.translation import gettext_lazy as _
@@ -423,3 +424,21 @@ class NotificationsViewSet(viewsets.ModelViewSet):
             recipient=self.request.user).filter(unread=True)
         serializer = self.get_serializer(notifications, many=True)
         return Response(serializer.data)
+
+
+class SponsorCreateView(PermissionRequiredMixin, generic.CreateView):
+    form_class = SponsorForm
+    permission_required = 'fridge.admin'
+    template_name = "admin/sponsor_form.html"
+    login_url = LOGIN_URL
+    success_url = reverse_lazy('fridge:myadmin')
+
+
+class SponsorDeleteView(PermissionRequiredMixin, generic.DeleteView):
+    model = Sponsor
+    success_url = reverse_lazy('fridge:myadmin')
+    permission_required = 'fridge.admin'
+    login_url = LOGIN_URL
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)

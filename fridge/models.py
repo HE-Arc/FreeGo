@@ -238,8 +238,7 @@ class Sponsor(models.Model):
     '''Sponsor class'''
     name = models.CharField(max_length=45)
     description = models.CharField(max_length=200, null=True, blank=True)
-    logo = models.ImageField(
-        upload_to='images/')
+    logo = models.ImageField(upload_to='images/')
     website = models.URLField(max_length=200, null=True, blank=True)
 
     def __str__(self):

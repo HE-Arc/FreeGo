@@ -79,6 +79,8 @@ urlpatterns = [
          name='food-cancellation'),
     path('reservation/list', views_user.ReservationListView.as_view(),
          name='reservation-list'),
+    path("sponsor/new/", views_admin.SponsorCreateView.as_view(),
+         name="sponsor-new"),
 
     # Login/Register/Logout
     path('register', views_user.RegisterView.as_view(), name='register'),

@@ -1,9 +1,10 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
     create_food, create_reservation, create_favorite
 from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
-    User, Reservation
+    User, Reservation, Sponsor
 from django.utils import timezone
 from django.shortcuts import resolve_url as r
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -512,6 +513,48 @@ class ReportContentViewTest(TestCase):
             reverse_lazy('fridge:report_content',
                          kwargs={'pk': self.food.pk}))
         self.assertRedirects(response, reverse('fridge:home'))
+
+
+class SponsorCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        permission = Permission.objects.get(codename="admin")
+        self.user.user_permissions.add(permission)
+
+    def test_invalid_argument(self):
+        image = SimpleUploadedFile(name='test.png', content=open(
+            'fridge/static/fridge/test/test.png', 'rb').read(),
+            content_type='image/png')
+        json = {
+            'name': 'A Sponsor',
+            'website': 'djangoproject',
+            'logo': image
+        }
+
+        response = self.client.post(reverse('fridge:sponsor-new'), json)
+        print(response)
+        self.assertEqual(response.status_code, 200)
+
+    def test_valid_argument(self):
+        image = SimpleUploadedFile(name='test.png', content=open(
+            'fridge/static/fridge/test/test.png', 'rb').read(),
+            content_type='image/png')
+        json = {
+            'name': 'A Sponsor',
+            'website': 'https://www.djangoproject.com/',
+            'logo': image
+        }
+
+        response = self.client.post(reverse('fridge:sponsor-new'), json)
+        print(response)
+        self.assertRedirects(response, reverse('fridge:myadmin'))
+        self.assertEqual(len(Sponsor.objects.all()), 1)
+        self.assertEqual(Sponsor.objects.last().name, 'A Sponsor')
+
+    def test_get(self):
+        response = self.client.get(reverse('fridge:sponsor-new'))
+        self.assertEqual(response.status_code, 200)
 
 
 class ServiceWorkerTest(TestCase):
