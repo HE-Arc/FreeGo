@@ -76,6 +76,10 @@ class Food(models.Model):
     name = models.CharField(max_length=45)
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
+    halal = models.BooleanField()
+    lactose_free = models.BooleanField()
+    gluten_free = models.BooleanField()
+    bio = models.BooleanField()
     expiration_date = models.DateField(validators=[expiration_date_validator])
     image = models.ImageField(
         upload_to='images/', default='default.JPG')

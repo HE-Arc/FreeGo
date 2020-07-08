@@ -63,6 +63,70 @@
         </div>
         <div class="row">
             <div class="input-field col s12">
+                <label>
+                    {{ form.halal }}
+                    <span>{{ form.halal.label }}</span>
+
+                    {% if form.halal.errors %}
+                    <ol>
+                        {% for error in form.halal.errors %}
+                        <strong class="red-text">{{ error|escape }}</strong>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label>
+                    {{ form.lactose_free }}
+                    <span>{{ form.lactose_free.label }}</span>
+
+                    {% if form.lactose_free.errors %}
+                    <ol>
+                        {% for error in form.lactose_free.errors %}
+                        <strong class="red-text">{{ error|escape }}</strong>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label>
+                    {{ form.gluten_free }}
+                    <span>{{ form.gluten_free.label }}</span>
+
+                    {% if form.gluten_free.errors %}
+                    <ol>
+                        {% for error in form.gluten_free.errors %}
+                        <strong class="red-text">{{ error|escape }}</strong>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <label>
+                    {{ form.bio }}
+                    <span>{{ form.bio.label }}</span>
+
+                    {% if form.bio.errors %}
+                    <ol>
+                        {% for error in form.bio.errors %}
+                        <strong class="red-text">{{ error|escape }}</strong>
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
                 {{ form.expiration_date }}
                 <label for="expiration_date">{{ form.expiration_date.label }}</label>
 

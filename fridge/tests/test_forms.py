@@ -11,8 +11,14 @@ class FoodFormTest(TestCase):
         """
         Valide date
         """
-        form_data = {'name': 'a name', 'vegetarian': True,
-                     'vegan': False, 'expiration_date': date.today()}
+        form_data = {'name': 'a name',
+                     'vegetarian': True,
+                     'vegan': False,
+                     'halal': False,
+                     'lactose_free': False,
+                     'gluten_free': False,
+                     'bio': False,
+                     'expiration_date': date.today()}
         form = FoodForm(data=form_data)
         self.assertTrue(form.is_valid())
 

@@ -36,12 +36,16 @@ def get_test_image():
 
 
 def create_food(fridge, user, name="food_test",
-                vegetarian=False, vegan=False, date=0):
+                vegetarian=False, vegan=False, halal=False, lactose_free=False,
+                gluten_free=False, bio=False, date=0):
     '''Create generic food with selectable name'''
+
     expiration_date = timezone.now() + timedelta(days=date)
     return Food.objects.create(name=name, vegetarian=vegetarian, vegan=vegan,
-                               expiration_date=expiration_date, fridge=fridge,
-                               user=user)
+                               halal=halal, lactose_free=lactose_free,
+                               gluten_free=gluten_free, bio=bio,
+                               expiration_date=expiration_date,
+                               fridge=fridge, user=user)
 
 
 def create_reservation(food, user):
