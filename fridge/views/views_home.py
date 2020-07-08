@@ -1,7 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.views import generic, View
-from fridge.models import Fridge, User
+from fridge.models import Fridge, User, ReportContent
 from fridge.forms import ContactForm
 from django.contrib.auth.models import Permission
 from django.shortcuts import redirect
@@ -62,6 +63,13 @@ class ContactView(View):
 
 class DonationView(generic.TemplateView):
     template_name = 'home/donation.html'
+
+
+class ReportContentView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        food = request.POST.get('food')
+        report_content = ReportContent(food=food, user=request.user)
+        report_content.save()
 
 
 def offline_view(request):

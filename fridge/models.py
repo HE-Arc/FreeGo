@@ -220,3 +220,11 @@ class FridgeFollowing(models.Model):
         Fridge, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class ReportContent(models.Model):
+    '''ReportContent class'''
+    food = models.ForeignKey(
+        Food, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
