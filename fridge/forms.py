@@ -1,7 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from .models import Fridge, Food, OpeningHour, SpecialDay, User, Sponsor
+from .models import Fridge, Food, OpeningHour, SpecialDay, User, Sponsor, \
+    Inventory, TemperatureControl
 from .validators import expiration_date_validator
 
 from django.utils.translation import gettext_lazy as _
@@ -167,4 +168,37 @@ class SponsorForm(forms.ModelForm):
         required = {
             'description': False,
             'website': False
+        }
+
+
+class InventoryForm(forms.ModelForm):
+
+    class Meta:
+        model = Inventory
+        fields = ("date", "product_name",
+                  "product_number", "temperature", "visa")
+        labels = {
+            "date": _("Date"),
+            "product_name": _("Product name"),
+            "product_number": _("Product number"),
+            "temperature": _("Temperature"),
+            "visa": _("Visa")
+        }
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'datepicker'})
+        }
+
+
+class TemperatureControlForm(forms.ModelForm):
+
+    class Meta:
+        model = TemperatureControl
+        fields = ("date", "temperature", "visa")
+        labels = {
+            "date": _("Date"),
+            "temperature": _("Temperature"),
+            "visa": _("Visa")
+        }
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'datepicker'})
         }
