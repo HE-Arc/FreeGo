@@ -1,8 +1,7 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.views import generic, View
-from fridge.models import Fridge, User, ReportContent, Food
+from fridge.models import Fridge, User
 from fridge.forms import ContactForm
 from django.contrib.auth.models import Permission
 from django.shortcuts import redirect
@@ -34,43 +33,7 @@ class SettingsView(generic.TemplateView):
         return context
 
 
-class NotificationsView(generic.TemplateView):
-    template_name = 'home/notifications.html'
 
-
-class ContactView(View):
-    form_class = ContactForm
-    template_name = 'home/contact.html'
-
-    def post(self, request, *args, **kwargs):
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            subject = form.cleaned_data.get('subject')
-            message = form.cleaned_data.get('message')
-            from_user = self.request.user.email
-            perm = Permission.objects.get(codename="admin")
-            to_user = User.objects.filter(
-                user_permissions__in=[perm])
-            send_mail(subject=subject, message=message,
-                      from_email=from_user, recipient_list=to_user)
-            return redirect('fridge:home')
-        return render(request, self.template_name, {'form': form})
-
-    def get(self, request, *args, **kwargs):
-        form = ContactForm()
-        return render(request, self.template_name, {'form': form})
-
-
-class DonationView(generic.TemplateView):
-    template_name = 'home/donation.html'
-
-
-class ReportContentView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        food = Food.objects.get(pk=self.kwargs['pk'])
-        report_content = ReportContent(food=food, user=request.user)
-        report_content.save()
-        return redirect('fridge:home')
 
 
 def offline_view(request):
