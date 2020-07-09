@@ -5,14 +5,14 @@
 {% load i18n %}
 
 <div class="container">
-    <h4>{% trans 'Temperature control' %}</h4>
     <table>
+        <caption><h4>{% trans 'Temperature control' %}</h4></caption>
         <thead>
             <tr>
-                <th>{% trans 'Date' %}</th>
-                <th>{% trans 'Temperature (°C)' %}</th>
-                <th>{% trans 'Visa' %}</th>
-                <th>{% trans 'Actions' %}</th>
+                <th scope="col">{% trans 'Date' %}</th>
+                <th scope="col">{% trans 'Temperature (°C)' %}</th>
+                <th scope="col">{% trans 'Visa' %}</th>
+                <th scope="col">{% trans 'Actions' %}</th>
             </tr>
         </thead>
         <tbody>

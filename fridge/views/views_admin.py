@@ -429,7 +429,7 @@ class NotificationsViewSet(viewsets.ModelViewSet):
 class SponsorCreateView(PermissionRequiredMixin, generic.CreateView):
     form_class = SponsorForm
     permission_required = 'fridge.admin'
-    template_name = "admin/sponsor_form.html"
+    template_name = "new_form.html"
     login_url = LOGIN_URL
     success_url = reverse_lazy('fridge:myadmin')
 
