@@ -2,9 +2,10 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
-    create_food, create_reservation, create_favorite
+    create_food, create_reservation, create_favorite, create_inventory, \
+    create_temperature_control
 from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
-    User, Reservation, Sponsor
+    User, Reservation, Sponsor, Inventory, TemperatureControl
 from django.utils import timezone
 from django.shortcuts import resolve_url as r
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -558,19 +559,51 @@ class SponsorCreateViewTest(TestCase):
 
 
 class InventoryCreateViewTest(TestCase):
-    pass
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        permission = Permission.objects.get(codename="admin")
+        self.user.user_permissions.add(permission)
+        self.fridge = create_fridge(user=self.user)
+
+    def test_post(self):
+        json = {
+            'date': date.today() + timedelta(days=1),
+            'product_name': 'Product name',
+            'product_number': 12,
+            'temperature': 22,
+            'visa': '2000',
+            'fridge': self.fridge
+        }
+        response = self.client.post(
+            reverse_lazy('fridge:inventory-new',
+                         kwargs={'pk': self.fridge.pk}), json)
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:inventory-sheet',
+                                          kwargs={'pk': self.fridge.pk}))
 
 
-class InventoryListViewTest(TestCase):
-    pass
+class TemperatureControlCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        permission = Permission.objects.get(codename="admin")
+        self.user.user_permissions.add(permission)
+        self.fridge = create_fridge(user=self.user)
 
-
-class InventoryUpdateViewTest(TestCase):
-    pass
-
-
-class InventoryDeleteViewTest(TestCase):
-    pass
+    def test_post(self):
+        json = {
+            'date': date.today() + timedelta(days=1),
+            'temperature': 22,
+            'visa': '2000',
+            'fridge': self.fridge
+        }
+        response = self.client.post(
+            reverse_lazy('fridge:temperature-control-new',
+                         kwargs={'pk': self.fridge.pk}), json)
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:temperature-control-list',
+                                          kwargs={'pk': self.fridge.pk}))
 
 
 class ServiceWorkerTest(TestCase):

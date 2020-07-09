@@ -1,5 +1,5 @@
 from fridge.models import Fridge, Food, Reservation, \
-    OpeningHour, SpecialDay, FridgeFollowing
+    OpeningHour, SpecialDay, FridgeFollowing, Inventory, TemperatureControl
 from fridge.forms import User
 from datetime import timedelta, date
 from django.utils import timezone
@@ -85,3 +85,16 @@ def create_user(username="test", email='test@test.test', password='test'):
 
 def create_favorite(user, fridge):
     return FridgeFollowing.objects.create(user=user, fridge=fridge)
+
+
+def create_inventory(fridge, date=0, product_name="Product", product_number=5,
+                     temperature=22, visa="2000"):
+    date = timezone.now() + timedelta(days=date)
+    return Inventory.objects.create(date=date, temperature=temperature,
+                                    visa=visa, fridge=fridge)
+
+
+def create_temperature_control(fridge, date=0, temperature=22, visa="2000"):
+    date = timezone.now() + timedelta(days=date)
+    return TemperatureControl.objects.create(
+        date=date, temperature=temperature, visa=visa, fridge=fridge)
