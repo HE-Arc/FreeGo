@@ -7,10 +7,10 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Permission
 from rest_framework import viewsets
 
-from fridge.models import Fridge, Food, OpeningHour, \
-    SpecialDay, Reservation, FridgeFollowing, User, Sponsor
+from fridge.models import Fridge, Food, OpeningHour, SpecialDay, Reservation, \
+    FridgeFollowing, User, Sponsor, Inventory, TemperatureControl
 from fridge.forms import FridgeForm, FoodForm, OpeningHourForm, \
-    SpecialDayForm, SponsorForm
+    SpecialDayForm, SponsorForm, InventoryForm, TemperatureControlForm
 from fridge.serializers import FridgeSerializer, NotificationSerializer
 from notifications.signals import notify
 from django.utils.translation import gettext_lazy as _
@@ -442,3 +442,130 @@ class SponsorDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class ValidInventoryUser(UserPassesTestMixin):
+    def test_func(self):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        return self.request.user == fridge.user or \
+            self.request.user.has_perm('fridge.admin')
+
+
+class InventoryCreateView(ValidInventoryUser, generic.CreateView):
+    form_class = InventoryForm
+    model = Inventory
+    template_name = "new_form.html"
+    login_url = LOGIN_URL
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            inventory = Inventory(
+                date=form.cleaned_data['date'],
+                product_name=form.cleaned_data['product_name'],
+                product_number=form.cleaned_data['product_number'],
+                temperature=form.cleaned_data['temperature'],
+                visa=form.cleaned_data['visa'],
+                fridge=Fridge.objects.get(pk=self.kwargs['pk'])
+            )
+            inventory.save()
+            return redirect('fridge:inventory-sheet', inventory.fridge.pk)
+        return render(request, self.template_name, {'form': form})
+
+
+class InventoryListView(ValidInventoryUser, generic.ListView):
+    model = Inventory
+    template_name = "admin/inventory_sheet.html"
+    login_url = LOGIN_URL
+
+    def get_queryset(self):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        return Inventory.objects.filter(fridge=fridge)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["fridge"] = Fridge.objects.get(pk=self.kwargs['pk'])
+        return context
+
+
+class InventoryDeleteView(ValidInventoryUser, generic.DeleteView):
+    model = Inventory
+    login_url = LOGIN_URL
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('fridge:inventory-sheet',
+                            kwargs={'pk': self.object.fridge.pk})
+
+
+class InventoryUpdateView(ValidInventoryUser, generic.UpdateView):
+    model = Inventory
+    template_name = "new_form.html"
+    login_url = LOGIN_URL
+    fields = ['date', 'product_name', 'product_number', 'temperature', 'visa']
+
+    def get_success_url(self):
+        return reverse_lazy('fridge:inventory-sheet',
+                            kwargs={'pk': self.object.fridge.pk})
+
+
+class TemperatureControlCreateView(ValidInventoryUser, generic.CreateView):
+    form_class = TemperatureControlForm
+    template_name = "new_form.html"
+    login_url = LOGIN_URL
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            temperature_control = TemperatureControl(
+                date=form.cleaned_data['date'],
+                temperature=form.cleaned_data['temperature'],
+                visa=form.cleaned_data['visa'],
+                fridge=Fridge.objects.get(pk=self.kwargs['pk'])
+            )
+            temperature_control.save()
+            return redirect('fridge:temperature-control-list',
+                            temperature_control.fridge.pk)
+        return render(request, self.template_name, {'form': form})
+
+
+class TemperatureControlListView(ValidInventoryUser, generic.ListView):
+    model = TemperatureControl
+    template_name = "admin/temperature_control_list.html"
+    login_url = LOGIN_URL
+
+    def get_queryset(self):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        return TemperatureControl.objects.filter(fridge=fridge)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["fridge"] = Fridge.objects.get(pk=self.kwargs['pk'])
+        return context
+
+
+class TemperatureControlDeleteView(ValidInventoryUser, generic.DeleteView):
+    model = TemperatureControl
+    login_url = LOGIN_URL
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('fridge:temperature-control-list',
+                            kwargs={'pk': self.object.fridge.pk})
+
+
+class TemperatureControlUpdateView(ValidInventoryUser, generic.UpdateView):
+    model = TemperatureControl
+    template_name = "new_form.html"
+    login_url = LOGIN_URL
+    fields = ['date', 'temperature', 'visa']
+
+    def get_success_url(self):
+        return reverse_lazy('fridge:temperature-control-list',
+                            kwargs={'pk': self.object.fridge.pk})

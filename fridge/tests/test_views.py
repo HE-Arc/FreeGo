@@ -557,6 +557,22 @@ class SponsorCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class InventoryCreateViewTest(TestCase):
+    pass
+
+
+class InventoryListViewTest(TestCase):
+    pass
+
+
+class InventoryUpdateViewTest(TestCase):
+    pass
+
+
+class InventoryDeleteViewTest(TestCase):
+    pass
+
+
 class ServiceWorkerTest(TestCase):
     def setUp(self):
         self.response = self.client.get(r('serviceworker'))

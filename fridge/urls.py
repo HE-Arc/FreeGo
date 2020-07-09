@@ -82,6 +82,28 @@ urlpatterns = [
     path("sponsor/new/", views_admin.SponsorCreateView.as_view(),
          name="sponsor-new"),
 
+    path("inventory/new/<pk>", views_admin.InventoryCreateView.as_view(),
+         name="inventory-new"),
+    path("inventory-sheet/<pk>", views_admin.InventoryListView.as_view(),
+         name="inventory-sheet"),
+    path("inventory/update/<pk>", views_admin.InventoryUpdateView.as_view(),
+         name="inventory-update"),
+    path("inventory/delete/<pk>", views_admin.InventoryDeleteView.as_view(),
+         name="inventory-delete"),
+
+    path("temperature-control/new/<pk>",
+         views_admin.TemperatureControlCreateView.as_view(),
+         name="temperature-control-new"),
+    path("temperature-control/list/<pk>",
+         views_admin.TemperatureControlListView.as_view(),
+         name="temperature-control-list"),
+    path("temperature-control/update/<pk>",
+         views_admin.TemperatureControlUpdateView.as_view(),
+         name="temperature-control-update"),
+    path("temperature-control/delete/<pk>",
+         views_admin.TemperatureControlDeleteView.as_view(),
+         name="temperature-control-delete"),
+
     # Login/Register/Logout
     path('register', views_user.RegisterView.as_view(), name='register'),
     path('login', views_user.LoginView.as_view(), name='login'),

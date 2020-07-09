@@ -243,3 +243,26 @@ class Sponsor(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Inventory(models.Model):
+    '''Inventory class for inventory sheet'''
+    date = models.DateField()
+    product_name = models.CharField(max_length=45)
+    product_number = models.IntegerField()
+    temperature = models.IntegerField()
+    visa = models.CharField(max_length=45)
+    fridge = models.ForeignKey(
+        Fridge, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.product_name
+
+
+class TemperatureControl(models.Model):
+    '''TemperatureControl model'''
+    date = models.DateField()
+    temperature = models.IntegerField()
+    visa = models.CharField(max_length=45)
+    fridge = models.ForeignKey(
+        Fridge, on_delete=models.CASCADE)
