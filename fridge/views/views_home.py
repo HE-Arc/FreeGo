@@ -1,10 +1,6 @@
-from django.core.mail import send_mail
 from django.shortcuts import render
-from django.views import generic, View
-from fridge.models import Fridge, User
-from fridge.forms import ContactForm
-from django.contrib.auth.models import Permission
-from django.shortcuts import redirect
+from django.views import generic
+from fridge.models import Fridge
 
 
 class HomeView(generic.TemplateView):
@@ -31,9 +27,6 @@ class SettingsView(generic.TemplateView):
                 user=self.request.user).first()
 
         return context
-
-
-
 
 
 def offline_view(request):

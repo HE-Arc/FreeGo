@@ -30,6 +30,11 @@
                         <input class="file-path validate" type="text">
                     </div>
                 </div>
+                {% elif field.field.widget.input_type == 'checkbox' %}
+                <label>
+                    {{ field }}
+                    <span>{{ field.label }}</span>
+                </label>
                 {% else %}
                 {{ field }}
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>

@@ -13,7 +13,7 @@ LOGIN_URL = 'fridge:login'
 
 class OpeningHourCreateView(PermissionRequiredMixin, View):
     form_class = OpeningHourForm
-    template_name = 'admin/opening_hour_form.html'
+    template_name = 'new_form.html'
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
     initial = {}
@@ -80,7 +80,7 @@ class SpecialDayListView(LoginRequiredMixin, generic.ListView):
 
 class SpecialDayCreateView(PermissionRequiredMixin, View):
     form_class = SpecialDayForm
-    template_name = 'admin/special_day_form.html'
+    template_name = 'new_form.html'
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
     initial = {}
