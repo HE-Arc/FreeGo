@@ -2,7 +2,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from fridge.views import views_admin, views_home, views_user
+from fridge.views import views_admin, views_home, views_user, views_fridge, \
+    views_user, views_schedule, views_food
 from rest_framework import routers
 
 from rest_framework_simplejwt import views as jwt_views
@@ -12,99 +13,66 @@ from django.urls import reverse_lazy
 app_name = 'fridge'
 
 router = routers.DefaultRouter()
-router.register('fridges', views_admin.FridgesViewSet)
-router.register('notifications', views_admin.NotificationsViewSet)
+router.register('fridges', views_fridge.FridgesViewSet)
+router.register('notifications', views_user.NotificationsViewSet)
 
 urlpatterns = [
-    path('list', views_admin.FridgeListView.as_view(),
-         name='list'),
-    # Admin
-    path('myadmin', views_admin.AdminIndexView.as_view(), name='myadmin'),
-
-    # Fridge
-    path('fridge/new',
-         views_admin.FridgeCreateView.as_view(), name='fridge-new'),
-    path('fridge/<pk>/delete', views_admin.FridgeDeleteView.as_view(),
-         name='fridge-delete'),
-    path('fridge/<pk>/update', views_admin.FridgeUpdateView.as_view(),
-         name='fridge-update'),
     path('api/', include(router.urls)),
 
-    # Store
-    path('store/<pk>', views_admin.StoreIndexView.as_view(), name='store'),
+    # Fridge
+    path('list', views_fridge.FridgeListView.as_view(),
+         name='list'),
+    path('fridge/new',
+         views_fridge.FridgeCreateView.as_view(), name='fridge-new'),
+    path('fridge/<pk>/delete', views_fridge.FridgeDeleteView.as_view(),
+         name='fridge-delete'),
+    path('fridge/<pk>/update', views_fridge.FridgeUpdateView.as_view(),
+         name='fridge-update'),
     path('fridge/detail/<pk>',
-         views_admin.FridgeDetailView.as_view(), name='fridge-detail'),
+         views_fridge.FridgeDetailView.as_view(), name='fridge-detail'),
+    path('fridge/demand', views_fridge.FridgeDemandCreateView.as_view(),
+         name='fridge-demand'),
+    path('fridge/valid/<pk>', views_fridge.FridgeValidDemand.as_view(),
+         name='fridge-valid'),
+    path('fridge/refuse/<pk>', views_fridge.FridgeRefuseDemand.as_view(),
+         name='fridge-refuse'),
+
     path('change/address/<pk>',
-         views_admin.FridgeUpdateView.as_view(
+         views_fridge.FridgeUpdateView.as_view(
              fields=['address', 'NPA', 'city']), name='change-address'),
     path('change/phone-number/<pk>',
-         views_admin.FridgeUpdateView.as_view(
+         views_fridge.FridgeUpdateView.as_view(
              fields=['phone_number']), name='change-phone-number'),
     path('change/user/<pk>',
-         views_admin.FridgeUpdateView.as_view(
+         views_fridge.FridgeUpdateView.as_view(
              fields=['user']), name='change-user'),
 
     # Food
-    path('food/new', views_admin.FoodCreateView.as_view(),
+    path('food/new', views_food.FoodCreateView.as_view(),
          name='food-form'),
-    path('food/<pk>/delete', views_admin.FoodDeleteView.as_view(),
+    path('food/<pk>/delete', views_food.FoodDeleteView.as_view(),
          name='food-delete'),
-    path('food/<pk>/list/', views_admin.FoodListView.as_view(),
+    path('food/<pk>/list/', views_food.FoodListView.as_view(),
          name='food-list'),
-    path('food/<pk>/update/', views_admin.FoodUpdateView.as_view(),
+    path('food/<pk>/update/', views_food.FoodUpdateView.as_view(),
          name='food-update'),
-
-    # Opening Day
-    path('openinghour/<pk>/new', views_admin.OpeningHourCreateView.as_view(),
+    # Schedule
+    path('openinghour/<pk>/new', views_schedule.OpeningHourCreateView.as_view(),
          name='openinghour-form'),
     path('openinghour/<pk>/delete',
-         views_admin.OpeningHourDeleteView.as_view(),
+         views_schedule.OpeningHourDeleteView.as_view(),
          name='openinghour-delete'),
     path('openinghour/<pk>/list',
-         views_admin.OpeningHourListView.as_view(),
+         views_schedule.OpeningHourListView.as_view(),
          name='opening-hour-list'),
 
-    # Special Day
-    path('specialday/<pk>/new', views_admin.SpecialDayCreateView.as_view(),
+    path('specialday/<pk>/new', views_schedule.SpecialDayCreateView.as_view(),
          name='specialday-form'),
-    path('specialday/<pk>/delete', views_admin.SpecialDayDeleteView.as_view(),
+    path('specialday/<pk>/delete', views_schedule.SpecialDayDeleteView.as_view(),
          name='specialday-delete'),
-    path('specialday/<pk>/list', views_admin.SpecialDayListView.as_view(),
+    path('specialday/<pk>/list', views_schedule.SpecialDayListView.as_view(),
          name='special-day-list'),
-
-    # Reservation
-    path('food/<pk>/reservation', views_admin.FoodReservation.as_view(),
-         name='food-reservation'),
-    path('food/<pk>/cancellation', views_admin.FoodCancellation.as_view(),
-         name='food-cancellation'),
-    path('reservation/list', views_user.ReservationListView.as_view(),
-         name='reservation-list'),
-    path("sponsor/new/", views_admin.SponsorCreateView.as_view(),
-         name="sponsor-new"),
-
-    path("inventory/new/<pk>", views_admin.InventoryCreateView.as_view(),
-         name="inventory-new"),
-    path("inventory-sheet/<pk>", views_admin.InventoryListView.as_view(),
-         name="inventory-sheet"),
-    path("inventory/update/<pk>", views_admin.InventoryUpdateView.as_view(),
-         name="inventory-update"),
-    path("inventory/delete/<pk>", views_admin.InventoryDeleteView.as_view(),
-         name="inventory-delete"),
-
-    path("temperature-control/new/<pk>",
-         views_admin.TemperatureControlCreateView.as_view(),
-         name="temperature-control-new"),
-    path("temperature-control/list/<pk>",
-         views_admin.TemperatureControlListView.as_view(),
-         name="temperature-control-list"),
-    path("temperature-control/update/<pk>",
-         views_admin.TemperatureControlUpdateView.as_view(),
-         name="temperature-control-update"),
-    path("temperature-control/delete/<pk>",
-         views_admin.TemperatureControlDeleteView.as_view(),
-         name="temperature-control-delete"),
-
-    # Login/Register/Logout
+    # User
     path('register', views_user.RegisterView.as_view(), name='register'),
     path('login', views_user.LoginView.as_view(), name='login'),
     path('logout', views_user.LogoutView.as_view(), name='logout'),
@@ -145,40 +113,68 @@ urlpatterns = [
              template_name='user/password_reset_complete.html'
          ),
          name='password_reset_complete'),
-    path('contact', views_home.ContactView.as_view(), name='contact'),
 
-    # Home
-    path('', views_home.HomeView.as_view(), name='home'),
-    path('home', views_home.HomeView.as_view(), name='home'),
-    path('map', views_home.MapView.as_view(), name='map'),
-    path('favorite', views_home.FavoriteView.as_view(), name='favorite'),
-    path('settings', views_home.SettingsView.as_view(), name='settings'),
-    path('donations', views_home.DonationView.as_view(), name='donation'),
-    path('report-content/<pk>', views_home.ReportContentView.as_view(),
-         name='report_content'),
-
-    # PWA
-    path('offline', views_home.offline_view, name='offline'),
-
+    path('food/<pk>/reservation', views_user.FoodReservation.as_view(),
+         name='food-reservation'),
+    path('food/<pk>/cancellation', views_user.FoodCancellation.as_view(),
+         name='food-cancellation'),
+    path('reservation/list', views_user.ReservationListView.as_view(),
+         name='reservation-list'),
     path('fridge-follow/<pk>',
          views_user.FridgeFollowingCreateView.as_view(),
          name='fridge-follow'),
     path('fridge-unfollow/<pk>',
          views_user.FridgeFollowingDeleteView.as_view(),
          name='fridge-unfollow'),
-    path('fridge/demand', views_admin.FridgeDemandCreateView.as_view(),
-         name='fridge-demand'),
-    path('fridge/valid/<pk>', views_admin.FridgeValidDemand.as_view(),
-         name='fridge-valid'),
-    path('fridge/refuse/<pk>', views_admin.FridgeRefuseDemand.as_view(),
-         name='fridge-refuse'),
+    path('contact', views_user.ContactView.as_view(), name='contact'),
+    path('donations', views_user.DonationView.as_view(), name='donation'),
+    path('notifications', views_user.NotificationsView.as_view(),
+         name='notifications'),
+
+
+    # Admin
+    path('myadmin', views_admin.AdminIndexView.as_view(), name='myadmin'),
+    path('store/<pk>', views_admin.StoreIndexView.as_view(), name='store'),
+    path("sponsor/new/", views_admin.SponsorCreateView.as_view(),
+         name="sponsor-new"),
+
+    path("inventory/new/<pk>", views_admin.InventoryCreateView.as_view(),
+         name="inventory-new"),
+    path("inventory-sheet/<pk>", views_admin.InventoryListView.as_view(),
+         name="inventory-sheet"),
+    path("inventory/update/<pk>", views_admin.InventoryUpdateView.as_view(),
+         name="inventory-update"),
+    path("inventory/delete/<pk>", views_admin.InventoryDeleteView.as_view(),
+         name="inventory-delete"),
+
+    path("temperature-control/new/<pk>",
+         views_admin.TemperatureControlCreateView.as_view(),
+         name="temperature-control-new"),
+    path("temperature-control/list/<pk>",
+         views_admin.TemperatureControlListView.as_view(),
+         name="temperature-control-list"),
+    path("temperature-control/update/<pk>",
+         views_admin.TemperatureControlUpdateView.as_view(),
+         name="temperature-control-update"),
+    path("temperature-control/delete/<pk>",
+         views_admin.TemperatureControlDeleteView.as_view(),
+         name="temperature-control-delete"),
+
+    path('report-content/<pk>', views_admin.ReportContentView.as_view(),
+         name='report_content'),
+    # Home
+    path('', views_home.HomeView.as_view(), name='home'),
+    path('home', views_home.HomeView.as_view(), name='home'),
+    path('map', views_home.MapView.as_view(), name='map'),
+    path('favorite', views_home.FavoriteView.as_view(), name='favorite'),
+    path('settings', views_home.SettingsView.as_view(), name='settings'),
+    path('offline', views_home.offline_view, name='offline'),
+
+    # JWT
     path('api/token/', jwt_views.TokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
-         name='token_refresh'),
-    path('notifications', views_home.NotificationsView.as_view(),
-         name='notifications'),
-
+         name='token_refresh')
 ]
 
 
