@@ -6,6 +6,7 @@ const filesToCache = [
     '/',
     '/home',
     // '/favorite',
+    '/map',
     '/offline',
     //css
     '/static/fridge/css/materialize.min.css',
@@ -52,14 +53,6 @@ self.addEventListener('activate', event => {
                 }
             }));
         })
-        // caches.keys().then(cacheNames => {
-        //     return Promise.all(
-        //         cacheNames
-        //             .filter(cacheName => (cacheName.startsWith("django-pwa-")))
-        //             .filter(cacheName => (cacheName !== staticCacheName))
-        //             .map(cacheName => caches.delete(cacheName))
-        //     );
-        // })
     );
 });
 
