@@ -47,16 +47,18 @@ class FoodForm(forms.ModelForm):
 
     class Meta:
         model = Food
-        fields = ('name', 'vegetarian', 'vegan', 'halal', 'lactose_free',
-                  'gluten_free', 'bio', 'expiration_date', 'image')
+        fields = ('name', 'description', 'vegetarian', 'vegan', 'halal',
+                  'lactose_free', 'gluten_free', 'bio',
+                  'expiration_date', 'image')
         labels = {
             'name': _('Name'),
+            'description': _('Description'),
             'vegetarian': _('Vegetarian'),
             'vegan': _('Vegan'),
-            'halal': _('halal'),
-            'lactose_free': _('lactose_free'),
-            'gluten_free': _('gluten_free'),
-            'bio': _('bio'),
+            'halal': _('Halal'),
+            'lactose_free': _('Lactose free'),
+            'gluten_free': _('Gluten free'),
+            'bio': _('Bio'),
             'expiration_date': _('Expiration date'),
             'image': _('Image'),
         }

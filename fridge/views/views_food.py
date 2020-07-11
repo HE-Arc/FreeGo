@@ -30,6 +30,7 @@ class FoodCreateView(PermissionRequiredMixin, View):
         if form.is_valid():
             food = Food(
                 name=form.cleaned_data['name'],
+                description=form.cleaned_data['description'],
                 vegetarian=form.cleaned_data['vegetarian'],
                 vegan=form.cleaned_data['vegan'],
                 halal=form.cleaned_data['halal'],
@@ -59,8 +60,8 @@ class FoodCreateView(PermissionRequiredMixin, View):
 class FoodUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Food
     template_name = 'new_form.html'
-    fields = ['name', 'vegetarian', 'vegan',  'halal', 'lactose_free',
-              'gluten_free', 'bio', 'expiration_date', 'image']
+    fields = ['name', 'description', 'vegetarian', 'vegan',  'halal',
+              'lactose_free', 'gluten_free', 'bio', 'expiration_date', 'image']
 
     def get_success_url(self):
         return reverse_lazy('fridge:profile')
