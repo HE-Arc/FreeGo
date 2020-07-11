@@ -1,3 +1,5 @@
+from django.contrib.auth.tokens import (
+    default_token_generator, PasswordResetTokenGenerator)
 from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
@@ -17,6 +19,13 @@ from django.contrib.auth import login, authenticate, logout
 from django.core.mail import send_mail
 from fridge.forms import ContactForm
 from django.contrib.auth.models import Permission
+
+from django.http import HttpResponse
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -72,16 +81,25 @@ class RegisterView(View):
     def post(self, request, *args, **kwargs):
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            refresh = RefreshToken.for_user(user)
-            return render(request, 'home/home.html', {
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your blog account.'
+            token_generator = PasswordResetTokenGenerator()
+            message = render_to_string('user/acc_active_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': token_generator.make_token(user),
             })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            # TODO add message like : Please confirm your email address to complete the registration
+            return redirect("fridge:home")
         return render(request, self.template_name, {'form': form})
 
     def get(self, request, *args, **kwargs):
@@ -191,3 +209,22 @@ class ContactView(View):
 
 class DonationView(generic.TemplateView):
     template_name = 'home/donation.html'
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        refresh = RefreshToken.for_user(user)
+        return render(request, 'home/home.html', {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        })
+    else:
+        return HttpResponse('Activation link is invalid!')

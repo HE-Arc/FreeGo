@@ -9,7 +9,7 @@ from rest_framework import routers
 from rest_framework_simplejwt import views as jwt_views
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
-
+from django.conf.urls import url
 app_name = 'fridge'
 
 router = routers.DefaultRouter()
@@ -174,7 +174,9 @@ urlpatterns = [
     path('api/token/', jwt_views.TokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
-         name='token_refresh')
+         name='token_refresh'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+         views_user.activate, name='activate'),
 ]
 
 
