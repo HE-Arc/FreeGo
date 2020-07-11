@@ -66,7 +66,7 @@ class NotificationsViewSet(viewsets.ModelViewSet):
 
 class RegisterView(View):
     form_class = RegisterForm
-    template_name = 'user/register.html'
+    template_name = 'new_form.html'
     initial = {'username': 'toto', 'raw_password': 'toto'}
 
     def post(self, request, *args, **kwargs):
@@ -168,7 +168,7 @@ class FridgeFollowingDeleteView(LoginRequiredMixin, View):
 
 class ContactView(View):
     form_class = ContactForm
-    template_name = 'home/contact.html'
+    template_name = 'new_form.html'
 
     def post(self, request, *args, **kwargs):
         form = ContactForm(request.POST)

@@ -152,8 +152,8 @@ class RegisterForm(UserCreationForm):
 
 
 class ContactForm(forms.Form):
-    subject = forms.CharField(max_length=45)
-    message = forms.CharField(max_length=500)
+    subject = forms.CharField(max_length=45, label=_('Subject'))
+    message = forms.CharField(max_length=500, label=_('Message'))
 
 
 class SponsorForm(forms.ModelForm):
