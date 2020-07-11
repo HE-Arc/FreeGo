@@ -74,6 +74,7 @@ class Fridge(models.Model):
 class Food(models.Model):
     '''Food model'''
     name = models.CharField(max_length=45)
+    description = models.CharField(max_length=200, null=True, blank=True)
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
     halal = models.BooleanField()
