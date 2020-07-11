@@ -1,6 +1,6 @@
 {% load i18n %}
 {% autoescape off %}
-{% blocktrans %}Hi {{ user.username }},
-Please click on the link to confirm your registration,{% endblocktrans %}
+{% trans "Hi "  %}{{ user.get_username }}{% trans ","  %}
+{% blocktrans %}Please click on the link to confirm your registration,{% endblocktrans %}
 http://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
 {% endautoescape %}
