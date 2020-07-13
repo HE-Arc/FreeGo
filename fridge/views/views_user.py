@@ -26,6 +26,8 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -38,6 +40,9 @@ class FoodReservation(LoginRequiredMixin, View):
         food = Food.objects.get(pk=self.kwargs['pk'])
         reservation = Reservation(food=food, user=request.user)
         reservation.save()
+        message = _(
+            "Food reserved with success")
+        messages.add_message(request, messages.INFO, message)
         return redirect('fridge:food-list', food.fridge.pk)
 
     def get(self, request, *args, **kwargs):
@@ -51,6 +56,9 @@ class FoodCancellation(LoginRequiredMixin, View):
         food = Food.objects.get(pk=self.kwargs['pk'])
         reservation = Reservation.objects.get(food=food)
         reservation.delete()
+        message = _(
+            "Food cancelled with success")
+        messages.add_message(request, messages.INFO, message)
         return redirect('fridge:food-list', food.fridge.pk)
 
     def get(self, request, *args, **kwargs):
@@ -75,7 +83,7 @@ class NotificationsViewSet(viewsets.ModelViewSet):
 
 class RegisterView(View):
     form_class = RegisterForm
-    template_name = 'new_form.html'
+    template_name = 'user/register.html'
     initial = {'username': 'toto', 'raw_password': 'toto'}
 
     def post(self, request, *args, **kwargs):
@@ -98,8 +106,12 @@ class RegisterView(View):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            # TODO add message like : Please confirm your email address to complete the registration
-            return redirect("fridge:home")
+
+            message = _(
+                "Please confirm your email address " +
+                "to complete the registration")
+            messages.add_message(request, messages.INFO, message)
+            return redirect("fridge:settings")
         return render(request, self.template_name, {'form': form})
 
     def get(self, request, *args, **kwargs):
@@ -117,6 +129,9 @@ class LoginView(generic.TemplateView):
         if user is not None:
             login(request, user)
             refresh = RefreshToken.for_user(user)
+            message = _(
+                "Login with success")
+            messages.add_message(request, messages.INFO, message)
             return render(request, 'home/home.html', {
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
@@ -129,6 +144,9 @@ class LogoutView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         logout(request)
+        message = _(
+            "Logout with success")
+        messages.add_message(request, messages.INFO, message)
         return redirect('fridge:settings')
 
 
@@ -199,6 +217,9 @@ class ContactView(View):
                 user_permissions__in=[perm])
             send_mail(subject=subject, message=message,
                       from_email=from_user, recipient_list=to_user)
+            message = _(
+                "Message send with success")
+            messages.add_message(request, messages.INFO, message)
             return redirect('fridge:home')
         return render(request, self.template_name, {'form': form})
 

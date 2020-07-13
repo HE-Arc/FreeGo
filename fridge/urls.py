@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from fridge.views import views_admin, views_home, views_user, views_fridge, \
-    views_user, views_schedule, views_food
+    views_schedule, views_food
 from rest_framework import routers
 
 from rest_framework_simplejwt import views as jwt_views
@@ -176,7 +176,7 @@ urlpatterns = [
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
          name='token_refresh'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-         views_user.activate, name='activate'),
+        views_user.activate, name='activate'),
 ]
 
 

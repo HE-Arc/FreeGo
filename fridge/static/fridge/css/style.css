@@ -73,4 +73,12 @@ i.large {
 
 .dropdown-content {
     min-width: 200px;
-  }
+}
+
+.icon_style {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: white;
+    cursor: pointer;
+}
