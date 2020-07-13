@@ -410,7 +410,7 @@ class SettingsViewTest(TestCase):
         """
         response = self.client.get(reverse('fridge:settings'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "You do not have an account yet")
+        self.assertContains(response, "You are not connected yet")
 
     def test_login_without_freego_store(self):
         """
@@ -469,7 +469,7 @@ class RegisterViewTest(TestCase):
         }
         response = self.client.post(reverse('fridge:register'), json)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('fridge:settings'))
         self.assertEqual(len(User.objects.all()), 2)
         self.assertEqual(User.objects.last().username, 'test')
 
