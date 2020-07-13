@@ -8,7 +8,7 @@ from django.contrib.auth.models import Permission
 from rest_framework import viewsets
 
 from fridge.models import Fridge, FridgeFollowing
-from fridge.forms import FridgeForm
+from fridge.forms import FridgeForm, FridgeUpdateAddressForm
 from fridge.serializers import FridgeSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -34,11 +34,28 @@ class FridgeDetailView(ValidFridgeUser, generic.DetailView):
 class FridgeUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Fridge
     template_name = 'new_form.html'
-    fields = ['name', 'address', 'NPA', 'city', 'phone_number', 'image']
 
     def get_success_url(self):
         return reverse_lazy('fridge:fridge-detail',
                             kwargs={'pk': self.object.pk})
+
+
+class FridgeUpdateAddressView(ValidFridgeUser, generic.UpdateView):
+    form_class = FridgeUpdateAddressForm
+    template_name = 'new_form.html'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            fridge = Fridge(
+                address=form.cleaned_data['address'],
+                NPA=form.cleaned_data['NPA'],
+                city=form.cleaned_data['city']
+            )
+            fridge.save()
+            return redirect('fridge:settings')
+
+        return render(request, self.template_name, {'form': form})
 
 
 class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):

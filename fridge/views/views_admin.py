@@ -139,7 +139,6 @@ class TemperatureControlCreateView(ValidInventoryUser, generic.CreateView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
-
         if form.is_valid():
             temperature_control = TemperatureControl(
                 date=form.cleaned_data['date'],

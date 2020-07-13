@@ -3,8 +3,11 @@
 
 {% block content %}
 
-<h5 class="container">{{ fridge.name }}</h5>
 <ul class="collection">
+    <a href="{% url 'fridge:change-name' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Name' %}</strong>
+        <span class="secondary-content">{{ fridge.name }}</span>
+    </a>
     <a href="{% url 'fridge:change-address' fridge.pk %}"
         class="collection-item black-text"><strong>{% trans 'Address' %}</strong>
         <span class="secondary-content">{{ fridge.address }}, {{ fridge.NPA }} {{ fridge.city }}</span>
@@ -13,6 +16,10 @@
         class="collection-item black-text"><strong>{% trans 'Phone number' %}</strong>
         <span class="secondary-content">{{ fridge.phone_number }}</span>
     </a>
+    <a href="{% url 'fridge:change-image' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Image' %}</strong>
+        <span class="secondary-content">{{ fridge.image }}</span>
+    </a>    
     <a href="{% url 'fridge:opening-hour-list' fridge.pk %}"
         class="collection-item black-text"><strong>{% trans 'Opening Hour' %}</strong>
         <i class="material-icons secondary-content" aria-hidden="true">send</i>

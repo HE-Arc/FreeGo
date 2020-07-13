@@ -10,6 +10,9 @@ from rest_framework_simplejwt import views as jwt_views
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.conf.urls import url
+from fridge.forms import FridgeUpdateAddressForm
+
+
 app_name = 'fridge'
 
 router = routers.DefaultRouter()
@@ -26,8 +29,6 @@ urlpatterns = [
          views_fridge.FridgeCreateView.as_view(), name='fridge-new'),
     path('fridge/<pk>/delete', views_fridge.FridgeDeleteView.as_view(),
          name='fridge-delete'),
-    path('fridge/<pk>/update', views_fridge.FridgeUpdateView.as_view(),
-         name='fridge-update'),
     path('fridge/detail/<pk>',
          views_fridge.FridgeDetailView.as_view(), name='fridge-detail'),
     path('fridge/demand', views_fridge.FridgeDemandCreateView.as_view(),
@@ -37,12 +38,18 @@ urlpatterns = [
     path('fridge/refuse/<pk>', views_fridge.FridgeRefuseDemand.as_view(),
          name='fridge-refuse'),
 
+    path('change/name/<pk>',
+         views_fridge.FridgeUpdateView.as_view(
+             fields=['name']), name='change-name'),
     path('change/address/<pk>',
          views_fridge.FridgeUpdateView.as_view(
-             fields=['address', 'NPA', 'city']), name='change-address'),
+             form_class=FridgeUpdateAddressForm), name='change-address'),
     path('change/phone-number/<pk>',
          views_fridge.FridgeUpdateView.as_view(
              fields=['phone_number']), name='change-phone-number'),
+    path('change/image/<pk>',
+         views_fridge.FridgeUpdateView.as_view(
+             fields=['image']), name='change-image'),
     path('change/user/<pk>',
          views_fridge.FridgeUpdateView.as_view(
              fields=['user']), name='change-user'),

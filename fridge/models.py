@@ -21,7 +21,7 @@ class Fridge(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     image = models.ImageField(upload_to='images/')
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True)
     is_active = models.BooleanField(default=False)

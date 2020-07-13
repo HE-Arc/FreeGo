@@ -42,6 +42,31 @@ class FridgeForm(forms.ModelForm):
             raise ValidationError(_("Invalid address"))
 
 
+class FridgeUpdateAddressForm(forms.ModelForm):
+    '''Fridge form'''
+
+    class Meta:
+        model = Fridge
+        fields = ('address', 'NPA', 'city')
+        labels = {
+            'address': _('Address'),
+            'NPA': _('NPA'),
+            'city': _('City')
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        print("TEEEEEEEEEESSSSSSSSST")
+        address = cleaned_data.get('address')
+        NPA = cleaned_data.get('NPA')
+        city = cleaned_data.get('city')
+        address = "{}, {} {}".format(address, NPA, city)
+        geolocator = Nominatim(user_agent='address')
+        location = geolocator.geocode(address)
+        if not location:
+            raise ValidationError(_("Invalid address"))
+
+
 class FoodForm(forms.ModelForm):
     '''Food form'''
 
@@ -123,6 +148,9 @@ class SpecialDayForm(forms.ModelForm):
             'from_hour': False,
             'to_hour': False
         }
+
+    class Media:
+        js = ('fridge/js/script.js')
 
     def clean(self):
         cleaned_data = super().clean()
