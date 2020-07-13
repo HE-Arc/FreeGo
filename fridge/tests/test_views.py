@@ -82,7 +82,7 @@ class FridgeCreateViewTest(TestCase):
         json = {
             'name': 'A Fridge',
             'address': 'Citadelle 5',
-            'NPA': '2525',
+            'zip_code': '2525',
             'phone_number': '0790000000',
             'city': 'Le Landeron',
             'image': image,
@@ -112,7 +112,7 @@ class FridgeDemandCreateViewTest(TestCase):
         json = {
             'name': 'A Fridge',
             'address': 'Citadelle 5',
-            'NPA': '2525',
+            'zip_code': '2525',
             'phone_number': '0790000000',
             'city': 'Le Landeron',
             'image': image,
@@ -372,6 +372,8 @@ class SpecialDayCreateViewTest(TestCase):
         from_date = (timezone.now() + timedelta(days=0)).date().isoformat()
         to_date = (timezone.now() + timedelta(days=1)).date().isoformat()
         json = {
+            'description': 'Holiday',
+            'is_open': False,
             'from_date': from_date,
             'to_date': to_date
         }

@@ -50,9 +50,6 @@ urlpatterns = [
     path('change/image/<pk>',
          views_fridge.FridgeUpdateView.as_view(
              fields=['image']), name='change-image'),
-    path('change/user/<pk>',
-         views_fridge.FridgeUpdateView.as_view(
-             fields=['user']), name='change-user'),
 
     # Food
     path('food/new', views_food.FoodCreateView.as_view(),

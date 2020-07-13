@@ -49,7 +49,7 @@ class FridgeUpdateAddressView(ValidFridgeUser, generic.UpdateView):
         if form.is_valid():
             fridge = Fridge(
                 address=form.cleaned_data['address'],
-                NPA=form.cleaned_data['NPA'],
+                zip_code=form.cleaned_data['zip_code'],
                 city=form.cleaned_data['city']
             )
             fridge.save()
@@ -84,7 +84,7 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
             fridge = Fridge(
                 name=form.cleaned_data['name'],
                 address=form.cleaned_data['address'],
-                NPA=form.cleaned_data['NPA'],
+                zip_code=form.cleaned_data['zip_code'],
                 city=form.cleaned_data['city'],
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
@@ -109,7 +109,7 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
             fridge = Fridge(
                 name=form.cleaned_data['name'],
                 address=form.cleaned_data['address'],
-                NPA=form.cleaned_data['NPA'],
+                zip_code=form.cleaned_data['zip_code'],
                 city=form.cleaned_data['city'],
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],

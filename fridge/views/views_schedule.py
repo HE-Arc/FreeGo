@@ -99,6 +99,8 @@ class SpecialDayCreateView(PermissionRequiredMixin, View):
                 to_date = None
 
             special_day = SpecialDay(
+                description=form.cleaned_data['description'],
+                is_open=form.cleaned_data['is_open'],
                 from_date=form.cleaned_data['from_date'],
                 to_date=to_date,
                 from_hour=form.cleaned_data['from_hour'],

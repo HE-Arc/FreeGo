@@ -10,7 +10,7 @@
     </a>
     <a href="{% url 'fridge:change-address' fridge.pk %}"
         class="collection-item black-text"><strong>{% trans 'Address' %}</strong>
-        <span class="secondary-content">{{ fridge.address }}, {{ fridge.NPA }} {{ fridge.city }}</span>
+        <span class="secondary-content">{{ fridge.address }}, {{ fridge.zip_code }} {{ fridge.city }}</span>
     </a>
     <a href="{% url 'fridge:change-phone-number' fridge.pk %}"
         class="collection-item black-text"><strong>{% trans 'Phone number' %}</strong>
@@ -37,10 +37,6 @@
             {{ sd }}<br>
             {% endfor %}
         </p>
-    </a>
-    <a href="{% url 'fridge:change-user' fridge.pk %}"
-        class="collection-item black-text"><strong>{% trans 'User' %}</strong>
-        <span class="secondary-content">{{ fridge.user }}</span>
     </a>
 </ul>
 

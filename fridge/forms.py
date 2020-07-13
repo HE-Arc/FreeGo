@@ -17,12 +17,12 @@ class FridgeForm(forms.ModelForm):
 
     class Meta:
         model = Fridge
-        fields = ('name', 'address', 'NPA', 'city',
+        fields = ('name', 'address', 'zip_code', 'city',
                   'phone_number', 'image', 'user')
         labels = {
             'name': _('Name'),
             'address': _('Address'),
-            'NPA': _('NPA'),
+            'zip_code': _('Code postal'),
             'city': _('City'),
             'phone_number': _('Phone number'),
             'image': _('Image'),
@@ -33,9 +33,9 @@ class FridgeForm(forms.ModelForm):
         cleaned_data = super().clean()
         name = cleaned_data.get('name')
         address = cleaned_data.get('address')
-        NPA = cleaned_data.get('NPA')
+        zip_code = cleaned_data.get('zip_code')
         city = cleaned_data.get('city')
-        address = "{}, {} {}".format(address, NPA, city)
+        address = "{}, {} {}".format(address, zip_code, city)
         geolocator = Nominatim(user_agent=name)
         location = geolocator.geocode(address)
         if not location:
@@ -47,20 +47,19 @@ class FridgeUpdateAddressForm(forms.ModelForm):
 
     class Meta:
         model = Fridge
-        fields = ('address', 'NPA', 'city')
+        fields = ('address', 'zip_code', 'city')
         labels = {
             'address': _('Address'),
-            'NPA': _('NPA'),
+            'zip_code': _('Code postal'),
             'city': _('City')
         }
 
     def clean(self):
         cleaned_data = super().clean()
-        print("TEEEEEEEEEESSSSSSSSST")
         address = cleaned_data.get('address')
-        NPA = cleaned_data.get('NPA')
+        zip_code = cleaned_data.get('zip_code')
         city = cleaned_data.get('city')
-        address = "{}, {} {}".format(address, NPA, city)
+        address = "{}, {} {}".format(address, zip_code, city)
         geolocator = Nominatim(user_agent='address')
         location = geolocator.geocode(address)
         if not location:
@@ -128,8 +127,11 @@ class SpecialDayForm(forms.ModelForm):
 
     class Meta:
         model = SpecialDay
-        fields = ('from_date', 'to_date', 'from_hour', 'to_hour')
+        fields = ('description', 'is_open', 'from_date',
+                  'to_date', 'from_hour', 'to_hour')
         labels = {
+            'description': _('Description'),
+            'is_open': _('Is the Free Go open?'),
             'from_date': _('From date'),
             'to_date': _('To date'),
             'from_hour': _('From hour'),

@@ -14,8 +14,8 @@ class Fridge(models.Model):
     '''Fridge model'''
     name = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
-    NPA = models.CharField(max_length=45, validators=[NPA_validator])
     city = models.CharField(max_length=45)
+    zip_code = models.CharField(max_length=45, validators=[NPA_validator])
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
     latitude = models.FloatField()
@@ -56,13 +56,13 @@ class Fridge(models.Model):
 
     def get_longitude_latitude(self):
         geolocator = Nominatim(user_agent="freego")
-        address = "{}, {} {}".format(self.address, self.NPA, self.city)
+        address = "{}, {} {}".format(self.address, self.zip_code, self.city)
         location = geolocator.geocode(address)
         return location.longitude, location.latitude
 
     def save(self, *args, **kwargs):
         geolocator = Nominatim(user_agent=self.name)
-        address = "{}, {} {}".format(self.address, self.NPA, self.city)
+        address = "{}, {} {}".format(self.address, self.zip_code, self.city)
         location = geolocator.geocode(address)
         if not location:
             raise ValidationError(_("Invalid address"))
@@ -134,20 +134,20 @@ class Reservation(models.Model):
 
 
 WEEKDAYS = [
-    (1, _("Monday")),
-    (2, _("Tuesday")),
-    (3, _("Wednesday")),
-    (4, _("Thursday")),
-    (5, _("Friday")),
-    (6, _("Saturday")),
-    (7, _("Sunday")),
+    (0, _("Monday")),
+    (1, _("Tuesday")),
+    (2, _("Wednesday")),
+    (3, _("Thursday")),
+    (4, _("Friday")),
+    (5, _("Saturday")),
+    (6, _("Sunday")),
 ]
 
 
 class OpeningHour(models.Model):
     '''OpeningHour model'''
     weekday = models.PositiveSmallIntegerField(
-        choices=WEEKDAYS, default=1)
+        choices=WEEKDAYS, default=0)
     from_hour = models.TimeField()
     to_hour = models.TimeField()
     fridge = models.ForeignKey(
@@ -166,7 +166,9 @@ class OpeningHour(models.Model):
 
 class SpecialDay(models.Model):
     '''SpecialDay model'''
-    from_date = models.DateField(null=True, blank=True)
+    description = models.CharField(max_length=200)
+    is_open = models.BooleanField(default=False)
+    from_date = models.DateField()
     to_date = models.DateField(null=True, blank=True)
     from_hour = models.TimeField(null=True, blank=True)
     to_hour = models.TimeField(null=True, blank=True)
