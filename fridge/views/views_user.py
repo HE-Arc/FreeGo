@@ -243,6 +243,9 @@ def activate(request, uidb64, token):
         user.save()
         login(request, user)
         refresh = RefreshToken.for_user(user)
+        message = _(
+            "Login with success")
+        messages.add_message(request, messages.INFO, message)
         return render(request, 'home/home.html', {
             'refresh': str(refresh),
             'access': str(refresh.access_token),
