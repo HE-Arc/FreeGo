@@ -91,5 +91,6 @@ class FoodListView(LoginRequiredMixin, generic.ListView):
         context['fridge'] = fridge
         context['is_favorite'] = fridge.is_favorite(self.request.user)
         context['food_available'] = fridge.get_available_food()
-        context['food_reserve'] = self.request.user.get_reserved_food()
+        context['food_reserve'] = fridge.get_reserved_food_by_me(
+            self.request.user)
         return context

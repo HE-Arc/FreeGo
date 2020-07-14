@@ -50,6 +50,10 @@ class Fridge(models.Model):
         return [food for food in Food.objects.filter(fridge=self)
                 if food.is_reserved() is True]
 
+    def get_reserved_food_by_me(self, current_user):
+        return [food for food in Food.objects.filter(fridge=self)
+                if food.is_reserved_by_me(current_user) is True]
+
     def is_favorite(self, user):
         return FridgeFollowing.objects.filter(user=user) \
             .filter(fridge=self).count() != 0
