@@ -6,7 +6,6 @@ from fridge.views import views_admin, views_home, views_user, views_fridge, \
     views_schedule, views_food
 from rest_framework import routers
 
-from rest_framework_simplejwt import views as jwt_views
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.conf.urls import url
@@ -174,11 +173,6 @@ urlpatterns = [
     path('settings', views_home.SettingsView.as_view(), name='settings'),
     path('offline', views_home.offline_view, name='offline'),
 
-    # JWT
-    path('api/token/', jwt_views.TokenObtainPairView.as_view(),
-         name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
-         name='token_refresh'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views_user.activate, name='activate'),
 ]

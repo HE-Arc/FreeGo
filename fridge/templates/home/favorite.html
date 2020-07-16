@@ -3,7 +3,7 @@
 {% block content %}
 {% load i18n %}
 
-<div v-if="isAuthenticated()" class="container" id="app-favorite">
+<div v-if="isAuthenticated() && ready" class="container" id="app-favorite">
     <div id="main" class="row">
         <div v-for="favorite in favorites" v-bind:key="favorite.id" class="col s10 offset-s1 m4">
             <div class="card">

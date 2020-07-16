@@ -12,6 +12,7 @@ from fridge.forms import FridgeForm, FridgeUpdateAddressForm
 from fridge.serializers import FridgeSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import permissions
 
 
 # Constant
@@ -168,7 +169,7 @@ class FridgesViewSet(viewsets.ModelViewSet):
     queryset = Fridge.objects.filter(is_active=True)
     serializer_class = FridgeSerializer
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[permissions.IsAuthenticated])
     def favorites(self, request):
         reserved_fridges = FridgeFollowing.objects.filter(
             user=request.user).values_list('fridge_id')

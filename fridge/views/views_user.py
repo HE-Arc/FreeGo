@@ -1,3 +1,4 @@
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.tokens import (
     default_token_generator, PasswordResetTokenGenerator)
 from django.shortcuts import render, redirect
@@ -11,7 +12,6 @@ from fridge.serializers import NotificationSerializer
 from notifications.models import Notification
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from fridge.forms import RegisterForm
 from django.contrib.auth import login, authenticate, logout
@@ -29,8 +29,18 @@ from django.core.mail import EmailMessage
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 # Constant
 LOGIN_URL = 'fridge:login'
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 
 class FoodReservation(LoginRequiredMixin, View):
@@ -128,13 +138,12 @@ class LoginView(generic.TemplateView):
         user = authenticate(username=username, password=raw_password)
         if user is not None:
             login(request, user)
-            refresh = RefreshToken.for_user(user)
+            token, created = Token.objects.get_or_create(user=user)
             message = _(
                 "Login with success")
             messages.add_message(request, messages.INFO, message)
             return render(request, 'home/home.html', {
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                'token': token.key,
             })
         return redirect('fridge:login')
 
@@ -242,13 +251,12 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        refresh = RefreshToken.for_user(user)
+        token, created = Token.objects.get_or_create(user=user)
         message = _(
             "Login with success")
         messages.add_message(request, messages.INFO, message)
         return render(request, 'home/home.html', {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            'token': token.key,
         })
     else:
         return HttpResponse('Activation link is invalid!')
