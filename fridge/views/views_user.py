@@ -203,7 +203,8 @@ class FridgeFollowingDeleteView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        fridge_following = FridgeFollowing.objects.get(fridge=fridge)
+        fridge_following = FridgeFollowing.objects.get(
+            fridge=fridge, user=request.user)
         fridge_following.delete()
         return redirect('fridge:food-list', fridge.pk)
 

@@ -8,9 +8,6 @@
     <a href="{% url 'fridge:change-username' user.pk %}" class="collection-item black-text">{% trans 'Name' %}
         <span class="secondary-content">{{ user.username }}</span>
     </a>
-    <a href="{% url 'fridge:change-email' user.pk %}" class="collection-item black-text">{% trans 'Email' %}
-        <span class="secondary-content">{{ user.email }}</span>
-    </a>
 </ul>
 <h5 class="container">{% trans 'Parameters' %}</h5>
 <ul class="collection">

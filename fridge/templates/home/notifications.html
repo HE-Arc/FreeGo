@@ -1,12 +1,43 @@
-{% extends 'admin/base_store.html' %}
+{% extends 'home/base.html' %}
 {% load static %}
 {% block content %}
 {% load i18n %}
 
-<div id="app-base">
+<div id="app-notifications">
     <ul class="collection">
-        <a v-for="notification in notifications" href="#" class="collection-item black-text">[[ notification.verb ]]</a>
+        <a v-for="notification in unread_notifications" href="#" class="collection-item black-text">[[notification.verb]]</a>
     </ul>
 </div>
+<script>
+    // const SERVER_URL_NOTIFICATIONS = "https://freego.srvz-webapp.he-arc.ch"
+    const SERVER_URL_NOTIFICATIONS = "http://127.0.0.1:8000"
 
+    new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app-notifications',
+        data: () => ({
+            unread_notifications: [],
+        }),
+        async created() {
+            await this.getNotificationsTest();
+        },
+        methods: {
+            async getNotificationsTest() {
+                let api_url = SERVER_URL_NOTIFICATIONS + "/inbox/notifications/api/unread_list/";
+                axios
+                    .get(api_url, {
+                        params: {
+                            mark_as_read: true
+                        }
+                    })
+                    .then(response => {
+                        this.unread_notifications = response.data['unread_list'];
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+            },
+        }
+    })
+</script>
 {% endblock %}

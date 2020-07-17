@@ -12,7 +12,6 @@ var appFridges = new Vue({
         fridges: [],
         favorites: [],
         notifications: [],
-        unread_notifications: [],
         ready: false,
 
         //map
@@ -29,11 +28,12 @@ var appFridges = new Vue({
         this.fridges = await this.getFridgesFromDb();
         this.favorites = await this.getFarvoritesFromDb();
         this.notifications = await this.getNotificationsFromDb();
+        // this.getNotificationsTest();
 
         if (navigator.onLine) {
-            await this.getFridgesFromNetwork();
-            await this.getFarvoritesFromNetwork();
-            await this.getNotificationsFromNetwork();
+            this.getFridgesFromNetwork();
+            this.getFarvoritesFromNetwork();
+            this.getNotificationsFromNetwork();
         }
 
         this.ready = true;
@@ -154,6 +154,23 @@ var appFridges = new Vue({
                     }
                 };
             });
+        },
+        async getNotificationsTest() {
+            let api_url = SERVER_URL + "/inbox/notifications/api/unread_list/";
+            let = unread_notifications = [];
+            axios
+                .get(api_url, {
+                    params: {
+                        mark_as_read: true
+                    }
+                })
+                .then(response => {
+                    unread_notifications = response.data;
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+            return unread_notifications;
         },
         async getFarvoritesFromDb() {
             return new Promise(resolve => {

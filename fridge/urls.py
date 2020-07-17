@@ -83,9 +83,6 @@ urlpatterns = [
     path('change/username/<pk>',
          views_user.UserUpdateView.as_view(fields=['username']),
          name='change-username'),
-    path('change/email/<pk>',
-         views_user.UserUpdateView.as_view(fields=['email']),
-         name='change-email'),
     path('change/password', auth_views.PasswordChangeView.as_view(
         template_name='user/user_update_form.html',
         success_url=reverse_lazy('fridge:profile')
