@@ -1,0 +1,59 @@
+{% extends 'admin/base_store.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<img class="responsive-img" src="{{ food.image.url }}">
+
+<ul class="collection">
+    {% if food.description %}
+    <li class="collection-item">
+        <h5>{% trans 'Description' %}</h5>
+        <p>{{food.description }}</p>
+    </li>
+    {% endif %}
+
+    <li class="collection-item">
+        <strong>{% trans 'Expiration date' %}</strong>
+        {{food.expiration_date}}
+    </li>
+
+    {% if food.vegetarian %}
+    <li class="collection-item">
+        <div>{% trans 'Vegetarian' %}<i class="material-icons secondary-content">send</i></div>
+    </li>
+    {% endif %}
+    {% if food.vegan %}
+    <li class="collection-item">
+        <div>{% trans 'Vegan' %}<i class="material-icons secondary-content">send</i></div>
+    </li>
+    {% endif %}
+    {% if food.halal %}
+    <li class="collection-item">
+        <div>{% trans 'Halal' %}<i class="material-icons secondary-content">send</i></div>
+    </li>
+    {% endif %}
+    {% if food.lactose_free %}
+    <li class="collection-item">
+        <div>{% trans 'Lactose free' %}<i class="material-icons secondary-content">send</i></div>
+    </li>
+    {% endif %}
+    {% if food.bio %}
+    <li class="collection-item">
+        <div>{% trans 'Bio' %}<i class="material-icons secondary-content">send</i></div>
+    </li>
+    {% endif %}
+</ul>
+{% if food.is_available %}
+<div class="center-align">
+    <a class="waves-effect waves-light btn-large"
+        href="{% url 'fridge:food-reservation' food.pk %}">{% trans 'Reserved' %}</a>
+</div>
+{% else %}
+<div class="center-align">
+    <a class="waves-effect waves-light btn-large"
+        href="{% url 'fridge:food-cancellation' food.pk %}">{% trans 'Cancel reservation' %}</a>
+</div>
+{% endif %}
+
+{% endblock %}

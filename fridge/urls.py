@@ -53,6 +53,8 @@ urlpatterns = [
     # Food
     path('food/new', views_food.FoodCreateView.as_view(),
          name='food-form'),
+    path('food/<pk>/detail', views_food.FoodDetailView.as_view(),
+         name='food-detail'),
     path('food/<pk>/delete', views_food.FoodDeleteView.as_view(),
          name='food-delete'),
     path('food/<pk>/list/', views_food.FoodListView.as_view(),

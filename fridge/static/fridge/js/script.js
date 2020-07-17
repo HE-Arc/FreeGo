@@ -3,21 +3,15 @@ $(document).ready(function () {
         'format': 'yyyy-mm-dd',
         showClearBtn: true
     });
-});
-
-$(document).ready(function () {
     $('select').formSelect();
-});
-
-$(document).ready(function () {
     $('.timepicker').timepicker({
         showClearBtn: true
     });
-
     $('#alert_close').click(function () {
         $("#alert_box").fadeOut("slow", function () {
         });
     });
+    $('.parallax').parallax();
 });
 
 $(document).ready(function () {

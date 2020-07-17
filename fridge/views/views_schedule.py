@@ -53,7 +53,7 @@ class OpeningHourDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
 
 class OpeningHourListView(LoginRequiredMixin, generic.ListView):
-    template_name = 'admin/opening_hour_list.html'
+    template_name = 'schedule/opening_hour_list.html'
     model = Fridge
     login_url = LOGIN_URL
 
@@ -66,7 +66,7 @@ class OpeningHourListView(LoginRequiredMixin, generic.ListView):
 
 
 class SpecialDayListView(LoginRequiredMixin, generic.ListView):
-    template_name = 'admin/special_day_list.html'
+    template_name = 'schedule/special_day_list.html'
     model = Fridge
     login_url = LOGIN_URL
 

@@ -27,7 +27,7 @@ class ValidFridgeUser(UserPassesTestMixin):
 
 
 class FridgeDetailView(ValidFridgeUser, generic.DetailView):
-    template_name = 'admin/fridge_detail.html'
+    template_name = 'fridge/fridge_detail.html'
     login_url = LOGIN_URL
     model = Fridge
 
@@ -127,7 +127,7 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
 
 
 class FridgeListView(generic.TemplateView):
-    template_name = 'admin/fridge_list.html'
+    template_name = 'fridge/fridge_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

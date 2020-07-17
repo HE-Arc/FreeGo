@@ -1,0 +1,15 @@
+{% load static %}
+{% load i18n %}
+
+<div class="col s6">
+    <div class="card">
+        <a id="reference" href="{% url 'fridge:food-detail' food.pk %}">
+            <div class="card-image">
+                <img id="image" src="{{ food.image.url }}" alt="fridge image">
+            </div>
+        </a>
+        <div class="card-content">
+            <span class="card-title grey-text text-darken-4">{{ food.name }}</span>
+        </div>
+    </div>
+</div>

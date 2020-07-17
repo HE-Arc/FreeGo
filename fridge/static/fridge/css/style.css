@@ -10,7 +10,7 @@ main {
     padding-bottom: 3em;
 }
 
-.btn {
+.btn, .btn-large {
     background-color: rgb(87, 161, 173);
 }
 

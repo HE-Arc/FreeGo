@@ -57,6 +57,12 @@ class FoodCreateView(PermissionRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
+class FoodDetailView(LoginRequiredMixin, generic.DetailView):
+    template_name = 'food/food_detail.html'
+    login_url = LOGIN_URL
+    model = Food
+
+
 class FoodUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Food
     template_name = 'new_form.html'
@@ -80,7 +86,7 @@ class FoodDeleteView(ValidFridgeUser, generic.DeleteView):
 
 
 class FoodListView(LoginRequiredMixin, generic.ListView):
-    template_name = 'admin/food_list.html'
+    template_name = 'food/food_list.html'
     model = Food
     login_url = LOGIN_URL
 
