@@ -18,31 +18,31 @@
         {{food.expiration_date}}
     </li>
 
-    {% if food.vegetarian %}
+
     <li class="collection-item">
-        <div>{% trans 'Vegetarian' %}<i class="material-icons secondary-content">send</i></div>
+        {% if food.vegetarian %}
+        <div>{% trans 'Vegetarian' %}</div>
+        {% endif %}
+        {% if food.vegan %}
+        <div>{% trans 'Vegan' %}</div>
+        {% endif %}
+        {% if food.halal %}
+        <div>{% trans 'Halal' %}</div>
+        {% endif %}
+        {% if food.lactose_free %}
+        <div>{% trans 'Lactose free' %}</div>
+        {% endif %}
+        {% if food.gluten_free %}
+        <div>{% trans 'Gluten Free' %}</div>
+        {% endif %}
+        {% if food.bio %}
+        <div>{% trans 'Bio' %}</div>
+        {% endif %}
+
     </li>
-    {% endif %}
-    {% if food.vegan %}
-    <li class="collection-item">
-        <div>{% trans 'Vegan' %}<i class="material-icons secondary-content">send</i></div>
-    </li>
-    {% endif %}
-    {% if food.halal %}
-    <li class="collection-item">
-        <div>{% trans 'Halal' %}<i class="material-icons secondary-content">send</i></div>
-    </li>
-    {% endif %}
-    {% if food.lactose_free %}
-    <li class="collection-item">
-        <div>{% trans 'Lactose free' %}<i class="material-icons secondary-content">send</i></div>
-    </li>
-    {% endif %}
-    {% if food.bio %}
-    <li class="collection-item">
-        <div>{% trans 'Bio' %}<i class="material-icons secondary-content">send</i></div>
-    </li>
-    {% endif %}
+
+
+
 </ul>
 {% if food.is_available %}
 <div class="center-align">

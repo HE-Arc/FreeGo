@@ -7,13 +7,14 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Permission
 from rest_framework import viewsets
 
-from fridge.models import Fridge, FridgeFollowing
-from fridge.forms import FridgeForm, FridgeUpdateAddressForm
+from fridge.models import Fridge, FridgeFollowing, User
+from fridge.forms import FridgeForm
 from fridge.serializers import FridgeSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import permissions
-
+from django.utils.translation import gettext_lazy as _
+from notifications.signals import notify
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -39,24 +40,6 @@ class FridgeUpdateView(ValidFridgeUser, generic.UpdateView):
     def get_success_url(self):
         return reverse_lazy('fridge:fridge-detail',
                             kwargs={'pk': self.object.pk})
-
-
-class FridgeUpdateAddressView(ValidFridgeUser, generic.UpdateView):
-    form_class = FridgeUpdateAddressForm
-    template_name = 'new_form.html'
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST, request.FILES)
-        if form.is_valid():
-            fridge = Fridge(
-                address=form.cleaned_data['address'],
-                zip_code=form.cleaned_data['zip_code'],
-                city=form.cleaned_data['city']
-            )
-            fridge.save()
-            return redirect('fridge:settings')
-
-        return render(request, self.template_name, {'form': form})
 
 
 class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
@@ -95,6 +78,13 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
 
             permission = Permission.objects.get(codename='store')
             fridge.user.user_permissions.add(permission)
+
+            perm = Permission.objects.get(codename="admin")
+            recipient = User.objects.filter(
+                user_permissions__in=[perm])
+            verb = _("New request to become a freego.")
+            notify.send(request.user, recipient=recipient,
+                        verb=verb)
             return redirect('fridge:settings')
 
         return render(request, self.template_name, {'form': form})

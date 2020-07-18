@@ -40,6 +40,11 @@
     </a>
 </ul>
 
+<div class="container center-align">
+    <a class="waves-effect waves-light btn-large red"
+        href="{% url 'fridge:fridge-delete' fridge.pk %}">{% trans 'Delete your fridge' %}</a>
+</div>
+
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large freego-color" href="{% url 'fridge:store' fridge.pk %}">
         <i class="material-icons" style="font-size: 3rem;" aria-hidden="true">home</i>

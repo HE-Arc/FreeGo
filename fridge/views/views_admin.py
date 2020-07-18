@@ -8,6 +8,8 @@ from fridge.models import Fridge, Food, Sponsor, Inventory, \
     TemperatureControl, ReportContent
 from fridge.forms import SponsorForm, InventoryForm, TemperatureControlForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from notifications.signals import notify
+from django.utils.translation import gettext_lazy as _
 
 
 # Constant
@@ -23,6 +25,7 @@ class AdminIndexView(PermissionRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context['fridges'] = Fridge.objects.all()
         context['fridges_to_valid'] = Fridge.objects.filter(is_active=False)
+        context['sponsor_list'] = Sponsor.objects.all()
         return context
 
 
@@ -51,6 +54,21 @@ class SponsorCreateView(PermissionRequiredMixin, generic.CreateView):
     permission_required = 'fridge.admin'
     template_name = "new_form.html"
     login_url = LOGIN_URL
+    success_url = reverse_lazy('fridge:myadmin')
+
+
+class SponsorListView(LoginRequiredMixin, generic.ListView):
+    template_name = 'admin/sponsor_list.html'
+    model = Sponsor
+    login_url = LOGIN_URL
+
+
+class SponsorUpdateView(PermissionRequiredMixin, generic.UpdateView):
+    model = Sponsor
+    permission_required = 'fridge.admin'
+    template_name = "new_form.html"
+    login_url = LOGIN_URL
+    fields = ['name', 'logo', 'website']
     success_url = reverse_lazy('fridge:myadmin')
 
 
@@ -195,4 +213,9 @@ class ReportContentView(LoginRequiredMixin, View):
         food = Food.objects.get(pk=self.kwargs['pk'])
         report_content = ReportContent(food=food, user=request.user)
         report_content.save()
+        recipient = [food.user]
+        verb = _("Someone report %(food)s as illegal content") % {
+            'food': food}
+        notify.send(request.user, recipient=recipient,
+                    verb=verb)
         return redirect('fridge:home')

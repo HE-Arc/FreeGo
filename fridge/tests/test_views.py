@@ -65,7 +65,6 @@ class StoreIndexViewTest(TestCase):
         response = self.client.get(reverse('fridge:store', args=(fridge.pk,)))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "MonFreeGo")
 
 
 class FridgeCreateViewTest(TestCase):
@@ -128,6 +127,27 @@ class FridgeDemandCreateViewTest(TestCase):
     def test_get(self):
         response = self.client.get(reverse('fridge:fridge-demand'))
         self.assertEqual(response.status_code, 200)
+
+
+class FridgeUpdateAddressViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(user=self.user)
+
+    def test_post(self):
+        json = {
+            'address': 'Citadelle 5',
+            'zip_code': '2525',
+            'city': 'Le Landeron'
+        }
+
+        response = self.client.post(
+            reverse('fridge:change-address', args=(self.fridge.pk,)), json)
+
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:fridge-detail',
+                                          kwargs={'pk': self.fridge.pk}))
 
 
 class FridgeListViewTest(TestCase):
@@ -513,7 +533,7 @@ class ReportContentViewTest(TestCase):
 
     def test_post(self):
         response = self.client.post(
-            reverse_lazy('fridge:report_content',
+            reverse_lazy('fridge:report-content',
                          kwargs={'pk': self.food.pk}))
         self.assertRedirects(response, reverse('fridge:home'))
 

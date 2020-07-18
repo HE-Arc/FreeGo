@@ -190,15 +190,13 @@ class SponsorForm(forms.ModelForm):
 
     class Meta:
         model = Sponsor
-        fields = ('name', 'description', 'logo', 'website')
+        fields = ('name', 'logo', 'website')
         labels = {
             'name': _('Name'),
-            'description': _('Description'),
             'logo': _('Logo'),
             'website': _('Website url')
         }
         required = {
-            'description': False,
             'website': False
         }
 

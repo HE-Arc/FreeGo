@@ -139,6 +139,12 @@ urlpatterns = [
     path('store/<pk>', views_admin.StoreIndexView.as_view(), name='store'),
     path("sponsor/new/", views_admin.SponsorCreateView.as_view(),
          name="sponsor-new"),
+    path("sponsor-list/", views_admin.SponsorListView.as_view(),
+         name="sponsor-list"),
+    path("sponsor/update/<pk>", views_admin.SponsorUpdateView.as_view(),
+         name="sponsor-update"),
+    path("sponsor/delete/<pk>", views_admin.SponsorDeleteView.as_view(),
+         name="sponsor-delete"),
 
     path("inventory/new/<pk>", views_admin.InventoryCreateView.as_view(),
          name="inventory-new"),
@@ -163,7 +169,8 @@ urlpatterns = [
          name="temperature-control-delete"),
 
     path('report-content/<pk>', views_admin.ReportContentView.as_view(),
-         name='report_content'),
+         name='report-content'),
+
     # Home
     path('', views_home.HomeView.as_view(), name='home'),
     path('home', views_home.HomeView.as_view(), name='home'),
