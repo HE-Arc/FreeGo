@@ -172,6 +172,9 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = User
     template_name = 'common/form.html'
 
+    def get_object(self, queryset=None):
+        return self.request.user
+
     def get_success_url(self):
         return reverse_lazy('fridge:profile')
 

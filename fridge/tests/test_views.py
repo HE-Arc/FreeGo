@@ -252,7 +252,9 @@ class FoodCreateViewTest(TestCase):
             'bio': False,
             'expiration_date': date.today() + timedelta(days=1)
         }
-        response = self.client.post(reverse('fridge:food-form'), json)
+        response = self.client.post(
+            reverse_lazy('fridge:food-form',
+                         kwargs={'pk': self.fridge.pk}), json)
         self.assertRedirects(response,
                              reverse_lazy('fridge:store',
                                           kwargs={'pk': self.fridge.pk}))
@@ -260,7 +262,9 @@ class FoodCreateViewTest(TestCase):
         self.assertEqual(Food.objects.last().name, 'An aliment')
 
     def test_get(self):
-        response = self.client.get(reverse('fridge:food-form'))
+        response = self.client.get(
+            reverse_lazy('fridge:food-form',
+                         kwargs={'pk': self.fridge.pk}))
         self.assertEqual(response.status_code, 200)
 
 

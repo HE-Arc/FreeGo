@@ -23,8 +23,8 @@
     {% endif%}
 
     <a href="{% url 'fridge:reservation-list' %}" class="collection-item black-text">{% trans 'Reservation' %}</a>
-    <a href="{% url 'fridge:donation' %}" class="collection-item black-text">{% trans 'Donations' %}</a>
-    <a href="#!" class="collection-item black-text">{% trans 'Help' %}</a>
+    <a href="{% url 'fridge:donations' %}" class="collection-item black-text">{% trans 'Donations' %}</a>
+    <a href="{% url 'fridge:sponsor-list' %}" class="collection-item black-text">{% trans 'Sponsor' %}</a>
     <a href="{% url 'fridge:contact' %}" class="collection-item black-text">{% trans 'Contact us' %}</a>
     <a href="{% url 'fridge:logout' %}" @click="logout" class="collection-item black-text">{% trans 'Log out' %}</a>
 </ul>

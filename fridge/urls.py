@@ -51,7 +51,7 @@ urlpatterns = [
              fields=['image']), name='change-image'),
 
     # Food
-    path('food/new', views_food.FoodCreateView.as_view(),
+    path('food/<pk>/new', views_food.FoodCreateView.as_view(),
          name='food-form'),
     path('food/<pk>/detail', views_food.FoodDetailView.as_view(),
          name='food-detail'),
@@ -84,11 +84,11 @@ urlpatterns = [
     path('login', views_user.LoginView.as_view(), name='login'),
     path('logout', views_user.LogoutView.as_view(), name='logout'),
     path('profile', views_user.ProfileView.as_view(), name='profile'),
-    path('change/username/<pk>',
+    path('change/username',
          views_user.UserUpdateView.as_view(fields=['username']),
          name='change-username'),
     path('change/password', auth_views.PasswordChangeView.as_view(
-        template_name='user/user_update_form.html',
+        template_name='common/form.html',
         success_url=reverse_lazy('fridge:profile')
     ),
         name='change-password'),
@@ -131,7 +131,7 @@ urlpatterns = [
          views_user.FridgeFollowingDeleteView.as_view(),
          name='fridge-unfollow'),
     path('contact', views_user.ContactView.as_view(), name='contact'),
-    path('donations', views_user.DonationView.as_view(), name='donation'),
+    path('donations', views_user.DonationView.as_view(), name='donations'),
     path('notifications', views_user.NotificationsView.as_view(),
          name='notifications'),
 

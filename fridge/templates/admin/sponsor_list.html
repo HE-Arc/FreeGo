@@ -6,11 +6,11 @@
 
 <div class="container">
     <div id="main" class="row">
-        {% for sponsor in sponsor_list %}
+        {% for sponsor in object_list %}
         <div class="col s12 m6">
             <div class="card">
                 {% if sponsor.website %}
-                <a id="reference" href="{{ sponsor.website }}">
+                <a href="{{ sponsor.website }}">
                     <div class="card-image">
                         <img id="image" src="{{ sponsor.logo.url }}" alt="sponsor image">
                     </div>

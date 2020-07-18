@@ -226,7 +226,7 @@ var appFridges = new Vue({
             })
         },
         goBack: function () {
-            window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
+            window.history.back();
         },
         isAuthenticated: function () {
             return localStorage.hasOwnProperty("token");

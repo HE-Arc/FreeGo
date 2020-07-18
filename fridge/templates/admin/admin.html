@@ -70,7 +70,7 @@
         {% endif %}
 
         <!-- SPONSOR -->
-        {% if sponsor_list %}
+        {% if sponsors %}
         <div class="col s12 m6">
             <table>
                 <caption>
@@ -83,12 +83,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for sponsor in sponsor_list %}
+                    {% for sponsor in sponsors %}
                     <tr>
                         <td>{{sponsor.name}}</td>
                         <td>
-                            <a href="{% url 'fridge:sponsor-update' sponsor.pk %}"
-                                class="btn btn-success btn-sm">{% trans 'Update' %}</a>
+                            <!-- <a href="{% url 'fridge:sponsor-update' sponsor.pk %}"
+                                class="btn btn-success btn-sm">{% trans 'Update' %}</a> -->
                             <a href="{% url 'fridge:sponsor-delete' sponsor.pk %}"
                                 class="btn btn-warning btn-sm">{% trans 'Delete' %}</a>
                         </td>

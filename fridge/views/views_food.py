@@ -1,29 +1,30 @@
 from django.shortcuts import render, redirect
-from django.views import generic, View
+from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from fridge.models import Fridge, Food, FridgeFollowing, User
 from fridge.forms import FoodForm
 from notifications.signals import notify
 from django.utils.translation import gettext_lazy as _
 from fridge.views.views_fridge import ValidFridgeUser
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 # Constant
 LOGIN_URL = 'fridge:login'
 
 
-class FoodCreateView(PermissionRequiredMixin, View):
+class FoodCreateView(UserPassesTestMixin, generic.CreateView):
     form_class = FoodForm
     template_name = 'common/form.html'
     permission_required = 'fridge.store'
     initial = {}
     login_url = LOGIN_URL
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["fridge"] = Fridge.objects.get(pk=self.kwargs['pk'])
+        return context
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
@@ -39,7 +40,7 @@ class FoodCreateView(PermissionRequiredMixin, View):
                 bio=form.cleaned_data['bio'],
                 expiration_date=form.cleaned_data['expiration_date'],
                 image=form.cleaned_data['image'],
-                fridge=Fridge.objects.filter(user=request.user).first(),
+                fridge=Fridge.objects.get(pk=self.kwargs['pk']),
                 user=request.user
             )
             food.save()
@@ -55,6 +56,11 @@ class FoodCreateView(PermissionRequiredMixin, View):
                         verb=verb)
             return redirect('fridge:store', food.fridge.pk)
         return render(request, self.template_name, {'form': form})
+
+    def test_func(self):
+        fridge_user = Fridge.objects.get(pk=self.kwargs['pk']).user
+        return self.request.user == fridge_user or \
+            self.request.user.has_perm('fridge.admin')
 
 
 class FoodDetailView(LoginRequiredMixin, generic.DetailView):

@@ -5,7 +5,7 @@
 
 <h5 class="container">{% trans 'Account details' %}</h5>
 <ul class="collection">
-    <a href="{% url 'fridge:change-username' user.pk %}" class="collection-item black-text">{% trans 'Name' %}
+    <a href="{% url 'fridge:change-username' %}" class="collection-item black-text">{% trans 'Name' %}
         <span class="secondary-content">{{ user.username }}</span>
     </a>
 </ul>

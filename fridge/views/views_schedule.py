@@ -11,16 +11,17 @@ from fridge.forms import OpeningHourForm, SpecialDayForm
 LOGIN_URL = 'fridge:login'
 
 
-class OpeningHourCreateView(PermissionRequiredMixin, View):
+class OpeningHourCreateView(PermissionRequiredMixin, generic.CreateView):
     form_class = OpeningHourForm
     template_name = 'common/form.html'
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
     initial = {}
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["fridge"] = Fridge.objects.get(pk=self.kwargs['pk'])
+        return context
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -78,16 +79,17 @@ class SpecialDayListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class SpecialDayCreateView(PermissionRequiredMixin, View):
+class SpecialDayCreateView(PermissionRequiredMixin, generic.CreateView):
     form_class = SpecialDayForm
     template_name = 'common/form.html'
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
     initial = {}
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["fridge"] = Fridge.objects.get(pk=self.kwargs['pk'])
+        return context
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
