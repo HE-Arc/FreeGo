@@ -52,7 +52,7 @@ class StoreIndexView(UserPassesTestMixin, generic.TemplateView):
 class SponsorCreateView(PermissionRequiredMixin, generic.CreateView):
     form_class = SponsorForm
     permission_required = 'fridge.admin'
-    template_name = "new_form.html"
+    template_name = "common/form.html"
     login_url = LOGIN_URL
     success_url = reverse_lazy('fridge:myadmin')
 
@@ -66,7 +66,7 @@ class SponsorListView(LoginRequiredMixin, generic.ListView):
 class SponsorUpdateView(PermissionRequiredMixin, generic.UpdateView):
     model = Sponsor
     permission_required = 'fridge.admin'
-    template_name = "new_form.html"
+    template_name = "common/form.html"
     login_url = LOGIN_URL
     fields = ['name', 'logo', 'website']
     success_url = reverse_lazy('fridge:myadmin')
@@ -92,7 +92,7 @@ class ValidInventoryUser(UserPassesTestMixin):
 class InventoryCreateView(ValidInventoryUser, generic.CreateView):
     form_class = InventoryForm
     model = Inventory
-    template_name = "new_form.html"
+    template_name = "common/form.html"
     login_url = LOGIN_URL
 
     def post(self, request, *args, **kwargs):
@@ -141,7 +141,7 @@ class InventoryDeleteView(ValidInventoryUser, generic.DeleteView):
 
 class InventoryUpdateView(ValidInventoryUser, generic.UpdateView):
     model = Inventory
-    template_name = "new_form.html"
+    template_name = "common/form.html"
     login_url = LOGIN_URL
     fields = ['date', 'product_name', 'product_number', 'temperature', 'visa']
 
@@ -152,7 +152,7 @@ class InventoryUpdateView(ValidInventoryUser, generic.UpdateView):
 
 class TemperatureControlCreateView(ValidInventoryUser, generic.CreateView):
     form_class = TemperatureControlForm
-    template_name = "new_form.html"
+    template_name = "common/form.html"
     login_url = LOGIN_URL
 
     def post(self, request, *args, **kwargs):
@@ -199,7 +199,7 @@ class TemperatureControlDeleteView(ValidInventoryUser, generic.DeleteView):
 
 class TemperatureControlUpdateView(ValidInventoryUser, generic.UpdateView):
     model = TemperatureControl
-    template_name = "new_form.html"
+    template_name = "common/form.html"
     login_url = LOGIN_URL
     fields = ['date', 'temperature', 'visa']
 

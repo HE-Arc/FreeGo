@@ -9,7 +9,7 @@
   <form method="post" class="col s12">
     {% csrf_token %}
 
-    {% include "form.html" %}
+    {% include "common/partial_form.html" %}
 
     <div class="row">
       <button class="btn col s6" type="submit" name="action">{% trans 'Create an account' %}</button>

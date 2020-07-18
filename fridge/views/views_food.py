@@ -16,7 +16,7 @@ LOGIN_URL = 'fridge:login'
 
 class FoodCreateView(PermissionRequiredMixin, View):
     form_class = FoodForm
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
     permission_required = 'fridge.store'
     initial = {}
     login_url = LOGIN_URL
@@ -65,7 +65,7 @@ class FoodDetailView(LoginRequiredMixin, generic.DetailView):
 
 class FoodUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Food
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
     fields = ['name', 'description', 'vegetarian', 'vegan',  'halal',
               'lactose_free', 'gluten_free', 'bio', 'expiration_date', 'image']
 

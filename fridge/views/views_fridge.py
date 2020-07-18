@@ -35,7 +35,7 @@ class FridgeDetailView(ValidFridgeUser, generic.DetailView):
 
 class FridgeUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Fridge
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
 
     def get_success_url(self):
         return reverse_lazy('fridge:fridge-detail',
@@ -54,7 +54,7 @@ class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
 class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = FridgeForm
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
     initial = {}
     login_url = LOGIN_URL
 
@@ -91,7 +91,7 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
     permission_required = 'fridge.admin'
 
     def post(self, request, *args, **kwargs):

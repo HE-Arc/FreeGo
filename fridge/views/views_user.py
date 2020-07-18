@@ -170,7 +170,7 @@ class ProfileView(LoginRequiredMixin, generic.TemplateView):
 
 class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = User
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
 
     def get_success_url(self):
         return reverse_lazy('fridge:profile')
@@ -214,7 +214,7 @@ class FridgeFollowingDeleteView(LoginRequiredMixin, View):
 
 class ContactView(View):
     form_class = ContactForm
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
 
     def post(self, request, *args, **kwargs):
         form = ContactForm(request.POST)
