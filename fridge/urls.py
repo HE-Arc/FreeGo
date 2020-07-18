@@ -62,7 +62,8 @@ urlpatterns = [
     path('food/<pk>/update/', views_food.FoodUpdateView.as_view(),
          name='food-update'),
     # Schedule
-    path('openinghour/<pk>/new', views_schedule.OpeningHourCreateView.as_view(),
+    path('openinghour/<pk>/new',
+         views_schedule.OpeningHourCreateView.as_view(),
          name='openinghour-form'),
     path('openinghour/<pk>/delete',
          views_schedule.OpeningHourDeleteView.as_view(),
@@ -73,7 +74,8 @@ urlpatterns = [
 
     path('specialday/<pk>/new', views_schedule.SpecialDayCreateView.as_view(),
          name='specialday-form'),
-    path('specialday/<pk>/delete', views_schedule.SpecialDayDeleteView.as_view(),
+    path('specialday/<pk>/delete',
+         views_schedule.SpecialDayDeleteView.as_view(),
          name='specialday-delete'),
     path('specialday/<pk>/list', views_schedule.SpecialDayListView.as_view(),
          name='special-day-list'),

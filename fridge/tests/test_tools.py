@@ -5,9 +5,6 @@ from datetime import timedelta, date
 from django.utils import timezone
 from random import randint
 
-from django.core.files.images import ImageFile
-from PIL import Image
-from io import BytesIO
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 

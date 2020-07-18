@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from fridge.forms import FoodForm, OpeningHourForm, SpecialDayForm, SponsorForm
+from fridge.forms import FoodForm, OpeningHourForm, SpecialDayForm
 from datetime import time, date
 
 from fridge.tests.test_tools import passed_date

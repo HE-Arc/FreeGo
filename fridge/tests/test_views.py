@@ -1,11 +1,9 @@
-from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
-    create_food, create_reservation, create_favorite, create_inventory, \
-    create_temperature_control
+    create_food, create_reservation, create_favorite
 from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
-    User, Reservation, Sponsor, Inventory, TemperatureControl
+    User, Reservation, Sponsor
 from django.utils import timezone
 from django.shortcuts import resolve_url as r
 from django.core.files.uploadedfile import SimpleUploadedFile
