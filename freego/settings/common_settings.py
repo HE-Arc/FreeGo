@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-from datetime import timedelta
 import os
 from django.utils.translation import gettext_lazy as _
 
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'pwa',
     'rest_framework',
     'notifications',
+    'rest_framework.authtoken',
 ]
 
 AUTH_USER_MODEL = 'fridge.User'
@@ -177,20 +177,11 @@ PWA_APP_SPLASH_SCREEN = [
 PWA_APP_DIR = 'ltr'
 PWA_APP_LANG = 'fr'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-}
-
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=100),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=200),
-}
-
 # email
 EMAIL_HOST = 'smtp.mailtrap.io'
 EMAIL_HOST_USER = 'e8047ddbd3b91e'
 EMAIL_HOST_PASSWORD = '955a848e134c6a'
 EMAIL_PORT = '2525'
+
+
+LOGIN_REDIRECT_URL = '/'

@@ -3,12 +3,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from fridge.views import views_admin, views_home, views_user, views_fridge, \
-    views_user, views_schedule, views_food
+    views_schedule, views_food
 from rest_framework import routers
 
-from rest_framework_simplejwt import views as jwt_views
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
+from django.conf.urls import url
+from fridge.forms import FridgeUpdateAddressForm
+
 
 app_name = 'fridge'
 
@@ -26,8 +28,6 @@ urlpatterns = [
          views_fridge.FridgeCreateView.as_view(), name='fridge-new'),
     path('fridge/<pk>/delete', views_fridge.FridgeDeleteView.as_view(),
          name='fridge-delete'),
-    path('fridge/<pk>/update', views_fridge.FridgeUpdateView.as_view(),
-         name='fridge-update'),
     path('fridge/detail/<pk>',
          views_fridge.FridgeDetailView.as_view(), name='fridge-detail'),
     path('fridge/demand', views_fridge.FridgeDemandCreateView.as_view(),
@@ -37,19 +37,24 @@ urlpatterns = [
     path('fridge/refuse/<pk>', views_fridge.FridgeRefuseDemand.as_view(),
          name='fridge-refuse'),
 
+    path('change/name/<pk>',
+         views_fridge.FridgeUpdateView.as_view(
+             fields=['name']), name='change-name'),
     path('change/address/<pk>',
          views_fridge.FridgeUpdateView.as_view(
-             fields=['address', 'NPA', 'city']), name='change-address'),
+             form_class=FridgeUpdateAddressForm), name='change-address'),
     path('change/phone-number/<pk>',
          views_fridge.FridgeUpdateView.as_view(
              fields=['phone_number']), name='change-phone-number'),
-    path('change/user/<pk>',
+    path('change/image/<pk>',
          views_fridge.FridgeUpdateView.as_view(
-             fields=['user']), name='change-user'),
+             fields=['image']), name='change-image'),
 
     # Food
-    path('food/new', views_food.FoodCreateView.as_view(),
+    path('food/<pk>/new', views_food.FoodCreateView.as_view(),
          name='food-form'),
+    path('food/<pk>/detail', views_food.FoodDetailView.as_view(),
+         name='food-detail'),
     path('food/<pk>/delete', views_food.FoodDeleteView.as_view(),
          name='food-delete'),
     path('food/<pk>/list/', views_food.FoodListView.as_view(),
@@ -57,7 +62,8 @@ urlpatterns = [
     path('food/<pk>/update/', views_food.FoodUpdateView.as_view(),
          name='food-update'),
     # Schedule
-    path('openinghour/<pk>/new', views_schedule.OpeningHourCreateView.as_view(),
+    path('openinghour/<pk>/new',
+         views_schedule.OpeningHourCreateView.as_view(),
          name='openinghour-form'),
     path('openinghour/<pk>/delete',
          views_schedule.OpeningHourDeleteView.as_view(),
@@ -68,7 +74,8 @@ urlpatterns = [
 
     path('specialday/<pk>/new', views_schedule.SpecialDayCreateView.as_view(),
          name='specialday-form'),
-    path('specialday/<pk>/delete', views_schedule.SpecialDayDeleteView.as_view(),
+    path('specialday/<pk>/delete',
+         views_schedule.SpecialDayDeleteView.as_view(),
          name='specialday-delete'),
     path('specialday/<pk>/list', views_schedule.SpecialDayListView.as_view(),
          name='special-day-list'),
@@ -77,21 +84,18 @@ urlpatterns = [
     path('login', views_user.LoginView.as_view(), name='login'),
     path('logout', views_user.LogoutView.as_view(), name='logout'),
     path('profile', views_user.ProfileView.as_view(), name='profile'),
-    path('change/username/<pk>',
+    path('change/username',
          views_user.UserUpdateView.as_view(fields=['username']),
          name='change-username'),
-    path('change/email/<pk>',
-         views_user.UserUpdateView.as_view(fields=['email']),
-         name='change-email'),
     path('change/password', auth_views.PasswordChangeView.as_view(
-        template_name='user/user_update_form.html',
+        template_name='common/form.html',
         success_url=reverse_lazy('fridge:profile')
     ),
         name='change-password'),
 
     path('password-reset/',
          auth_views.PasswordResetView.as_view(
-             template_name='new_form.html',
+             template_name='common/form.html',
              subject_template_name='user/password_reset_subject.txt',
              email_template_name='user/password_reset_email.html',
              success_url=reverse_lazy('fridge:password_reset_done')
@@ -104,7 +108,7 @@ urlpatterns = [
          name='password_reset_done'),
     path('password-reset-confirm/<uidb64>/<token>/',
          auth_views.PasswordResetConfirmView.as_view(
-             template_name='new_form.html',
+             template_name='common/form.html',
              success_url=reverse_lazy('fridge:password_reset_complete')
          ),
          name='password_reset_confirm'),
@@ -127,7 +131,7 @@ urlpatterns = [
          views_user.FridgeFollowingDeleteView.as_view(),
          name='fridge-unfollow'),
     path('contact', views_user.ContactView.as_view(), name='contact'),
-    path('donations', views_user.DonationView.as_view(), name='donation'),
+    path('donations', views_user.DonationView.as_view(), name='donations'),
     path('notifications', views_user.NotificationsView.as_view(),
          name='notifications'),
 
@@ -137,6 +141,12 @@ urlpatterns = [
     path('store/<pk>', views_admin.StoreIndexView.as_view(), name='store'),
     path("sponsor/new/", views_admin.SponsorCreateView.as_view(),
          name="sponsor-new"),
+    path("sponsor-list/", views_admin.SponsorListView.as_view(),
+         name="sponsor-list"),
+    path("sponsor/update/<pk>", views_admin.SponsorUpdateView.as_view(),
+         name="sponsor-update"),
+    path("sponsor/delete/<pk>", views_admin.SponsorDeleteView.as_view(),
+         name="sponsor-delete"),
 
     path("inventory/new/<pk>", views_admin.InventoryCreateView.as_view(),
          name="inventory-new"),
@@ -161,7 +171,8 @@ urlpatterns = [
          name="temperature-control-delete"),
 
     path('report-content/<pk>', views_admin.ReportContentView.as_view(),
-         name='report_content'),
+         name='report-content'),
+
     # Home
     path('', views_home.HomeView.as_view(), name='home'),
     path('home', views_home.HomeView.as_view(), name='home'),
@@ -170,11 +181,8 @@ urlpatterns = [
     path('settings', views_home.SettingsView.as_view(), name='settings'),
     path('offline', views_home.offline_view, name='offline'),
 
-    # JWT
-    path('api/token/', jwt_views.TokenObtainPairView.as_view(),
-         name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
-         name='token_refresh')
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views_user.activate, name='activate'),
 ]
 
 

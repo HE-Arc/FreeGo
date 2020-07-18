@@ -19,7 +19,6 @@ pytest-django = "*"
 django-rest-framework = "*"
 geopy = "*"
 django-notifications-hq = "*"
-djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.8"

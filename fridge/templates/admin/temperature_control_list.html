@@ -1,4 +1,4 @@
-{% extends 'admin/base_store.html' %}
+{% extends 'common/base_store.html' %}
 
 {% block content %}
 {% load static %}
@@ -29,7 +29,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'fridge:inventory-new' fridge.pk %}"
+    <a href="{% url 'fridge:temperature-control-new' fridge.pk %}"
         class="btn waves-effect waves-light right">{% trans 'Add' %}</a>
 </div>
 {% endblock %}

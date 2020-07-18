@@ -11,16 +11,17 @@ from fridge.forms import OpeningHourForm, SpecialDayForm
 LOGIN_URL = 'fridge:login'
 
 
-class OpeningHourCreateView(PermissionRequiredMixin, View):
+class OpeningHourCreateView(PermissionRequiredMixin, generic.CreateView):
     form_class = OpeningHourForm
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
     initial = {}
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["fridge"] = Fridge.objects.get(pk=self.kwargs['pk'])
+        return context
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -53,7 +54,7 @@ class OpeningHourDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
 
 class OpeningHourListView(LoginRequiredMixin, generic.ListView):
-    template_name = 'admin/opening_hour_list.html'
+    template_name = 'schedule/opening_hour_list.html'
     model = Fridge
     login_url = LOGIN_URL
 
@@ -66,7 +67,7 @@ class OpeningHourListView(LoginRequiredMixin, generic.ListView):
 
 
 class SpecialDayListView(LoginRequiredMixin, generic.ListView):
-    template_name = 'admin/special_day_list.html'
+    template_name = 'schedule/special_day_list.html'
     model = Fridge
     login_url = LOGIN_URL
 
@@ -78,16 +79,17 @@ class SpecialDayListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class SpecialDayCreateView(PermissionRequiredMixin, View):
+class SpecialDayCreateView(PermissionRequiredMixin, generic.CreateView):
     form_class = SpecialDayForm
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
     permission_required = 'fridge.store'
     login_url = LOGIN_URL
     initial = {}
 
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["fridge"] = Fridge.objects.get(pk=self.kwargs['pk'])
+        return context
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -99,6 +101,8 @@ class SpecialDayCreateView(PermissionRequiredMixin, View):
                 to_date = None
 
             special_day = SpecialDay(
+                description=form.cleaned_data['description'],
+                is_open=form.cleaned_data['is_open'],
                 from_date=form.cleaned_data['from_date'],
                 to_date=to_date,
                 from_hour=form.cleaned_data['from_hour'],

@@ -1,10 +1,10 @@
-{% extends 'home/base.html' %}
+{% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
 {% load i18n %}
 
 <div class="container" id="app-fridges">
-  <div id="main" class="row">
+  <div id="main" class="row" v-if="ready">
     <div v-for="fridge in fridges" v-bind:key="fridge.id" class="col s10 offset-s1 m4">
       <div class="card">
         <a id="reference" :href="'/food/' + fridge.id + '/list'">

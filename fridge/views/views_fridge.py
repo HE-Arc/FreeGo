@@ -7,12 +7,14 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Permission
 from rest_framework import viewsets
 
-from fridge.models import Fridge, FridgeFollowing
+from fridge.models import Fridge, FridgeFollowing, User
 from fridge.forms import FridgeForm
 from fridge.serializers import FridgeSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from rest_framework import permissions
+from django.utils.translation import gettext_lazy as _
+from notifications.signals import notify
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -26,15 +28,14 @@ class ValidFridgeUser(UserPassesTestMixin):
 
 
 class FridgeDetailView(ValidFridgeUser, generic.DetailView):
-    template_name = 'admin/fridge_detail.html'
+    template_name = 'fridge/fridge_detail.html'
     login_url = LOGIN_URL
     model = Fridge
 
 
 class FridgeUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Fridge
-    template_name = 'new_form.html'
-    fields = ['name', 'address', 'NPA', 'city', 'phone_number', 'image']
+    template_name = 'common/form.html'
 
     def get_success_url(self):
         return reverse_lazy('fridge:fridge-detail',
@@ -53,7 +54,7 @@ class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
 class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = FridgeForm
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
     initial = {}
     login_url = LOGIN_URL
 
@@ -67,7 +68,7 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
             fridge = Fridge(
                 name=form.cleaned_data['name'],
                 address=form.cleaned_data['address'],
-                NPA=form.cleaned_data['NPA'],
+                zip_code=form.cleaned_data['zip_code'],
                 city=form.cleaned_data['city'],
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
@@ -77,13 +78,20 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
 
             permission = Permission.objects.get(codename='store')
             fridge.user.user_permissions.add(permission)
+
+            perm = Permission.objects.get(codename="admin")
+            recipient = User.objects.filter(
+                user_permissions__in=[perm])
+            verb = _("New request to become a freego.")
+            notify.send(request.user, recipient=recipient,
+                        verb=verb)
             return redirect('fridge:settings')
 
         return render(request, self.template_name, {'form': form})
 
 
 class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
-    template_name = 'new_form.html'
+    template_name = 'common/form.html'
     permission_required = 'fridge.admin'
 
     def post(self, request, *args, **kwargs):
@@ -92,7 +100,7 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
             fridge = Fridge(
                 name=form.cleaned_data['name'],
                 address=form.cleaned_data['address'],
-                NPA=form.cleaned_data['NPA'],
+                zip_code=form.cleaned_data['zip_code'],
                 city=form.cleaned_data['city'],
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
@@ -109,7 +117,7 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
 
 
 class FridgeListView(generic.TemplateView):
-    template_name = 'admin/fridge_list.html'
+    template_name = 'fridge/fridge_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -151,7 +159,7 @@ class FridgesViewSet(viewsets.ModelViewSet):
     queryset = Fridge.objects.filter(is_active=True)
     serializer_class = FridgeSerializer
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[permissions.IsAuthenticated])
     def favorites(self, request):
         reserved_fridges = FridgeFollowing.objects.filter(
             user=request.user).values_list('fridge_id')

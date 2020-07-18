@@ -1,27 +1,18 @@
 const DB_NAME = 'freego_db';
-const DB_VERSION = 7;
+const DB_VERSION = 8;
 let DB;
 // const SERVER_URL = "https://freego.srvz-webapp.he-arc.ch"
 const SERVER_URL = "http://127.0.0.1:8000"
-const routes = []
-
-// 3. Create the router instance and pass the `routes` option
-// You can pass in additional options here, but let's
-// keep it simple for now.
-const router = new VueRouter({
-    routes // short for `routes: routes`
-})
 
 var appFridges = new Vue({
     delimiters: ['[[', ']]'],
-    router,
     el: '#app-base',
     data: () => ({
         db: null,
         fridges: [],
         favorites: [],
         notifications: [],
-        unread_notifications: [],
+        ready: false,
 
         //map
         selectedFeatures: [],
@@ -32,16 +23,20 @@ var appFridges = new Vue({
     }),
     async created() {
         await this.login();
-        await this.getNotifications();
         this.db = await this.getDb();
 
-        this.getFridgesFromDb();
-        this.getFarvoritesFromDb();
+        this.fridges = await this.getFridgesFromDb();
+        this.favorites = await this.getFarvoritesFromDb();
+        this.notifications = await this.getNotificationsFromDb();
+        // this.getNotificationsTest();
 
         if (navigator.onLine) {
             this.getFridgesFromNetwork();
             this.getFarvoritesFromNetwork();
+            this.getNotificationsFromNetwork();
         }
+
+        this.ready = true;
     },
     methods: {
         async getDb() {
@@ -66,15 +61,21 @@ var appFridges = new Vue({
 
                 request.onupgradeneeded = e => {
                     let db = e.target.result;
-                    db.createObjectStore('fridges', { autoIncrement: true, keyPath: 'pk' });
-                    db.createObjectStore("favorites", { autoIncrement: true, keyPath: 'pk' });
+
+                    if (e.oldVersion < 7) {
+                        db.createObjectStore('fridges', { autoIncrement: true, keyPath: 'pk' });
+                        db.createObjectStore("favorites", { autoIncrement: true, keyPath: 'pk' });
+                    }
+                    if (e.oldVersion < 8) {
+                        db.createObjectStore("notifications", { autoIncrement: true, keyPath: 'pk' });
+                    }
+
                 };
             });
         },
         async login() {
-            if (typeof access != "undefined" && typeof refresh != "undefined" && access != "" && refresh != "") {
-                localStorage.setItem('access', access);
-                localStorage.setItem('refresh', refresh);
+            if (typeof token != "undefined" && token != "") {
+                localStorage.setItem('token', token);
             }
         },
         async logout() {
@@ -82,38 +83,32 @@ var appFridges = new Vue({
             return true;
         },
         async getFridgesFromDb() {
-            let db = await this.getDb();
-
-            return new Promise(resolve => {
-                var tx = db.transaction(['fridges'], 'readonly');
-                var store = tx.objectStore('fridges');
+            return new Promise((resolve, reject) => {
+                let trans = this.db.transaction(['fridges'], 'readonly');
+                trans.oncomplete = e => {
+                    resolve(fridges);
+                };
+                let store = trans.objectStore('fridges');
                 let fridges = [];
-                store.openCursor().onsuccess = function (event) {
-                    var cursor = event.target.result;
+
+                store.openCursor().onsuccess = event => {
+                    let cursor = event.target.result;
                     if (cursor) {
                         cursor.value['reference'] = "/food/" + cursor.value.id + "/list"
                         fridges.push(cursor.value);
-                        console.log(fridges);
-
                         cursor.continue();
                     }
                 };
-                this.fridges = fridges;
             });
         },
         async getFridgesFromNetwork() {
-            let db = await this.getDb();
-
-            const payload = {
-                headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
-            }
             let api_url = SERVER_URL + "/api/fridges";
             axios
-                .get(api_url, payload)
+                .get(api_url)
                 .then(response => {
                     this.fridges = response.data;
                     return new Promise((resolve, reject) => {
-                        var tx = db.transaction('fridges', 'readwrite');
+                        var tx = this.db.transaction('fridges', 'readwrite');
                         var store = tx.objectStore('fridges');
                         store.clear(); // clear old datas
 
@@ -122,16 +117,15 @@ var appFridges = new Vue({
                         })).catch(function (e) {
                             tx.abort();
                         });
-
                     });
                 })
                 .catch(err => {
                     console.error(err);
                 })
         },
-        async getNotifications() {
+        async getNotificationsFromNetwork() {
             const payload = {
-                headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             }
             let api_url = SERVER_URL + "/api/notifications/by_user/";
             axios
@@ -143,13 +137,50 @@ var appFridges = new Vue({
                     console.error(err);
                 })
         },
-        async getFarvoritesFromDb() {
-            let db = await this.getDb();
-
+        async getNotificationsFromDb() {
             return new Promise(resolve => {
-                var tx = db.transaction(['favorites'], 'readonly');
-                var store = tx.objectStore('favorites');
+                let trans = this.db.transaction(['notifications'], 'readonly');
+                trans.oncomplete = e => {
+                    resolve(notifications);
+                };
+                let store = trans.objectStore('notifications');
+                let notifications = [];
+
+                store.openCursor().onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        notifications.push(cursor.value);
+                        cursor.continue();
+                    }
+                };
+            });
+        },
+        async getNotificationsTest() {
+            let api_url = SERVER_URL + "/inbox/notifications/api/unread_list/";
+            let = unread_notifications = [];
+            axios
+                .get(api_url, {
+                    params: {
+                        mark_as_read: true
+                    }
+                })
+                .then(response => {
+                    unread_notifications = response.data;
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+            return unread_notifications;
+        },
+        async getFarvoritesFromDb() {
+            return new Promise(resolve => {
+                var trans = this.db.transaction(['favorites'], 'readonly');
+                trans.oncomplete = e => {
+                    resolve(favorites);
+                };
+                var store = trans.objectStore('favorites');
                 let favorites = [];
+
                 store.openCursor().onsuccess = function (event) {
                     var cursor = event.target.result;
                     if (cursor) {
@@ -158,15 +189,13 @@ var appFridges = new Vue({
                         cursor.continue();
                     }
                 };
-                this.favorites = favorites;
             });
-
         },
         async getFarvoritesFromNetwork() {
             let db = await this.getDb();
 
             const payload = {
-                headers: { Authorization: `Bearer ${localStorage.getItem('access')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             }
             let api_url = SERVER_URL + "/api/fridges/favorites";
             axios
@@ -197,10 +226,10 @@ var appFridges = new Vue({
             })
         },
         goBack: function () {
-            window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
+            window.history.back();
         },
-        isAuthenticated: function() {
-            return localStorage.hasOwnProperty("access");
+        isAuthenticated: function () {
+            return localStorage.hasOwnProperty("token");
         }
 
     }

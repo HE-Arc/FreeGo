@@ -5,9 +5,8 @@ from datetime import timedelta, date
 from django.utils import timezone
 from random import randint
 
-from django.core.files.images import ImageFile
-from PIL import Image
-from io import BytesIO
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
 
 
 def passed_date():
@@ -16,23 +15,17 @@ def passed_date():
 
 
 def create_fridge(user, name="test_fridge", address="5th Avenue",
-                  NPA="175", phone_number="0790000000", city="NYC",
+                  zip_code="175", phone_number="0790000000", city="NYC",
                   is_active=False):
     '''Create generic fridge with selectable name'''
-    image = get_test_image()
-    return Fridge.objects.create(name=name, address=address, NPA=NPA,
+
+    image_path = settings.MEDIA_ROOT + '/default.JPG'
+    image = SimpleUploadedFile(name='default.JPG', content=open(
+        image_path, 'rb').read(), content_type='image/jpeg')
+
+    return Fridge.objects.create(name=name, address=address, zip_code=zip_code,
                                  phone_number=phone_number, image=image,
                                  user=user, city=city, is_active=is_active)
-
-
-def get_test_image():
-    pil_image = Image.open('fridge/static/fridge/test/test.png')
-    f = BytesIO()
-    pil_image.save(f, 'PNG')
-
-    image = ImageFile(f)
-    image.filename = "test_image"
-    return image
 
 
 def create_food(fridge, user, name="food_test",
