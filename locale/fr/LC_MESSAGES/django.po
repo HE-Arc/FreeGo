@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-19 07:48+0200\n"
+"POT-Creation-Date: 2020-07-19 08:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr "Anglais"
 msgid "French"
 msgstr "Français"
 
-#: .\fridge\forms.py:23 .\fridge\forms.py:78 .\fridge\forms.py:195
+#: .\fridge\forms.py:23 .\fridge\forms.py:78 .\fridge\forms.py:197
 #: .\fridge\templates\admin\admin.html:18
 #: .\fridge\templates\admin\admin.html:48
 #: .\fridge\templates\admin\admin.html:81
@@ -62,7 +62,7 @@ msgstr "Utilisateur"
 msgid "Invalid address"
 msgstr "Adresse invalide"
 
-#: .\fridge\forms.py:79 .\fridge\forms.py:133
+#: .\fridge\forms.py:79 .\fridge\forms.py:135
 #: .\fridge\templates\food\food_detail.html:11
 msgid "Description"
 msgstr "Réservation"
@@ -99,79 +99,79 @@ msgstr "Date d'expiration"
 msgid "Week day"
 msgstr "Jour de la semaine"
 
-#: .\fridge\forms.py:106 .\fridge\forms.py:137
+#: .\fridge\forms.py:106 .\fridge\forms.py:139
 msgid "From hour"
 msgstr "De l'heure"
 
-#: .\fridge\forms.py:107 .\fridge\forms.py:138
+#: .\fridge\forms.py:107 .\fridge\forms.py:140
 msgid "To hour"
 msgstr "À l'heure"
 
-#: .\fridge\forms.py:122 .\fridge\forms.py:172 .\fridge\models.py:162
+#: .\fridge\forms.py:124 .\fridge\forms.py:174 .\fridge\models.py:162
 #: .\fridge\models.py:191
 msgid "Invalid hour"
 msgstr "Heure invalide"
 
-#: .\fridge\forms.py:134
+#: .\fridge\forms.py:136
 msgid "Is the Free Go open?"
 msgstr "Est-ce que le Free Go est ouvert ?"
 
-#: .\fridge\forms.py:135
+#: .\fridge\forms.py:137
 msgid "From date"
 msgstr "De la date"
 
-#: .\fridge\forms.py:136
+#: .\fridge\forms.py:138
 msgid "To date"
 msgstr "À la date"
 
-#: .\fridge\forms.py:167 .\fridge\models.py:186
+#: .\fridge\forms.py:169 .\fridge\models.py:186
 msgid "If two dates are selected, you can't select an hour."
 msgstr ""
 "Si deux dates sont sélectionnées, vous ne pouvez pas sélectionner une heure"
 
-#: .\fridge\forms.py:169 .\fridge\models.py:188
+#: .\fridge\forms.py:171 .\fridge\models.py:188
 msgid "Invalid date"
 msgstr "Date invalide"
 
-#: .\fridge\forms.py:177
+#: .\fridge\forms.py:179
 msgid "Required. Fill an valid email address."
 msgstr "Requis. Remplissez une adresse email valide"
 
-#: .\fridge\forms.py:185
+#: .\fridge\forms.py:187
 msgid "Subject"
 msgstr "Sujet"
 
-#: .\fridge\forms.py:186
+#: .\fridge\forms.py:188
 msgid "Message"
 msgstr "Message"
 
-#: .\fridge\forms.py:196
+#: .\fridge\forms.py:198
 msgid "Logo"
 msgstr "Logo"
 
-#: .\fridge\forms.py:197
+#: .\fridge\forms.py:199
 msgid "Website url"
 msgstr "Url du site web"
 
-#: .\fridge\forms.py:211 .\fridge\forms.py:228
+#: .\fridge\forms.py:213 .\fridge\forms.py:230
 #: .\fridge\templates\admin\inventory_sheet.html:14
 #: .\fridge\templates\admin\temperature_control_list.html:12
 msgid "Date"
 msgstr "Date"
 
-#: .\fridge\forms.py:212 .\fridge\templates\admin\inventory_sheet.html:15
+#: .\fridge\forms.py:214 .\fridge\templates\admin\inventory_sheet.html:15
 msgid "Product name"
 msgstr "Nom du produit"
 
-#: .\fridge\forms.py:213 .\fridge\templates\admin\inventory_sheet.html:16
+#: .\fridge\forms.py:215 .\fridge\templates\admin\inventory_sheet.html:16
 msgid "Product number"
 msgstr "Nombre de produit"
 
-#: .\fridge\forms.py:214 .\fridge\forms.py:229
+#: .\fridge\forms.py:216 .\fridge\forms.py:231
 msgid "Temperature"
 msgstr "Température"
 
-#: .\fridge\forms.py:215 .\fridge\forms.py:230
+#: .\fridge\forms.py:217 .\fridge\forms.py:232
 #: .\fridge\templates\admin\inventory_sheet.html:18
 #: .\fridge\templates\admin\temperature_control_list.html:14
 msgid "Visa"
