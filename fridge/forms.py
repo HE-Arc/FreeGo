@@ -22,7 +22,7 @@ class FridgeForm(forms.ModelForm):
         labels = {
             'name': _('Name'),
             'address': _('Address'),
-            'zip_code': _('Code postal'),
+            'zip_code': _('Zip code'),
             'city': _('City'),
             'phone_number': _('Phone number'),
             'image': _('Image'),
@@ -50,7 +50,7 @@ class FridgeUpdateAddressForm(forms.ModelForm):
         fields = ('address', 'zip_code', 'city')
         labels = {
             'address': _('Address'),
-            'zip_code': _('Code postal'),
+            'zip_code': _('Zip code'),
             'city': _('City')
         }
 
@@ -114,6 +114,8 @@ class OpeningHourForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        print("TEEEEESSSSSSSSSTTTTTTTTTTT")
+        print(cleaned_data)
         from_hour = to_hour = None
         from_hour = cleaned_data.get('from_hour')
         to_hour = cleaned_data.get('to_hour')
