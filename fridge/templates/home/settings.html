@@ -1,4 +1,4 @@
-{% extends 'home/base.html' %}
+{% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
 {% load i18n %}
@@ -13,15 +13,19 @@
 
     {% if user.has_fridge %}
     <a href="{% url 'fridge:store' fridge.pk %}" class="collection-item black-text">{% trans 'My Free Go' %}</a>
+    <a href="{% url 'fridge:inventory-sheet' fridge.pk %}"
+        class="collection-item black-text">{% trans 'Inventory Sheet' %}</a>
+    <a href="{% url 'fridge:temperature-control-list' fridge.pk %}"
+        class="collection-item black-text">{% trans 'Temperature Control' %}</a>
     {% else %}
     <a href="{% url 'fridge:fridge-demand' %}"
         class="collection-item black-text">{% trans 'Ask for become a Free Go' %}</a>
     {% endif%}
 
     <a href="{% url 'fridge:reservation-list' %}" class="collection-item black-text">{% trans 'Reservation' %}</a>
-    <a href="#!" class="collection-item black-text">{% trans 'Donations' %}</a>
-    <a href="#!" class="collection-item black-text">{% trans 'Help' %}</a>
-    <a href="#!" class="collection-item black-text">{% trans 'Contact us' %}</a>
+    <a href="{% url 'fridge:donations' %}" class="collection-item black-text">{% trans 'Donations' %}</a>
+    <a href="{% url 'fridge:sponsor-list' %}" class="collection-item black-text">{% trans 'Sponsor' %}</a>
+    <a href="{% url 'fridge:contact' %}" class="collection-item black-text">{% trans 'Contact us' %}</a>
     <a href="{% url 'fridge:logout' %}" @click="logout" class="collection-item black-text">{% trans 'Log out' %}</a>
 </ul>
 {% else %}

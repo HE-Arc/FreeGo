@@ -1,11 +1,12 @@
-const cacheName = 'freego-pwa-v5';
+const cacheName = 'freego-pwa-v6';
 
 const filesToCache = [
     //urls
     '/list',
     '/',
     '/home',
-    // '/favorite',
+    '/favorite',
+    '/map',
     '/offline',
     //css
     '/static/fridge/css/materialize.min.css',
@@ -19,6 +20,7 @@ const filesToCache = [
     '/static/fridge/js/jquery-3.5.1.min.js',
     '/static/fridge/js/materialize.min.js',
     '/static/fridge/js/script.js',
+    '/static/fridge/js/app.js',
     //logos
     '/static/fridge/logos/icon-128x128.png',
     '/static/fridge/logos/icon-144x144.png',
@@ -52,14 +54,6 @@ self.addEventListener('activate', event => {
                 }
             }));
         })
-        // caches.keys().then(cacheNames => {
-        //     return Promise.all(
-        //         cacheNames
-        //             .filter(cacheName => (cacheName.startsWith("django-pwa-")))
-        //             .filter(cacheName => (cacheName !== staticCacheName))
-        //             .map(cacheName => caches.delete(cacheName))
-        //     );
-        // })
     );
 });
 

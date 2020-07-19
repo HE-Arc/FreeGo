@@ -1,0 +1,28 @@
+{% extends 'common/base_store.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<img class="responsive-img" src="{{ fridge.image.url }}" alt="fridge-image">
+
+<ul class="collection">
+    <li class="collection-item">
+        <h5>{% trans 'Opening hours' %}</h5>
+        {% for opening_hour in fridge.get_opening_hours %}
+        {% include "schedule/opening_hour_detail.html" %}
+        {% endfor %}
+    </li>
+    <li class="collection-item">
+        <h5>{% trans 'Available food' %}</h5>
+        <div class="row" id="main">
+            {% for food in food_available %}
+            {% include "food/food_card.html" %}
+            {% endfor %}
+
+            {% for food in food_reserve %}
+            {% include "food/food_card.html" %}
+            {% endfor %}
+        </div>
+    </li>
+</ul>
+{% endblock %}

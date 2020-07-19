@@ -1,10 +1,9 @@
-{% extends 'home/base.html' %}
+{% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
 {% load i18n %}
 
-{% if user.is_authenticated %}
-<div class="container" id="app-favorite">
+<div v-if="isAuthenticated() && ready" class="container" id="app-favorite">
     <div id="main" class="row">
         <div v-for="favorite in favorites" v-bind:key="favorite.id" class="col s10 offset-s1 m4">
             <div class="card">
@@ -22,9 +21,8 @@
         </div>
     </div>
 </div>
-{% else %}
+<div v-else>
+    {% include 'user/login_options.html' %}
+</div>
 
-{% include 'user/login_options.html' %}
-
-{% endif %}
 {% endblock %}

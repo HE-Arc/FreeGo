@@ -1,0 +1,35 @@
+{% extends 'common/base_store.html' %}
+
+{% block content %}
+{% load static %}
+{% load i18n %}
+
+<div class="container">
+    <table>
+        <caption><h4>{% trans 'Temperature control' %}</h4></caption>
+        <thead>
+            <tr>
+                <th scope="col">{% trans 'Date' %}</th>
+                <th scope="col">{% trans 'Temperature (°C)' %}</th>
+                <th scope="col">{% trans 'Visa' %}</th>
+                <th scope="col">{% trans 'Actions' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for temperature_control in object_list %}
+            <tr>
+                <td>{{temperature_control.date}}</td>
+                <td>{{temperature_control.temperature}}</td>
+                <td>{{temperature_control.visa}}</td>
+                <td>
+                    <a href="{% url 'fridge:temperature-control-update' temperature_control.pk %}" class="btn btn-success btn-sm">Update</a>
+                    <a href="{% url 'fridge:temperature-control-delete' temperature_control.pk %}" class="btn btn-warning btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'fridge:temperature-control-new' fridge.pk %}"
+        class="btn waves-effect waves-light right">{% trans 'Add' %}</a>
+</div>
+{% endblock %}
