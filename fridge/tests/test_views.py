@@ -329,7 +329,7 @@ class FoodReservationTest(TestCase):
         self.assertEqual(Reservation.objects.count(), 1)
         self.assertEqual(food.is_reserved(), True)
         self.assertEqual(food.is_reserved_by_me(self.user), True)
-        user2 = create_user(username="test2")
+        user2 = create_user(username="test2", email="test2@test.test")
         self.assertEqual(food.is_reserved_by_me(user2), False)
 
 

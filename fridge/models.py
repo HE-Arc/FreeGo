@@ -4,10 +4,24 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from .validators import phone_number_validator, NPA_validator, \
     expiration_date_validator
-
+from PIL import Image
+from io import BytesIO
 from django.utils.translation import gettext_lazy as _
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
 from geopy.geocoders import Nominatim
+
+
+def compress_image(uploaded_image):
+    tmp_image = Image.open(uploaded_image)
+    output_io_stream = BytesIO()
+    tmp_image.save(output_io_stream, format='PNG', quality=60)
+    output_io_stream.seek(0)
+    uploaded_image = InMemoryUploadedFile(
+        output_io_stream, 'ImageField', "%s.png" %
+        uploaded_image.name.split('.')[
+            0], 'image/png', sys.getsizeof(output_io_stream), None)
+    return uploaded_image
 
 
 class Fridge(models.Model):
@@ -72,6 +86,7 @@ class Fridge(models.Model):
             raise ValidationError(_("Invalid address"))
         self.latitude = location.latitude
         self.longitude = location.longitude
+        self.image = compress_image(self.image)
         super().save(*args, **kwargs)
 
 
@@ -106,6 +121,10 @@ class Food(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    def save(self, *args, **kwargs):
+        self.image = compress_image(self.image)
+        super().save(*args, **kwargs)
 
 
 class Reporting(models.Model):
@@ -216,6 +235,7 @@ class SpecialDay(models.Model):
 class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
+    email = models.EmailField(unique=True)
 
     def has_fridge(self):
         return Fridge.objects.filter(user=self).count() != 0
@@ -249,6 +269,10 @@ class Sponsor(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.logo = compress_image(self.logo)
+        super().save(*args, **kwargs)
 
 
 class Inventory(models.Model):

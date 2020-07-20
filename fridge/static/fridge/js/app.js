@@ -26,13 +26,13 @@ var appFridges = new Vue({
         this.db = await this.getDb();
 
         this.fridges = await this.getFridgesFromDb();
-        this.favorites = await this.getFarvoritesFromDb();
+        this.favorites = await this.getFavoritesFromDb();
         this.notifications = await this.getNotificationsFromDb();
         // this.getNotificationsTest();
 
         if (navigator.onLine) {
             this.getFridgesFromNetwork();
-            this.getFarvoritesFromNetwork();
+            this.getFavoritesFromNetwork();
             this.getNotificationsFromNetwork();
         }
 
@@ -106,15 +106,21 @@ var appFridges = new Vue({
             axios
                 .get(api_url)
                 .then(response => {
-                    this.fridges = response.data;
+                    console.log(response.length);
+
                     return new Promise((resolve, reject) => {
                         var tx = this.db.transaction('fridges', 'readwrite');
                         var store = tx.objectStore('fridges');
-                        store.clear(); // clear old datas
 
-                        return Promise.all(response.data.map(function (item) {
+                        if (Array.isArray(response.data)) {
+                            store.clear();
+                            this.fridges = response.data;
+                        }
+
+                        return Promise.all(this.fridges.map(function (item) {
                             return store.add(item);
                         })).catch(function (e) {
+                            console.log("ABORT");
                             tx.abort();
                         });
                     });
@@ -172,7 +178,7 @@ var appFridges = new Vue({
                 })
             return unread_notifications;
         },
-        async getFarvoritesFromDb() {
+        async getFavoritesFromDb() {
             return new Promise(resolve => {
                 var trans = this.db.transaction(['favorites'], 'readonly');
                 trans.oncomplete = e => {
@@ -191,7 +197,7 @@ var appFridges = new Vue({
                 };
             });
         },
-        async getFarvoritesFromNetwork() {
+        async getFavoritesFromNetwork() {
             let db = await this.getDb();
 
             const payload = {
@@ -201,10 +207,15 @@ var appFridges = new Vue({
             axios
                 .get(api_url, payload)
                 .then(response => {
-                    this.favorites = response.data;
                     return new Promise((resolve, reject) => {
                         var tx = db.transaction('favorites', 'readwrite');
                         var store = tx.objectStore('favorites');
+
+                        if (Array.isArray(response.data)) {
+                            store.clear();
+                            this.favorites = response.data;
+                        } // clear old datas
+
                         store.clear(); // clear old datas
 
                         return Promise.all(response.data.map(function (item) {

@@ -77,6 +77,26 @@ $(document).ready(function () {
     });
 });
 
+$(function () {
+    var progress = $('progress');
+    var progressBar = $('#progressBar');
 
-
-
+    $('form').ajaxForm({
+        beforeSend: function () {
+            console.log("beforeSend");
+            progress.removeAttr('hidden');
+            var percentVal = 'width: 0%';
+            progressBar.style(percentVal);
+        },
+        uploadProgress: function (event, position, total, percentComplete) {
+            console.log("uploadProgress");
+            var percentVal = 'width: ' + percentComplete + '%';
+            progressBar.style(percentVal);
+        },
+        complete: function (xhr) {
+            console.log("complete");
+            var percentVal = percentComplete + '%';
+            progressBar.style(percentVal);
+        }
+    });
+}); 

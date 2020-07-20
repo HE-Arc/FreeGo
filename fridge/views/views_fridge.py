@@ -8,7 +8,7 @@ from django.contrib.auth.models import Permission
 from rest_framework import viewsets
 
 from fridge.models import Fridge, FridgeFollowing, User
-from fridge.forms import FridgeForm
+from fridge.forms import FridgeForm, FridgeDemandForm
 from fridge.serializers import FridgeSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -53,10 +53,14 @@ class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
 
 
 class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
-    form_class = FridgeForm
+    form_class = FridgeDemandForm
     template_name = 'common/form.html'
     initial = {}
     login_url = LOGIN_URL
+
+    fields = ('name', 'address', 'zip_code', 'city',
+              'phone_number', 'image')
+
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
@@ -92,6 +96,7 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
 
 class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
     template_name = 'common/form.html'
+    form_class = FridgeForm
     permission_required = 'fridge.admin'
 
     def post(self, request, *args, **kwargs):

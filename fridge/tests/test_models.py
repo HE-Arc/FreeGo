@@ -75,8 +75,8 @@ class FridgeModelTest(TestCase):
 
 class FoodModel(TestCase):
     def setUp(self):
-        self.user = create_user("test1")
-        self.another_user = create_user("test2")
+        self.user = create_user("test1", email="test1@test.tests")
+        self.another_user = create_user("test2", email="test2@test.tests")
         fridge = create_fridge(self.user)
         self.food = create_food(fridge, self.user)
 
