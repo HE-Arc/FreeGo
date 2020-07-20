@@ -126,6 +126,10 @@ class Food(models.Model):
         self.image = compress_image(self.image)
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
+
 
 class Reporting(models.Model):
     '''Reporting model'''
@@ -273,6 +277,10 @@ class Sponsor(models.Model):
     def save(self, *args, **kwargs):
         self.logo = compress_image(self.logo)
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.logo.delete(save=False)
+        super().delete(*args, **kwargs)
 
 
 class Inventory(models.Model):
