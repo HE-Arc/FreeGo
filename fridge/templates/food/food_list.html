@@ -10,15 +10,27 @@
         <h5>{% trans 'Opening hours' %}</h5>
         {% if fridge.get_opening_hours %}
         {% for opening_hour in fridge.get_opening_hours %}
-        {% include "schedule/opening_hour_detail.html" %}
+        <div class="row">
+            {{ opening_hour }}
+        </div>
         {% endfor %}
         {% else %}
         <p>{% trans 'No schedule provided' %}</p>
         {% endif %}
     </li>
+    {% if fridge.get_special_days %}
+    <li class="collection-item">
+        <h5>{% trans 'Special day' %}</h5>
+        {% for special_day in fridge.get_special_days %}
+        <div class="row">
+            {{ special_day }}
+        </div>
+        {% endfor %}
+    </li>
+    {% endif %}
     <li class="collection-item">
         <h5>{% trans 'Available food' %}</h5>
-        {% if fridge.get_opening_hours %}
+        {% if food_available %}
         <div class="row" id="main">
             {% for food in food_available %}
             {% include "food/food_card.html" %}

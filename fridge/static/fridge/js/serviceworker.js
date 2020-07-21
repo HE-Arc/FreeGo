@@ -10,6 +10,7 @@ const filesToCache = [
     '/offline',
     //css
     '/static/fridge/css/materialize.min.css',
+    '/static/fridge/css/vuelayers.min.css',
     '/static/fridge/css/style.css',
     //icons
     '/static/fridge/icons/vegan-icon.png',
@@ -20,7 +21,7 @@ const filesToCache = [
     '/static/fridge/js/jquery-3.5.1.min.js',
     '/static/fridge/js/materialize.min.js',
     '/static/fridge/js/script.js',
-    '/static/fridge/js/axios.min.js',    
+    '/static/fridge/js/axios.min.js',
     '/static/fridge/js/app.js',
     '/static/fridge/js/idb.js',
     '/static/fridge/js/vue.min.js',
@@ -59,7 +60,6 @@ self.addEventListener('activate', event => {
             }));
         })
     );
-    console.log("activate");
 });
 
 

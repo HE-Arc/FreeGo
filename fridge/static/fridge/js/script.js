@@ -8,8 +8,10 @@ $(document).ready(function () {
         showClearBtn: true
     });
     $('#alert_close').click(function () {
-        $("#alert_box").fadeOut("slow", function () {
-        });
+        $("#alert_box").fadeOut("slow", function () {});
+    });
+    $('#alert_close_map').click(function () {
+        $("#alert_box_map").fadeOut("slow", function () {});
     });
     $('.parallax').parallax();
     $('.dropdown-trigger').dropdown();
@@ -19,6 +21,10 @@ $(document).ready(function () {
     let toDate = $('#id_to_date').parents('div')[1];
     let fromHour = $('#id_from_hour').parents('div')[1];
     let toHour = $('#id_to_hour').parents('div')[1];
+
+    if (!toDate || !fromHour || !toHour) {
+        return;
+    }
 
     toDate.style.display = 'none';
     fromHour.style.display = 'none';
@@ -76,27 +82,3 @@ $(document).ready(function () {
         };
     });
 });
-
-$(function () {
-    var progress = $('progress');
-    var progressBar = $('#progressBar');
-
-    $('form').ajaxForm({
-        beforeSend: function () {
-            console.log("beforeSend");
-            progress.removeAttr('hidden');
-            var percentVal = 'width: 0%';
-            progressBar.style(percentVal);
-        },
-        uploadProgress: function (event, position, total, percentComplete) {
-            console.log("uploadProgress");
-            var percentVal = 'width: ' + percentComplete + '%';
-            progressBar.style(percentVal);
-        },
-        complete: function (xhr) {
-            console.log("complete");
-            var percentVal = percentComplete + '%';
-            progressBar.style(percentVal);
-        }
-    });
-}); 

@@ -28,12 +28,14 @@ var appFridges = new Vue({
         this.fridges = await this.getFridgesFromDb();
         this.favorites = await this.getFavoritesFromDb();
         this.notifications = await this.getNotificationsFromDb();
-        // this.getNotificationsTest();
 
         if (navigator.onLine) {
             this.getFridgesFromNetwork();
-            this.getFavoritesFromNetwork();
-            this.getNotificationsFromNetwork();
+
+            if (this.isAuthenticated()) {
+                this.getFavoritesFromNetwork();
+                this.getNotificationsFromNetwork();
+            }
         }
 
         this.ready = true;
@@ -106,8 +108,6 @@ var appFridges = new Vue({
             axios
                 .get(api_url)
                 .then(response => {
-                    console.log(response.length);
-
                     return new Promise((resolve, reject) => {
                         var tx = this.db.transaction('fridges', 'readwrite');
                         var store = tx.objectStore('fridges');
@@ -160,23 +160,6 @@ var appFridges = new Vue({
                     }
                 };
             });
-        },
-        async getNotificationsTest() {
-            let api_url = SERVER_URL + "/inbox/notifications/api/unread_list/";
-            let = unread_notifications = [];
-            axios
-                .get(api_url, {
-                    params: {
-                        mark_as_read: true
-                    }
-                })
-                .then(response => {
-                    unread_notifications = response.data;
-                })
-                .catch(err => {
-                    console.error(err);
-                })
-            return unread_notifications;
         },
         async getFavoritesFromDb() {
             return new Promise(resolve => {
@@ -235,9 +218,6 @@ var appFridges = new Vue({
                 console.log(feature.getId())
                 window.location.href = SERVER_URL + '/food/' + feature.getId() + "/list";
             })
-        },
-        goBack: function () {
-            window.history.back();
         },
         isAuthenticated: function () {
             return localStorage.hasOwnProperty("token");
