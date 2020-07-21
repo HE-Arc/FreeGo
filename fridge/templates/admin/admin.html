@@ -37,7 +37,6 @@
         {% endif %}
 
         <!-- ALL FRIDGE -->
-        {% if fridges %}
         <div class="col s12 m6">
             <table>
                 <caption>
@@ -67,10 +66,8 @@
                 <a href="{% url 'fridge:fridge-new' %}" class="btn waves-effect waves-light">{% trans 'Add' %}</a>
             </div>
         </div>
-        {% endif %}
 
         <!-- SPONSOR -->
-        {% if sponsors %}
         <div class="col s12 m6">
             <table>
                 <caption>
@@ -100,7 +97,6 @@
                 <a href="{% url 'fridge:sponsor-new' %}" class="btn waves-effect waves-light">{% trans 'Add' %}</a>
             </div>
         </div>
-        {% endif %}
 
     </div>
 </div>

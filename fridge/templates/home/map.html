@@ -3,7 +3,7 @@
 {% load i18n %}
 {% block content %}
 
-<div class="row" id="alert_box" hidden>
+<div class="row" id="alert_box_map" hidden>
     <div class="col s12 m12">
         <div class="card red darken-1">
             <div class="row">
@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="col s12 m2">
-                    <i class="material-icons icon_style" id="alert_close" aria-hidden="true">close</i>
+                    <i class="material-icons icon_style" id="alert_close_map" aria-hidden="true">close</i>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
     navigator.permissions.query({ name: 'geolocation' })
         .then(function (permissionStatus) {
             if (permissionStatus.state == 'denied') {
-                let div = document.getElementById('alert_box');
+                let div = document.getElementById('alert_box_map');
                 div.removeAttribute("hidden")
             }
         });

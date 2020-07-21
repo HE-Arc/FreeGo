@@ -10,6 +10,7 @@ const filesToCache = [
     '/offline',
     //css
     '/static/fridge/css/materialize.min.css',
+    '/static/fridge/css/vuelayers.min.css',
     '/static/fridge/css/style.css',
     //icons
     '/static/fridge/icons/vegan-icon.png',
@@ -20,7 +21,11 @@ const filesToCache = [
     '/static/fridge/js/jquery-3.5.1.min.js',
     '/static/fridge/js/materialize.min.js',
     '/static/fridge/js/script.js',
+    '/static/fridge/js/axios.min.js',
     '/static/fridge/js/app.js',
+    '/static/fridge/js/idb.js',
+    '/static/fridge/js/vue.min.js',
+    '/static/fridge/js/vuelayers.js',
     //logos
     '/static/fridge/logos/icon-128x128.png',
     '/static/fridge/logos/icon-144x144.png',
@@ -48,7 +53,7 @@ self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(keyList => {
             return Promise.all(keyList.map(key => {
-                if(key !== cacheName){
+                if (key !== cacheName) {
                     console.log('[ServiceWorker] Removing old cache', key);
                     return caches.delete(key);
                 }
@@ -56,6 +61,7 @@ self.addEventListener('activate', event => {
         })
     );
 });
+
 
 // Serve from Cache
 self.addEventListener("fetch", event => {
