@@ -4,10 +4,24 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from .validators import phone_number_validator, NPA_validator, \
     expiration_date_validator
-
+from PIL import Image
+from io import BytesIO
 from django.utils.translation import gettext_lazy as _
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
 from geopy.geocoders import Nominatim
+
+
+def compress_image(uploaded_image):
+    tmp_image = Image.open(uploaded_image)
+    output_io_stream = BytesIO()
+    tmp_image.save(output_io_stream, format='PNG', quality=60)
+    output_io_stream.seek(0)
+    uploaded_image = InMemoryUploadedFile(
+        output_io_stream, 'ImageField', "%s.png" %
+        uploaded_image.name.split('.')[
+            0], 'image/png', sys.getsizeof(output_io_stream), None)
+    return uploaded_image
 
 
 class Fridge(models.Model):
@@ -72,6 +86,7 @@ class Fridge(models.Model):
             raise ValidationError(_("Invalid address"))
         self.latitude = location.latitude
         self.longitude = location.longitude
+        self.image = compress_image(self.image)
         super().save(*args, **kwargs)
 
 
@@ -106,6 +121,14 @@ class Food(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    def save(self, *args, **kwargs):
+        self.image = compress_image(self.image)
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
 
 
 class Reporting(models.Model):
@@ -192,30 +215,33 @@ class SpecialDay(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
+        sd = _("%(description)s : %(is_open)s ") % {
+            'description': self.description, 'is_open': "open" if self.is_open == True else "closed"}
         if self.to_date:
-            return _("From %(from_date)s to %(to_date)s") % \
+            return sd + _("from %(from_date)s to %(to_date)s") % \
                 {'from_date': self.from_date.strftime('%d/%m/%Y'),
                  'to_date': self.to_date.strftime('%d/%m/%Y')}
         elif self.from_hour and self.to_hour:
-            return _("The %(from_date)s open from %(from_hour)s to %(to_hour)s") % \
+            return sd + _("the %(from_date)s open from %(from_hour)s to %(to_hour)s") % \
                 {'from_date': self.from_date.strftime('%d/%m/%Y'),
                  'from_hour': self.from_hour.strftime('%H:%M'),
                  'to_hour':  self.to_hour.strftime('%H:%M')}
         elif self.from_hour:
-            return _("The %(from_date)s open from %(from_hour)s") % \
+            return sd + _("the %(from_date)s open from %(from_hour)s") % \
                 {'from_date': self.from_date.strftime('%d/%m/%Y'),
                  'from_hour': self.from_hour.strftime('%H:%M')}
         elif self.to_hour:
-            return _("The %(from_date)s closed at %(to_hour)s") % \
+            return sd + _("the %(from_date)s closed at %(to_hour)s") % \
                 {'from_date': self.from_date.strftime('%d/%m/%Y'),
                  'to_hour': self.to_hour.strftime('%H:%M')}
-        return _("The %(from_date)s") % \
+        return sd + _("The %(from_date)s") % \
             {'from_date': self.from_date.strftime('%d/%m/%Y')}
 
 
 class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
+    email = models.EmailField(unique=True)
 
     def has_fridge(self):
         return Fridge.objects.filter(user=self).count() != 0
@@ -249,6 +275,14 @@ class Sponsor(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.logo = compress_image(self.logo)
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.logo.delete(save=False)
+        super().delete(*args, **kwargs)
 
 
 class Inventory(models.Model):

@@ -12,6 +12,34 @@ from geopy.geocoders import Nominatim
 DATE_FORMAT = '%b %d, %Y'
 
 
+class FridgeDemandForm(forms.ModelForm):
+    '''Fridge form'''
+
+    class Meta:
+        model = Fridge
+        fields = ('name', 'address', 'zip_code', 'city',
+                  'phone_number', 'image')
+        labels = {
+            'name': _('Name'),
+            'address': _('Address'),
+            'zip_code': _('Zip code'),
+            'city': _('City'),
+            'phone_number': _('Phone number'),
+            'image': _('Image'),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        address = cleaned_data.get('address')
+        zip_code = cleaned_data.get('zip_code')
+        city = cleaned_data.get('city')
+        address = "{}, {} {}".format(address, zip_code, city)
+        geolocator = Nominatim(user_agent=name)
+        location = geolocator.geocode(address)
+        if not location:
+            raise ValidationError(_("Invalid address"))
+
 class FridgeForm(forms.ModelForm):
     '''Fridge form'''
 
