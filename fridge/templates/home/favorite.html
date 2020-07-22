@@ -1,11 +1,28 @@
-{% extends 'home/base.html' %}
+{% extends 'common/base.html' %}
 {% load static %}
 {% block content %}
+{% load i18n %}
 
-<div class="container">
-    <div class="valign-wrapper center-align">
-        <h2>Work in progress</h2>
+<div v-if="isAuthenticated() && ready" class="container" id="app-favorite">
+    <div id="main" class="row">
+        <div v-for="favorite in favorites" v-bind:key="favorite.id" class="col s10 offset-s1 m4">
+            <div class="card">
+                <a id="reference" :href="'/food/' + favorite.id + '/list'">
+                    <div class="card-image">
+                        <img id="image" :src="favorite.image" alt="fridge image">
+                        <span id="name" class="card-title">[[favorite.name]]</span>
+                    </div>
+                </a>
+                <div class="card-content">
+                    <strong>{% trans 'Address' %}</strong>
+                    <p id="address">[[favorite.address]]</p>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+<div v-else>
+    {% include 'user/login_options.html' %}
 </div>
 
 {% endblock %}

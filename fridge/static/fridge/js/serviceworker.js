@@ -1,26 +1,21 @@
-const cacheName = 'freego-pwa-v3';
+const cacheName = 'freego-pwa-v6';
 
 const filesToCache = [
     //urls
-    '/fridge/list',
+    '/list',
     '/',
     '/home',
-    '/map',
     '/favorite',
+    '/map',
     '/offline',
     //css
-    '/static/fridge/css/materialize.min.css',
     '/static/fridge/css/style.css',
     //icons
     '/static/fridge/icons/vegan-icon.png',
     '/static/fridge/icons/vegetarian-icon.png',
-    '/static/fridge/icons/feather/corner-up-left.svg',
     //js
-    '/static/fridge/js/feather.min.js',
     '/static/fridge/js/jquery-3.5.1.min.js',
-    '/static/fridge/js/materialize.min.js',
     '/static/fridge/js/script.js',
-    '/static/fridge/js/idb.js',
     '/static/fridge/js/app.js',
     //logos
     '/static/fridge/logos/icon-128x128.png',
@@ -29,6 +24,14 @@ const filesToCache = [
     '/static/fridge/logos/icon-192x192.png',
     '/static/fridge/logos/icon-256x256.png',
     '/static/fridge/logos/icon-512x512.png',
+    //cdn
+    'https://unpkg.com/vue/dist/vue.min.js',
+    'https://kit.fontawesome.com/8072de43d0.js',
+    'https://unpkg.com/axios/dist/axios.min.js',
+    'https://unpkg.com/idb@5.0.4/build/cjs/index.js',
+    'https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v5.3.0/build/ol.js',
+    'https://unpkg.com/vuelayers/lib/index.umd.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js',
 ];
 
 
@@ -38,8 +41,8 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(cacheName)
             .then(cache => {
+                console.log('[ServiceWorker] Pre-caching offline page');
                 return cache.addAll(filesToCache);
-
             })
     );
 });
@@ -47,16 +50,17 @@ self.addEventListener('install', event => {
 // Clear cache on activate
 self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames
-                    .filter(cacheName => (cacheName.startsWith("django-pwa-")))
-                    .filter(cacheName => (cacheName !== staticCacheName))
-                    .map(cacheName => caches.delete(cacheName))
-            );
+        caches.keys().then(keyList => {
+            return Promise.all(keyList.map(key => {
+                if (key !== cacheName) {
+                    console.log('[ServiceWorker] Removing old cache', key);
+                    return caches.delete(key);
+                }
+            }));
         })
     );
 });
+
 
 // Serve from Cache
 self.addEventListener("fetch", event => {

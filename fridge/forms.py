@@ -1,31 +1,97 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from .models import Fridge, Food, OpeningHour, SpecialDay, User
+from .models import Fridge, Food, OpeningHour, SpecialDay, User, Sponsor, \
+    Inventory, TemperatureControl
 from .validators import expiration_date_validator
 
 from django.utils.translation import gettext_lazy as _
+from geopy.geocoders import Nominatim
 
 # Constant
 DATE_FORMAT = '%b %d, %Y'
 
+
+class FridgeDemandForm(forms.ModelForm):
+    '''Fridge form'''
+
+    class Meta:
+        model = Fridge
+        fields = ('name', 'address', 'zip_code', 'city',
+                  'phone_number', 'image')
+        labels = {
+            'name': _('Name'),
+            'address': _('Address'),
+            'zip_code': _('Zip code'),
+            'city': _('City'),
+            'phone_number': _('Phone number'),
+            'image': _('Image'),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        address = cleaned_data.get('address')
+        zip_code = cleaned_data.get('zip_code')
+        city = cleaned_data.get('city')
+        address = "{}, {} {}".format(address, zip_code, city)
+        geolocator = Nominatim(user_agent=name)
+        location = geolocator.geocode(address)
+        if not location:
+            raise ValidationError(_("Invalid address"))
 
 class FridgeForm(forms.ModelForm):
     '''Fridge form'''
 
     class Meta:
         model = Fridge
-        fields = ('name', 'address', 'NPA', 'city',
+        fields = ('name', 'address', 'zip_code', 'city',
                   'phone_number', 'image', 'user')
         labels = {
             'name': _('Name'),
             'address': _('Address'),
-            'NPA': _('NPA'),
+            'zip_code': _('Zip code'),
             'city': _('City'),
             'phone_number': _('Phone number'),
             'image': _('Image'),
             'user': _('User')
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        address = cleaned_data.get('address')
+        zip_code = cleaned_data.get('zip_code')
+        city = cleaned_data.get('city')
+        address = "{}, {} {}".format(address, zip_code, city)
+        geolocator = Nominatim(user_agent=name)
+        location = geolocator.geocode(address)
+        if not location:
+            raise ValidationError(_("Invalid address"))
+
+
+class FridgeUpdateAddressForm(forms.ModelForm):
+    '''Fridge form'''
+
+    class Meta:
+        model = Fridge
+        fields = ('address', 'zip_code', 'city')
+        labels = {
+            'address': _('Address'),
+            'zip_code': _('Zip code'),
+            'city': _('City')
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        address = cleaned_data.get('address')
+        zip_code = cleaned_data.get('zip_code')
+        city = cleaned_data.get('city')
+        address = "{}, {} {}".format(address, zip_code, city)
+        geolocator = Nominatim(user_agent='address')
+        location = geolocator.geocode(address)
+        if not location:
+            raise ValidationError(_("Invalid address"))
 
 
 class FoodForm(forms.ModelForm):
@@ -33,11 +99,18 @@ class FoodForm(forms.ModelForm):
 
     class Meta:
         model = Food
-        fields = ('name', 'vegetarian', 'vegan', 'expiration_date', 'image')
+        fields = ('name', 'description', 'vegetarian', 'vegan', 'halal',
+                  'lactose_free', 'gluten_free', 'bio',
+                  'expiration_date', 'image')
         labels = {
             'name': _('Name'),
+            'description': _('Description'),
             'vegetarian': _('Vegetarian'),
             'vegan': _('Vegan'),
+            'halal': _('Halal'),
+            'lactose_free': _('Lactose free'),
+            'gluten_free': _('Gluten free'),
+            'bio': _('Bio'),
             'expiration_date': _('Expiration date'),
             'image': _('Image'),
         }
@@ -84,8 +157,11 @@ class SpecialDayForm(forms.ModelForm):
 
     class Meta:
         model = SpecialDay
-        fields = ('from_date', 'to_date', 'from_hour', 'to_hour')
+        fields = ('description', 'is_open', 'from_date',
+                  'to_date', 'from_hour', 'to_hour')
         labels = {
+            'description': _('Description'),
+            'is_open': _('Is the Free Go open?'),
             'from_date': _('From date'),
             'to_date': _('To date'),
             'from_hour': _('From hour'),
@@ -104,6 +180,9 @@ class SpecialDayForm(forms.ModelForm):
             'from_hour': False,
             'to_hour': False
         }
+
+    class Media:
+        js = ('fridge/js/script.js')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -130,3 +209,56 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2', )
+
+
+class ContactForm(forms.Form):
+    subject = forms.CharField(max_length=45, label=_('Subject'))
+    message = forms.CharField(max_length=500, label=_('Message'))
+
+
+class SponsorForm(forms.ModelForm):
+
+    class Meta:
+        model = Sponsor
+        fields = ('name', 'logo', 'website')
+        labels = {
+            'name': _('Name'),
+            'logo': _('Logo'),
+            'website': _('Website url')
+        }
+        required = {
+            'website': False
+        }
+
+
+class InventoryForm(forms.ModelForm):
+
+    class Meta:
+        model = Inventory
+        fields = ("date", "product_name",
+                  "product_number", "temperature", "visa")
+        labels = {
+            "date": _("Date"),
+            "product_name": _("Product name"),
+            "product_number": _("Product number"),
+            "temperature": _("Temperature"),
+            "visa": _("Visa")
+        }
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'datepicker'})
+        }
+
+
+class TemperatureControlForm(forms.ModelForm):
+
+    class Meta:
+        model = TemperatureControl
+        fields = ("date", "temperature", "visa")
+        labels = {
+            "date": _("Date"),
+            "temperature": _("Temperature"),
+            "visa": _("Visa")
+        }
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'datepicker'})
+        }

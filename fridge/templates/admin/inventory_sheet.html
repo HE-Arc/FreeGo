@@ -1,0 +1,41 @@
+{% extends 'common/base_store.html' %}
+
+{% block content %}
+{% load static %}
+{% load i18n %}
+
+<div class="container">
+    <table>
+        <caption>
+            <h4>{% trans 'Inventory sheet' %}</h4>
+        </caption>
+        <thead>
+            <tr>
+                <th scope="col">{% trans 'Date' %}</th>
+                <th scope="col">{% trans 'Product name' %}</th>
+                <th scope="col">{% trans 'Product number' %}</th>
+                <th scope="col">{% trans 'Temperature (°C)' %}</th>
+                <th scope="col">{% trans 'Visa' %}</th>
+                <th scope="col">{% trans 'Actions' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inventory in inventory_list %}
+            <tr>
+                <td>{{inventory.date}}</td>
+                <td>{{inventory.product_name}}</td>
+                <td>{{inventory.product_number}}</td>
+                <td>{{inventory.temperature}}</td>
+                <td>{{inventory.visa}}</td>
+                <td>
+                    <a href="{% url 'fridge:inventory-update' inventory.pk %}" class="btn btn-success btn-sm">Update</a>
+                    <a href="{% url 'fridge:inventory-delete' inventory.pk %}" class="btn btn-warning btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'fridge:inventory-new' fridge.pk %}"
+        class="btn waves-effect waves-light right">{% trans 'Add' %}</a>
+</div>
+{% endblock %}

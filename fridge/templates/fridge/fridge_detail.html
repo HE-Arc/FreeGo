@@ -1,0 +1,54 @@
+{% extends 'common/base_store.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<ul class="collection">
+    <a href="{% url 'fridge:change-name' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Name' %}</strong>
+        <span class="secondary-content">{{ fridge.name }}</span>
+    </a>
+    <a href="{% url 'fridge:change-address' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Address' %}</strong>
+        <span class="secondary-content">{{ fridge.address }}, {{ fridge.zip_code }} {{ fridge.city }}</span>
+    </a>
+    <a href="{% url 'fridge:change-phone-number' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Phone number' %}</strong>
+        <span class="secondary-content">{{ fridge.phone_number }}</span>
+    </a>
+    <a href="{% url 'fridge:change-image' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Image' %}</strong>
+        <span class="secondary-content">{{ fridge.image }}</span>
+    </a>
+    <a href="{% url 'fridge:opening-hour-list' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Opening Hour' %}</strong>
+        <i class="material-icons secondary-content" aria-hidden="true">send</i>
+        <p>
+            {% for oh in fridge.get_opening_hours %}
+            {{ oh }}<br>
+            {% endfor %}
+        </p>
+    </a>
+    <a href="{% url 'fridge:special-day-list' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Special Day' %}</strong>
+        <i class="material-icons secondary-content" aria-hidden="true">send</i>
+        <p>
+            {% for sd in fridge.get_special_days %}
+            {{ sd }}<br>
+            {% endfor %}
+        </p>
+    </a>
+</ul>
+
+<div class="container center-align">
+    <a class="waves-effect waves-light btn-large red"
+        href="{% url 'fridge:fridge-delete' fridge.pk %}">{% trans 'Delete your fridge' %}</a>
+</div>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large freego-color" href="{% url 'fridge:store' fridge.pk %}">
+        <i class="material-icons" style="font-size: 3rem;" aria-hidden="true">home</i>
+    </a>
+</div>
+
+{% endblock %}

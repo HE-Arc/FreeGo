@@ -1,15 +1,12 @@
-{% extends 'admin/base_store.html' %}
+{% extends 'common/base_store.html' %}
 {% load static %}
 {% block content %}
 {% load i18n %}
 
 <h5 class="container">{% trans 'Account details' %}</h5>
 <ul class="collection">
-    <a href="{% url 'fridge:change-user' user.pk %}" class="collection-item black-text">{% trans 'Name' %}
+    <a href="{% url 'fridge:change-username' %}" class="collection-item black-text">{% trans 'Name' %}
         <span class="secondary-content">{{ user.username }}</span>
-    </a>
-    <a href="{% url 'fridge:change-email' user.pk %}" class="collection-item black-text">{% trans 'Email' %}
-        <span class="secondary-content">{{ user.email }}</span>
     </a>
 </ul>
 <h5 class="container">{% trans 'Parameters' %}</h5>

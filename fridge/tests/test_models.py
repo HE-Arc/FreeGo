@@ -59,11 +59,24 @@ class FridgeModelTest(TestCase):
         self.assertEqual(self.fridge.get_available_food().count(), 0)
         self.assertEqual(len(self.fridge.get_reserved_food()), 1)
 
+    def test_latitude_longitude(self):
+        """
+        Test latitude and longitude.
+        For address : 175 5th Avenue NYC
+        longitude = -73.98964162240998
+        latitude = 40.741059199999995
+        """
+        longitude = -73.98964162240998
+        latitude = 40.741059199999995
+
+        self.assertAlmostEqual(self.fridge.longitude, longitude)
+        self.assertAlmostEqual(self.fridge.latitude, latitude)
+
 
 class FoodModel(TestCase):
     def setUp(self):
-        self.user = create_user("test1")
-        self.another_user = create_user("test2")
+        self.user = create_user("test1", email="test1@test.tests")
+        self.another_user = create_user("test2", email="test2@test.tests")
         fridge = create_fridge(self.user)
         self.food = create_food(fridge, self.user)
 
