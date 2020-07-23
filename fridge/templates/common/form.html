@@ -35,18 +35,26 @@
                     {{ field }}
                     <span>{{ field.label }}</span>
                 </label>
+                {% elif field.field.widget.input_type == 'select' %}
+                {{ field }}
+                {% if field.errors %}
+                {% for error in field.errors %}
+                <span class="helper-text red-text" data-error="wrong" data-success="right">{{ error|escape }}</span>
+                {% endfor %}
+                {% endif %}
                 {% else %}
                 {{ field }}
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {% if field.errors %}
-                        {% for error in field.errors %}
-                        <span class="helper-text red-text" data-error="wrong" data-success="right">{{ error|escape }}</span>
-                        {% endfor %}
-                    {% endif %}
+                {% if field.errors %}
+                {% for error in field.errors %}
+                <span class="helper-text red-text" data-error="wrong" data-success="right">{{ error|escape }}</span>
+                {% endfor %}
+                {% endif %}
                 {% endif %}
             </div>
         </div>
         {% endfor %}
+        <p>*{% trans "Required" %}</p>
 
         <!-- ENDFORM -->
 

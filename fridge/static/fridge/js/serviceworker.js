@@ -1,4 +1,4 @@
-const cacheName = 'freego-pwa-v6';
+const cacheName = 'freego-pwa-v8';
 
 const filesToCache = [
     //urls
@@ -67,6 +67,7 @@ self.addEventListener("fetch", event => {
     event.respondWith(
         caches.match(event.request)
             .then(response => {
+                console.log("fetch event");
                 return response || fetch(event.request);
             })
             .catch(() => {
