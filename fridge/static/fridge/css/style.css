@@ -24,12 +24,12 @@ main {
     margin: 25px;
 }
 
-.nav-wrapper, .page-footer {
+.nav-extended, .page-footer {
     background-color: rgb(87, 161, 173);
 }
 
 .valign-wrapper {
-    height: 50rem;
+    height: 35rem;
 }
 
 .freego-color {
@@ -81,4 +81,15 @@ i.large {
     top: 10px;
     color: white;
     cursor: pointer;
+}
+
+.brand-title {
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+nav .brand-logo {
+    width: 70%;
+    font-size: 1.8rem;
+    text-align: center;
 }

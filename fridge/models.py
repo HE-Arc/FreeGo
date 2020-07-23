@@ -131,20 +131,6 @@ class Food(models.Model):
         super().delete(*args, **kwargs)
 
 
-class Reporting(models.Model):
-    '''Reporting model'''
-    title = models.CharField(max_length=45)
-    description = models.CharField(max_length=500)
-    fridge = models.ForeignKey(
-        Fridge, on_delete=models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-        null=True, blank=True)
-
-    def __str__(self):
-        return str(self.title)
-
-
 class Reservation(models.Model):
     '''Reservation model'''
     food = models.ForeignKey(
@@ -290,7 +276,7 @@ class Inventory(models.Model):
     date = models.DateField()
     product_name = models.CharField(max_length=45)
     product_number = models.IntegerField()
-    temperature = models.IntegerField()
+    temperature = models.FloatField()
     visa = models.CharField(max_length=45)
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE)
@@ -302,7 +288,7 @@ class Inventory(models.Model):
 class TemperatureControl(models.Model):
     '''TemperatureControl model'''
     date = models.DateField()
-    temperature = models.IntegerField()
+    temperature = models.FloatField()
     visa = models.CharField(max_length=45)
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE)

@@ -1,3 +1,4 @@
+from django.contrib.messages.views import SuccessMessageMixin
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.tokens import (
     default_token_generator, PasswordResetTokenGenerator)
@@ -14,7 +15,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from fridge.forms import RegisterForm
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import (
+    login, authenticate, logout, views as auth_views)
 
 from django.core.mail import send_mail
 from fridge.forms import ContactForm
@@ -129,23 +131,19 @@ class RegisterView(View):
         return render(request, self.template_name, {'form': form})
 
 
-class LoginView(generic.TemplateView):
+class LoginView(auth_views.LoginView):
     template_name = 'user/login.html'
 
-    def post(self, request, *args, **kwargs):
-        username = request.POST.get("username")
-        raw_password = request.POST.get("password")
-        user = authenticate(username=username, password=raw_password)
-        if user is not None:
-            login(request, user)
-            token, created = Token.objects.get_or_create(user=user)
-            message = _(
-                "Login with success")
-            messages.add_message(request, messages.INFO, message)
-            return render(request, 'home/home.html', {
-                'token': token.key,
-            })
-        return redirect('fridge:login')
+    def form_valid(self, form):
+        """Security check complete. Log the user in."""
+        login(self.request, form.get_user())
+        token, created = Token.objects.get_or_create(user=form.get_user())
+        message = _(
+            "Login with success")
+        messages.add_message(self.request, messages.INFO, message)
+        return render(self.request, 'home/home.html', {
+            'token': token.key,
+        })
 
 
 class LogoutView(LoginRequiredMixin, View):
@@ -215,30 +213,24 @@ class FridgeFollowingDeleteView(LoginRequiredMixin, View):
         return self.post(request, args, kwargs)
 
 
-class ContactView(View):
+class ContactView(generic.FormView):
     form_class = ContactForm
     template_name = 'common/form.html'
 
-    def post(self, request, *args, **kwargs):
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            subject = form.cleaned_data.get('subject')
-            message = form.cleaned_data.get('message')
-            from_user = self.request.user.email
-            perm = Permission.objects.get(codename="admin")
-            to_user = User.objects.filter(
-                user_permissions__in=[perm])
-            send_mail(subject=subject, message=message,
-                      from_email=from_user, recipient_list=to_user)
-            message = _(
-                "Message send with success")
-            messages.add_message(request, messages.INFO, message)
-            return redirect('fridge:home')
-        return render(request, self.template_name, {'form': form})
-
-    def get(self, request, *args, **kwargs):
-        form = ContactForm()
-        return render(request, self.template_name, {'form': form})
+    def form_valid(self, form):
+        subject = form.cleaned_data.get('subject')
+        message = form.cleaned_data.get('message')
+        from_user = self.request.user.email
+        perm = Permission.objects.get(codename="admin")
+        to_user = User.objects.filter(
+            user_permissions__in=[perm])
+        send_mail(subject=subject, message=message,
+                  from_email=from_user, recipient_list=to_user)
+        message2 = _(
+            "Message send with success")
+        messages.add_message(self.request, messages.INFO, message2)
+        print(messages)
+        return render(self.request, 'home/home.html', {'form': form})
 
 
 class DonationView(generic.TemplateView):

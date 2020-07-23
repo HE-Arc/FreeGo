@@ -8,18 +8,7 @@
         <form method="post" class="col s12">
             {% csrf_token %}
 
-            <div class="row"> {% include "common/partial_form.html" %}
-                <div class="input-field col s12">
-                    <input id="username" name="username" type="text" required />
-                    <label for="username">{% trans 'Username : ' %}</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <input id="password" name="password" type="password" required />
-                    <label for="password">{% trans 'Password : ' %}</label>
-                </div>
-            </div>
+            {% include "common/partial_form.html" %}
 
             <div class="row">
                 <button class="btn waves-effect waves-light col s12" type="submit"

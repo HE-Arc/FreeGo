@@ -460,7 +460,7 @@ msgid ""
 msgstr ""
 "Notre association a pour but de mettre en place des réfrigérateurs et des "
 "armoires libre-service afin de diminuer le gaspillage alimentaire tout en "
-"permettant d'aider les personnes les plus démunies."
+"permettant d'aider les personnes dans le besoin."
 
 #: .fridgetemplateshomehome.html:13
 msgid "it was created in 2019."

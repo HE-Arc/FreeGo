@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 from fridge.models import Fridge
+from rest_framework.authtoken.models import Token
 
 
 class HomeView(generic.TemplateView):
