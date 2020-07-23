@@ -38,63 +38,73 @@
 
         <!-- ALL FRIDGE -->
         <div class="col s12 m6">
-            <table>
-                <caption>
-                    <h4>{% trans 'All fridges' %}</h4>
-                </caption>
-                <thead>
-                    <tr>
-                        <th scope="col">{% trans 'Name' %}</th>
-                        <th scope="col">{% trans 'Action' %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for fridge in fridges %}
-                    <tr>
-                        <td>{{fridge.name}}</td>
-                        <td>
-                            <a href="{% url 'fridge:store' fridge.pk %}"
-                                class="btn btn-success btn-sm">{% trans 'Details' %}</a>
-                            <a href="{% url 'fridge:fridge-delete' fridge.pk %}"
-                                class="btn btn-warning btn-sm">{% trans 'Delete' %}</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="center-align">
-                <a href="{% url 'fridge:fridge-new' %}" class="btn waves-effect waves-light">{% trans 'Add' %}</a>
+            <div class="section">
+                <table>
+                    <caption>
+                        <h4>{% trans 'All fridges' %}</h4>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">{% trans 'Name' %}</th>
+                            <th scope="col">{% trans 'Action' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fridge in fridges %}
+                        <tr>
+                            <td>{{fridge.name}}</td>
+                            <td>
+                                <a href="{% url 'fridge:store' fridge.pk %}"
+                                    class="btn btn-success btn-sm">{% trans 'Details' %}</a>
+                                <a href="{% url 'fridge:fridge-delete' fridge.pk %}"
+                                    class="btn btn-warning btn-sm">{% trans 'Delete' %}</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="section">
+                <div class="center-align">
+                    <a href="{% url 'fridge:fridge-new' %}"
+                        class="btn waves-effect waves-light right">{% trans 'Add' %}</a>
+                </div>
             </div>
         </div>
 
         <!-- SPONSOR -->
         <div class="col s12 m6">
-            <table>
-                <caption>
-                    <h4>{% trans 'Sponsor' %}</h4>
-                </caption>
-                <thead>
-                    <tr>
-                        <th scope="col">{% trans 'Name' %}</th>
-                        <th scope="col">{% trans 'Action' %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for sponsor in sponsors %}
-                    <tr>
-                        <td>{{sponsor.name}}</td>
-                        <td>
-                            <!-- <a href="{% url 'fridge:sponsor-update' sponsor.pk %}"
+            <div class="section">
+                <table>
+                    <caption>
+                        <h4>{% trans 'Sponsor' %}</h4>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">{% trans 'Name' %}</th>
+                            <th scope="col">{% trans 'Action' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sponsor in sponsors %}
+                        <tr>
+                            <td>{{sponsor.name}}</td>
+                            <td>
+                                <!-- <a href="{% url 'fridge:sponsor-update' sponsor.pk %}"
                                 class="btn btn-success btn-sm">{% trans 'Update' %}</a> -->
-                            <a href="{% url 'fridge:sponsor-delete' sponsor.pk %}"
-                                class="btn btn-warning btn-sm">{% trans 'Delete' %}</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="center-align">
-                <a href="{% url 'fridge:sponsor-new' %}" class="btn waves-effect waves-light">{% trans 'Add' %}</a>
+                                <a href="{% url 'fridge:sponsor-delete' sponsor.pk %}"
+                                    class="btn btn-warning btn-sm">{% trans 'Delete' %}</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="section">
+                <div class="center-align">
+                    <a href="{% url 'fridge:sponsor-new' %}"
+                        class="btn waves-effect waves-light right">{% trans 'Add' %}</a>
+                </div>
             </div>
         </div>
 

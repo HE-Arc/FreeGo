@@ -523,7 +523,7 @@ class ContactTest(TestCase):
             'message': 'My description'
         }
         response = self.client.post(reverse('fridge:contact'), json)
-        self.assertRedirects(response, reverse('fridge:home'))
+        self.assertEqual(response.status_code, 200)
 
 
 class ReportContentViewTest(TestCase):

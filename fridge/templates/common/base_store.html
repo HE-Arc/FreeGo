@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'fridge/css/style.css' %}" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Let browser know website is optimized for mobile-->
+    <link rel="icon" type="image/png" href="{% static 'fridge/logos/icon-128x128.png' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
@@ -19,6 +20,7 @@
         <div class="navbar-fixed">
             <nav class="nav-extended">
                 <div class="nav-wrapper">
+                    <!-- BACK BUTTONS REDIRECTIONS -->
                     <!-- admin -->
                     {% url 'fridge:myadmin' as myadmin_url %}
                     {% url 'fridge:store' fridge.pk as store_url %}
@@ -36,61 +38,61 @@
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a class="brand-logo">{% trans 'Administation' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Administation' %}</a>
 
                     {% elif request.path == store_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
 
                     {% elif request.path == sponsor_new_url %}
                     <a class="left" href="{% url 'fridge:myadmin' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Add sponsor' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Add sponsor' %}</a>
 
                     {% elif request.path == sponsor_list_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Sponsors list' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Sponsors list' %}</a>
 
                     {% elif request.path == inventory_new_url  %}
                     <a class="left" href="{% url 'fridge:inventory-sheet' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Add inventory' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Add inventory' %}</a>
 
                     {% elif request.path == inventory_update_url %}
                     <a class="left" href="{% url 'fridge:inventory-sheet' object.fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Add inventory' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Add inventory' %}</a>
 
                     {% elif request.path == inventory_sheet_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Inventory sheet' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Inventory sheet' %}</a>
 
                     {% elif request.path == temperature_control_new_url %}
                     <a class="left" href="{% url 'fridge:temperature-control-list' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Temperature control' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Temperature control' %}</a>
 
                     {% elif request.path == temperature_control_update_url %}
                     <a class="left" href="{% url 'fridge:temperature-control-list' object.fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Temperature control' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Temperature control' %}</a>
 
                     {% elif request.path == temperature_control_sheet_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Temperature control' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Temperature control' %}</a>
                     {% endif %}
 
                     <!-- food -->
@@ -103,7 +105,7 @@
                     <a class="left" href="{% url 'fridge:list' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
                     {% if is_favorite %}
                     <a class="right" href="{% url 'fridge:fridge-unfollow' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
@@ -117,17 +119,17 @@
                     <a class="left" href="{% url 'fridge:food-list' food.fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ food.fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ food.name }}</a>
                     {% elif request.path == food_form_url %}
                     <a class="left" href="{% url 'fridge:store' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
                     {% elif request.path == food_update_url %}
                     <a class="left" href="{% url 'fridge:store' food.fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ food.fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ food.fridge.name }}</a>
                     {% endif %}
 
                     <!-- fridge -->
@@ -143,25 +145,25 @@
                     <a class="left" href="{% url 'fridge:myadmin' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Create fridge' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Create fridge' %}</a>
 
                     {% elif request.path == fridge_demand_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Ask for become a freego' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Demand fridge' %}</a>
 
                     {% elif request.path == fridge_detail_url %}
                     <a class="left" href="{% url 'fridge:store' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
 
                     {% elif request.path == change_name_url or request.path == change_address_url or request.path == change_phone_number_url or request.path == change_image_url %}
                     <a class="left" href="{% url 'fridge:fridge-detail' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
                     {% endif %}
 
                     <!-- schedule -->
@@ -174,25 +176,25 @@
                     <a class="left" href="{% url 'fridge:opening-hour-list' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
 
                     {% elif request.path == opening_hour_list_url %}
                     <a class="left" href="{% url 'fridge:fridge-detail' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
 
                     {% elif request.path == specialday_form_url %}
                     <a class="left" href="{% url 'fridge:special-day-list' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
 
                     {% elif request.path == special_day_list_url %}
                     <a class="left" href="{% url 'fridge:fridge-detail' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{{ fridge.name }}</a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
                     {% endif %}
 
                     <!-- user -->
@@ -213,73 +215,73 @@
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Register' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Register' %}</a>
 
                     {% elif request.path == login_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Login' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Login' %}</a>
 
                     {% elif request.path == profile_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Profile' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Profile' %}</a>
 
                     {% elif request.path == change_username_url %}
                     <a class="left" href="{% url 'fridge:profile' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Profile' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Profile' %}</a>
 
                     {% elif request.path == change_password_url %}
                     <a class="left" href="{% url 'fridge:profile' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Profile' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Profile' %}</a>
 
                     {% elif request.path == password_reset_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Login' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Login' %}</a>
 
                     {% elif request.path == password_reset_done_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Login' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Login' %}</a>
 
                     {% elif request.path == password_reset_confirm_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Login' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Login' %}</a>
 
                     {% elif request.path == reservation_list_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Your reservations' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Your reservations' %}</a>
 
                     {% elif request.path == contact_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Contact us' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Contact us' %}</a>
 
                     {% elif request.path == donations_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Donations' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Donations' %}</a>
 
                     {% elif request.path == notifications_url %}
                     <a class="left" href="{% url 'fridge:home' %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
-                    <a href="{% url 'fridge:home' %}" class="brand-logo">{% trans 'Your notifications' %}</a>
+                    <a class="brand-logo truncate">{% trans 'Your notifications' %}</a>
                     {% endif %}
 
                 </div>
@@ -289,19 +291,15 @@
         <!-- ALERT BOX -->
         {% if messages %}
         {% for message in messages %}
-        <div class="row" id="alert_box">
-            <div class="col s12 m12">
-                <div class="card red darken-1">
-                    <div class="row">
-                        <div class="col s12 m10">
-                            <div class="card-content white-text">
-                                <p>{{message}}</p>
-                            </div>
-                        </div>
-                        <div class="col s12 m2">
-                            <i class="material-icons icon_style" id="alert_close" aria-hidden="true">close</i>
-                        </div>
+        <div class="card green" style="position: absolute;left: 0.5rem;right: 0.5rem;" id="alert_box">
+            <div class="row">
+                <div class="col s12 m10">
+                    <div class="card-content white-text">
+                        <p>{{message}}</p>
                     </div>
+                </div>
+                <div class="col s12 m2">
+                    <i class="material-icons icon_style" id="alert_close" aria-hidden="true">close</i>
                 </div>
             </div>
         </div>

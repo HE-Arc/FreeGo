@@ -124,7 +124,7 @@ class InventoryListView(ValidInventoryUser, generic.ListView):
 
     def get_queryset(self):
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        return Inventory.objects.filter(fridge=fridge)
+        return Inventory.objects.filter(fridge=fridge).reverse()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -197,7 +197,7 @@ class TemperatureControlListView(ValidInventoryUser, generic.ListView):
 
     def get_queryset(self):
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        return TemperatureControl.objects.filter(fridge=fridge)
+        return TemperatureControl.objects.filter(fridge=fridge).reverse()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

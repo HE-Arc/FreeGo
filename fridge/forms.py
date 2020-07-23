@@ -13,19 +13,19 @@ DATE_FORMAT = '%b %d, %Y'
 
 
 class FridgeDemandForm(forms.ModelForm):
-    '''Fridge form'''
+    '''Fridge Demand form'''
 
     class Meta:
         model = Fridge
         fields = ('name', 'address', 'zip_code', 'city',
                   'phone_number', 'image')
         labels = {
-            'name': _('Name'),
-            'address': _('Address'),
-            'zip_code': _('Zip code'),
-            'city': _('City'),
-            'phone_number': _('Phone number'),
-            'image': _('Image'),
+            'name': _('Name') + "*",
+            'address': _('Address') + "*",
+            'zip_code': _('Zip code') + "*",
+            'city': _('City') + "*",
+            'phone_number': _('Phone number') + "*",
+            'image': _('Image') + "*",
         }
 
     def clean(self):
@@ -40,6 +40,7 @@ class FridgeDemandForm(forms.ModelForm):
         if not location:
             raise ValidationError(_("Invalid address"))
 
+
 class FridgeForm(forms.ModelForm):
     '''Fridge form'''
 
@@ -48,13 +49,13 @@ class FridgeForm(forms.ModelForm):
         fields = ('name', 'address', 'zip_code', 'city',
                   'phone_number', 'image', 'user')
         labels = {
-            'name': _('Name'),
-            'address': _('Address'),
-            'zip_code': _('Zip code'),
-            'city': _('City'),
-            'phone_number': _('Phone number'),
-            'image': _('Image'),
-            'user': _('User')
+            'name': _('Name') + "*",
+            'address': _('Address') + "*",
+            'zip_code': _('Zip code') + "*",
+            'city': _('City') + "*",
+            'phone_number': _('Phone number') + "*",
+            'image': _('Image') + "*",
+            'user': _('User') + "*"
         }
 
     def clean(self):
@@ -77,9 +78,9 @@ class FridgeUpdateAddressForm(forms.ModelForm):
         model = Fridge
         fields = ('address', 'zip_code', 'city')
         labels = {
-            'address': _('Address'),
-            'zip_code': _('Zip code'),
-            'city': _('City')
+            'address': _('Address') + "*",
+            'zip_code': _('Zip code') + "*",
+            'city': _('City') + "*"
         }
 
     def clean(self):
@@ -103,7 +104,7 @@ class FoodForm(forms.ModelForm):
                   'lactose_free', 'gluten_free', 'bio',
                   'expiration_date', 'image')
         labels = {
-            'name': _('Name'),
+            'name': _('Name') + "*",
             'description': _('Description'),
             'vegetarian': _('Vegetarian'),
             'vegan': _('Vegan'),
@@ -111,7 +112,7 @@ class FoodForm(forms.ModelForm):
             'lactose_free': _('Lactose free'),
             'gluten_free': _('Gluten free'),
             'bio': _('Bio'),
-            'expiration_date': _('Expiration date'),
+            'expiration_date': _('Expiration date') + "*",
             'image': _('Image'),
         }
 
@@ -130,20 +131,19 @@ class OpeningHourForm(forms.ModelForm):
         model = OpeningHour
         fields = ('weekday', 'from_hour', 'to_hour')
         labels = {
-            'weekday': _('Week day'),
-            'from_hour': _('From hour'),
-            'to_hour': _('To hour')
+            'weekday': _('Week day') + "*",
+            'from_hour': _('From hour') + "*",
+            'to_hour': _('To hour') + "*"
         }
 
         widgets = {
+            'weekday': forms.Select(attrs={'class': 'browser-default'}),
             'from_hour': forms.TimeInput(attrs={'class': 'timepicker'}),
             'to_hour': forms.TimeInput(attrs={'class': 'timepicker'})
         }
 
     def clean(self):
         cleaned_data = super().clean()
-        print("TEEEEESSSSSSSSSTTTTTTTTTTT")
-        print(cleaned_data)
         from_hour = to_hour = None
         from_hour = cleaned_data.get('from_hour')
         to_hour = cleaned_data.get('to_hour')
@@ -160,9 +160,9 @@ class SpecialDayForm(forms.ModelForm):
         fields = ('description', 'is_open', 'from_date',
                   'to_date', 'from_hour', 'to_hour')
         labels = {
-            'description': _('Description'),
+            'description': _('Description') + "*",
             'is_open': _('Is the Free Go open?'),
-            'from_date': _('From date'),
+            'from_date': _('From date') + "*",
             'to_date': _('To date'),
             'from_hour': _('From hour'),
             'to_hour': _('To hour')
@@ -203,6 +203,7 @@ class SpecialDayForm(forms.ModelForm):
 
 
 class RegisterForm(UserCreationForm):
+    '''Register Form'''
     email = forms.EmailField(
         max_length=254, help_text=_('Required. Fill an valid email address.'))
 
@@ -212,18 +213,19 @@ class RegisterForm(UserCreationForm):
 
 
 class ContactForm(forms.Form):
+    '''Contact Form'''
     subject = forms.CharField(max_length=45, label=_('Subject'))
     message = forms.CharField(max_length=500, label=_('Message'))
 
 
 class SponsorForm(forms.ModelForm):
-
+    '''Sponsor Form'''
     class Meta:
         model = Sponsor
         fields = ('name', 'logo', 'website')
         labels = {
-            'name': _('Name'),
-            'logo': _('Logo'),
+            'name': _('Name') + "*",
+            'logo': _('Logo') + "*",
             'website': _('Website url')
         }
         required = {
@@ -232,17 +234,17 @@ class SponsorForm(forms.ModelForm):
 
 
 class InventoryForm(forms.ModelForm):
-
+    '''Inventory Sheet Form'''
     class Meta:
         model = Inventory
         fields = ("date", "product_name",
                   "product_number", "temperature", "visa")
         labels = {
-            "date": _("Date"),
-            "product_name": _("Product name"),
-            "product_number": _("Product number"),
-            "temperature": _("Temperature"),
-            "visa": _("Visa")
+            "date": _("Date") + "*",
+            "product_name": _("Product name") + "*",
+            "product_number": _("Product number") + "*",
+            "temperature": _("Temperature") + "*",
+            "visa": _("Visa") + "*"
         }
         widgets = {
             'date': forms.DateInput(attrs={'class': 'datepicker'})
@@ -250,14 +252,14 @@ class InventoryForm(forms.ModelForm):
 
 
 class TemperatureControlForm(forms.ModelForm):
-
+    '''Temperature Control Form'''
     class Meta:
         model = TemperatureControl
         fields = ("date", "temperature", "visa")
         labels = {
-            "date": _("Date"),
-            "temperature": _("Temperature"),
-            "visa": _("Visa")
+            "date": _("Date") + "*",
+            "temperature": _("Temperature") + "*",
+            "visa": _("Visa") + "*"
         }
         widgets = {
             'date': forms.DateInput(attrs={'class': 'datepicker'})
