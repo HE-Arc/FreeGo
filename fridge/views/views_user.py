@@ -1,4 +1,3 @@
-from django.contrib.messages.views import SuccessMessageMixin
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.tokens import (
     default_token_generator, PasswordResetTokenGenerator)
@@ -15,8 +14,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from fridge.forms import RegisterForm
-from django.contrib.auth import (
-    login, authenticate, logout, views as auth_views)
+from django.contrib.auth import login, logout, views as auth_views
 
 from django.core.mail import send_mail
 from fridge.forms import ContactForm

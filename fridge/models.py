@@ -13,6 +13,7 @@ from geopy.geocoders import Nominatim
 
 
 def compress_image(uploaded_image):
+    '''Return compressed image'''
     tmp_image = Image.open(uploaded_image)
     output_io_stream = BytesIO()
     tmp_image.save(output_io_stream, format='PNG', quality=60)
@@ -225,6 +226,7 @@ class SpecialDay(models.Model):
 
 
 class User(AbstractUser):
+    '''User model'''
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
     email = models.EmailField(unique=True)
@@ -238,7 +240,7 @@ class User(AbstractUser):
 
 
 class FridgeFollowing(models.Model):
-    '''FridgeFollowing class'''
+    '''FridgeFollowing model'''
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE)
     user = models.ForeignKey(
@@ -246,7 +248,7 @@ class FridgeFollowing(models.Model):
 
 
 class ReportContent(models.Model):
-    '''ReportContent class'''
+    '''ReportContent model'''
     food = models.ForeignKey(
         Food, on_delete=models.CASCADE)
     user = models.ForeignKey(
@@ -254,7 +256,7 @@ class ReportContent(models.Model):
 
 
 class Sponsor(models.Model):
-    '''Sponsor class'''
+    '''Sponsor model'''
     name = models.CharField(max_length=45)
     logo = models.ImageField(upload_to='images/')
     website = models.URLField(max_length=200, null=True, blank=True)

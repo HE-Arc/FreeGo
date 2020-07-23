@@ -13,7 +13,7 @@ DATE_FORMAT = '%b %d, %Y'
 
 
 class FridgeDemandForm(forms.ModelForm):
-    '''Fridge form'''
+    '''Fridge Demand form'''
 
     class Meta:
         model = Fridge
@@ -203,6 +203,7 @@ class SpecialDayForm(forms.ModelForm):
 
 
 class RegisterForm(UserCreationForm):
+    '''Register Form'''
     email = forms.EmailField(
         max_length=254, help_text=_('Required. Fill an valid email address.'))
 
@@ -212,12 +213,13 @@ class RegisterForm(UserCreationForm):
 
 
 class ContactForm(forms.Form):
+    '''Contact Form'''
     subject = forms.CharField(max_length=45, label=_('Subject'))
     message = forms.CharField(max_length=500, label=_('Message'))
 
 
 class SponsorForm(forms.ModelForm):
-
+    '''Sponsor Form'''
     class Meta:
         model = Sponsor
         fields = ('name', 'logo', 'website')
@@ -232,7 +234,7 @@ class SponsorForm(forms.ModelForm):
 
 
 class InventoryForm(forms.ModelForm):
-
+    '''Inventory Sheet Form'''
     class Meta:
         model = Inventory
         fields = ("date", "product_name",
@@ -250,7 +252,7 @@ class InventoryForm(forms.ModelForm):
 
 
 class TemperatureControlForm(forms.ModelForm):
-
+    '''Temperature Control Form'''
     class Meta:
         model = TemperatureControl
         fields = ("date", "temperature", "visa")

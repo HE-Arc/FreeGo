@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views import generic, View
+from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
