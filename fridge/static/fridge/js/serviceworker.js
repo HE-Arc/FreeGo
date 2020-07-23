@@ -1,4 +1,4 @@
-const cacheName = 'freego-pwa-v6';
+const cacheName = 'freego-pwa-v8';
 
 const filesToCache = [
     //urls
