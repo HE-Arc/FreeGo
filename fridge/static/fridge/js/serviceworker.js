@@ -1,4 +1,4 @@
-const cacheName = 'freego-pwa-v8';
+const cacheName = 'freego-pwa-v10';
 
 const filesToCache = [
     //urls
@@ -24,7 +24,15 @@ const filesToCache = [
     '/static/fridge/logos/icon-192x192.png',
     '/static/fridge/logos/icon-256x256.png',
     '/static/fridge/logos/icon-512x512.png',
+    //images
+    '/media/default.jpg',
+    '/media/offline.png',
     //cdn
+    'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css',
+    'https://fonts.googleapis.com/icon?family=Material+Icons&display=swap',
+    'https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap',
+    'https://unpkg.com/vuelayers/lib/style.css',
+
     'https://unpkg.com/vue/dist/vue.min.js',
     'https://kit.fontawesome.com/8072de43d0.js',
     'https://unpkg.com/axios/dist/axios.min.js',
