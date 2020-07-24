@@ -1,9 +1,8 @@
-#. extracted from django.csv
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-21 09:49+0200\n"
+"POT-Creation-Date: 2020-07-24 13:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,428 +11,497 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 2.5.1\n"
 
-#: .freegosettingscommon_settings.py:64
+#: .\freego\settings\common_settings.py:64
 msgid "English"
 msgstr "Anglais"
 
-#: .freegosettingscommon_settings.py:65
+#: .\freego\settings\common_settings.py:65
 msgid "French"
 msgstr "Français"
 
-#: .fridgeforms.py:23+.fridgeforms.py:51+.fridgeforms.py:106+.fridgeforms.py:225+.fridgetemplatesadminadmin.html:18+.fridgetemplatesadminadmin.html:47+.fridgetemplatesadminadmin.html:78+.fridgetemplatesfridgefridge_detail.html:8+.fridgetemplatesuserprofile.html:8
+#: .\fridge\forms.py:23 .\fridge\forms.py:52 .\fridge\forms.py:107
+#: .\fridge\forms.py:229 .\fridge\templates\admin\admin.html:18
+#: .\fridge\templates\admin\admin.html:48
+#: .\fridge\templates\admin\admin.html:84
+#: .\fridge\templates\fridge\fridge_detail.html:8
+#: .\fridge\templates\user\profile.html:8
 msgid "Name"
 msgstr "Nom"
 
-#: .fridgeforms.py:24+.fridgeforms.py:52+.fridgeforms.py:80+.fridgetemplatesadminstore.html:18+.fridgetemplatesfridgefridge_detail.html:12+.fridgetemplatesfridgefridge_list.html:17+.fridgetemplateshomefavorite.html:17
+#: .\fridge\forms.py:24 .\fridge\forms.py:53 .\fridge\forms.py:81
+#: .\fridge\templates\admin\store.html:18
+#: .\fridge\templates\fridge\fridge_detail.html:12
+#: .\fridge\templates\fridge\fridge_list.html:17
+#: .\fridge\templates\home\favorite.html:17
 msgid "Address"
 msgstr "Adresse"
 
-#: .fridgeforms.py:25+.fridgeforms.py:53+.fridgeforms.py:81
+#: .\fridge\forms.py:25 .\fridge\forms.py:54 .\fridge\forms.py:82
 msgid "Zip code"
 msgstr "Code postal"
 
-#: .fridgeforms.py:26+.fridgeforms.py:54+.fridgeforms.py:82
+#: .\fridge\forms.py:26 .\fridge\forms.py:55 .\fridge\forms.py:83
 msgid "City"
 msgstr "Ville"
 
-#: .fridgeforms.py:27+.fridgeforms.py:55+.fridgetemplatesadminstore.html:26+.fridgetemplatesfridgefridge_detail.html:16
+#: .\fridge\forms.py:27 .\fridge\forms.py:56
+#: .\fridge\templates\admin\store.html:26
+#: .\fridge\templates\fridge\fridge_detail.html:16
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: .fridgeforms.py:28+.fridgeforms.py:56+.fridgeforms.py:115+.fridgetemplatesfridgefridge_detail.html:20
+#: .\fridge\forms.py:28 .\fridge\forms.py:57 .\fridge\forms.py:116
+#: .\fridge\templates\fridge\fridge_detail.html:20
 msgid "Image"
 msgstr "Image"
 
-#: .fridgeforms.py:41+.fridgeforms.py:70+.fridgeforms.py:94+.fridgemodels.py:86
+#: .\fridge\forms.py:41 .\fridge\forms.py:71 .\fridge\forms.py:95
+#: .\fridge\models.py:98
 msgid "Invalid address"
 msgstr "Adresse invalide"
 
-#: .fridgeforms.py:57
+#: .\fridge\forms.py:58
 msgid "User"
 msgstr "Utilisateur"
 
-#: .fridgeforms.py:107+.fridgeforms.py:163+.fridgetemplatesfoodfood_detail.html:11
+#: .\fridge\forms.py:108 .\fridge\forms.py:163
+#: .\fridge\templates\food\food_detail.html:11
 msgid "Description"
 msgstr "Description"
 
-#: .fridgeforms.py:108+.fridgetemplatesfoodfood_detail.html:24
+#: .\fridge\forms.py:109 .\fridge\templates\food\food_detail.html:24
 msgid "Vegetarian"
 msgstr "Végétarien"
 
-#: .fridgeforms.py:109+.fridgetemplatesfoodfood_detail.html:27
+#: .\fridge\forms.py:110 .\fridge\templates\food\food_detail.html:27
 msgid "Vegan"
 msgstr "Végan"
 
-#: .fridgeforms.py:110+.fridgetemplatesfoodfood_detail.html:30
+#: .\fridge\forms.py:111 .\fridge\templates\food\food_detail.html:30
 msgid "Halal"
 msgstr "Halal"
 
-#: .fridgeforms.py:111+.fridgetemplatesfoodfood_detail.html:33
+#: .\fridge\forms.py:112 .\fridge\templates\food\food_detail.html:33
 msgid "Lactose free"
 msgstr "Sans lactose"
 
-#: .fridgeforms.py:112
+#: .\fridge\forms.py:113
 msgid "Gluten free"
 msgstr "Sans gluten"
 
-#: .fridgeforms.py:113+.fridgetemplatesfoodfood_detail.html:39
+#: .\fridge\forms.py:114 .\fridge\templates\food\food_detail.html:39
 msgid "Bio"
 msgstr "Bio"
 
-#: .fridgeforms.py:114+.fridgetemplatesfoodfood_detail.html:17
+#: .\fridge\forms.py:115 .\fridge\templates\food\food_detail.html:17
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
-#: .fridgeforms.py:133
+#: .\fridge\forms.py:134
 msgid "Week day"
 msgstr "Jour de la semaine"
 
-#: .fridgeforms.py:134+.fridgeforms.py:167
+#: .\fridge\forms.py:135 .\fridge\forms.py:167
 msgid "From hour"
 msgstr "De l'heure"
 
-#: .fridgeforms.py:135+.fridgeforms.py:168
+#: .\fridge\forms.py:136 .\fridge\forms.py:168
 msgid "To hour"
 msgstr "À l'heure"
 
-#: .fridgeforms.py:152+.fridgeforms.py:202+.fridgemodels.py:185+.fridgemodels.py:214
+#: .\fridge\forms.py:152 .\fridge\forms.py:202 .\fridge\models.py:172
+#: .\fridge\models.py:201
 msgid "Invalid hour"
 msgstr "Heure invalide"
 
-#: .fridgeforms.py:164
+#: .\fridge\forms.py:164
 msgid "Is the Free Go open?"
 msgstr "Est-ce que le Free Go est ouvert ?"
 
-#: .fridgeforms.py:165
+#: .\fridge\forms.py:165
 msgid "From date"
 msgstr "De la date"
 
-#: .fridgeforms.py:166
+#: .\fridge\forms.py:166
 msgid "To date"
 msgstr "À la date"
 
-#: .fridgeforms.py:197+.fridgemodels.py:209
+#: .\fridge\forms.py:197 .\fridge\models.py:196
 msgid "If two dates are selected, you can't select an hour."
 msgstr ""
 "Si deux dates sont sélectionnées, vous ne pouvez pas sélectionner une heure"
 
-#: .fridgeforms.py:199+.fridgemodels.py:211
+#: .\fridge\forms.py:199 .\fridge\models.py:198
 msgid "Invalid date"
 msgstr "Date invalide"
 
-#: .fridgeforms.py:207
+#: .\fridge\forms.py:208
 msgid "Required. Fill an valid email address."
 msgstr "Requis. Remplissez une adresse email valide"
 
-#: .fridgeforms.py:215
+#: .\fridge\forms.py:217
 msgid "Subject"
 msgstr "Sujet"
 
-#: .fridgeforms.py:216
+#: .\fridge\forms.py:219
 msgid "Message"
 msgstr "Message"
 
-#: .fridgeforms.py:226
+#: .\fridge\forms.py:230
 msgid "Logo"
 msgstr "Logo"
 
-#: .fridgeforms.py:227
+#: .\fridge\forms.py:231
 msgid "Website url"
 msgstr "Url du site web"
 
-#: .fridgeforms.py:241+.fridgeforms.py:258+.fridgetemplatesadmininventory_sheet.html:14+.fridgetemplatesadmintemperature_control_list.html:12
+#: .\fridge\forms.py:245 .\fridge\forms.py:262
+#: .\fridge\templates\admin\inventory_sheet.html:14
+#: .\fridge\templates\admin\temperature_control_list.html:14
 msgid "Date"
 msgstr "Date"
 
-#: .fridgeforms.py:242+.fridgetemplatesadmininventory_sheet.html:15
+#: .\fridge\forms.py:246 .\fridge\templates\admin\inventory_sheet.html:15
 msgid "Product name"
 msgstr "Nom du produit"
 
-#: .fridgeforms.py:243+.fridgetemplatesadmininventory_sheet.html:16
+#: .\fridge\forms.py:247 .\fridge\templates\admin\inventory_sheet.html:16
 msgid "Product number"
 msgstr "Nombre de produit"
 
-#: .fridgeforms.py:244+.fridgeforms.py:259
+#: .\fridge\forms.py:248 .\fridge\forms.py:263
 msgid "Temperature"
 msgstr "Température"
 
-#: .fridgeforms.py:245+.fridgeforms.py:260+.fridgetemplatesadmininventory_sheet.html:18+.fridgetemplatesadmintemperature_control_list.html:14
+#: .\fridge\forms.py:249 .\fridge\forms.py:264
+#: .\fridge\templates\admin\inventory_sheet.html:18
+#: .\fridge\templates\admin\temperature_control_list.html:16
 msgid "Visa"
 msgstr "Visa"
 
-#: .fridgemodels.py:159
-msgid "You can't reserve your own food."
-msgstr "Vous ne pouvez pas réserver votre propre nourriture"
-
-#: .fridgemodels.py:164
+#: .\fridge\models.py:29
 msgid "Monday"
 msgstr "Lundi"
 
-#: .fridgemodels.py:165
+#: .\fridge\models.py:30
 msgid "Tuesday"
 msgstr "Mardi"
 
-#: .fridgemodels.py:166
+#: .\fridge\models.py:31
 msgid "Wednesday"
 msgstr "Mercredi"
 
-#: .fridgemodels.py:167
+#: .\fridge\models.py:32
 msgid "Thursday"
 msgstr "Jeudi"
 
-#: .fridgemodels.py:168
+#: .\fridge\models.py:33
 msgid "Friday"
 msgstr "Vendredi"
 
-#: .fridgemodels.py:169
+#: .\fridge\models.py:34
 msgid "Saturday"
 msgstr "Samedi"
 
-#: .fridgemodels.py:170
+#: .\fridge\models.py:35
 msgid "Sunday"
 msgstr "Dimanche"
 
-#: .fridgemodels.py:218
+#: .\fridge\models.py:157
+msgid "You can't reserve your own food."
+msgstr "Vous ne pouvez pas réserver votre propre nourriture"
+
+#: .\fridge\models.py:205
+#, python-format
 msgid "%(description)s : %(is_open)s "
 msgstr "%(description)s : %(is_open)s "
 
-#: .fridgemodels.py:221
+#: .\fridge\models.py:206
+msgid "open"
+msgstr "ouvert"
+
+#: .\fridge\models.py:206
+msgid "closed"
+msgstr "fermé"
+
+#: .\fridge\models.py:208
+#, python-format
 msgid "from %(from_date)s to %(to_date)s"
 msgstr "du %(from_date)s aux %(to_date)s"
 
-#: .fridgemodels.py:225
+#: .\fridge\models.py:212
+#, python-format
 msgid "the %(from_date)s open from %(from_hour)s to %(to_hour)s"
 msgstr "le %(from_date)s ouvre à %(from_hour)s jusqu'à %(to_hour)s"
 
-#: .fridgemodels.py:230
+#: .\fridge\models.py:217
+#, python-format
 msgid "the %(from_date)s open from %(from_hour)s"
 msgstr "le %(from_date)s ouvre à %(from_hour)s"
 
-#: .fridgemodels.py:234
+#: .\fridge\models.py:221
+#, python-format
 msgid "the %(from_date)s closed at %(to_hour)s"
 msgstr "le %(from_date)s ferme à %(to_hour)s"
 
-#: .fridgemodels.py:237
+#: .\fridge\models.py:224
+#, python-format
 msgid "The %(from_date)s"
 msgstr "le %(from_date)s"
 
-#: .fridgetemplatesadminadmin.html:14
+#: .\fridge\templates\admin\admin.html:14
 msgid "Friddge to valid"
 msgstr "Free Go à valider"
 
-#: .fridgetemplatesadminadmin.html:19+.fridgetemplatesadminadmin.html:48+.fridgetemplatesadminadmin.html:79
+#: .\fridge\templates\admin\admin.html:19
+#: .\fridge\templates\admin\admin.html:49
+#: .\fridge\templates\admin\admin.html:85
 msgid "Action"
 msgstr "Actions"
 
-#: .fridgetemplatesadminadmin.html:28
+#: .\fridge\templates\admin\admin.html:28
 msgid "Accept"
 msgstr "Accepter"
 
-#: .fridgetemplatesadminadmin.html:30
+#: .\fridge\templates\admin\admin.html:30
 msgid "Refuse"
 msgstr "Refuser"
 
-#: .fridgetemplatesadminadmin.html:43
+#: .\fridge\templates\admin\admin.html:44
 msgid "All fridges"
 msgstr "Tous les Free Go"
 
-#: .fridgetemplatesadminadmin.html:57
+#: .\fridge\templates\admin\admin.html:58
 msgid "Details"
 msgstr "Détails"
 
-#: .fridgetemplatesadminadmin.html:59+.fridgetemplatesadminadmin.html:90
+#: .\fridge\templates\admin\admin.html:60
+#: .\fridge\templates\admin\admin.html:96
 msgid "Delete"
 msgstr "Supprimer"
 
-#: .fridgetemplatesadminadmin.html:66+.fridgetemplatesadminadmin.html:97+.fridgetemplatesadmininventory_sheet.html:39+.fridgetemplatesadminsponsor_list.html:34+.fridgetemplatesadmintemperature_control_list.html:33
+#: .\fridge\templates\admin\admin.html:70
+#: .\fridge\templates\admin\admin.html:106
+#: .\fridge\templates\admin\inventory_sheet.html:65
+#: .\fridge\templates\admin\sponsor_list.html:34
+#: .\fridge\templates\admin\temperature_control_list.html:59
 msgid "Add"
 msgstr "Ajouter"
 
-#: .fridgetemplatesadminadmin.html:74+.fridgetemplateshomesettings.html:27
+#: .\fridge\templates\admin\admin.html:80
+#: .\fridge\templates\home\settings.html:27
 msgid "Sponsor"
 msgstr "Sponsors"
 
-#: .fridgetemplatesadminadmin.html:88
+#: .\fridge\templates\admin\admin.html:94
 msgid "Update"
 msgstr "Modifier"
 
-#: .fridgetemplatesadmininventory_sheet.html:10+.fridgetemplatescommonbase_store.html:75
-msgid "Inventory sheet"
-msgstr "Feuille d’inventaire"
-
-#: .fridgetemplatesadmininventory_sheet.html:17+.fridgetemplatesadmintemperature_control_list.html:13
+#: .\fridge\templates\admin\inventory_sheet.html:17
+#: .\fridge\templates\admin\temperature_control_list.html:15
 msgid "Temperature (°C)"
 msgstr "Température (°C)"
 
-#: .fridgetemplatesadmininventory_sheet.html:19+.fridgetemplatesadmintemperature_control_list.html:15
+#: .\fridge\templates\admin\inventory_sheet.html:19
+#: .\fridge\templates\admin\temperature_control_list.html:17
 msgid "Actions"
 msgstr "Actions"
 
-#: .fridgetemplatesadminstore.html:11
+#: .\fridge\templates\admin\store.html:11
 msgid "Informations"
 msgstr "Informations"
 
-#: .fridgetemplatesadminstore.html:14
+#: .\fridge\templates\admin\store.html:14
 msgid "Waiting for validation"
 msgstr "En attente de validation"
 
-#: .fridgetemplatesadminstore.html:22
+#: .\fridge\templates\admin\store.html:22
 msgid "Email"
 msgstr "Email"
 
-#: .fridgetemplatesadminstore.html:31+.fridgetemplatesfoodfood_list.html:10
+#: .\fridge\templates\admin\store.html:31
+#: .\fridge\templates\food\food_list.html:10
 msgid "Opening hours"
 msgstr "Horaire d'ouverture"
 
-#: .fridgetemplatesadminstore.html:39+.fridgetemplatesfoodfood_list.html:18
+#: .\fridge\templates\admin\store.html:39
+#: .\fridge\templates\food\food_list.html:18
 msgid "No schedule provided"
 msgstr "Aucun horaires fourni"
 
-#: .fridgetemplatesadminstore.html:44+.fridgetemplatesfoodfood_list.html:23
+#: .\fridge\templates\admin\store.html:44
+#: .\fridge\templates\food\food_list.html:23
 msgid "Special day"
 msgstr "Horaire spéciaux"
 
-#: .fridgetemplatesadminstore.html:54
+#: .\fridge\templates\admin\store.html:54
 msgid "Reserved food"
 msgstr "Nourriture réservé"
 
-#: .fridgetemplatesadminstore.html:64+.fridgetemplatesfoodfood_list.html:32
+#: .\fridge\templates\admin\store.html:64
+#: .\fridge\templates\food\food_list.html:32
 msgid "Available food"
 msgstr "Nourriture disponible"
 
-#: .fridgetemplatesadmintemperature_control_list.html:9+.fridgetemplatescommonbase_store.html:81+.fridgetemplatescommonbase_store.html:87+.fridgetemplatescommonbase_store.html:93
-msgid "Temperature control"
-msgstr "Contrôle de température"
-
-#: .fridgetemplatescommonbase.html:41+.fridgetemplatescommonbase.html:51
+#: .\fridge\templates\common\base.html:45
+#: .\fridge\templates\common\base.html:55
 msgid "Home"
 msgstr "Accueil"
 
-#: .fridgetemplatescommonbase.html:43
+#: .\fridge\templates\common\base.html:47
 msgid "List"
 msgstr "Liste"
 
-#: .fridgetemplatescommonbase.html:45
+#: .\fridge\templates\common\base.html:49
 msgid "Map"
 msgstr "Carte"
 
-#: .fridgetemplatescommonbase.html:47
+#: .\fridge\templates\common\base.html:51
 msgid "Favorite"
 msgstr "Favoris"
 
-#: .fridgetemplatescommonbase.html:49
+#: .\fridge\templates\common\base.html:53
 msgid "Settings"
 msgstr "Paramètres"
 
-#: .fridgetemplatescommonbase_store.html:39
+#: .\fridge\templates\common\base_store.html:41
 msgid "Administation"
 msgstr "Administration"
 
-#: .fridgetemplatescommonbase_store.html:51
+#: .\fridge\templates\common\base_store.html:53
 msgid "Add sponsor"
 msgstr "Ajout de sponsor"
 
-#: .fridgetemplatescommonbase_store.html:57
+#: .\fridge\templates\common\base_store.html:59
 msgid "Sponsors list"
 msgstr "Liste des sponsors"
 
-#: .fridgetemplatescommonbase_store.html:63+.fridgetemplatescommonbase_store.html:69
+#: .\fridge\templates\common\base_store.html:65
+#: .\fridge\templates\common\base_store.html:71
 msgid "Add inventory"
 msgstr "Ajout dans la feuille d’inventaire"
 
-#: .fridgetemplatescommonbase_store.html:146
+#: .\fridge\templates\common\base_store.html:77
+msgid "Inventory sheet"
+msgstr "Feuille d’inventaire"
+
+#: .\fridge\templates\common\base_store.html:83
+#: .\fridge\templates\common\base_store.html:89
+#: .\fridge\templates\common\base_store.html:95
+msgid "Temperature control"
+msgstr "Contrôle de température"
+
+#: .\fridge\templates\common\base_store.html:148
 msgid "Create fridge"
 msgstr "Création d’un Free Go"
 
-#: .fridgetemplatescommonbase_store.html:152
-msgid "Ask for become a freego"
-msgstr "Demander pour devenir un Free Go"
+#: .\fridge\templates\common\base_store.html:154
+#, fuzzy
+#| msgid "Create fridge"
+msgid "Demand fridge"
+msgstr "Création d’un Free Go"
 
-#: .fridgetemplatescommonbase_store.html:216
+#: .\fridge\templates\common\base_store.html:218
 msgid "Register"
 msgstr "S'inscrire"
 
-#: .fridgetemplatescommonbase_store.html:222+.fridgetemplatescommonbase_store.html:246+.fridgetemplatescommonbase_store.html:252+.fridgetemplatescommonbase_store.html:258
+#: .\fridge\templates\common\base_store.html:224
+#: .\fridge\templates\common\base_store.html:248
+#: .\fridge\templates\common\base_store.html:254
+#: .\fridge\templates\common\base_store.html:260
 msgid "Login"
 msgstr "Se connecter"
 
-#: .fridgetemplatescommonbase_store.html:228+.fridgetemplatescommonbase_store.html:234+.fridgetemplatescommonbase_store.html:240
+#: .\fridge\templates\common\base_store.html:230
+#: .\fridge\templates\common\base_store.html:236
+#: .\fridge\templates\common\base_store.html:242
 msgid "Profile"
 msgstr "Mon profil"
 
-#: .fridgetemplatescommonbase_store.html:264
+#: .\fridge\templates\common\base_store.html:266
 msgid "Your reservations"
 msgstr "Mes réservations"
 
-#: .fridgetemplatescommonbase_store.html:270+.fridgetemplateshomesettings.html:28
+#: .\fridge\templates\common\base_store.html:272
+#: .\fridge\templates\home\settings.html:28
 msgid "Contact us"
 msgstr "Nous contacter"
 
-#: .fridgetemplatescommonbase_store.html:276+.fridgetemplateshomesettings.html:26
+#: .\fridge\templates\common\base_store.html:278
+#: .\fridge\templates\home\settings.html:26
 msgid "Donations"
 msgstr "Donations"
 
-#: .fridgetemplatescommonbase_store.html:282
+#: .\fridge\templates\common\base_store.html:284
 msgid "Your notifications"
 msgstr "Mes notifications"
 
-#: .fridgetemplatescommonform.html:55
+#: .\fridge\templates\common\form.html:57
+#, fuzzy
+#| msgid "Reserved"
+msgid "Required"
+msgstr "Requis"
+
+#: .\fridge\templates\common\form.html:63
 msgid "Validate"
 msgstr "Valider"
 
-#: .fridgetemplatesfoodfood_card.html:17
+#: .\fridge\templates\food\food_card.html:17
 msgid "Report content"
 msgstr "Signaler du contenu"
 
-#: .fridgetemplatesfoodfood_card.html:19
+#: .\fridge\templates\food\food_card.html:19
 msgid "Reserve"
 msgstr "Réservation"
 
-#: .fridgetemplatesfoodfood_card.html:21+.fridgetemplatesfoodfood_detail.html:55
+#: .\fridge\templates\food\food_card.html:21
+#: .\fridge\templates\food\food_detail.html:55
 msgid "Cancel reservation"
 msgstr "Annuler la réservation"
 
-#: .fridgetemplatesfoodfood_detail.html:36
+#: .\fridge\templates\food\food_detail.html:36
 msgid "Gluten Free"
 msgstr "Sans gluten"
 
-#: .fridgetemplatesfoodfood_detail.html:50
+#: .\fridge\templates\food\food_detail.html:50
 msgid "Reserved"
 msgstr "Réserver"
 
-#: .fridgetemplatesfoodfood_list.html:44
+#: .\fridge\templates\food\food_list.html:44
 msgid "No food available"
 msgstr "Pas de nourriture disponible"
 
-#: .fridgetemplatesfridgefridge_detail.html:24+.fridgetemplatesscheduleopening_hour_list.html:7
+#: .\fridge\templates\fridge\fridge_detail.html:24
+#: .\fridge\templates\schedule\opening_hour_list.html:7
 msgid "Opening Hour"
 msgstr "Horaire d'ouverture"
 
-#: .fridgetemplatesfridgefridge_detail.html:33+.fridgetemplatesschedulespecial_day_list.html:7
+#: .\fridge\templates\fridge\fridge_detail.html:33
+#: .\fridge\templates\schedule\special_day_list.html:7
 msgid "Special Day"
 msgstr "Horaire spéciaux"
 
-#: .fridgetemplatesfridgefridge_detail.html:45
+#: .\fridge\templates\fridge\fridge_detail.html:45
 msgid "Delete your fridge"
 msgstr "Supprimer votre Free Go"
 
-#: .fridgetemplateshomedonation.html:9
+#: .\fridge\templates\home\donation.html:9
 msgid "Twint"
 msgstr "Twint"
 
-#: .fridgetemplateshomedonation.html:12
+#: .\fridge\templates\home\donation.html:12
 msgid "Sending by TWINT to the association number (078.669.10.01)"
 msgstr "Envoyer par TWINT sur le numéro de l’association (078.669.10.01)"
 
-#: .fridgetemplateshomedonation.html:17
+#: .\fridge\templates\home\donation.html:17
 msgid "Bank transfer"
 msgstr "Virement banquaire"
 
-#: .fridgetemplateshomedonation.html:20
+#: .\fridge\templates\home\donation.html:20
 msgid "<strong>IBAN :</strong> CH60 0076 6000 1032 7955 7"
 msgstr "<strong>IBAN :</strong> CH60 0076 6000 1032 7955 7"
 
-#: .fridgetemplateshomedonation.html:21
+#: .\fridge\templates\home\donation.html:21
 msgid ""
 "<strong>Payement for :</strong><br>\n"
 "                Banque Cantonale neuchâteloise <br>\n"
@@ -443,7 +511,7 @@ msgstr ""
 "                Banque Cantonale neuchâteloise <br>\n"
 "                2000 Neuchâtel"
 
-#: .fridgetemplateshomedonation.html:24
+#: .\fridge\templates\home\donation.html:24
 msgid ""
 "<strong>In favor of :​</strong><br>\n"
 "                Association Free Go <br>\n"
@@ -453,7 +521,7 @@ msgstr ""
 "                Association Free Go <br>\n"
 "                Rue de Beau-Site 14, 2014 Bôle"
 
-#: .fridgetemplateshomehome.html:11
+#: .\fridge\templates\home\home.html:12
 msgid ""
 "Our association aims to set up refrigerators and self-service cabinets to "
 "reduce food waste while helping the poorest."
@@ -462,113 +530,107 @@ msgstr ""
 "armoires libre-service afin de diminuer le gaspillage alimentaire tout en "
 "permettant d'aider les personnes dans le besoin."
 
-#: .fridgetemplateshomehome.html:13
+#: .\fridge\templates\home\home.html:14
 msgid "it was created in 2019."
 msgstr "Elle a été crée en 2019."
 
-#: .fridgetemplateshomemap.html:12
-msgid "Position is not allowed"
-msgstr "La localisation n’est pas autorisé."
-
-#: .fridgetemplateshomeoffline.html:8
+#: .\fridge\templates\home\offline.html:8
 msgid "You are offline"
 msgstr "Vous êtes hors-ligne"
 
-#: .fridgetemplateshomesettings.html:8
+#: .\fridge\templates\home\settings.html:8
 msgid "My profil"
 msgstr "Mon profil"
 
-#: .fridgetemplateshomesettings.html:11
+#: .\fridge\templates\home\settings.html:11
 msgid "Administration"
 msgstr "Administration"
 
-#: .fridgetemplateshomesettings.html:15
+#: .\fridge\templates\home\settings.html:15
 msgid "My Free Go"
 msgstr "Mon Free Go"
 
-#: .fridgetemplateshomesettings.html:17
+#: .\fridge\templates\home\settings.html:17
 msgid "Inventory Sheet"
 msgstr "Feuille d’inventaire"
 
-#: .fridgetemplateshomesettings.html:19
+#: .\fridge\templates\home\settings.html:19
 msgid "Temperature Control"
 msgstr "Contrôle de température"
 
-#: .fridgetemplateshomesettings.html:22
+#: .\fridge\templates\home\settings.html:22
 msgid "Ask for become a Free Go"
 msgstr "Demander pour devenir un Free Go"
 
-#: .fridgetemplateshomesettings.html:25
+#: .\fridge\templates\home\settings.html:25
 msgid "Reservation"
 msgstr "Réservation"
 
-#: .fridgetemplateshomesettings.html:29
+#: .\fridge\templates\home\settings.html:29
 msgid "Log out"
 msgstr "Se déconnecter"
 
-#: .fridgetemplatesuseracc_active_email.html:3
+#: .\fridge\templates\user\acc_active_email.html:3
 msgid "Hi "
-msgstr "Bonjour"
+msgstr "Bonjour "
 
-#: .fridgetemplatesuseracc_active_email.html:3
+#: .\fridge\templates\user\acc_active_email.html:3
 msgid ","
 msgstr ","
 
-#: .fridgetemplatesuseracc_active_email.html:4
+#: .\fridge\templates\user\acc_active_email.html:4
 msgid "Please click on the link to confirm your registration,"
 msgstr "S’il-vous-plaît, cliquer sur ce lien pour confirmé votre inscription"
 
-#: .fridgetemplatesuserlogin.html:14
-msgid "Username : "
-msgstr "Nom d'utilisateur : "
-
-#: .fridgetemplatesuserlogin.html:20
-msgid "Password : "
-msgstr "Mot de passe : "
-
-#: .fridgetemplatesuserlogin.html:26
+#: .\fridge\templates\user\login.html:15
 msgid "Connection"
 msgstr "Connexion"
 
-#: .fridgetemplatesuserlogin.html:31
+#: .\fridge\templates\user\login.html:20
 msgid "I do not have an account yet"
 msgstr "Je n'ai pas encore de compte"
 
-#: .fridgetemplatesuserlogin.html:34
+#: .\fridge\templates\user\login.html:23
 msgid "Forget password"
 msgstr "Mot de passe oublié"
 
-#: .fridgetemplatesuserlogin_options.html:9
+#: .\fridge\templates\user\login_options.html:9
 msgid "You are not connected yet"
 msgstr "Vous n'êtes pas authentifé"
 
-#: .fridgetemplatesuserlogin_options.html:14
+#: .\fridge\templates\user\login_options.html:14
 msgid "Log in"
 msgstr "Se connecter"
 
-#: .fridgetemplatesuserlogin_options.html:20+.fridgetemplatesuserregister.html:14
+#: .\fridge\templates\user\login_options.html:20
+#: .\fridge\templates\user\register.html:15
 msgid "Create an account"
 msgstr "Création d'un compte"
 
-#: .fridgetemplatesuserpassword_reset_complete.html:6+.fridgetemplatesuserpassword_reset_done.html:6
+#: .\fridge\templates\user\password_reset_complete.html:6
+#: .\fridge\templates\user\password_reset_done.html:6
 msgid "Reset Password"
 msgstr "Réinitialiser votre mot de passe"
 
-#: .fridgetemplatesuserpassword_reset_complete.html:7
+#: .\fridge\templates\user\password_reset_complete.html:7
 msgid "Your password has been changed."
-msgstr "Votre mot de passe à changé"
+msgstr "Votre mot de passe à été changé"
 
-#: .fridgetemplatesuserpassword_reset_complete.html:8
+#: .\fridge\templates\user\password_reset_complete.html:8
 msgid "Click here to Login"
 msgstr "Login"
 
-#: .fridgetemplatesuserpassword_reset_done.html:7
+#: .\fridge\templates\user\password_reset_done.html:7
 msgid ""
 "We have sended you reset password link on your email. Please Check Your "
 "Email."
 msgstr "Nous vous avons envoyé un lien pour réinitialiser votre mot de passe"
 
-#: .fridgetemplatesuserpassword_reset_email.html:3
+#: .\fridge\templates\user\password_reset_email.html:3
+#, fuzzy, python-format
+#| msgid ""
+#| "Hey, You're receiving this email because you requested a password reset "
+#| "for your user account at %(site_name)s."
 msgid ""
 "Hey, You're receiving this email because you requested a password reset for "
 "your user account at %(site_name)s."
@@ -576,130 +638,147 @@ msgstr ""
 "Bonjour, vous recevez ce mail car vous avez demandé de réinitialiser votre "
 "mot de passe."
 
-#: .fridgetemplatesuserpassword_reset_email.html:5
+#: .\fridge\templates\user\password_reset_email.html:5
 msgid "Please go to the following page and choose a new password:"
 msgstr ""
 "S’il-vous-plaît suivez ce lien, pour choisir votre nouveau mot de passe."
 
-#: .fridgetemplatesuserpassword_reset_email.html:9
+#: .\fridge\templates\user\password_reset_email.html:9
 msgid "Your username, in case you've forgotten:"
 msgstr "Votre nom d’utilisateur dans le cas ou vous l’auriez oublié"
 
-#: .fridgetemplatesuserpassword_reset_email.html:11
+#: .\fridge\templates\user\password_reset_email.html:11
 msgid "Thanks for using our site!"
 msgstr "Merci d’utiliser notre site"
 
-#: .fridgetemplatesuserpassword_reset_email.html:13
+#: .\fridge\templates\user\password_reset_email.html:13
+#, python-format
 msgid "The %(site_name)s team"
 msgstr "La team %(site_name)s"
 
-#: .fridgetemplatesuserpassword_reset_subject.txt:2
+#: .\fridge\templates\user\password_reset_subject.txt:2
+#, fuzzy, python-format
+#| msgid "Password reset on %(site_name)s"
 msgid "Password reset on %(site_name)s"
 msgstr "Mot de passe réinitialisé"
 
-#: .fridgetemplatesuserprofile.html:6
+#: .\fridge\templates\user\profile.html:6
 msgid "Account details"
 msgstr "Détails de mon compte"
 
-#: .fridgetemplatesuserprofile.html:12
+#: .\fridge\templates\user\profile.html:12
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: .fridgetemplatesuserprofile.html:14
+#: .\fridge\templates\user\profile.html:14
 msgid "Change password"
 msgstr "Changer de mot de passe"
 
-#: .fridgetemplatesuserregister.html:19
+#: .\fridge\templates\user\register.html:20
 msgid "I have already an account"
 msgstr "J'ai déjà un compte"
 
-#: .fridgetemplatesuserreservation_list.html:21
+#: .\fridge\templates\user\reservation_list.html:21
 msgid "I do not have reservations yet"
-msgstr "Je n'ai pas encore de compte"
+msgstr "Je n'ai pas encore de réservations"
 
-#: .fridgevalidators.py:10
+#: .\fridge\validators.py:10
 msgid "This phone number is not valid."
 msgstr "Ce numéro de téléphone n'est pas valide"
 
-#: .fridgevalidators.py:11
+#: .\fridge\validators.py:11
 msgid "This NPA is not valid"
 msgstr "Ce NPA n'est pas valide"
 
-#: .fridgevalidators.py:16
+#: .\fridge\validators.py:17
 msgid "The expiration date is already passed."
 msgstr "Cette date d'expiration est déjà passé"
 
-#: .fridgeviewsviews_admin.py:254
+#: .\fridge\views\views_admin.py:256
+#, python-format
 msgid "Someone report %(food)s as illegal content"
 msgstr "Quelqu’un à signalé %(food)s comme contenu non réglementaire"
 
-#: .fridgeviewsviews_food.py:52
+#: .\fridge\views\views_food.py:52
+#, python-format
 msgid "You have new notifications from fridge %(fridge)s"
 msgstr "Vous avez une nouvelle notification du freego %(fridge)s"
 
-#: .fridgeviewsviews_fridge.py:88
+#: .\fridge\views\views_fridge.py:88
 msgid "New request to become a freego."
 msgstr "Nouvelle demande pour devenir un Free Go"
 
-#: .fridgeviewsviews_user.py:54
+#: .\fridge\views\views_user.py:54
 msgid "Food reserved with success"
 msgstr "Nourriture réservé"
 
-#: .fridgeviewsviews_user.py:70
+#: .\fridge\views\views_user.py:70
 msgid "Food cancelled with success"
 msgstr "Nourriture annulé"
 
-#: .fridgeviewsviews_user.py:121
+#: .\fridge\views\views_user.py:121
 msgid "Please confirm your email address "
 msgstr "S’il-vous-plaît, confirmé votre adresse email"
 
-#: .fridgeviewsviews_user.py:143+.fridgeviewsviews_user.py:260
+#: .\fridge\views\views_user.py:140 .\fridge\views\views_user.py:250
 msgid "Login with success"
 msgstr "Connexion"
 
-#: .fridgeviewsviews_user.py:157
+#: .\fridge\views\views_user.py:153
 msgid "Logout with success"
 msgstr "Déconnexion"
 
-#: .fridgeviewsviews_user.py:234
+#: .\fridge\views\views_user.py:228
 msgid "Message send with success"
 msgstr "Message envoyé"
 
-msgid "Welcome to the Free Go Association web application"
-msgstr "Bienvenue sur l'application web de l'Association Free Go"
+#~ msgid "Ask for become a freego"
+#~ msgstr "Demander pour devenir un Free Go"
 
-msgid "NPA"
-msgstr "NPA"
+#~ msgid "Position is not allowed"
+#~ msgstr "La localisation n’est pas autorisé."
 
-msgid "Creation of a Free Go"
-msgstr "Création d'un Free Go"
+#~ msgid "Username : "
+#~ msgstr "Nom d'utilisateur : "
 
-msgid "Modification of a Free Go"
-msgstr "Modification d'un Free Go"
+#~ msgid "Password : "
+#~ msgstr "Mot de passe : "
 
-msgid "Save"
-msgstr "Sauvegarder"
+#~ msgid "Welcome to the Free Go Association web application"
+#~ msgstr "Bienvenue sur l'application web de l'Association Free Go"
 
-msgid "Help"
-msgstr "Aide"
+#~ msgid "NPA"
+#~ msgstr "NPA"
 
-msgid "You do not have an account yet"
-msgstr "Vous n'avez pas encore de compte"
+#~ msgid "Creation of a Free Go"
+#~ msgstr "Création d'un Free Go"
 
-msgid "Enter your new password"
-msgstr "Entrez votre nouveau mot de passe"
+#~ msgid "Modification of a Free Go"
+#~ msgstr "Modification d'un Free Go"
 
-msgid "Free Go"
-msgstr "Free Go"
+#~ msgid "Save"
+#~ msgstr "Sauvegarder"
 
-msgid "Email address : "
-msgstr "Adresse email : "
+#~ msgid "Help"
+#~ msgstr "Aide"
 
-msgid "Password confirmation : "
-msgstr "Confirmationd de mot de passe : "
+#~ msgid "You do not have an account yet"
+#~ msgstr "Vous n'avez pas encore de compte"
 
-msgid "Are your sur, do you want to delete \"{{ object }}\"?"
-msgstr "Vous êtes sur de vouloir supprimé \"{{ object }}\"?"
+#~ msgid "Enter your new password"
+#~ msgstr "Entrez votre nouveau mot de passe"
 
-msgid "Images"
-msgstr "Images"
+#~ msgid "Free Go"
+#~ msgstr "Free Go"
+
+#~ msgid "Email address : "
+#~ msgstr "Adresse email : "
+
+#~ msgid "Password confirmation : "
+#~ msgstr "Confirmationd de mot de passe : "
+
+#~ msgid "Are your sur, do you want to delete \"{{ object }}\"?"
+#~ msgstr "Vous êtes sur de vouloir supprimé \"{{ object }}\"?"
+
+#~ msgid "Images"
+#~ msgstr "Images"
