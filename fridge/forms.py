@@ -215,7 +215,9 @@ class RegisterForm(UserCreationForm):
 class ContactForm(forms.Form):
     '''Contact Form'''
     subject = forms.CharField(max_length=45, label=_('Subject'))
-    message = forms.CharField(max_length=500, label=_('Message'))
+    message = forms.CharField(max_length=500, label=_(
+        'Message'), widget=forms.Textarea(
+            attrs={'class': 'materialize-textarea'}))
 
 
 class SponsorForm(forms.ModelForm):

@@ -121,10 +121,11 @@ class InventoryListView(ValidInventoryUser, generic.ListView):
     model = Inventory
     template_name = "admin/inventory_sheet.html"
     login_url = LOGIN_URL
+    paginate_by = 5
 
     def get_queryset(self):
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        return Inventory.objects.filter(fridge=fridge).reverse()
+        return Inventory.objects.filter(fridge=fridge).order_by('-pk')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -194,10 +195,11 @@ class TemperatureControlListView(ValidInventoryUser, generic.ListView):
     model = TemperatureControl
     template_name = "admin/temperature_control_list.html"
     login_url = LOGIN_URL
+    paginate_by = 5
 
     def get_queryset(self):
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        return TemperatureControl.objects.filter(fridge=fridge).reverse()
+        return TemperatureControl.objects.filter(fridge=fridge).order_by('-pk')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
