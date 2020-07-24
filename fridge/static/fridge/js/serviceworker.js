@@ -25,8 +25,8 @@ const filesToCache = [
     '/static/fridge/logos/icon-256x256.png',
     '/static/fridge/logos/icon-512x512.png',
     //images
-    '/media/default.jpg',
-    '/media/offline.png',
+    '/media/default.JPG',
+    '/media/offline.PNG',
     //cdn
     'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css',
     'https://fonts.googleapis.com/icon?family=Material+Icons&display=swap',
