@@ -235,6 +235,10 @@ class DonationView(generic.TemplateView):
     template_name = 'home/donation.html'
 
 
+class AllRightsReserved(generic.TemplateView):
+    template_name = 'home/all_rights_reserved.html'
+
+
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
