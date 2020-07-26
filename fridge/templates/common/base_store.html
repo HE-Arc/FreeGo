@@ -210,6 +210,7 @@
                     {% url 'fridge:contact' as contact_url %}
                     {% url 'fridge:donations' as donations_url %}
                     {% url 'fridge:notifications' as notifications_url %}
+                    {% url 'fridge:all_rights_reserved' as all_rights_reserved %}
 
                     {% if request.path == register_url %}
                     <a class="left" href="{% url 'fridge:settings' %}">
@@ -282,6 +283,12 @@
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
                     <a class="brand-logo truncate">{% trans 'Your notifications' %}</a>
+
+                    {% elif request.path == all_rights_reserved %}
+                    <a class="left" href="{% url 'fridge:home' %}">
+                        <i class="material-icons black-text" style="font-size: 3rem;"
+                            aria-hidden="true">chevron_left</i></a>
+                    <a class="brand-logo truncate">{% trans 'About' %}</a>
                     {% endif %}
 
                 </div>

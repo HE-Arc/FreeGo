@@ -5,7 +5,7 @@ from freego.settings.common_settings import *
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
                  '127.0.0.1', 'freego.srvz-webapp.he-arc.ch']

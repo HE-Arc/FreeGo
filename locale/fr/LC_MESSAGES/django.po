@@ -489,7 +489,7 @@ msgstr "Supprimer votre Free Go"
 #, fuzzy
 #| msgid "All fridges"
 msgid "All rights reserved"
-msgstr "Tous les Free Go"
+msgstr "Tous droits réservés."
 
 #: .\fridge\templates\home\donation.html:9
 msgid "Twint"
