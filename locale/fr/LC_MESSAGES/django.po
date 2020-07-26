@@ -216,6 +216,14 @@ msgstr "Vous ne pouvez pas réserver votre propre nourriture"
 msgid "%(description)s : %(is_open)s "
 msgstr "%(description)s : %(is_open)s "
 
+#: .\fridge\models.py:206
+msgid "open"
+msgstr "ouvert"
+
+#: .\fridge\models.py:206
+msgid "closed"
+msgstr "fermé"
+
 #: .\fridge\models.py:208
 #, python-format
 msgid "from %(from_date)s to %(to_date)s"
@@ -432,7 +440,7 @@ msgstr "Mes notifications"
 #, fuzzy
 #| msgid "Reserved"
 msgid "Required"
-msgstr "Réserver"
+msgstr "Requis"
 
 #: .\fridge\templates\common\form.html:63
 msgid "Validate"
@@ -574,7 +582,7 @@ msgstr "Se déconnecter"
 
 #: .\fridge\templates\user\acc_active_email.html:3
 msgid "Hi "
-msgstr "Bonjour"
+msgstr "Bonjour "
 
 #: .\fridge\templates\user\acc_active_email.html:3
 msgid ","
@@ -616,7 +624,7 @@ msgstr "Réinitialiser votre mot de passe"
 
 #: .\fridge\templates\user\password_reset_complete.html:7
 msgid "Your password has been changed."
-msgstr "Votre mot de passe à changé"
+msgstr "Votre mot de passe à été changé"
 
 #: .\fridge\templates\user\password_reset_complete.html:8
 msgid "Click here to Login"
@@ -682,7 +690,7 @@ msgstr "J'ai déjà un compte"
 
 #: .\fridge\templates\user\reservation_list.html:21
 msgid "I do not have reservations yet"
-msgstr "Je n'ai pas encore de compte"
+msgstr "Je n'ai pas encore de réservations"
 
 #: .\fridge\validators.py:10
 msgid "This phone number is not valid."
