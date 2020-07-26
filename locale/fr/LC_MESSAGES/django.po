@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-24 13:41+0200\n"
+"POT-Creation-Date: 2020-07-26 10:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -485,6 +485,12 @@ msgstr "Horaire spéciaux"
 msgid "Delete your fridge"
 msgstr "Supprimer votre Free Go"
 
+#: .\fridge\templates\home\all_rights_reserved.html:14
+#, fuzzy
+#| msgid "All fridges"
+msgid "All rights reserved"
+msgstr "Tous les Free Go"
+
 #: .\fridge\templates\home\donation.html:9
 msgid "Twint"
 msgstr "Twint"
@@ -567,6 +573,10 @@ msgid "Reservation"
 msgstr "Réservation"
 
 #: .\fridge\templates\home\settings.html:29
+msgid "About"
+msgstr "À propos"
+
+#: .\fridge\templates\home\settings.html:30
 msgid "Log out"
 msgstr "Se déconnecter"
 
@@ -720,7 +730,7 @@ msgstr "Nourriture annulé"
 msgid "Please confirm your email address "
 msgstr "S’il-vous-plaît, confirmé votre adresse email"
 
-#: .\fridge\views\views_user.py:140 .\fridge\views\views_user.py:250
+#: .\fridge\views\views_user.py:140 .\fridge\views\views_user.py:254
 msgid "Login with success"
 msgstr "Connexion"
 

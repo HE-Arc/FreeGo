@@ -132,6 +132,7 @@ urlpatterns = [
          name='fridge-unfollow'),
     path('contact', views_user.ContactView.as_view(), name='contact'),
     path('donations', views_user.DonationView.as_view(), name='donations'),
+    path('all-rights-reserved', views_user.AllRightsReserved.as_view(), name='all_rights_reserved'),
     path('notifications', views_user.NotificationsView.as_view(),
          name='notifications'),
 
