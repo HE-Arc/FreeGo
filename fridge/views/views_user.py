@@ -221,7 +221,7 @@ class ContactView(generic.FormView):
         from_user = self.request.user.email
         perm = Permission.objects.get(codename="admin")
         to_user = User.objects.filter(
-            user_permissions__in=[perm])
+            user_permissions__in=[perm]).values_list('email', flat=True)
         send_mail(subject=subject, message=message,
                   from_email=from_user, recipient_list=to_user)
         message2 = _(
