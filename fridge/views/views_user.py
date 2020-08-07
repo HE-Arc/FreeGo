@@ -227,7 +227,6 @@ class ContactView(generic.FormView):
         message2 = _(
             "Message send with success")
         messages.add_message(self.request, messages.INFO, message2)
-        print(messages)
         return render(self.request, 'home/home.html', {'form': form})
 
 
