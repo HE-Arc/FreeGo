@@ -4,21 +4,21 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-autopep8 = "*"
 
 [packages]
-asgiref = "==3.2.4"
-coverage = "==5.1"
-django-pwa = "==1.0.8"
-pytz = "==2019.3"
-sqlparse = "==0.3.1"
-Django = ">=3.0.7"
-Pillow = "==7.1.1"
+django = "*"
+django-pwa = "*"
+pillow = "*"
 flake8 = "*"
-pytest-django = "*"
 django-rest-framework = "*"
 geopy = "*"
+coverage = "*"
+pytz = "*"
+sqlparse = "*"
+pytest-django = "*"
 django-notifications-hq = "*"
+django-cors-headers = "*"
+asgiref = "*"
 
 [requires]
 python_version = "3.8"

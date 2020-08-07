@@ -132,7 +132,8 @@ urlpatterns = [
          name='fridge-unfollow'),
     path('contact', views_user.ContactView.as_view(), name='contact'),
     path('donations', views_user.DonationView.as_view(), name='donations'),
-    path('all-rights-reserved', views_user.AllRightsReserved.as_view(), name='all_rights_reserved'),
+    path('all-rights-reserved', views_user.AllRightsReserved.as_view(),
+         name='all_rights_reserved'),
     path('notifications', views_user.NotificationsView.as_view(),
          name='notifications'),
 
@@ -182,8 +183,8 @@ urlpatterns = [
     path('settings', views_home.SettingsView.as_view(), name='settings'),
     path('offline', views_home.offline_view, name='offline'),
 
-    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        views_user.activate, name='activate'),
+    path('activate/<uidb64>/<token>/',
+         views_user.ActivateAccount.as_view(), name='activate'),
 ]
 
 

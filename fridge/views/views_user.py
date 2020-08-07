@@ -239,22 +239,24 @@ class AllRightsReserved(generic.TemplateView):
     template_name = 'home/all_rights_reserved.html'
 
 
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and default_token_generator.check_token(user, token):
-        user.is_active = True
-        user.save()
-        login(request, user)
-        token, created = Token.objects.get_or_create(user=user)
-        message = _(
-            "Login with success")
-        messages.add_message(request, messages.INFO, message)
-        return render(request, 'home/home.html', {
-            'token': token.key,
-        })
-    else:
-        return HttpResponse('Activation link is invalid!')
+class ActivateAccount(View):
+    def get(self, request, uidb64, token, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.profile.email_confirmed = True
+            user.save()
+            login(request, user)
+            message = _(
+                "Login with success")
+            messages.add_message(request, messages.INFO, message)
+            return render(request, 'home/home.html', {
+                'token': token.key,
+            })
+        else:
+            return HttpResponse('Activation link is invalid!')

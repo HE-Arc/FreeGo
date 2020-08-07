@@ -248,7 +248,7 @@ class TemperatureControlUpdateView(UserPassesTestMixin, generic.UpdateView):
 
 
 class ReportContentView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         food = Food.objects.get(pk=self.kwargs['pk'])
         report_content = ReportContent(food=food, user=request.user)
         report_content.save()
