@@ -559,7 +559,6 @@ class SponsorCreateViewTest(TestCase):
         }
 
         response = self.client.post(reverse('fridge:sponsor-new'), json)
-        print(response)
         self.assertEqual(response.status_code, 200)
 
     def test_valid_argument(self):
@@ -573,7 +572,6 @@ class SponsorCreateViewTest(TestCase):
         }
 
         response = self.client.post(reverse('fridge:sponsor-new'), json)
-        print(response)
         self.assertRedirects(response, reverse('fridge:myadmin'))
         self.assertEqual(len(Sponsor.objects.all()), 1)
         self.assertEqual(Sponsor.objects.last().name, 'A Sponsor')
