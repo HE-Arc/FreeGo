@@ -492,6 +492,7 @@ class RegisterViewTest(TestCase):
             'password2': 'neFDE234r'
         }
         response = self.client.post(reverse('fridge:register'), json)
+        print(response)
 
         self.assertRedirects(response, reverse('fridge:settings'))
         self.assertEqual(len(User.objects.all()), 2)
@@ -534,7 +535,7 @@ class ReportContentViewTest(TestCase):
         self.food = create_food(fridge=self.fridge, user=self.user)
 
     def test_post(self):
-        response = self.client.post(
+        response = self.client.get(
             reverse_lazy('fridge:report-content',
                          kwargs={'pk': self.food.pk}))
         self.assertRedirects(response, reverse('fridge:home'))

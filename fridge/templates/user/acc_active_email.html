@@ -3,6 +3,6 @@
 {% trans "Hi "  %}{{ user.get_username }}{% trans ","  %}
 {% blocktrans %}Please click on the link to confirm your registration,{% endblocktrans %}
 {% block reset_link %}
-https://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
+http://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
 {% endblock %}
 {% endautoescape %}
