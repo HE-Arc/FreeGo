@@ -19,6 +19,7 @@ pytest-django = "*"
 django-rest-framework = "*"
 geopy = "*"
 django-notifications-hq = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.8"
