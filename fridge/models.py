@@ -12,11 +12,16 @@ import sys
 from geopy.geocoders import Nominatim
 
 
-def compress_image(uploaded_image):
+def compress_image(uploaded_image, width):
     '''Return compressed image'''
     tmp_image = Image.open(uploaded_image)
     output_io_stream = BytesIO()
-    tmp_image.save(output_io_stream, format='PNG', quality=60)
+    old_size = tmp_image.size
+    new_width = width
+    new_height = int(old_size[1]/(old_size[0]/new_width))
+    tmp_image = tmp_image.resize((new_width, new_height))
+    tmp_image.save(output_io_stream, format='PNG')
+
     output_io_stream.seek(0)
     uploaded_image = InMemoryUploadedFile(
         output_io_stream, 'ImageField', "%s.png" %
@@ -98,7 +103,7 @@ class Fridge(models.Model):
             raise ValidationError(_("Invalid address"))
         self.latitude = location.latitude
         self.longitude = location.longitude
-        self.image = compress_image(self.image)
+        self.image = compress_image(self.image, 600)
         super().save(*args, **kwargs)
 
 
@@ -135,7 +140,7 @@ class Food(models.Model):
         return str(self.name)
 
     def save(self, *args, **kwargs):
-        self.image = compress_image(self.image)
+        self.image = compress_image(self.image, 375)
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -265,7 +270,7 @@ class Sponsor(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.logo = compress_image(self.logo)
+        self.logo = compress_image(self.logo, 600)
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
