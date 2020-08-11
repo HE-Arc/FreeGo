@@ -102,7 +102,7 @@ class FoodForm(forms.ModelForm):
         model = Food
         fields = ('name', 'description', 'vegetarian', 'vegan', 'halal',
                   'lactose_free', 'gluten_free', 'bio',
-                  'expiration_date', 'image')
+                  'expiration_date')
         labels = {
             'name': _('Name') + "*",
             'description': _('Description'),
@@ -113,7 +113,6 @@ class FoodForm(forms.ModelForm):
             'gluten_free': _('Gluten free'),
             'bio': _('Bio'),
             'expiration_date': _('Expiration date') + "*",
-            'image': _('Image'),
         }
 
         validators = {

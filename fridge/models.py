@@ -118,8 +118,6 @@ class Food(models.Model):
     gluten_free = models.BooleanField()
     bio = models.BooleanField()
     expiration_date = models.DateField(validators=[expiration_date_validator])
-    image = models.ImageField(
-        upload_to='images/', default='default.JPG')
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
@@ -138,14 +136,6 @@ class Food(models.Model):
 
     def __str__(self):
         return str(self.name)
-
-    def save(self, *args, **kwargs):
-        self.image = compress_image(self.image, 375)
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
 
 
 class Reservation(models.Model):
