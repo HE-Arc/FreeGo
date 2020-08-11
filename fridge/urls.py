@@ -8,7 +8,6 @@ from rest_framework import routers
 
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
-from django.conf.urls import url
 from fridge.forms import FridgeUpdateAddressForm
 
 

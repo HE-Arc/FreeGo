@@ -208,7 +208,8 @@ class SpecialDay(models.Model):
 
     def __str__(self):
         sd = _("%(description)s : %(is_open)s ") % {
-            'description': self.description, 'is_open': _("open") if self.is_open == True else _("closed")}
+            'description': self.description, 'is_open': _("open")
+            if self.is_open is True else _("closed")}
         if self.to_date:
             return sd + _("from %(from_date)s to %(to_date)s") % \
                 {'from_date': self.from_date.strftime('%d/%m/%Y'),
