@@ -16,7 +16,6 @@
         {{food.expiration_date}}
     </li>
 
-
     <li class="collection-item">
         {% if food.vegetarian %}
         <div>{% trans 'Vegetarian' %}</div>
@@ -36,22 +35,19 @@
         {% if food.bio %}
         <div>{% trans 'Bio' %}</div>
         {% endif %}
-
     </li>
-
-
-
 </ul>
-{% if food.is_available %}
-<div class="center-align">
-    <a class="waves-effect waves-light btn-large"
-        href="{% url 'fridge:food-reservation' food.pk %}">{% trans 'Reserved' %}</a>
+<div class="card-action center-align">
+    <a href="#" class="dropdown-trigger btn" data-target='dropdown2'>{% trans 'Reserve' %}</a>
 </div>
-{% else %}
-<div class="center-align">
-    <a class="waves-effect waves-light btn-large"
-        href="{% url 'fridge:food-cancellation' food.pk %}">{% trans 'Cancel reservation' %}</a>
-</div>
-{% endif %}
+<ul id='dropdown2' class='dropdown-content'>
+    {% for i in food.quantity_available %}
+    <li><a href="{% url 'fridge:food-reservation' pk=food.pk quantity=i %}">{{i}}</a></li>
+    {% endfor %}
+
+    {% if food.has_reservation %}
+    <li><a href="{% url 'fridge:food-cancellation' pk=food.pk %}">{% trans 'Cancel reservation' %}</a></li>
+    {% endif %}
+</ul>
 
 {% endblock %}

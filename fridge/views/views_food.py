@@ -32,6 +32,7 @@ class FoodCreateView(UserPassesTestMixin, generic.CreateView):
             food = Food(
                 name=form.cleaned_data['name'],
                 description=form.cleaned_data['description'],
+                counter=form.cleaned_data['counter'],
                 vegetarian=form.cleaned_data['vegetarian'],
                 vegan=form.cleaned_data['vegan'],
                 halal=form.cleaned_data['halal'],
@@ -39,7 +40,6 @@ class FoodCreateView(UserPassesTestMixin, generic.CreateView):
                 gluten_free=form.cleaned_data['gluten_free'],
                 bio=form.cleaned_data['bio'],
                 expiration_date=form.cleaned_data['expiration_date'],
-                image=form.cleaned_data['image'],
                 fridge=Fridge.objects.get(pk=self.kwargs['pk']),
                 user=request.user
             )

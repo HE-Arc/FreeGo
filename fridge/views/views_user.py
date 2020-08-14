@@ -48,7 +48,11 @@ class FoodReservation(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         food = Food.objects.get(pk=self.kwargs['pk'])
-        reservation = Reservation(food=food, user=request.user)
+
+        if Reservation.objects.filter(user=request.user).count() != 0:
+            Reservation.objects.filter(user=request.user).delete()
+        reservation = Reservation(
+            food=food, user=request.user, quantity=self.kwargs['quantity'])
         reservation.save()
         message = _(
             "Food reserved with success")
@@ -249,7 +253,7 @@ class ActivateAccount(View):
         if user is not None and \
                 default_token_generator.check_token(user, token):
             user.is_active = True
-            user.profile.email_confirmed = True
+            user.email_confirmed = True
             user.save()
             login(request, user)
             message = _(

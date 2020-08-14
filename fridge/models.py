@@ -70,11 +70,10 @@ class Fridge(models.Model):
     def get_special_days(self):
         return SpecialDay.objects.filter(fridge=self)
 
-    def get_foods(self):
-        return Food.objects.filter(fridge=self)
-
     def get_available_food(self):
-        all_reservation = Reservation.objects.values_list('food_id')
+        all_reservation = [
+            r.food.pk for r in Reservation.objects.all()
+            if r.quantity == r.food.counter]
         return Food.objects.filter(fridge=self).exclude(id__in=all_reservation)
 
     def get_reserved_food(self):
@@ -111,6 +110,7 @@ class Food(models.Model):
     '''Food model'''
     name = models.CharField(max_length=45)
     description = models.CharField(max_length=200, null=True, blank=True)
+    counter = models.PositiveIntegerField()
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
     halal = models.BooleanField()
@@ -128,11 +128,25 @@ class Food(models.Model):
         return Reservation.objects.filter(food=self).count() != 0
 
     def is_reserved_by_me(self, current_user):
+        test = Reservation.objects.filter(food=self) \
+            .filter(user=current_user).count() != 0
+        print(test)
         return Reservation.objects.filter(food=self) \
             .filter(user=current_user).count() != 0
 
-    def is_available(self):
-        return Reservation.objects.filter(food=self).count() == 0
+    # def is_available(self):
+    #     return Reservation.objects.filter(food=self).count() == 0
+
+    def has_reservation(self):
+        return Reservation.objects.filter(
+            user=self.user, food=self).count() != 0
+
+    def quantity_available(self):
+        quantity_available = self.counter - sum(
+            map(lambda r: r.quantity,
+                list(Reservation.objects.filter(food=self))))
+        quantity_available = min(4, quantity_available)
+        return range(quantity_available)
 
     def __str__(self):
         return str(self.name)
@@ -145,8 +159,14 @@ class Reservation(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True)
+    quantity = models.PositiveIntegerField()
 
     def save(self, *args, **kwargs):
+        if self.food.counter < int(self.quantity):
+            raise ValidationError(_("Not enough food available"))
+        if int(self.quantity) > 4:
+            raise ValidationError(_("You can't reserve more than for food"))
+
         r = Reservation.objects.filter(food=self.food)
         if r and r[0].user == self.user:
             raise ValidationError(_("You can't reserve your own food."))
@@ -226,6 +246,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
     email = models.EmailField(unique=True)
+    email_confirmed = models.BooleanField(default=False)
 
     def has_fridge(self):
         return Fridge.objects.filter(user=self).count() != 0

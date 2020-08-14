@@ -32,7 +32,7 @@ def create_admin_user(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fridge', '0003_auto_20200602_1020'),
+        ('fridge', '0001_initial'),
     ]
 
     operations = [

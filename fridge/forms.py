@@ -100,12 +100,13 @@ class FoodForm(forms.ModelForm):
 
     class Meta:
         model = Food
-        fields = ('name', 'description', 'vegetarian', 'vegan', 'halal',
-                  'lactose_free', 'gluten_free', 'bio',
+        fields = ('name', 'description', 'counter', 'vegetarian', 'vegan',
+                  'halal', 'lactose_free', 'gluten_free', 'bio',
                   'expiration_date')
         labels = {
             'name': _('Name') + "*",
             'description': _('Description'),
+            'counter': _('Counter') + "*",
             'vegetarian': _('Vegetarian'),
             'vegan': _('Vegan'),
             'halal': _('Halal'),
@@ -120,7 +121,9 @@ class FoodForm(forms.ModelForm):
         }
 
         widgets = {
-            'expiration_date': forms.DateInput(attrs={'class': 'datepicker'})
+            'expiration_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'description': forms.Textarea(
+                 attrs={'class': 'materialize-textarea'})
         }
 
 
@@ -158,7 +161,7 @@ class SpecialDayForm(forms.ModelForm):
         model = SpecialDay
         fields = ('description', 'is_open', 'from_date',
                   'to_date', 'from_hour', 'to_hour')
-        labels = {
+        labels={
             'description': _('Description') + "*",
             'is_open': _('Is the Free Go open?'),
             'from_date': _('From date') + "*",
