@@ -134,8 +134,6 @@ class Food(models.Model):
         return Reservation.objects.filter(food=self) \
             .filter(user=current_user).count() != 0
 
-    # def is_available(self):
-    #     return Reservation.objects.filter(food=self).count() == 0
 
     def has_reservation(self):
         return Reservation.objects.filter(

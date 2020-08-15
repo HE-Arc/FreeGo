@@ -72,8 +72,8 @@ class FoodDetailView(LoginRequiredMixin, generic.DetailView):
 class FoodUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Food
     template_name = 'common/form.html'
-    fields = ['name', 'description', 'vegetarian', 'vegan',  'halal',
-              'lactose_free', 'gluten_free', 'bio', 'expiration_date', 'image']
+    fields = ['name', 'description', 'counter', 'vegetarian', 'vegan',
+              'halal', 'lactose_free', 'gluten_free', 'bio', 'expiration_date']
 
     def get_success_url(self):
         return reverse_lazy('fridge:profile')
