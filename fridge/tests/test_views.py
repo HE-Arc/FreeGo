@@ -291,7 +291,7 @@ class FoodListViewTest(TestCase):
         """
         self.client.login(username='test', password='test')
         food = create_food(self.fridge, self.user)
-        create_reservation(food, self.user, 3)
+        create_reservation(food, self.user, 4)
         response = self.client.get(
             reverse('fridge:food-list', args=(self.fridge.id,)))
         self.assertEqual(response.status_code, 200)
