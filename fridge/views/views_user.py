@@ -24,8 +24,9 @@ from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from django.template.loader import render_to_string, get_template
+from django.template import Context
+from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 
@@ -48,7 +49,11 @@ class FoodReservation(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         food = Food.objects.get(pk=self.kwargs['pk'])
-        reservation = Reservation(food=food, user=request.user)
+
+        if Reservation.objects.filter(user=request.user).count() != 0:
+            Reservation.objects.filter(user=request.user).delete()
+        reservation = Reservation(
+            food=food, user=request.user, quantity=self.kwargs['quantity'])
         reservation.save()
         message = _(
             "Food reserved with success")
@@ -105,16 +110,22 @@ class RegisterView(View):
             current_site = get_current_site(request)
             mail_subject = 'Activate your blog account.'
             token_generator = PasswordResetTokenGenerator()
-            message = render_to_string('user/acc_active_email.html', {
+
+            txt = get_template('user/acc_active_email.txt')
+            html = get_template('user/acc_active_email.html')
+            d = {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': token_generator.make_token(user),
-            })
+            }
+            html_content = html.render(d)
+            txt_content = txt.render(d)
             to_email = form.cleaned_data.get('email')
-            email = EmailMessage(
-                mail_subject, message, to=[to_email]
+            email = EmailMultiAlternatives(
+                mail_subject, txt_content, to=[to_email]
             )
+            email.attach_alternative(html_content, "text/html")
             email.send()
 
             message = _(
@@ -221,7 +232,7 @@ class ContactView(generic.FormView):
         from_user = self.request.user.email
         perm = Permission.objects.get(codename="admin")
         to_user = User.objects.filter(
-            user_permissions__in=[perm])
+            user_permissions__in=[perm]).values_list('email', flat=True)
         send_mail(subject=subject, message=message,
                   from_email=from_user, recipient_list=to_user)
         message2 = _(
@@ -249,14 +260,14 @@ class ActivateAccount(View):
         if user is not None and \
                 default_token_generator.check_token(user, token):
             user.is_active = True
-            user.profile.email_confirmed = True
+            user.email_confirmed = True
             user.save()
             login(request, user)
             message = _(
                 "Login with success")
             messages.add_message(request, messages.INFO, message)
             return render(request, 'home/home.html', {
-                'token': token.key,
+                'token': token,
             })
         else:
             return HttpResponse('Activation link is invalid!')

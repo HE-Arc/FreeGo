@@ -64,7 +64,7 @@
         <h5>{% trans 'Available food' %}</h5>
         <div class="row" id="main">
             {% for food in fridge.get_available_food %}
-            {% include "food/food_card.html" %}
+            {% include "food/food_card_edit.html" %}
             {% endfor %}
         </div>
     </li>

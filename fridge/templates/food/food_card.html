@@ -1,27 +1,36 @@
 {% load static %}
 {% load i18n %}
+{% load fridge_extras %}
 
-<div class="col offset-s2 s8 m6">
+<div class="col s12 m6">
     <div class="card">
-        <a id="reference" href="{% url 'fridge:food-detail' food.pk %}">
-            <div class="card-image">
-                <img id="image" src="{{ food.image.url }}" width="375" alt="fridge image">
-            </div>
-        </a>
         <div class="card-content">
-            <span class="card-title grey-text text-darken-4">{{ food.name }}
+            <span class="card-title grey-text text-darken-4">
+                <a id="reference" href="{% url 'fridge:food-detail' food.pk %}" class="black-text">{{ food.name }}</a>
                 <a class='dropdown-trigger' href='#' data-target='dropdown1'>
                     <i class="material-icons right black-text" aria-hidden="true">more_vert</i>
                 </a>
                 <ul id='dropdown1' class='dropdown-content'>
                     <li><a href="{% url 'fridge:report-content' food.pk %}">{% trans 'Report content' %}</a></li>
-                    {% if food.is_available %}
-                    <li><a href="{% url 'fridge:food-reservation' food.pk %}">{% trans 'Reserve' %}</a></li>
-                    {% else %}
-                    <li><a href="{% url 'fridge:food-cancellation' food.pk %}">{% trans 'Cancel reservation' %}</a></li>
-                    {% endif %}
                 </ul>
             </span>
+            {% if food.description %}
+            <p>{{ food.description }}</p>
+            {% endif %}
         </div>
+        <div class="card-action center-align">
+            <a href="#" class="dropdown-trigger btn" data-target='dropdown_{{food.pk}}'>{% trans 'Reserve' %}</a>
+        </div>
+        <ul id='dropdown_{{food.pk}}' class='dropdown-content'>
+            {% is_reserved_by_user food request.user as is_reserved %}
+            {% if is_reserved %}
+            <li><a href="{% url 'fridge:food-cancellation' pk=food.pk %}">{% trans 'Cancel reservation' %}</a></li>
+            {% else%}
+            {% for i in food.quantity_available %}
+            <li><a href="{% url 'fridge:food-reservation' pk=food.pk quantity=i %}">{{i}}</a></li>
+            {% endfor %}
+            {% endif %}
+        </ul>
     </div>
+
 </div>

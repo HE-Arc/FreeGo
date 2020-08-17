@@ -96,6 +96,7 @@ urlpatterns = [
          auth_views.PasswordResetView.as_view(
              template_name='common/form.html',
              subject_template_name='user/password_reset_subject.txt',
+             html_email_template_name='user/html_password_reset_email.html',
              email_template_name='user/password_reset_email.html',
              success_url=reverse_lazy('fridge:password_reset_done')
          ),
@@ -117,10 +118,10 @@ urlpatterns = [
          ),
          name='password_reset_complete'),
 
-    path('food/<pk>/reservation', views_user.FoodReservation.as_view(),
-         name='food-reservation'),
-    path('food/<pk>/cancellation', views_user.FoodCancellation.as_view(),
-         name='food-cancellation'),
+    path('food/<pk>/reservation/<quantity>',
+         views_user.FoodReservation.as_view(), name='food-reservation'),
+    path('food/<pk>/cancellation>',
+         views_user.FoodCancellation.as_view(), name='food-cancellation'),
     path('reservation/list', views_user.ReservationListView.as_view(),
          name='reservation-list'),
     path('fridge-follow/<pk>',

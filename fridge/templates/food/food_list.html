@@ -29,14 +29,19 @@
     </li>
     {% endif %}
     <li class="collection-item">
-        <h5>{% trans 'Available food' %}</h5>
-        {% if food_available %}
+        <h5>{% trans 'Reserved food' %}</h5>
+        {% if food_reserve %}
         <div class="row" id="main">
-            {% for food in food_available %}
+            {% for food in food_reserve %}
             {% include "food/food_card.html" %}
             {% endfor %}
-
-            {% for food in food_reserve %}
+        </div>
+        {% endif %}
+        
+        {% if food_available %}
+        <h5>{% trans 'Available food' %}</h5>
+        <div class="row" id="main">
+            {% for food in food_available %}
             {% include "food/food_card.html" %}
             {% endfor %}
         </div>
