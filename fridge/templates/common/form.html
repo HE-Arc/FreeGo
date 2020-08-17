@@ -43,8 +43,8 @@
                 {% endfor %}
                 {% endif %}
                 {% else %}
+                <span>{{ field.label }}</span>
                 {{ field }}
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {% if field.errors %}
                 {% for error in field.errors %}
                 <span class="helper-text red-text" data-error="wrong" data-success="right">{{ error|escape }}</span>

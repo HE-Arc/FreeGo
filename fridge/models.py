@@ -163,8 +163,6 @@ class Reservation(models.Model):
             raise ValidationError(_("Not enough food available"))
         if int(self.quantity) > 4:
             raise ValidationError(_("You can't reserve more than for food"))
-
-        r = Reservation.objects.filter(food=self.food)
         super().save(*args, **kwargs)
 
 

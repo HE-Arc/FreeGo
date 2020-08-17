@@ -122,12 +122,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-TIME_FORMAT = '%I:%M %p'
-
-TIME_INPUT_FORMATS = (
-    '%I:%M %p',
-)
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

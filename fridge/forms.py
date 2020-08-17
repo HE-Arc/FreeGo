@@ -12,6 +12,15 @@ from geopy.geocoders import Nominatim
 DATE_FORMAT = '%b %d, %Y'
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
+class TimeInput(forms.TimeInput):
+    input_type = 'time'
+    input_formats=['%H:%M'],
+
+
 class FridgeDemandForm(forms.ModelForm):
     '''Fridge Demand form'''
 
@@ -121,9 +130,9 @@ class FoodForm(forms.ModelForm):
         }
 
         widgets = {
-            'expiration_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'expiration_date': DateInput(),
             'description': forms.Textarea(
-                 attrs={'class': 'materialize-textarea'})
+                attrs={'class': 'materialize-textarea'})
         }
 
 
@@ -140,8 +149,8 @@ class OpeningHourForm(forms.ModelForm):
 
         widgets = {
             'weekday': forms.Select(attrs={'class': 'browser-default'}),
-            'from_hour': forms.TimeInput(attrs={'class': 'timepicker'}),
-            'to_hour': forms.TimeInput(attrs={'class': 'timepicker'})
+            'from_hour': TimeInput(),
+            'to_hour': TimeInput()
         }
 
     def clean(self):
@@ -161,7 +170,7 @@ class SpecialDayForm(forms.ModelForm):
         model = SpecialDay
         fields = ('description', 'is_open', 'from_date',
                   'to_date', 'from_hour', 'to_hour')
-        labels={
+        labels = {
             'description': _('Description') + "*",
             'is_open': _('Is the Free Go open?'),
             'from_date': _('From date') + "*",
@@ -171,10 +180,10 @@ class SpecialDayForm(forms.ModelForm):
         }
 
         widgets = {
-            'from_date': forms.DateInput(attrs={'class': 'datepicker'}),
-            'to_date': forms.DateInput(attrs={'class': 'datepicker'}),
-            'from_hour': forms.TimeInput(attrs={'class': 'timepicker'}),
-            'to_hour': forms.TimeInput(attrs={'class': 'timepicker'})
+            'from_date': DateInput(),
+            'to_date': DateInput(),
+            'from_hour': TimeInput(),
+            'to_hour': TimeInput()
         }
 
         required = {
@@ -251,7 +260,7 @@ class InventoryForm(forms.ModelForm):
             "visa": _("Visa") + "*"
         }
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'datepicker'})
+            'date': DateInput()
         }
 
 
@@ -266,5 +275,5 @@ class TemperatureControlForm(forms.ModelForm):
             "visa": _("Visa") + "*"
         }
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'datepicker'})
+            'date': DateInput()
         }

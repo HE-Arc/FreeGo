@@ -19,6 +19,10 @@
             {{ fridge.address }}, {{ fridge.zip_code }} {{ fridge.city }}
         </div>
         <div class="row">
+            <strong>{% trans 'Username' %} : </strong>
+            {{ fridge.user.username }}
+        </div>
+        <div class="row">
             <strong>{% trans 'Email' %} : </strong>
             {{ fridge.user.email }}
         </div>
