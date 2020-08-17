@@ -1,35 +1,25 @@
-{% load i18n %}
+{% extends 'common/base_email.html' %}
 {% load static %}
+{% load i18n %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% autoescape off %}
+<div class="container">
+    <div style="font-size: 3rem;" class="valign-wrapper"><img class="responsive-img" width="64" height="64"
+            src="{{site}}{% static 'fridge/logos/icon-128x128.png' %}" alt="">Free Go</div>
+    <section class="section col s10 offset-s1">
+        <div class="row" style="font-size:1.5rem;">{% trans "Hi"  %} {{ user.get_username }}{% trans ","  %}</div>
+        <div class="row" style="font-size:1.5rem;">
+            {% blocktrans %}Please click on the link to confirm your registration : {% endblocktrans %}
+            {% block reset_link %}
+            http://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
+            {% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Go</title>
-    <!-- Compiled and minified JavaScript -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-</head>
-
-<body>
-    {% autoescape off %}
-    <div class="container">
-        <div style="font-size: 3rem;" class="valign-wrapper"><img class="responsive-img" width="64" height="64"
-                src="{{site}}{% static 'fridge/logos/icon-128x128.png' %}" alt="">Free Go</div>
-        <section class="section col s10 offset-s1">
-            <div class="row" style="font-size:1.5rem;">{% trans "Hi"  %} {{ user.get_username }}{% trans ","  %}</div>
-            <div class="row" style="font-size:1.5rem;">
-                {% blocktrans %}Please click on the link to confirm your registration : {% endblocktrans %}
-                {% block reset_link %}
-                http://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
-                {% endblock %}
-
-            </div>
-            <div class="row" style="font-size:1.5rem;">{% blocktrans %}The Free Go team{% endblocktrans %}
-            </div>
-        </section>
-        <!-- <div class="divider"></div>
+        </div>
+        <div class="row" style="font-size:1.5rem;">{% blocktrans %}The Free Go team{% endblocktrans %}
+        </div>
+    </section>
+    <!-- <div class="divider"></div>
         <section class="section">
             <div class="row center-align">
                 <a href="https://www.facebook.com/assocFreeGo/" class="col s2 offset-s1"><i class="fab fa-facebook"
@@ -44,8 +34,6 @@
                         style="font-size: 2em; color: black;" aria-hidden="true">web</i></a>
             </div>
         </section> -->
-    </div>
-    {% endautoescape %}
-</body>
-
-</html>
+</div>
+{% endautoescape %}
+{% endblock %}

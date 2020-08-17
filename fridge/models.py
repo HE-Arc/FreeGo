@@ -134,7 +134,6 @@ class Food(models.Model):
         return Reservation.objects.filter(food=self) \
             .filter(user=current_user).count() != 0
 
-
     def has_reservation(self):
         return Reservation.objects.filter(
             user=self.user, food=self).count() != 0
@@ -166,8 +165,6 @@ class Reservation(models.Model):
             raise ValidationError(_("You can't reserve more than for food"))
 
         r = Reservation.objects.filter(food=self.food)
-        if r and r[0].user == self.user:
-            raise ValidationError(_("You can't reserve your own food."))
         super().save(*args, **kwargs)
 
 

@@ -89,6 +89,24 @@ class FoodModel(TestCase):
         self.assertEqual(self.food.is_reserved_by_me(self.user), True)
         self.assertEqual(self.food.is_reserved_by_me(self.another_user), False)
 
+    def test_has_reservation(self):
+        """
+        Test has_reservation method
+        """
+        self.assertEqual(self.food.has_reservation(), False)
+        create_reservation(food=self.food, user=self.user, quantity=3)
+        self.assertEqual(self.food.has_reservation(), True)
+
+    def test_quantity_available(self):
+        """
+        Test quantity_available method
+        """
+        self.assertEqual(self.food.quantity_available(), range(0, 4))
+        create_reservation(food=self.food, user=self.another_user, quantity=2)
+        self.assertEqual(self.food.quantity_available(), range(0, 2))
+        create_reservation(food=self.food, user=self.another_user, quantity=1)
+        self.assertEqual(self.food.quantity_available(), range(0, 1))
+
 
 class OpeningHourModelTests(TestCase):
     def setUp(self):
