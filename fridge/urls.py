@@ -96,6 +96,7 @@ urlpatterns = [
          auth_views.PasswordResetView.as_view(
              template_name='common/form.html',
              subject_template_name='user/password_reset_subject.txt',
+             html_email_template_name='user/html_password_reset_email.html',
              email_template_name='user/password_reset_email.html',
              success_url=reverse_lazy('fridge:password_reset_done')
          ),

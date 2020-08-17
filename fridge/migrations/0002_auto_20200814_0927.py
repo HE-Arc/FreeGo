@@ -22,7 +22,7 @@ def create_permission(apps, schema_editor):
 
 def create_admin_user(apps, schema_editor):
     user = User.objects.create_user(
-        username='admin', password='admin', email='44fb691853-fe0fbc@inbox.mailtrap.io')
+        username='admin', password='admin', email='freego.tb@gmail.com')
     permission_admin = Permission.objects.get(codename='admin')
     user.user_permissions.add(permission_admin)
     permission_store = Permission.objects.get(codename='store')
