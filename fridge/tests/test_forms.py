@@ -12,6 +12,7 @@ class FoodFormTest(TestCase):
         Valide date
         """
         form_data = {'name': 'a name',
+                     'counter': 2,
                      'vegetarian': True,
                      'vegan': False,
                      'halal': False,

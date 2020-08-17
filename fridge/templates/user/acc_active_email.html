@@ -1,8 +1,14 @@
+{% extends 'common/base_email.html' %}
+{% load static %}
 {% load i18n %}
-{% autoescape off %}
-{% trans "Hi "  %}{{ user.get_username }}{% trans ","  %}
-{% blocktrans %}Please click on the link to confirm your registration,{% endblocktrans %}
-{% block reset_link %}
-http://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
+{% block content %}
+
+<div class="row" style="font-size:1.5rem;">{% trans "Hi"  %} {{ user.get_username }}{% trans ","  %}</div>
+<div class="row" style="font-size:1.5rem;">
+        {% blocktrans %}Please click on the link to confirm your registration : {% endblocktrans %}
+        {% block reset_link %}
+        http://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
+        {% endblock %}
+
+</div>
 {% endblock %}
-{% endautoescape %}
