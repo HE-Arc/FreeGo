@@ -231,11 +231,6 @@ class TemperatureControlUpdateView(UserPassesTestMixin, generic.UpdateView):
     login_url = LOGIN_URL
     fields = ['date', 'temperature', 'visa']
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        print(context)
-        return context
-
     def get_success_url(self):
         return reverse_lazy('fridge:temperature-control-list',
                             kwargs={'pk': self.object.fridge.pk})
@@ -248,7 +243,7 @@ class TemperatureControlUpdateView(UserPassesTestMixin, generic.UpdateView):
 
 
 class ReportContentView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         food = Food.objects.get(pk=self.kwargs['pk'])
         report_content = ReportContent(food=food, user=request.user)
         report_content.save()

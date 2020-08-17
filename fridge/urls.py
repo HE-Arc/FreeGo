@@ -8,7 +8,6 @@ from rest_framework import routers
 
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
-from django.conf.urls import url
 from fridge.forms import FridgeUpdateAddressForm
 
 
@@ -97,6 +96,7 @@ urlpatterns = [
          auth_views.PasswordResetView.as_view(
              template_name='common/form.html',
              subject_template_name='user/password_reset_subject.txt',
+             html_email_template_name='user/html_password_reset_email.html',
              email_template_name='user/password_reset_email.html',
              success_url=reverse_lazy('fridge:password_reset_done')
          ),
@@ -118,10 +118,10 @@ urlpatterns = [
          ),
          name='password_reset_complete'),
 
-    path('food/<pk>/reservation', views_user.FoodReservation.as_view(),
-         name='food-reservation'),
-    path('food/<pk>/cancellation', views_user.FoodCancellation.as_view(),
-         name='food-cancellation'),
+    path('food/<pk>/reservation/<quantity>',
+         views_user.FoodReservation.as_view(), name='food-reservation'),
+    path('food/<pk>/cancellation>',
+         views_user.FoodCancellation.as_view(), name='food-cancellation'),
     path('reservation/list', views_user.ReservationListView.as_view(),
          name='reservation-list'),
     path('fridge-follow/<pk>',
@@ -132,7 +132,8 @@ urlpatterns = [
          name='fridge-unfollow'),
     path('contact', views_user.ContactView.as_view(), name='contact'),
     path('donations', views_user.DonationView.as_view(), name='donations'),
-    path('all-rights-reserved', views_user.AllRightsReserved.as_view(), name='all_rights_reserved'),
+    path('all-rights-reserved', views_user.AllRightsReserved.as_view(),
+         name='all_rights_reserved'),
     path('notifications', views_user.NotificationsView.as_view(),
          name='notifications'),
 
@@ -182,8 +183,8 @@ urlpatterns = [
     path('settings', views_home.SettingsView.as_view(), name='settings'),
     path('offline', views_home.offline_view, name='offline'),
 
-    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        views_user.activate, name='activate'),
+    path('activate/<uidb64>/<token>/',
+         views_user.ActivateAccount.as_view(), name='activate'),
 ]
 
 

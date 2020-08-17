@@ -24,8 +24,9 @@ from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from django.template.loader import render_to_string, get_template
+from django.template import Context
+from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 
@@ -48,7 +49,11 @@ class FoodReservation(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         food = Food.objects.get(pk=self.kwargs['pk'])
-        reservation = Reservation(food=food, user=request.user)
+
+        if Reservation.objects.filter(user=request.user).count() != 0:
+            Reservation.objects.filter(user=request.user).delete()
+        reservation = Reservation(
+            food=food, user=request.user, quantity=self.kwargs['quantity'])
         reservation.save()
         message = _(
             "Food reserved with success")
@@ -105,16 +110,22 @@ class RegisterView(View):
             current_site = get_current_site(request)
             mail_subject = 'Activate your blog account.'
             token_generator = PasswordResetTokenGenerator()
-            message = render_to_string('user/acc_active_email.html', {
+
+            txt = get_template('user/acc_active_email.txt')
+            html = get_template('user/acc_active_email.html')
+            d = {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': token_generator.make_token(user),
-            })
+            }
+            html_content = html.render(d)
+            txt_content = txt.render(d)
             to_email = form.cleaned_data.get('email')
-            email = EmailMessage(
-                mail_subject, message, to=[to_email]
+            email = EmailMultiAlternatives(
+                mail_subject, txt_content, to=[to_email]
             )
+            email.attach_alternative(html_content, "text/html")
             email.send()
 
             message = _(
@@ -227,7 +238,6 @@ class ContactView(generic.FormView):
         message2 = _(
             "Message send with success")
         messages.add_message(self.request, messages.INFO, message2)
-        print(messages)
         return render(self.request, 'home/home.html', {'form': form})
 
 
@@ -239,22 +249,25 @@ class AllRightsReserved(generic.TemplateView):
     template_name = 'home/all_rights_reserved.html'
 
 
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and default_token_generator.check_token(user, token):
-        user.is_active = True
-        user.save()
-        login(request, user)
-        token, created = Token.objects.get_or_create(user=user)
-        message = _(
-            "Login with success")
-        messages.add_message(request, messages.INFO, message)
-        return render(request, 'home/home.html', {
-            'token': token.key,
-        })
-    else:
-        return HttpResponse('Activation link is invalid!')
+class ActivateAccount(View):
+    def get(self, request, uidb64, token, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and \
+                default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.email_confirmed = True
+            user.save()
+            login(request, user)
+            message = _(
+                "Login with success")
+            messages.add_message(request, messages.INFO, message)
+            return render(request, 'home/home.html', {
+                'token': token,
+            })
+        else:
+            return HttpResponse('Activation link is invalid!')

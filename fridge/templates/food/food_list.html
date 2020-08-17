@@ -3,7 +3,7 @@
 {% load i18n %}
 {% block content %}
 
-<img class="responsive-img" src="{{ fridge.image.url }}" alt="fridge-image">
+<img class="responsive-img" src="{{ fridge.image.url }}" width="600" alt="fridge-image">
 
 <ul class="collection">
     <li class="collection-item">
@@ -29,14 +29,19 @@
     </li>
     {% endif %}
     <li class="collection-item">
-        <h5>{% trans 'Available food' %}</h5>
-        {% if food_available %}
+        <h5>{% trans 'Reserved food' %}</h5>
+        {% if food_reserve %}
         <div class="row" id="main">
-            {% for food in food_available %}
+            {% for food in food_reserve %}
             {% include "food/food_card.html" %}
             {% endfor %}
-
-            {% for food in food_reserve %}
+        </div>
+        {% endif %}
+        
+        {% if food_available %}
+        <h5>{% trans 'Available food' %}</h5>
+        <div class="row" id="main">
+            {% for food in food_available %}
             {% include "food/food_card.html" %}
             {% endfor %}
         </div>
