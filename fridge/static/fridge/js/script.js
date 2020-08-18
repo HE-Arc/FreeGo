@@ -16,12 +16,12 @@ $(document).ready(function () {
     $('.parallax').parallax();
     $('.dropdown-trigger').dropdown();
     $('#modal_pop').modal();
-    $('#modal_pop').modal('open');
+    // $('#modal_pop').modal('open');
 
-    // if (Cookies.get("pop") == null) {
-    //     $('#modal_pop').modal('open');
-    //     Cookies.set("pop", 1);
-    // }
+    if (Cookies.get("pop") == null) {
+        $('#modal_pop').modal('open');
+        Cookies.set("pop", 1);
+    }
 });
 
 $(document).ready(function () {
