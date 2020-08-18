@@ -30,26 +30,36 @@
                         <input class="file-path validate" type="text">
                     </div>
                 </div>
+
                 {% elif field.field.widget.input_type == 'checkbox' %}
                 <label>
                     {{ field }}
                     <span>{{ field.label }}</span>
                 </label>
+
                 {% elif field.field.widget.input_type == 'select' %}
                 {{ field }}
-                {% if field.errors %}
-                {% for error in field.errors %}
-                <span class="helper-text red-text" data-error="wrong" data-success="right">{{ error|escape }}</span>
+
+                {% elif field.field.widget.input_type == 'radio' %}
+                <span>{{field.label}}</span>
+                {% for options in field %}
+                <p>
+                    <label for="{{ options.id_for_label }}">
+                        {{ options.tag }}
+                        <span class="radio">{{ options.choice_label }}</span>
+                    </label>
+                </p>
                 {% endfor %}
-                {% endif %}
+
                 {% else %}
                 <span>{{ field.label }}</span>
                 {{ field }}
+                {% endif %}
+
                 {% if field.errors %}
                 {% for error in field.errors %}
                 <span class="helper-text red-text" data-error="wrong" data-success="right">{{ error|escape }}</span>
                 {% endfor %}
-                {% endif %}
                 {% endif %}
             </div>
         </div>

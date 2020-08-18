@@ -18,7 +18,7 @@ class DateInput(forms.DateInput):
 
 class TimeInput(forms.TimeInput):
     input_type = 'time'
-    input_formats=['%H:%M'],
+    input_formats = ['%H:%M'],
 
 
 class FridgeDemandForm(forms.ModelForm):
@@ -180,6 +180,7 @@ class SpecialDayForm(forms.ModelForm):
         }
 
         widgets = {
+            'is_open': forms.RadioSelect(),
             'from_date': DateInput(),
             'to_date': DateInput(),
             'from_hour': TimeInput(),

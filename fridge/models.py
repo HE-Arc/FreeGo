@@ -40,6 +40,11 @@ WEEKDAYS = [
     (6, _("Sunday")),
 ]
 
+IS_OPEN = [
+    (0, _("Opened")),
+    (1, _("Closed"))
+]
+
 
 class Fridge(models.Model):
     '''Fridge model'''
@@ -189,7 +194,8 @@ class OpeningHour(models.Model):
 class SpecialDay(models.Model):
     '''SpecialDay model'''
     description = models.CharField(max_length=200)
-    is_open = models.BooleanField(default=False)
+    is_open = models.PositiveSmallIntegerField(
+        choices=IS_OPEN, default=0)
     from_date = models.DateField()
     to_date = models.DateField(null=True, blank=True)
     from_hour = models.TimeField(null=True, blank=True)
