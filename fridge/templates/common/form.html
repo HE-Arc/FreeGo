@@ -5,7 +5,7 @@
 {% load i18n %}
 
 <div class="container">
-    <form method="post" enctype="multipart/form-data" class="col s12">
+    <form id="upload" method="post" enctype="multipart/form-data" class="col s12">
         {% csrf_token %}
 
         <!-- FORM -->
@@ -67,6 +67,9 @@
         <p>*{% trans "Required" %}</p>
 
         <!-- ENDFORM -->
+        <div class="progress" style="visibility: hidden">
+            <div id="progressBar" class="indeterminate"></div>
+        </div>
 
         <div class="row">
             <button class="btn waves-effect waves-light col s12" type="submit"
