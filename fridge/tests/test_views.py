@@ -481,8 +481,6 @@ class RegisterViewTest(TestCase):
             'password2': 'neFDE234r'
         }
         response = self.client.post(reverse('fridge:register'), json)
-        print(response)
-
         self.assertRedirects(response, reverse('fridge:settings'))
         self.assertEqual(len(User.objects.all()), 2)
         self.assertEqual(User.objects.last().username, 'test')

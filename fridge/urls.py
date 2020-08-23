@@ -35,6 +35,15 @@ urlpatterns = [
          name='fridge-valid'),
     path('fridge/refuse/<pk>', views_fridge.FridgeRefuseDemand.as_view(),
          name='fridge-refuse'),
+    path('fridge/content-image-list/<pk>',
+         views_fridge.FridgeContentImageListView.as_view(),
+         name='fridge-content-image-list'),
+    path('fridge/content-image-add/<pk>',
+         views_fridge.FridgeContentImageCreateView.as_view(),
+         name='fridge-content-image-add'),
+    path('fridge/content-image-delete/<pk>',
+         views_fridge.FridgeContentImageDeleteView.as_view(),
+         name='fridge-content-image-delete'),
 
     path('change/name/<pk>',
          views_fridge.FridgeUpdateView.as_view(

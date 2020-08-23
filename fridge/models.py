@@ -133,9 +133,6 @@ class Food(models.Model):
         return Reservation.objects.filter(food=self).count() != 0
 
     def is_reserved_by_me(self, current_user):
-        test = Reservation.objects.filter(food=self) \
-            .filter(user=current_user).count() != 0
-        print(test)
         return Reservation.objects.filter(food=self) \
             .filter(user=current_user).count() != 0
 
@@ -261,6 +258,17 @@ class FridgeFollowing(models.Model):
         Fridge, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class FridgeContentImage(models.Model):
+    '''FridgeContentImage model'''
+    fridge = models.ForeignKey(
+        Fridge, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
+
+    def save(self, *args, **kwargs):
+        self.image = compress_image(self.image, 600)
+        super().save(*args, **kwargs)
 
 
 class ReportContent(models.Model):

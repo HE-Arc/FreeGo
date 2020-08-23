@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from .models import Fridge, Food, OpeningHour, SpecialDay, User, Sponsor, \
-    Inventory, TemperatureControl
+    Inventory, TemperatureControl, FridgeContentImage
 from .validators import expiration_date_validator
 
 from django.utils.translation import gettext_lazy as _
@@ -277,4 +277,15 @@ class TemperatureControlForm(forms.ModelForm):
         }
         widgets = {
             'date': DateInput()
+        }
+
+
+class FridgeContentImageForm(forms.ModelForm):
+    '''FridgeContentImage form'''
+
+    class Meta:
+        model = FridgeContentImage
+        fields = ("image",)
+        labels = {
+            "image": _("Image") + "*"
         }

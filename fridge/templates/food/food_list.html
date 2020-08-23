@@ -7,6 +7,12 @@
 
 <ul class="collection">
     <li class="collection-item">
+        <div>
+            <a href="#" class="black-text" style="font-size: 1.64rem;">{% trans 'Contenu du Free Go' %}<i
+                    class="material-icons right">image</i></a>
+        </div>
+    </li>
+    <li class="collection-item">
         <h5>{% trans 'Opening hours' %}</h5>
         {% if fridge.get_opening_hours %}
         {% for opening_hour in fridge.get_opening_hours %}
@@ -37,7 +43,7 @@
             {% endfor %}
         </div>
         {% endif %}
-        
+
         {% if food_available %}
         <h5>{% trans 'Available food' %}</h5>
         <div class="row" id="main">
