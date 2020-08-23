@@ -73,7 +73,6 @@ class SpecialDayFormTest(TestCase):
                      'from_date': from_date, 'from_hour': from_hour,
                      'to_hour': to_hour}
         form = SpecialDayForm(data=form_data)
-        print(form.errors)
         self.assertTrue(form.is_valid())
 
     def test_valid_date(self):
