@@ -7,7 +7,7 @@ from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
 from django.utils import timezone
 from django.shortcuts import resolve_url as r
 from django.core.files.uploadedfile import SimpleUploadedFile
-from datetime import timedelta, date
+from datetime import timedelta, date, time
 from django.contrib.auth.models import Permission
 
 
@@ -353,8 +353,8 @@ class OpeningHourCreateView(TestCase):
     def test_post(self):
         json = {
             'weekday': 1,
-            'from_hour': "08:00 AM",
-            'to_hour': "10:00 AM"
+            'from_hour': time(8, 0, 0),
+            'to_hour': time(10, 0, 0)
         }
         response = self.client.post(
             reverse('fridge:openinghour-form', args=(self.fridge.pk,)), json)
@@ -384,7 +384,7 @@ class SpecialDayCreateViewTest(TestCase):
         to_date = (timezone.now() + timedelta(days=1)).date().isoformat()
         json = {
             'description': 'Holiday',
-            'is_open': False,
+            'is_open': 1,
             'from_date': from_date,
             'to_date': to_date
         }
