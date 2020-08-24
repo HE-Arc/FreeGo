@@ -172,24 +172,6 @@ class FridgesViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class FridgeContentImageUpdateView(UserPassesTestMixin, generic.TemplateView):
-    template_name = 'fridge/fridge_content_image_update.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        fridge_content_image_update = FridgeContentImage.objects.filter(
-            fridge=fridge)
-        context['fridge'] = fridge
-        context['fridge_content_image_update'] = fridge_content_image_update
-        return context
-
-    def test_func(self):
-        fridge_user = Fridge.objects.get(pk=self.kwargs['pk']).user
-        return self.request.user == fridge_user or \
-            self.request.user.has_perm('fridge.admin')
-
-
 class FridgeContentImageListView(generic.ListView):
     model = FridgeContentImage
     template_name = 'fridge/fridge_content_image_list.html'
@@ -204,6 +186,16 @@ class FridgeContentImageListView(generic.ListView):
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
         context['fridge'] = fridge
         return context
+
+
+class FridgeContentImageUpdateView(UserPassesTestMixin, FridgeContentImageListView):
+    template_name = 'fridge/fridge_content_image_update.html'
+    paginate_by = 5
+
+    def test_func(self):
+        fridge_user = Fridge.objects.get(pk=self.kwargs['pk']).user
+        return self.request.user == fridge_user or \
+            self.request.user.has_perm('fridge.admin')
 
 
 class FridgeContentImageCreateView(UserPassesTestMixin, generic.CreateView):

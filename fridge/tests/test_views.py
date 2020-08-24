@@ -283,8 +283,28 @@ class FridgeContentImageListViewTest(TestCase):
             reverse_lazy('fridge:fridge-content-image-list',
                          kwargs={'pk': self.fridge.pk}))
         self.assertEqual(response.status_code, 200)
+
+
+class FridgeContentImageUpdateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(user=self.user)
+
+    def test_empty(self):
+        response = self.client.get(
+            reverse_lazy('fridge:fridge-content-image-update',
+                         kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
-            response.context['fridgecontentimage_list'], ['<FridgeContentImage: FridgeContentImage object (1)>'])
+            response.context['fridgecontentimage_list'], [])
+
+    def test_with_content(self):
+        create_fridge_content_image(fridge=self.fridge)
+        response = self.client.get(
+            reverse_lazy('fridge:fridge-content-image-update',
+                         kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(response.status_code, 200)
 
 
 class FoodCreateViewTest(TestCase):

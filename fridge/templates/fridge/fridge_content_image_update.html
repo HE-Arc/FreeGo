@@ -5,7 +5,7 @@
 
 <div class="container">
     <h5>{% trans 'Fridge content images' %}</h5>
-    {% for fridge_content_image in fridge_content_image_update %}
+    {% for fridge_content_image in fridgecontentimage_list %}
     <div class="col s12 m6">
         <div class="card">
             <div class="card-image">
@@ -23,6 +23,8 @@
         </div>
     </div>
     {% endfor %}
+
+    {% include "common/pagination.html" %}
 
     <a href="{% url 'fridge:fridge-content-image-add' fridge.pk %}">
         <i class="small material-icons" aria-hidden="true" style="color: rgb(87, 161, 173);">add_circle</i>
