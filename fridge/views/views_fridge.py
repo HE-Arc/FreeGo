@@ -172,15 +172,37 @@ class FridgesViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class FridgeContentImageListView(generic.TemplateView):
-    template_name = 'fridge/fridge_content_image_list.html'
+class FridgeContentImageUpdateView(UserPassesTestMixin, generic.TemplateView):
+    template_name = 'fridge/fridge_content_image_update.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-        fridge_content_image_list = FridgeContentImage.objects.filter(fridge=fridge)
+        fridge_content_image_update = FridgeContentImage.objects.filter(
+            fridge=fridge)
         context['fridge'] = fridge
-        context['fridge_content_image_list'] = fridge_content_image_list
+        context['fridge_content_image_update'] = fridge_content_image_update
+        return context
+
+    def test_func(self):
+        fridge_user = Fridge.objects.get(pk=self.kwargs['pk']).user
+        return self.request.user == fridge_user or \
+            self.request.user.has_perm('fridge.admin')
+
+
+class FridgeContentImageListView(generic.ListView):
+    model = FridgeContentImage
+    template_name = 'fridge/fridge_content_image_list.html'
+    paginate_by = 1
+
+    def get_queryset(self):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        return FridgeContentImage.objects.filter(fridge=fridge).order_by('pk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        context['fridge'] = fridge
         return context
 
 
@@ -193,12 +215,12 @@ class FridgeContentImageCreateView(UserPassesTestMixin, generic.CreateView):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             fridge = Fridge.objects.get(pk=self.kwargs['pk'])
-            fridgeImage = FridgeContentImage(
+            fridgeContentImage = FridgeContentImage(
                 image=form.cleaned_data['image'],
                 fridge=fridge
             )
-            fridgeImage.save()
-            return redirect('fridge:fridge-detail')
+            fridgeContentImage.save()
+            return redirect('fridge:fridge-detail',  self.kwargs['pk'])
 
         return render(request, self.template_name, {'form': form})
 
@@ -210,13 +232,18 @@ class FridgeContentImageCreateView(UserPassesTestMixin, generic.CreateView):
 
 class FridgeContentImageDeleteView(UserPassesTestMixin, generic.DeleteView):
     model = FridgeContentImage
-    success_url = reverse_lazy('fridge:myadmin')
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
     def test_func(self):
-        fridge_user = Fridge.objects.get(pk=self.kwargs['pk']).user
+        fridge_user = FridgeContentImage.objects.get(
+            pk=self.kwargs['pk']).fridge.user
         return self.request.user == fridge_user or \
             self.request.user.has_perm('fridge.admin')
 
+    def get_success_url(self):
+        fridgeContentImage = FridgeContentImage.objects.get(
+            pk=self.kwargs['pk'])
+        return reverse_lazy('fridge:fridge-detail',
+                            kwargs={'pk': fridgeContentImage.fridge.pk})

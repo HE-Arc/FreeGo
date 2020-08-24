@@ -4,29 +4,50 @@
 {% block content %}
 
 <div class="container">
-    <h5>{% trans 'Fridge content images' %}</h5>
-    {% for fridge_content_image in fridge_content_image_list %}
+    {% for fridge_content_image in fridgecontentimage_list %}
     <div class="col s12 m6">
         <div class="card">
-            <div class="card-image">
-                <img id="image" src="{{ fridge_content_image.image.url }}">
-            </div>
-            <div class="card-tabs">
-                <ul class="tabs tabs-fixed-width">
-                    <li class="tab">
-                        <a href="{% url 'fridge:fridge-content-image-delete' fridge_content_image.pk %}"><i
-                                class="material-icons black-text" aria-hidden="true">delete</i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <img src="{{ fridge_content_image.image.url }}" alt="" class="responsive-img"> <!-- notice the "circle" class -->
         </div>
     </div>
     {% endfor %}
 
-    <a href="{% url 'fridge:fridge-content-image-add' fridge.pk %}">
-        <i class="small material-icons" aria-hidden="true" style="color: rgb(87, 161, 173);">add_circle</i>
-    </a>
+    <ul class="pagination center-align">
+        <li class="wave-effect"></li>
+        {% if page_obj.has_previous %}
+        <li class="wave-effect">
+            <a href="?page={{ page_obj.previous_page_number }}">
+                <i class="material-icons" aria-hidden="true">chevron_left</i>
+            </a>
+        </li>
+        {% else %}
+        <li class="diseable">
+            <a href="#">
+                <i class="material-icons" aria-hidden="true">chevron_left</i>
+            </a>
+        </li>
+        {% endif %}
+
+        <li class="active" style="background-color: rgb(87, 161, 173);;">
+            <a href="#">
+                {{ page_obj.number }}
+            </a>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="wave-effect">
+            <a href="?page={{ page_obj.next_page_number }}">
+                <i class="material-icons" aria-hidden="true">chevron_right</i>
+            </a>
+        </li>
+        {% else %}
+        <li class="diseable">
+            <a href="#">
+                <i class="material-icons" aria-hidden="true">chevron_right</i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
 </div>
 
 {% endblock %}

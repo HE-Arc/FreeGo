@@ -140,6 +140,8 @@
                     {% url 'fridge:change-address' fridge.pk as change_address_url %}
                     {% url 'fridge:change-phone-number' fridge.pk as change_phone_number_url %}
                     {% url 'fridge:change-image' fridge.pk as change_image_url %}
+                    {% url 'fridge:fridge-content-image-update' fridge.pk as fridge_content_image_update_url %}
+                    {% url 'fridge:fridge-content-image-list' fridge.pk as fridge_content_image_list_url %}
 
                     {% if request.path == fridge_new_url %}
                     <a class="left" href="{% url 'fridge:myadmin' %}">
@@ -159,8 +161,14 @@
                             aria-hidden="true">chevron_left</i></a>
                     <a class="brand-logo truncate">{{ fridge.name }}</a>
 
-                    {% elif request.path == change_name_url or request.path == change_address_url or request.path == change_phone_number_url or request.path == change_image_url %}
+                    {% elif request.path == change_name_url or request.path == change_address_url or request.path == change_phone_number_url or request.path == change_image_url or request.path == fridge_content_image_update_url %}
                     <a class="left" href="{% url 'fridge:fridge-detail' fridge.pk %}">
+                        <i class="material-icons black-text" style="font-size: 3rem;"
+                            aria-hidden="true">chevron_left</i></a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
+
+                    {% elif request.path == fridge_content_image_list_url %}
+                    <a class="left" href="{% url 'fridge:food-list' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
                     <a class="brand-logo truncate">{{ fridge.name }}</a>
@@ -327,7 +335,7 @@
 
     <script>
         $('#upload').submit(function () {
-            $(this).find("button[type='submit']").prop("disabled",true);
+            $(this).find("button[type='submit']").prop("disabled", true);
             $(this).find("#progressBar").css('visibility', 'visible');
         });
     </script>

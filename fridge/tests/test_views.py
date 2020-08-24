@@ -1,11 +1,12 @@
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
-    create_food, create_reservation, create_favorite
+    create_food, create_reservation, create_favorite, create_fridge_content_image
 from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
-    User, Reservation, Sponsor
+    User, Reservation, Sponsor, FridgeContentImage
 from django.utils import timezone
 from django.shortcuts import resolve_url as r
+from django.shortcuts import redirect
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import timedelta, date, time
 from django.contrib.auth.models import Permission
@@ -231,6 +232,59 @@ class FridgeRefuseDemandTest(TestCase):
         self.client.get(reverse_lazy('fridge:fridge-refuse',
                                      kwargs={'pk': self.fridge.pk}))
         self.assertEqual(Fridge.objects.filter(pk=pk).count(), 0)
+
+
+class FridgeContentImageCreateViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(user=self.user)
+
+    def test_post(self):
+        image = SimpleUploadedFile(name='test.png', content=open(
+            'fridge/static/fridge/test/test.png', 'rb').read(),
+            content_type='image/png')
+        json = {
+            'image': image
+        }
+
+        response = self.client.post(
+            reverse_lazy('fridge:fridge-content-image-add',
+                         kwargs={'pk': self.fridge.pk}), json)
+        self.assertRedirects(response,
+                             reverse_lazy('fridge:fridge-detail',
+                                          kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(len(FridgeContentImage.objects.all()), 1)
+
+    def test_get(self):
+        response = self.client.get(
+            reverse_lazy('fridge:fridge-content-image-add',
+                         kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(response.status_code, 200)
+
+
+class FridgeContentImageListViewTest(TestCase):
+    def setUp(self):
+        self.user = create_user('test', 'test@test.test', 'test')
+        self.client.login(username='test', password='test')
+        self.fridge = create_fridge(user=self.user)
+
+    def test_empty(self):
+        response = self.client.get(
+            reverse_lazy('fridge:fridge-content-image-list',
+                         kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context['fridgecontentimage_list'], [])
+
+    def test_with_content(self):
+        create_fridge_content_image(fridge=self.fridge)
+        response = self.client.get(
+            reverse_lazy('fridge:fridge-content-image-list',
+                         kwargs={'pk': self.fridge.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context['fridgecontentimage_list'], ['<FridgeContentImage: FridgeContentImage object (1)>'])
 
 
 class FoodCreateViewTest(TestCase):
