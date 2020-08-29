@@ -1,5 +1,6 @@
 from fridge.models import Fridge, Food, Reservation, \
-    OpeningHour, SpecialDay, FridgeFollowing, Inventory, TemperatureControl, FridgeContentImage
+    OpeningHour, SpecialDay, FridgeFollowing, Inventory, \
+    TemperatureControl, FridgeContentImage
 from fridge.forms import User
 from datetime import timedelta, date
 from django.utils import timezone

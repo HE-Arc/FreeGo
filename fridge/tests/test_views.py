@@ -1,12 +1,12 @@
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from fridge.tests.test_tools import create_user, create_fridge, \
-    create_food, create_reservation, create_favorite, create_fridge_content_image
+    create_food, create_reservation, create_favorite, \
+    create_fridge_content_image
 from fridge.models import Food, Fridge, SpecialDay, OpeningHour, \
     User, Reservation, Sponsor, FridgeContentImage
 from django.utils import timezone
 from django.shortcuts import resolve_url as r
-from django.shortcuts import redirect
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import timedelta, date, time
 from django.contrib.auth.models import Permission

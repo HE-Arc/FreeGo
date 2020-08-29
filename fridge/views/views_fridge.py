@@ -188,7 +188,8 @@ class FridgeContentImageListView(generic.ListView):
         return context
 
 
-class FridgeContentImageUpdateView(UserPassesTestMixin, FridgeContentImageListView):
+class FridgeContentImageUpdateView(
+        UserPassesTestMixin, FridgeContentImageListView):
     template_name = 'fridge/fridge_content_image_update.html'
     paginate_by = 5
 
