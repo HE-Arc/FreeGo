@@ -1,0 +1,34 @@
+{% extends 'common/base_store.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="container">
+    <h5>{% trans 'Fridge content images' %}</h5>
+    {% for fridge_content_image in fridgecontentimage_list %}
+    <div class="col s12 m6">
+        <div class="card">
+            <div class="card-image">
+                <img id="image" src="{{ fridge_content_image.image.url }}" alt="fridge content image">
+            </div>
+            <div class="card-tabs">
+                <ul class="tabs tabs-fixed-width">
+                    <li class="tab">
+                        <a href="{% url 'fridge:fridge-content-image-delete' fridge_content_image.pk %}"><i
+                                class="material-icons black-text" aria-hidden="true">delete</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% include "common/pagination.html" %}
+
+    <a href="{% url 'fridge:fridge-content-image-add' fridge.pk %}">
+        <i class="small material-icons" aria-hidden="true" style="color: rgb(87, 161, 173);">add_circle</i>
+    </a>
+</div>
+
+{% endblock %}

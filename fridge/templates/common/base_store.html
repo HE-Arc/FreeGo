@@ -9,7 +9,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="{% static 'fridge/css/style.css' %}" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'fridge/iconfont/material-icons.css' %}" type="text/css" prelaod>
     <!--Let browser know website is optimized for mobile-->
     <link rel="icon" type="image/png" href="{% static 'fridge/logos/icon-128x128.png' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -140,6 +140,8 @@
                     {% url 'fridge:change-address' fridge.pk as change_address_url %}
                     {% url 'fridge:change-phone-number' fridge.pk as change_phone_number_url %}
                     {% url 'fridge:change-image' fridge.pk as change_image_url %}
+                    {% url 'fridge:fridge-content-image-update' fridge.pk as fridge_content_image_update_url %}
+                    {% url 'fridge:fridge-content-image-list' fridge.pk as fridge_content_image_list_url %}
 
                     {% if request.path == fridge_new_url %}
                     <a class="left" href="{% url 'fridge:myadmin' %}">
@@ -159,8 +161,14 @@
                             aria-hidden="true">chevron_left</i></a>
                     <a class="brand-logo truncate">{{ fridge.name }}</a>
 
-                    {% elif request.path == change_name_url or request.path == change_address_url or request.path == change_phone_number_url or request.path == change_image_url %}
+                    {% elif request.path == change_name_url or request.path == change_address_url or request.path == change_phone_number_url or request.path == change_image_url or request.path == fridge_content_image_update_url %}
                     <a class="left" href="{% url 'fridge:fridge-detail' fridge.pk %}">
+                        <i class="material-icons black-text" style="font-size: 3rem;"
+                            aria-hidden="true">chevron_left</i></a>
+                    <a class="brand-logo truncate">{{ fridge.name }}</a>
+
+                    {% elif request.path == fridge_content_image_list_url %}
+                    <a class="left" href="{% url 'fridge:food-list' fridge.pk %}">
                         <i class="material-icons black-text" style="font-size: 3rem;"
                             aria-hidden="true">chevron_left</i></a>
                     <a class="brand-logo truncate">{{ fridge.name }}</a>
@@ -324,6 +332,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="{% static 'fridge/js/script.js' %}"></script>
     <script src="{% static 'fridge/js/app.js' %}"></script>
+
+    <script>
+        $('#upload').submit(function () {
+            $(this).find("button[type='submit']").prop("disabled", true);
+            $(this).find("#progressBar").css('visibility', 'visible');
+        });
+    </script>
 </body>
 
 </html>

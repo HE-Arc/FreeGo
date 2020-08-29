@@ -15,6 +15,13 @@ $(document).ready(function () {
     });
     $('.parallax').parallax();
     $('.dropdown-trigger').dropdown();
+    $('#modal_pop').modal();
+    // $('#modal_pop').modal('open');
+
+    if (Cookies.get("pop") == null) {
+        $('#modal_pop').modal('open');
+        Cookies.set("pop", 1);
+    }
 });
 
 $(document).ready(function () {
@@ -33,14 +40,12 @@ $(document).ready(function () {
     // From date
     $('#id_from_date')[0].addEventListener('change', (event) => {
         if (event.target.value != "") {
-            console.log("1");
             toDate.style.display = 'block';
             fromHour.style.display = 'block';
             toHour.style.display = 'block';
 
         }
         else {
-            console.log("2");
             toDate.style.display = 'none';
         };
     });
@@ -48,12 +53,10 @@ $(document).ready(function () {
     // To date
     $('#id_to_date')[0].addEventListener('change', (event) => {
         if (event.target.value != "") {
-            console.log(event.target.value);
             fromHour.style.display = 'none';
             toHour.style.display = 'none';
 
         } else {
-            console.log("4");
             fromHour.style.display = 'block';
             toHour.style.display = 'block';
 
@@ -63,10 +66,8 @@ $(document).ready(function () {
     // From hour
     $('#id_from_hour')[0].addEventListener('change', (event) => {
         if (event.target.value != "") {
-            console.log("5");
             toDate.style.display = 'none';
         } else {
-            console.log("6");
             toDate.style.display = 'block';
         };
     });
@@ -74,10 +75,8 @@ $(document).ready(function () {
     // To hour
     $('#id_to_hour')[0].addEventListener('change', (event) => {
         if (event.target.value != "") {
-            console.log("7");
             toDate.style.display = 'none';
         } else {
-            console.log("8");
             toDate.style.display = 'block';
         };
     });

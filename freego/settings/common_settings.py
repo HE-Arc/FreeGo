@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'fridge.User'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -120,12 +121,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-TIME_FORMAT = '%I:%M %p'
-
-TIME_INPUT_FORMATS = (
-    '%I:%M %p',
-)
 
 
 # Static files (CSS, JavaScript, Images)

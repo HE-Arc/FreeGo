@@ -1,0 +1,36 @@
+<ul class="pagination center-align">
+    <li class="wave-effect"></li>
+    {% if page_obj.has_previous %}
+    <li class="wave-effect">
+        <a href="?page={{ page_obj.previous_page_number }}">
+            <i class="material-icons" aria-hidden="true">chevron_left</i>
+        </a>
+    </li>
+    {% else %}
+    <li class="diseable">
+        <a href="#">
+            <i class="material-icons" aria-hidden="true">chevron_left</i>
+        </a>
+    </li>
+    {% endif %}
+
+    <li class="active" style="background-color: rgb(87, 161, 173);;">
+        <a href="#">
+            {{ page_obj.number }}
+        </a>
+    </li>
+
+    {% if page_obj.has_next %}
+    <li class="wave-effect">
+        <a href="?page={{ page_obj.next_page_number }}">
+            <i class="material-icons" aria-hidden="true">chevron_right</i>
+        </a>
+    </li>
+    {% else %}
+    <li class="diseable">
+        <a href="#">
+            <i class="material-icons" aria-hidden="true">chevron_right</i>
+        </a>
+    </li>
+    {% endif %}
+</ul>

@@ -1,5 +1,6 @@
 from fridge.models import Fridge, Food, Reservation, \
-    OpeningHour, SpecialDay, FridgeFollowing, Inventory, TemperatureControl
+    OpeningHour, SpecialDay, FridgeFollowing, Inventory, \
+    TemperatureControl, FridgeContentImage
 from fridge.forms import User
 from datetime import timedelta, date
 from django.utils import timezone
@@ -28,21 +29,22 @@ def create_fridge(user, name="test_fridge", address="5th Avenue",
                                  user=user, city=city, is_active=is_active)
 
 
-def create_food(fridge, user, name="food_test",
+def create_food(fridge, user, name="food_test", counter=4,
                 vegetarian=False, vegan=False, halal=False, lactose_free=False,
                 gluten_free=False, bio=False, date=0):
     '''Create generic food with selectable name'''
 
     expiration_date = timezone.now() + timedelta(days=date)
-    return Food.objects.create(name=name, vegetarian=vegetarian, vegan=vegan,
+    return Food.objects.create(name=name, counter=counter,
+                               vegetarian=vegetarian, vegan=vegan,
                                halal=halal, lactose_free=lactose_free,
                                gluten_free=gluten_free, bio=bio,
                                expiration_date=expiration_date,
                                fridge=fridge, user=user)
 
 
-def create_reservation(food, user):
-    return Reservation.objects.create(food=food, user=user)
+def create_reservation(food, user, quantity):
+    return Reservation.objects.create(food=food, user=user, quantity=quantity)
 
 
 def create_opening_hour(fridge, from_hour=0, to_hour=1, weekday=1):
@@ -91,3 +93,13 @@ def create_temperature_control(fridge, date=0, temperature=22, visa="2000"):
     date = timezone.now() + timedelta(days=date)
     return TemperatureControl.objects.create(
         date=date, temperature=temperature, visa=visa, fridge=fridge)
+
+
+def create_fridge_content_image(fridge):
+    '''Create generic fridgeContentImage'''
+
+    image_path = settings.MEDIA_ROOT + '/default.JPG'
+    image = SimpleUploadedFile(name='default.JPG', content=open(
+        image_path, 'rb').read(), content_type='image/jpeg')
+
+    return FridgeContentImage.objects.create(image=image, fridge=fridge)

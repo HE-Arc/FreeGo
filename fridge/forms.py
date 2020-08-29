@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from .models import Fridge, Food, OpeningHour, SpecialDay, User, Sponsor, \
-    Inventory, TemperatureControl
+    Inventory, TemperatureControl, FridgeContentImage
 from .validators import expiration_date_validator
 
 from django.utils.translation import gettext_lazy as _
@@ -10,6 +10,15 @@ from geopy.geocoders import Nominatim
 
 # Constant
 DATE_FORMAT = '%b %d, %Y'
+
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
+class TimeInput(forms.TimeInput):
+    input_type = 'time'
+    input_formats = ['%H:%M'],
 
 
 class FridgeDemandForm(forms.ModelForm):
@@ -100,12 +109,13 @@ class FoodForm(forms.ModelForm):
 
     class Meta:
         model = Food
-        fields = ('name', 'description', 'vegetarian', 'vegan', 'halal',
-                  'lactose_free', 'gluten_free', 'bio',
-                  'expiration_date', 'image')
+        fields = ('name', 'description', 'counter', 'vegetarian', 'vegan',
+                  'halal', 'lactose_free', 'gluten_free', 'bio',
+                  'expiration_date')
         labels = {
             'name': _('Name') + "*",
             'description': _('Description'),
+            'counter': _('Counter') + "*",
             'vegetarian': _('Vegetarian'),
             'vegan': _('Vegan'),
             'halal': _('Halal'),
@@ -113,7 +123,6 @@ class FoodForm(forms.ModelForm):
             'gluten_free': _('Gluten free'),
             'bio': _('Bio'),
             'expiration_date': _('Expiration date') + "*",
-            'image': _('Image'),
         }
 
         validators = {
@@ -121,7 +130,9 @@ class FoodForm(forms.ModelForm):
         }
 
         widgets = {
-            'expiration_date': forms.DateInput(attrs={'class': 'datepicker'})
+            'expiration_date': DateInput(),
+            'description': forms.Textarea(
+                attrs={'class': 'materialize-textarea'})
         }
 
 
@@ -138,8 +149,8 @@ class OpeningHourForm(forms.ModelForm):
 
         widgets = {
             'weekday': forms.Select(attrs={'class': 'browser-default'}),
-            'from_hour': forms.TimeInput(attrs={'class': 'timepicker'}),
-            'to_hour': forms.TimeInput(attrs={'class': 'timepicker'})
+            'from_hour': TimeInput(),
+            'to_hour': TimeInput()
         }
 
     def clean(self):
@@ -169,10 +180,11 @@ class SpecialDayForm(forms.ModelForm):
         }
 
         widgets = {
-            'from_date': forms.DateInput(attrs={'class': 'datepicker'}),
-            'to_date': forms.DateInput(attrs={'class': 'datepicker'}),
-            'from_hour': forms.TimeInput(attrs={'class': 'timepicker'}),
-            'to_hour': forms.TimeInput(attrs={'class': 'timepicker'})
+            'is_open': forms.RadioSelect(),
+            'from_date': DateInput(),
+            'to_date': DateInput(),
+            'from_hour': TimeInput(),
+            'to_hour': TimeInput()
         }
 
         required = {
@@ -249,7 +261,7 @@ class InventoryForm(forms.ModelForm):
             "visa": _("Visa") + "*"
         }
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'datepicker'})
+            'date': DateInput()
         }
 
 
@@ -264,5 +276,16 @@ class TemperatureControlForm(forms.ModelForm):
             "visa": _("Visa") + "*"
         }
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'datepicker'})
+            'date': DateInput()
+        }
+
+
+class FridgeContentImageForm(forms.ModelForm):
+    '''FridgeContentImage form'''
+
+    class Meta:
+        model = FridgeContentImage
+        fields = ("image",)
+        labels = {
+            "image": _("Image") + "*"
         }

@@ -3,9 +3,15 @@
 {% load i18n %}
 {% block content %}
 
-<img class="responsive-img" src="{{ fridge.image.url }}" alt="fridge-image">
+<img class="responsive-img" src="{{ fridge.image.url }}" width="600" alt="fridge-image">
 
 <ul class="collection">
+    <li class="collection-item">
+        <div>
+            <a href="{% url 'fridge:fridge-content-image-list' fridge.pk %}" class="black-text" style="font-size: 1.64rem;">{% trans 'Contenu du Free Go' %}<i
+                    class="material-icons right" aria-hidden="true">image</i></a>
+        </div>
+    </li>
     <li class="collection-item">
         <h5>{% trans 'Opening hours' %}</h5>
         {% if fridge.get_opening_hours %}
@@ -29,14 +35,19 @@
     </li>
     {% endif %}
     <li class="collection-item">
-        <h5>{% trans 'Available food' %}</h5>
-        {% if food_available %}
+        <h5>{% trans 'Reserved food' %}</h5>
+        {% if food_reserve %}
         <div class="row" id="main">
-            {% for food in food_available %}
+            {% for food in food_reserve %}
             {% include "food/food_card.html" %}
             {% endfor %}
+        </div>
+        {% endif %}
 
-            {% for food in food_reserve %}
+        {% if food_available %}
+        <h5>{% trans 'Available food' %}</h5>
+        <div class="row" id="main">
+            {% for food in food_available %}
             {% include "food/food_card.html" %}
             {% endfor %}
         </div>

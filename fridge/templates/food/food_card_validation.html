@@ -1,19 +1,15 @@
 {% load static %}
 {% load i18n %}
 
-<div class="col offset-s2 s8 m6">
+<div class="col s12 m6">
     <div class="card">
-        <a id="reference" href="{% url 'fridge:food-detail' food.pk %}">
-            <div class="card-image">
-                <img id="image" src="{{ food.image.url }}" alt="fridge image">
-            </div>
-        </a>
         <div class="card-content">
-            <span class="card-title grey-text text-darken-4">{{ food.name }}
-                <a href="{% url 'fridge:food-update' food.pk %}">
-                    <i class="material-icons right black-text" aria-hidden="true">edit</i>
-                </a>
+            <span class="card-title grey-text text-darken-4">
+                <a id="reference" href="{% url 'fridge:food-detail' food.pk %}" class="black-text">{{ food.name }}</a>
             </span>
+            {% if food.description %}
+            <p>{{ food.description }}</p>
+            {% endif %}
         </div>
         <div class="card-tabs">
             <ul class="tabs tabs-fixed-width">
