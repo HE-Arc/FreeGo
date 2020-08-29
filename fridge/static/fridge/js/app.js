@@ -215,7 +215,6 @@ var appFridges = new Vue({
         },
         clickOnFridge: function (evt) {
             evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-                console.log(feature.getId())
                 window.location.href = SERVER_URL + '/food/' + feature.getId() + "/list";
             })
         },

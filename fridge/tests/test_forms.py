@@ -69,7 +69,7 @@ class SpecialDayFormTest(TestCase):
 
         from_date = passed_date()
 
-        form_data = {'description': 'Holiday', 'is_open': False,
+        form_data = {'description': 'Holiday', 'is_open': 1,
                      'from_date': from_date, 'from_hour': from_hour,
                      'to_hour': to_hour}
         form = SpecialDayForm(data=form_data)
@@ -82,7 +82,7 @@ class SpecialDayFormTest(TestCase):
         from_date = passed_date()
         to_date = date.today()
 
-        form_data = {'description': 'Holiday', 'is_open': False,
+        form_data = {'description': 'Holiday', 'is_open': 1,
                      'from_date': from_date, 'to_date': to_date}
         form = SpecialDayForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -97,7 +97,7 @@ class SpecialDayFormTest(TestCase):
         from_date = passed_date()
         to_date = date.today()
 
-        form_data = {'description': 'Holiday', 'is_open': False,
+        form_data = {'description': 'Holiday', 'is_open': 1,
                      'from_date': from_date, 'to_date': to_date,
                      'from_hour': from_hour, 'to_hour': to_hour}
         form = SpecialDayForm(data=form_data)

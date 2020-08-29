@@ -24,8 +24,7 @@ from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string, get_template
-from django.template import Context
+from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages

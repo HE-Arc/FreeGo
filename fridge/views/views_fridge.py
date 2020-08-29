@@ -7,8 +7,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Permission
 from rest_framework import viewsets
 
-from fridge.models import Fridge, FridgeFollowing, User
-from fridge.forms import FridgeForm, FridgeDemandForm
+from fridge.models import Fridge, FridgeFollowing, User, FridgeContentImage
+from fridge.forms import FridgeForm, FridgeDemandForm, FridgeContentImageForm
 from fridge.serializers import FridgeSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -170,3 +170,73 @@ class FridgesViewSet(viewsets.ModelViewSet):
         favorites = Fridge.objects.filter(id__in=reserved_fridges)
         serializer = self.get_serializer(favorites, many=True)
         return Response(serializer.data)
+
+
+class FridgeContentImageListView(generic.ListView):
+    model = FridgeContentImage
+    template_name = 'fridge/fridge_content_image_list.html'
+    paginate_by = 1
+
+    def get_queryset(self):
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        return FridgeContentImage.objects.filter(fridge=fridge).order_by('pk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+        context['fridge'] = fridge
+        return context
+
+
+class FridgeContentImageUpdateView(
+        UserPassesTestMixin, FridgeContentImageListView):
+    template_name = 'fridge/fridge_content_image_update.html'
+    paginate_by = 5
+
+    def test_func(self):
+        fridge_user = Fridge.objects.get(pk=self.kwargs['pk']).user
+        return self.request.user == fridge_user or \
+            self.request.user.has_perm('fridge.admin')
+
+
+class FridgeContentImageCreateView(UserPassesTestMixin, generic.CreateView):
+    form_class = FridgeContentImageForm
+    template_name = 'common/form.html'
+    initial = {}
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            fridge = Fridge.objects.get(pk=self.kwargs['pk'])
+            fridgeContentImage = FridgeContentImage(
+                image=form.cleaned_data['image'],
+                fridge=fridge
+            )
+            fridgeContentImage.save()
+            return redirect('fridge:fridge-detail',  self.kwargs['pk'])
+
+        return render(request, self.template_name, {'form': form})
+
+    def test_func(self):
+        fridge_user = Fridge.objects.get(pk=self.kwargs['pk']).user
+        return self.request.user == fridge_user or \
+            self.request.user.has_perm('fridge.admin')
+
+
+class FridgeContentImageDeleteView(UserPassesTestMixin, generic.DeleteView):
+    model = FridgeContentImage
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def test_func(self):
+        fridge_user = FridgeContentImage.objects.get(
+            pk=self.kwargs['pk']).fridge.user
+        return self.request.user == fridge_user or \
+            self.request.user.has_perm('fridge.admin')
+
+    def get_success_url(self):
+        fridgeContentImage = FridgeContentImage.objects.get(
+            pk=self.kwargs['pk'])
+        return reverse_lazy('fridge:fridge-detail',
+                            kwargs={'pk': fridgeContentImage.fridge.pk})
