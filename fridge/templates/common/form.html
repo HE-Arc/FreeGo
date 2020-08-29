@@ -5,7 +5,7 @@
 {% load i18n %}
 
 <div class="container">
-    <form method="post" enctype="multipart/form-data" class="col s12">
+    <form id="upload" method="post" enctype="multipart/form-data" class="col s12">
         {% csrf_token %}
 
         <!-- FORM -->
@@ -30,26 +30,36 @@
                         <input class="file-path validate" type="text">
                     </div>
                 </div>
+
                 {% elif field.field.widget.input_type == 'checkbox' %}
                 <label>
                     {{ field }}
                     <span>{{ field.label }}</span>
                 </label>
+
                 {% elif field.field.widget.input_type == 'select' %}
                 {{ field }}
-                {% if field.errors %}
-                {% for error in field.errors %}
-                <span class="helper-text red-text" data-error="wrong" data-success="right">{{ error|escape }}</span>
+
+                {% elif field.field.widget.input_type == 'radio' %}
+                <span>{{field.label}}</span>
+                {% for options in field %}
+                <p>
+                    <label for="{{ options.id_for_label }}">
+                        {{ options.tag }}
+                        <span class="radio">{{ options.choice_label }}</span>
+                    </label>
+                </p>
                 {% endfor %}
-                {% endif %}
+
                 {% else %}
+                <span>{{ field.label }}</span>
                 {{ field }}
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% endif %}
+
                 {% if field.errors %}
                 {% for error in field.errors %}
                 <span class="helper-text red-text" data-error="wrong" data-success="right">{{ error|escape }}</span>
                 {% endfor %}
-                {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -57,6 +67,9 @@
         <p>*{% trans "Required" %}</p>
 
         <!-- ENDFORM -->
+        <div class="progress" style="visibility: hidden">
+            <div id="progressBar" class="indeterminate"></div>
+        </div>
 
         <div class="row">
             <button class="btn waves-effect waves-light col s12" type="submit"

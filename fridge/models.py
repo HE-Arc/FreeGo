@@ -40,6 +40,11 @@ WEEKDAYS = [
     (6, _("Sunday")),
 ]
 
+IS_OPEN = [
+    (0, _("Opened")),
+    (1, _("Closed"))
+]
+
 
 class Fridge(models.Model):
     '''Fridge model'''
@@ -128,9 +133,6 @@ class Food(models.Model):
         return Reservation.objects.filter(food=self).count() != 0
 
     def is_reserved_by_me(self, current_user):
-        test = Reservation.objects.filter(food=self) \
-            .filter(user=current_user).count() != 0
-        print(test)
         return Reservation.objects.filter(food=self) \
             .filter(user=current_user).count() != 0
 
@@ -163,8 +165,6 @@ class Reservation(models.Model):
             raise ValidationError(_("Not enough food available"))
         if int(self.quantity) > 4:
             raise ValidationError(_("You can't reserve more than for food"))
-
-        r = Reservation.objects.filter(food=self.food)
         super().save(*args, **kwargs)
 
 
@@ -191,7 +191,8 @@ class OpeningHour(models.Model):
 class SpecialDay(models.Model):
     '''SpecialDay model'''
     description = models.CharField(max_length=200)
-    is_open = models.BooleanField(default=False)
+    is_open = models.PositiveSmallIntegerField(
+        choices=IS_OPEN, default=0)
     from_date = models.DateField()
     to_date = models.DateField(null=True, blank=True)
     from_hour = models.TimeField(null=True, blank=True)
@@ -257,6 +258,17 @@ class FridgeFollowing(models.Model):
         Fridge, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class FridgeContentImage(models.Model):
+    '''FridgeContentImage model'''
+    fridge = models.ForeignKey(
+        Fridge, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
+
+    def save(self, *args, **kwargs):
+        self.image = compress_image(self.image, 600)
+        super().save(*args, **kwargs)
 
 
 class ReportContent(models.Model):

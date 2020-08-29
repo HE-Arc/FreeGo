@@ -20,6 +20,10 @@
         class="collection-item black-text"><strong>{% trans 'Image' %}</strong>
         <span class="secondary-content">{{ fridge.image }}</span>
     </a>
+    <a href="{% url 'fridge:fridge-content-image-update' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Fridge content images' %}</strong>
+        <i class="material-icons secondary-content" aria-hidden="true">send</i>
+    </a>
     <a href="{% url 'fridge:opening-hour-list' fridge.pk %}"
         class="collection-item black-text"><strong>{% trans 'Opening Hour' %}</strong>
         <i class="material-icons secondary-content" aria-hidden="true">send</i>

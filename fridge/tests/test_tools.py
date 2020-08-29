@@ -1,5 +1,6 @@
 from fridge.models import Fridge, Food, Reservation, \
-    OpeningHour, SpecialDay, FridgeFollowing, Inventory, TemperatureControl
+    OpeningHour, SpecialDay, FridgeFollowing, Inventory, \
+    TemperatureControl, FridgeContentImage
 from fridge.forms import User
 from datetime import timedelta, date
 from django.utils import timezone
@@ -92,3 +93,13 @@ def create_temperature_control(fridge, date=0, temperature=22, visa="2000"):
     date = timezone.now() + timedelta(days=date)
     return TemperatureControl.objects.create(
         date=date, temperature=temperature, visa=visa, fridge=fridge)
+
+
+def create_fridge_content_image(fridge):
+    '''Create generic fridgeContentImage'''
+
+    image_path = settings.MEDIA_ROOT + '/default.JPG'
+    image = SimpleUploadedFile(name='default.JPG', content=open(
+        image_path, 'rb').read(), content_type='image/jpeg')
+
+    return FridgeContentImage.objects.create(image=image, fridge=fridge)
