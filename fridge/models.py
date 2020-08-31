@@ -54,8 +54,8 @@ class Fridge(models.Model):
     zip_code = models.CharField(max_length=45, validators=[NPA_validator])
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(blank=True)
+    longitude = models.FloatField(blank=True)
     image = models.ImageField(upload_to='images/')
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
@@ -100,15 +100,19 @@ class Fridge(models.Model):
         return location.longitude, location.latitude
 
     def save(self, *args, **kwargs):
-        geolocator = Nominatim(user_agent=self.name)
-        address = "{}, {} {}".format(self.address, self.zip_code, self.city)
-        location = geolocator.geocode(address)
-        if not location:
-            raise ValidationError(_("Invalid address"))
-        self.latitude = location.latitude
-        self.longitude = location.longitude
-        self.image = compress_image(self.image, 600)
-        super().save(*args, **kwargs)
+        if self.latitude and self.longitude:
+            super().save(*args, **kwargs)
+        else:
+            geolocator = Nominatim(user_agent=self.name)
+            address = "{}, {} {}".format(
+                self.address, self.zip_code, self.city)
+            location = geolocator.geocode(address)
+            if not location:
+                raise ValidationError(_("Invalid address"))
+            self.latitude = location.latitude
+            self.longitude = location.longitude
+            self.image = compress_image(self.image, 600)
+            super().save(*args, **kwargs)
 
 
 class Food(models.Model):

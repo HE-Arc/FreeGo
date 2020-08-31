@@ -109,6 +109,8 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
                 user=form.cleaned_data['user'],
+                latitude=form.cleaned_data['latitude'],
+                longitude=form.cleaned_data['longitude'],
                 is_active=True
             )
             fridge.save()
