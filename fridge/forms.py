@@ -253,7 +253,7 @@ class SpecialDayForm(forms.ModelForm):
 class RegisterForm(UserCreationForm):
     '''Register Form'''
     email = forms.EmailField(
-        max_length=254, help_text=_('Required. Fill an valid email address.'))
+        max_length=254, help_text=_('Required. Fill a valid email address.'))
 
     class Meta:
         model = User
@@ -276,7 +276,7 @@ class SponsorForm(forms.ModelForm):
         labels = {
             'name': _('Name') + "*",
             'logo': _('Logo') + "*",
-            'website': _('Website url')
+            'website': _('Website URL')
         }
         required = {
             'website': False

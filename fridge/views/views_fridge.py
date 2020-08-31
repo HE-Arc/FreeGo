@@ -85,7 +85,7 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
             perm = Permission.objects.get(codename="admin")
             recipient = User.objects.filter(
                 user_permissions__in=[perm])
-            verb = _("New request to become a freego.")
+            verb = _("New request to become a Free Go.")
             notify.send(request.user, recipient=recipient,
                         verb=verb)
             return redirect('fridge:settings')

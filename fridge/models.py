@@ -187,7 +187,7 @@ class OpeningHour(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return "{} : {}-{}".format(str(WEEKDAYS[self.weekday][1]),
+        return "{}: {}-{}".format(str(WEEKDAYS[self.weekday][1]),
                                    self.from_hour.strftime('%H:%M'),
                                    self.to_hour.strftime('%H:%M'))
 
@@ -217,7 +217,7 @@ class SpecialDay(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        sd = _("%(description)s : %(is_open)s ") % {
+        sd = _("%(description)s: %(is_open)s ") % {
             'description': self.description, 'is_open': _("open")
             if self.is_open is True else _("closed")}
         if self.to_date:
