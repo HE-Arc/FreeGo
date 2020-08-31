@@ -81,3 +81,26 @@ $(document).ready(function () {
         };
     });
 });
+
+$(document).ready(function () {
+    let latitude = $('#id_latitude').parents('div')[1];
+    let longitude = $('#id_longitude').parents('div')[1];
+
+    if (!latitude || !longitude) {
+        console.log("TEST");
+        return;
+    }
+
+    latitude.style.display = 'none';
+    longitude.style.display = 'none';
+
+    $('input[name=has_address]').change(function () {
+        if ($(this).is(':checked')) {
+            latitude.style.display = 'block';
+            longitude.style.display = 'block';
+        } else {
+            latitude.style.display = 'none';
+            longitude.style.display = 'none';
+        }
+    });
+});

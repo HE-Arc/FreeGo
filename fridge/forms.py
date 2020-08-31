@@ -23,11 +23,13 @@ class TimeInput(forms.TimeInput):
 
 class FridgeDemandForm(forms.ModelForm):
     '''Fridge Demand form'''
+    has_address = forms.BooleanField(
+        label=_('As valid address'), required=False)
 
     class Meta:
         model = Fridge
         fields = ('name', 'address', 'zip_code', 'city',
-                  'phone_number', 'image')
+                  'phone_number', 'image', 'latitude', 'longitude')
         labels = {
             'name': _('Name') + "*",
             'address': _('Address') + "*",
@@ -36,6 +38,14 @@ class FridgeDemandForm(forms.ModelForm):
             'phone_number': _('Phone number') + "*",
             'image': _('Image') + "*",
         }
+
+        required = {
+            'latitude': False,
+            'longitude': False
+        }
+
+    field_order = ['name', 'address', 'zip_code', 'city', 'phone_number',
+                   'image', 'has_address', 'latitude', 'longitude']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -52,11 +62,13 @@ class FridgeDemandForm(forms.ModelForm):
 
 class FridgeForm(forms.ModelForm):
     '''Fridge form'''
+    has_address = forms.BooleanField(
+        label=_('As valid address'), required=False)
 
     class Meta:
         model = Fridge
         fields = ('name', 'address', 'zip_code', 'city',
-                  'phone_number', 'image', 'user')
+                  'phone_number', 'image', 'user', 'latitude', 'longitude')
         labels = {
             'name': _('Name') + "*",
             'address': _('Address') + "*",
@@ -64,20 +76,45 @@ class FridgeForm(forms.ModelForm):
             'city': _('City') + "*",
             'phone_number': _('Phone number') + "*",
             'image': _('Image') + "*",
-            'user': _('User') + "*"
+            'user': _('User') + "*",
+            'latitude': _('Latitude'),
+            'longitude': _('Longitude')
         }
+
+        required = {
+            'latitude': False,
+            'longitude': False
+        }
+    field_order = ['name', 'address', 'zip_code', 'city', 'phone_number',
+                   'image', 'user', 'has_address', 'latitude', 'longitude']
 
     def clean(self):
         cleaned_data = super().clean()
-        name = cleaned_data.get('name')
-        address = cleaned_data.get('address')
-        zip_code = cleaned_data.get('zip_code')
-        city = cleaned_data.get('city')
-        address = "{}, {} {}".format(address, zip_code, city)
-        geolocator = Nominatim(user_agent=name)
-        location = geolocator.geocode(address)
-        if not location:
-            raise ValidationError(_("Invalid address"))
+        if not cleaned_data.get('has_address'):
+            name = cleaned_data.get('name')
+            address = cleaned_data.get('address')
+            zip_code = cleaned_data.get('zip_code')
+            city = cleaned_data.get('city')
+            address = "{}, {} {}".format(address, zip_code, city)
+            geolocator = Nominatim(user_agent=name)
+            location = geolocator.geocode(address)
+            if not location:
+                raise ValidationError(_("Invalid address"))
+        else:
+            if cleaned_data.get('latitude') and \
+                    not cleaned_data.get('longitude'):
+                raise ValidationError(
+                    _("You must have latitude AND longitude"))
+            elif not cleaned_data.get('latitude') and \
+                    cleaned_data.get('longitude'):
+                raise ValidationError(
+                    _("You must have latitude AND longitude"))
+            elif not cleaned_data.get('latitude') and \
+                    not cleaned_data.get('longitude'):
+                raise ValidationError(
+                    _("You must have latitude AND longitude"))
+
+            # cleaned_data.get('latitude') and cleaned_data.get('longitude')
 
 
 class FridgeUpdateAddressForm(forms.ModelForm):
@@ -217,7 +254,7 @@ class SpecialDayForm(forms.ModelForm):
 class RegisterForm(UserCreationForm):
     '''Register Form'''
     email = forms.EmailField(
-        max_length=254, help_text=_('Required. Fill an valid email address.'))
+        max_length=254, help_text=_('Required. Fill a valid email address.'))
 
     class Meta:
         model = User
@@ -240,7 +277,7 @@ class SponsorForm(forms.ModelForm):
         labels = {
             'name': _('Name') + "*",
             'logo': _('Logo') + "*",
-            'website': _('Website url')
+            'website': _('Website URL')
         }
         required = {
             'website': False

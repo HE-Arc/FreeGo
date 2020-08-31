@@ -75,6 +75,8 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
                 city=form.cleaned_data['city'],
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
+                latitude=form.cleaned_data['latitude'],
+                longitude=form.cleaned_data['longitude'],
                 user=request.user
             )
             fridge.save()
@@ -85,11 +87,10 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
             perm = Permission.objects.get(codename="admin")
             recipient = User.objects.filter(
                 user_permissions__in=[perm])
-            verb = _("New request to become a freego.")
+            verb = _("New request to become a Free Go.")
             notify.send(request.user, recipient=recipient,
                         verb=verb)
             return redirect('fridge:settings')
-
         return render(request, self.template_name, {'form': form})
 
 
@@ -109,6 +110,8 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
                 user=form.cleaned_data['user'],
+                latitude=form.cleaned_data['latitude'],
+                longitude=form.cleaned_data['longitude'],
                 is_active=True
             )
             fridge.save()
