@@ -23,7 +23,8 @@ class TimeInput(forms.TimeInput):
 
 class FridgeDemandForm(forms.ModelForm):
     '''Fridge Demand form'''
-    has_address = forms.BooleanField(label=_('As valid address'))
+    has_address = forms.BooleanField(
+        label=_('As valid address'), required=False)
 
     class Meta:
         model = Fridge

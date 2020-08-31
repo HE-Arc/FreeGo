@@ -113,11 +113,11 @@ class FridgeDemandCreateViewTest(TestCase):
             'zip_code': '2525',
             'phone_number': '0790000000',
             'city': 'Le Landeron',
-            'image': image,
-            'user': self.user.pk
+            'image': image
         }
 
         response = self.client.post(reverse('fridge:fridge-demand'), json)
+        print(response)
 
         self.assertRedirects(response, reverse('fridge:settings'))
         self.assertEqual(len(Fridge.objects.all()), 1)

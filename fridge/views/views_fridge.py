@@ -91,7 +91,6 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
             notify.send(request.user, recipient=recipient,
                         verb=verb)
             return redirect('fridge:settings')
-
         return render(request, self.template_name, {'form': form})
 
 
