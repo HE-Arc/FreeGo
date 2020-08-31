@@ -75,6 +75,8 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
                 city=form.cleaned_data['city'],
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
+                latitude=form.cleaned_data['latitude'],
+                longitude=form.cleaned_data['longitude'],
                 user=request.user
             )
             fridge.save()
