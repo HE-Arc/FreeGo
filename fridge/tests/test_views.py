@@ -117,8 +117,6 @@ class FridgeDemandCreateViewTest(TestCase):
         }
 
         response = self.client.post(reverse('fridge:fridge-demand'), json)
-        print(response)
-
         self.assertRedirects(response, reverse('fridge:settings'))
         self.assertEqual(len(Fridge.objects.all()), 1)
         self.assertEqual(Fridge.objects.last().name, 'A Fridge')
