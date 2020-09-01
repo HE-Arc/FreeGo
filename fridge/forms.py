@@ -37,6 +37,8 @@ class FridgeDemandForm(forms.ModelForm):
             'city': _('City') + "*",
             'phone_number': _('Phone number') + "*",
             'image': _('Image') + "*",
+            'latitude': _('Latitude'),
+            'longitude': _('Longitude')
         }
 
         required = {
