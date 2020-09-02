@@ -1,6 +1,6 @@
 from fridge.models import Fridge, FridgeFollowing
 from fridge.serializers import FridgeSerializer, NotificationSerializer
-from fridge.permissions import IsAdminOrReadOnly
+from fridge.permissions import IsAdminOrReadOnly, ReadOnly
 
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
@@ -26,7 +26,7 @@ class FridgeViewSet(viewsets.ModelViewSet):
 class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnly]
 
     @action(detail=False)
     def by_user(self, request):

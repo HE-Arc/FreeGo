@@ -76,7 +76,8 @@ class FoodUpdateView(ValidFridgeUser, generic.UpdateView):
               'halal', 'lactose_free', 'gluten_free', 'bio', 'expiration_date']
 
     def get_success_url(self):
-        return reverse_lazy('fridge:profile')
+        return reverse_lazy('fridge:store',
+                            kwargs={'pk': self.object.fridge.pk})
 
 
 class FoodDeleteView(ValidFridgeUser, generic.DeleteView):

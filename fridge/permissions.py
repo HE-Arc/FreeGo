@@ -7,3 +7,8 @@ class IsAdminOrReadOnly(BasePermission):
             request.method in SAFE_METHODS or
             request.user.has_perm('fridge.admin')
         )
+
+
+class ReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS

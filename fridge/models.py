@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from .validators import phone_number_validator, NPA_validator, \
-    expiration_date_validator
+    expiration_date_validator, latitude_longitude_validators
 from PIL import Image
 from io import BytesIO
 from django.utils.translation import gettext_lazy as _
@@ -54,8 +54,10 @@ class Fridge(models.Model):
     zip_code = models.CharField(max_length=45, validators=[NPA_validator])
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
-    latitude = models.FloatField(blank=True)
-    longitude = models.FloatField(blank=True)
+    latitude = models.FloatField(blank=True, validators=[
+                                 latitude_longitude_validators])
+    longitude = models.FloatField(blank=True, validators=[
+                                  latitude_longitude_validators])
     image = models.ImageField(upload_to='images/')
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
@@ -98,6 +100,9 @@ class Fridge(models.Model):
         address = "{}, {} {}".format(self.address, self.zip_code, self.city)
         location = geolocator.geocode(address)
         return location.longitude, location.latitude
+
+    def has_content_image(self):
+        return FridgeContentImage.objects.filter(fridge=self).count() != 0
 
     def save(self, *args, **kwargs):
         if self.latitude and self.longitude:
@@ -149,7 +154,10 @@ class Food(models.Model):
             map(lambda r: r.quantity,
                 list(Reservation.objects.filter(food=self))))
         quantity_available = min(4, quantity_available)
-        return range(quantity_available)
+        return range(1, quantity_available + 1)
+
+    def quantity_reserved_by_user(self, user):
+        return Reservation.objects.filter(user=user, food=self).count()
 
     def __str__(self):
         return str(self.name)
@@ -188,8 +196,8 @@ class OpeningHour(models.Model):
 
     def __str__(self):
         return "{}: {}-{}".format(str(WEEKDAYS[self.weekday][1]),
-                                   self.from_hour.strftime('%H:%M'),
-                                   self.to_hour.strftime('%H:%M'))
+                                  self.from_hour.strftime('%H:%M'),
+                                  self.to_hour.strftime('%H:%M'))
 
 
 class SpecialDay(models.Model):

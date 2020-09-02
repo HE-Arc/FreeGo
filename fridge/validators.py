@@ -15,3 +15,12 @@ def expiration_date_validator(expiration_date):
     '''Check if the date is already'''
     if expiration_date < datetime.now().date():
         raise ValidationError(_("The expiration date is already passed."))
+
+
+def latitude_longitude_validators(value):
+    """
+    Value must be between -90 and 90
+    """
+    if value > 90.0 or value < -90.0:
+        raise ValidationError(
+            _("Latitude and longitude must be between -90 and 90."))

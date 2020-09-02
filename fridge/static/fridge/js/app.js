@@ -17,9 +17,8 @@ var appFridges = new Vue({
         //map
         selectedFeatures: [],
         zoom: 15,
-        center: [7.6451, 47.5227],
         rotation: 0,
-        geolocPosition: undefined,
+        geolocPosition: [7.065378, 47.055668],
     }),
     async created() {
         await this.login();

@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load fridge_extras %}
 
 <div class="col s12 m6">
     <div class="card">
@@ -10,6 +11,8 @@
             {% if food.description %}
             <p>{{ food.description }}</p>
             {% endif %}
+            {% nb_reservation_by_user food request.user as nb_reservations %}
+            <p>{% trans "Number of reservations:" %} {{nb_reservations}}</p>
         </div>
         <div class="card-tabs">
             <ul class="tabs tabs-fixed-width">

@@ -38,10 +38,9 @@ class FridgeUpdateView(ValidFridgeUser, generic.UpdateView):
                             kwargs={'pk': self.object.pk})
 
 
-class FridgeDeleteView(PermissionRequiredMixin, generic.DeleteView):
+class FridgeDeleteView(ValidFridgeUser, generic.DeleteView):
     model = Fridge
-    success_url = reverse_lazy('fridge:myadmin')
-    permission_required = 'fridge.admin'
+    success_url = reverse_lazy('fridge:settings')
     login_url = LOGIN_URL
 
     def get(self, request, *args, **kwargs):
@@ -224,5 +223,5 @@ class FridgeContentImageDeleteView(UserPassesTestMixin, generic.DeleteView):
     def get_success_url(self):
         fridgeContentImage = FridgeContentImage.objects.get(
             pk=self.kwargs['pk'])
-        return reverse_lazy('fridge:fridge-detail',
+        return reverse_lazy('fridge:fridge-content-image-update',
                             kwargs={'pk': fridgeContentImage.fridge.pk})
