@@ -8,7 +8,7 @@ class FridgeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Fridge
-        fields = ['name', 'address', 'city', 'zip_code', 'phone_number',
+        fields = ['id', 'name', 'address', 'city', 'zip_code', 'phone_number',
                   'latitude', 'longitude', 'image', 'user', 'is_active']
 
 

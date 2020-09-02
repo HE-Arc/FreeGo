@@ -42,6 +42,14 @@
             {% endfor %}
         </p>
     </a>
+    <a href="{% url 'fridge:inventory-sheet' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Inventory Sheet' %}</strong>
+        <i class="material-icons secondary-content" aria-hidden="true">send</i>
+    </a>
+    <a href="{% url 'fridge:temperature-control-list' fridge.pk %}"
+        class="collection-item black-text"><strong>{% trans 'Temperature Control' %}</strong>
+        <i class="material-icons secondary-content" aria-hidden="true">send</i>
+    </a>
 </ul>
 
 <div class="container center-align">

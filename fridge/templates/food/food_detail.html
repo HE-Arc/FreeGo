@@ -1,5 +1,6 @@
 {% extends 'common/base_store.html' %}
 {% load static %}
+{% load fridge_extras %}
 {% load i18n %}
 {% block content %}
 
@@ -41,12 +42,13 @@
     <a href="#" class="dropdown-trigger btn" data-target='dropdown2'>{% trans 'Reserve' %}</a>
 </div>
 <ul id='dropdown2' class='dropdown-content'>
+    {% is_reserved_by_user food request.user as is_reserved %}
+    {% if is_reserved %}
+    <li><a href="{% url 'fridge:food-cancellation' pk=food.pk %}">{% trans 'Cancel reservation' %}</a></li>
+    {% else%}
     {% for i in food.quantity_available %}
     <li><a href="{% url 'fridge:food-reservation' pk=food.pk quantity=i %}">{{i}}</a></li>
     {% endfor %}
-
-    {% if food.has_reservation %}
-    <li><a href="{% url 'fridge:food-cancellation' pk=food.pk %}">{% trans 'Cancel reservation' %}</a></li>
     {% endif %}
 </ul>
 

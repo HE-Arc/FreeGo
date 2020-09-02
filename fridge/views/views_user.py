@@ -112,8 +112,7 @@ class RegisterView(View):
             email.send()
 
             message = _(
-                "Please confirm your email address " +
-                "to complete the registration")
+                "Please confirm your email address to complete the registration")
             messages.add_message(request, messages.INFO, message)
             return redirect("fridge:settings")
         return render(request, self.template_name, {'form': form})

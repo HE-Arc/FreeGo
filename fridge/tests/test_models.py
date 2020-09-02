@@ -101,11 +101,11 @@ class FoodModel(TestCase):
         """
         Test quantity_available method
         """
-        self.assertEqual(self.food.quantity_available(), range(0, 4))
+        self.assertEqual(self.food.quantity_available(), range(1, 5))
         create_reservation(food=self.food, user=self.another_user, quantity=2)
-        self.assertEqual(self.food.quantity_available(), range(0, 2))
+        self.assertEqual(self.food.quantity_available(), range(1, 3))
         create_reservation(food=self.food, user=self.another_user, quantity=1)
-        self.assertEqual(self.food.quantity_available(), range(0, 1))
+        self.assertEqual(self.food.quantity_available(), range(1, 2))
 
 
 class OpeningHourModelTests(TestCase):
