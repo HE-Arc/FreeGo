@@ -156,6 +156,9 @@ class Food(models.Model):
         quantity_available = min(4, quantity_available)
         return range(1, quantity_available + 1)
 
+    def quantity_reserved_by_user(self, user):
+        return Reservation.objects.filter(user=user, food=self).count()
+
     def __str__(self):
         return str(self.name)
 
