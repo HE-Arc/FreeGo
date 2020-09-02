@@ -5,13 +5,9 @@ from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from rest_framework import viewsets
 
 from fridge.models import Fridge, Food, Reservation, FridgeFollowing, User
-from fridge.serializers import NotificationSerializer
-from notifications.models import Notification
-from rest_framework.decorators import action
-from rest_framework.response import Response
+
 
 from fridge.forms import RegisterForm
 from django.contrib.auth import login, logout, views as auth_views
@@ -81,18 +77,6 @@ class FoodCancellation(LoginRequiredMixin, View):
 
 class NotificationsView(generic.TemplateView):
     template_name = 'home/notifications.html'
-
-
-class NotificationsViewSet(viewsets.ModelViewSet):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializer
-
-    @action(detail=False)
-    def by_user(self, request):
-        notifications = Notification.objects.filter(
-            recipient=self.request.user).filter(unread=True)
-        serializer = self.get_serializer(notifications, many=True)
-        return Response(serializer.data)
 
 
 class RegisterView(View):

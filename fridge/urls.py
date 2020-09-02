@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 
 from fridge.views import views_admin, views_home, views_user, views_fridge, \
     views_schedule, views_food
+from fridge import viewsets
 from rest_framework import routers
 
 from django.contrib.auth import views as auth_views
@@ -14,8 +15,8 @@ from fridge.forms import FridgeUpdateAddressForm
 app_name = 'fridge'
 
 router = routers.DefaultRouter()
-router.register('fridges', views_fridge.FridgesViewSet)
-router.register('notifications', views_user.NotificationsViewSet)
+router.register('fridges', viewsets.FridgeViewSet)
+router.register('notifications', viewsets.NotificationViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),

@@ -10,6 +10,7 @@ const filesToCache = [
     '/offline',
     //css
     '/static/fridge/css/style.css',
+    '/static/fridge/css/all.min.css',
     //icons
     '/static/fridge/icons/vegan-icon.png',
     '/static/fridge/icons/vegetarian-icon.png',

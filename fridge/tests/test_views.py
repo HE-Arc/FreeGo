@@ -84,7 +84,10 @@ class FridgeCreateViewTest(TestCase):
             'phone_number': '0790000000',
             'city': 'Le Landeron',
             'image': image,
-            'user': self.user.pk
+            'user': self.user.pk,
+            'has_address': False,
+            'latitude': 1.5,
+            'longitude': 1.5
         }
 
         response = self.client.post(reverse('fridge:fridge-new'), json)
@@ -113,7 +116,10 @@ class FridgeDemandCreateViewTest(TestCase):
             'zip_code': '2525',
             'phone_number': '0790000000',
             'city': 'Le Landeron',
-            'image': image
+            'image': image,
+            'has_address': False,
+            'latitude': 1.5,
+            'longitude': 1.5
         }
 
         response = self.client.post(reverse('fridge:fridge-demand'), json)
