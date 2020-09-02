@@ -6,12 +6,14 @@
 <img class="responsive-img" src="{{ fridge.image.url }}" width="600" alt="fridge-image">
 
 <ul class="collection">
+    {% if fridge.has_content_image %}
     <li class="collection-item">
         <div>
             <a href="{% url 'fridge:fridge-content-image-list' fridge.pk %}" class="black-text" style="font-size: 1.64rem;">{% trans 'Content of the Free Go' %}<i
                     class="material-icons right" aria-hidden="true">image</i></a>
         </div>
     </li>
+    {% endif %}
     <li class="collection-item">
         <h5>{% trans 'Opening hours' %}</h5>
         {% if fridge.get_opening_hours %}
