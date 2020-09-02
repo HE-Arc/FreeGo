@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from .models import Fridge, Food, OpeningHour, SpecialDay, User, Sponsor, \
     Inventory, TemperatureControl, FridgeContentImage
-from .validators import expiration_date_validator
 
 from django.utils.translation import gettext_lazy as _
 from geopy.geocoders import Nominatim
@@ -52,47 +51,6 @@ class FridgeDemandForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        name = cleaned_data.get('name')
-        address = cleaned_data.get('address')
-        zip_code = cleaned_data.get('zip_code')
-        city = cleaned_data.get('city')
-        address = "{}, {} {}".format(address, zip_code, city)
-        geolocator = Nominatim(user_agent=name)
-        location = geolocator.geocode(address)
-        if not location:
-            raise ValidationError(_("Invalid address"))
-
-
-class FridgeForm(forms.ModelForm):
-    '''Fridge form'''
-    has_address = forms.BooleanField(
-        label=_('As valid address'), required=False)
-
-    class Meta:
-        model = Fridge
-        fields = ('name', 'address', 'zip_code', 'city',
-                  'phone_number', 'image', 'user', 'latitude', 'longitude')
-        labels = {
-            'name': format_lazy('{} {}', _('Name'), _("*")),
-            'address': format_lazy('{} {}', _('Address'), _("*")),
-            'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
-            'city': format_lazy('{} {}',  _('City'), _("*")),
-            'phone_number': format_lazy('{} {}', _('Phone number'), _("*")),
-            'image': format_lazy('{} {}', _('Image'), _("*")),
-            'user': format_lazy('{} {}', _('User'), _("*")),
-            'latitude': _('Latitude'),
-            'longitude': _('Longitude')
-        }
-
-        required = {
-            'latitude': False,
-            'longitude': False
-        }
-    field_order = ['name', 'address', 'zip_code', 'city', 'phone_number',
-                   'image', 'user', 'has_address', 'latitude', 'longitude']
-
-    def clean(self):
-        cleaned_data = super().clean()
         if not cleaned_data.get('has_address'):
             name = cleaned_data.get('name')
             address = cleaned_data.get('address')
@@ -117,7 +75,32 @@ class FridgeForm(forms.ModelForm):
                 raise ValidationError(
                     _("You must have latitude AND longitude"))
 
-            # cleaned_data.get('latitude') and cleaned_data.get('longitude')
+
+class FridgeForm(FridgeDemandForm):
+    '''Fridge form'''
+
+    class Meta:
+        model = Fridge
+        fields = ('name', 'address', 'zip_code', 'city',
+                  'phone_number', 'image', 'user', 'latitude', 'longitude')
+        labels = {
+            'name': format_lazy('{} {}', _('Name'), _("*")),
+            'address': format_lazy('{} {}', _('Address'), _("*")),
+            'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
+            'city': format_lazy('{} {}',  _('City'), _("*")),
+            'phone_number': format_lazy('{} {}', _('Phone number'), _("*")),
+            'image': format_lazy('{} {}', _('Image'), _("*")),
+            'user': format_lazy('{} {}', _('User'), _("*")),
+            'latitude': _('Latitude'),
+            'longitude': _('Longitude')
+        }
+
+        required = {
+            'latitude': False,
+            'longitude': False
+        }
+    field_order = ['name', 'address', 'zip_code', 'city', 'phone_number',
+                   'image', 'user', 'has_address', 'latitude', 'longitude']
 
 
 class FridgeUpdateAddressForm(forms.ModelForm):
@@ -163,10 +146,6 @@ class FoodForm(forms.ModelForm):
             'gluten_free': _('Gluten free'),
             'bio': _('Bio'),
             'expiration_date': format_lazy('{} {}', _('Expiration date'), _("*")),
-        }
-
-        validators = {
-            'expiration_date': [expiration_date_validator]
         }
 
         widgets = {
