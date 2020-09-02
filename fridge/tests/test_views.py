@@ -106,7 +106,10 @@ class FridgeDemandCreateViewTest(TestCase):
         self.user = create_user('test', 'test@test.test', 'test')
         self.client.login(username='test', password='test')
 
-    def test_post(self):
+    def test_valid_address(self):
+        """
+        Test with correct address, so latitude and longitude isn't required
+        """
         image = SimpleUploadedFile(name='test.png', content=open(
             'fridge/static/fridge/test/test.png', 'rb').read(),
             content_type='image/png')
@@ -118,8 +121,30 @@ class FridgeDemandCreateViewTest(TestCase):
             'city': 'Le Landeron',
             'image': image,
             'has_address': False,
-            'latitude': 1.5,
-            'longitude': 1.5
+        }
+
+        response = self.client.post(reverse('fridge:fridge-demand'), json)
+        self.assertRedirects(response, reverse('fridge:settings'))
+        self.assertEqual(len(Fridge.objects.all()), 1)
+        self.assertEqual(Fridge.objects.last().name, 'A Fridge')
+
+    def test_with_longitude_latitude(self):
+        """
+        Test with a false address so latitude and longitude is required
+        """
+        image = SimpleUploadedFile(name='test.png', content=open(
+            'fridge/static/fridge/test/test.png', 'rb').read(),
+            content_type='image/png')
+        json = {
+            'name': 'A Fridge',
+            'address': 'A wrong address',
+            'zip_code': '0000',
+            'phone_number': '0790000000',
+            'city': 'Cityland',
+            'image': image,
+            'has_address': True,
+            'latitude': 15.5,
+            'longitude': -21.5
         }
 
         response = self.client.post(reverse('fridge:fridge-demand'), json)
