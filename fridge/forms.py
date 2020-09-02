@@ -52,15 +52,16 @@ class FridgeDemandForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         if not cleaned_data.get('has_address'):
-            name = cleaned_data.get('name')
             address = cleaned_data.get('address')
             zip_code = cleaned_data.get('zip_code')
             city = cleaned_data.get('city')
             address = "{}, {} {}".format(address, zip_code, city)
-            geolocator = Nominatim(user_agent=name)
+            geolocator = Nominatim(user_agent="FreeGo")
             location = geolocator.geocode(address)
             if not location:
                 raise ValidationError(_("Invalid address"))
+            cleaned_data['latitude'] = location.latitude
+            cleaned_data['longitude'] = location.longitude
         else:
             if cleaned_data.get('latitude') and \
                     not cleaned_data.get('longitude'):
@@ -99,32 +100,27 @@ class FridgeForm(FridgeDemandForm):
             'latitude': False,
             'longitude': False
         }
+
     field_order = ['name', 'address', 'zip_code', 'city', 'phone_number',
                    'image', 'user', 'has_address', 'latitude', 'longitude']
 
 
-class FridgeUpdateAddressForm(forms.ModelForm):
+class FridgeUpdateAddressForm(FridgeDemandForm):
     '''Fridge form'''
 
     class Meta:
         model = Fridge
-        fields = ('address', 'zip_code', 'city')
+        fields = ('address', 'zip_code', 'city', 'latitude', 'longitude')
         labels = {
             'address': format_lazy('{} {}', _('Address'), _("*")),
             'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
             'city': format_lazy('{} {}', _('City'), _("*")),
+            'latitude': _('Latitude'),
+            'longitude': _('Longitude')
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        address = cleaned_data.get('address')
-        zip_code = cleaned_data.get('zip_code')
-        city = cleaned_data.get('city')
-        address = "{}, {} {}".format(address, zip_code, city)
-        geolocator = Nominatim(user_agent='address')
-        location = geolocator.geocode(address)
-        if not location:
-            raise ValidationError(_("Invalid address"))
+    field_order = ['address', 'zip_code', 'city',
+                   'has_address', 'latitude', 'longitude']
 
 
 class FoodForm(forms.ModelForm):
