@@ -438,7 +438,7 @@ class OpeningHourCreateView(TestCase):
             reverse('fridge:openinghour-form', args=(self.fridge.pk,)), json)
 
         self.assertRedirects(response,
-                             reverse_lazy('fridge:fridge-detail',
+                             reverse_lazy('fridge:opening-hour-list',
                                           kwargs={'pk': self.fridge.pk}))
         self.assertEqual(len(OpeningHour.objects.all()), 1)
         self.assertEqual(OpeningHour.objects.last().weekday, 1)
@@ -471,7 +471,7 @@ class SpecialDayCreateViewTest(TestCase):
             reverse('fridge:specialday-form', args=(self.fridge.pk,)), json)
 
         self.assertRedirects(response,
-                             reverse_lazy('fridge:fridge-detail',
+                             reverse_lazy('fridge:special-day-list',
                                           kwargs={'pk': self.fridge.pk}))
         self.assertEqual(len(SpecialDay.objects.all()), 1)
         self.assertEqual(SpecialDay.objects.last().from_date,
