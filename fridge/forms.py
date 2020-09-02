@@ -1,3 +1,4 @@
+from django.utils.text import format_lazy
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
@@ -31,12 +32,12 @@ class FridgeDemandForm(forms.ModelForm):
         fields = ('name', 'address', 'zip_code', 'city',
                   'phone_number', 'image', 'latitude', 'longitude')
         labels = {
-            'name': _('Name') + "*",
-            'address': _('Address') + "*",
-            'zip_code': _('Zip code') + "*",
-            'city': _('City') + "*",
-            'phone_number': _('Phone number') + "*",
-            'image': _('Image') + "*",
+            'name': format_lazy('{} {}', _('Name'), _("*")),
+            'address': format_lazy('{} {}', _('Address'), _("*")),
+            'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
+            'city': format_lazy('{} {}', _('City'), _("*")),
+            'phone_number': format_lazy('{} {}', _('Phone number'), _("*")),
+            'image': format_lazy('{} {}', _('Image'), _("*")),
             'latitude': _('Latitude'),
             'longitude': _('Longitude')
         }
@@ -72,13 +73,13 @@ class FridgeForm(forms.ModelForm):
         fields = ('name', 'address', 'zip_code', 'city',
                   'phone_number', 'image', 'user', 'latitude', 'longitude')
         labels = {
-            'name': _('Name') + "*",
-            'address': _('Address') + "*",
-            'zip_code': _('Zip code') + "*",
-            'city': _('City') + "*",
-            'phone_number': _('Phone number') + "*",
-            'image': _('Image') + "*",
-            'user': _('User') + "*",
+            'name': format_lazy('{} {}', _('Name'), _("*")),
+            'address': format_lazy('{} {}', _('Address'), _("*")),
+            'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
+            'city': format_lazy('{} {}',  _('City'), _("*")),
+            'phone_number': format_lazy('{} {}', _('Phone number'), _("*")),
+            'image': format_lazy('{} {}', _('Image'), _("*")),
+            'user': format_lazy('{} {}', _('User'), _("*")),
             'latitude': _('Latitude'),
             'longitude': _('Longitude')
         }
@@ -126,9 +127,9 @@ class FridgeUpdateAddressForm(forms.ModelForm):
         model = Fridge
         fields = ('address', 'zip_code', 'city')
         labels = {
-            'address': _('Address') + "*",
-            'zip_code': _('Zip code') + "*",
-            'city': _('City') + "*"
+            'address': format_lazy('{} {}', _('Address'), _("*")),
+            'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
+            'city': format_lazy('{} {}', _('City'), _("*")),
         }
 
     def clean(self):
@@ -152,16 +153,16 @@ class FoodForm(forms.ModelForm):
                   'halal', 'lactose_free', 'gluten_free', 'bio',
                   'expiration_date')
         labels = {
-            'name': _('Name') + "*",
+            'name': format_lazy('{} {}', _('Name'), _("*")),
             'description': _('Description'),
-            'counter': _('Counter') + "*",
+            'counter': format_lazy('{} {}', _('Counter'), _("*")),
             'vegetarian': _('Vegetarian'),
             'vegan': _('Vegan'),
             'halal': _('Halal'),
             'lactose_free': _('Lactose free'),
             'gluten_free': _('Gluten free'),
             'bio': _('Bio'),
-            'expiration_date': _('Expiration date') + "*",
+            'expiration_date': format_lazy('{} {}', _('Expiration date'), _("*")),
         }
 
         validators = {
@@ -181,9 +182,9 @@ class OpeningHourForm(forms.ModelForm):
         model = OpeningHour
         fields = ('weekday', 'from_hour', 'to_hour')
         labels = {
-            'weekday': _('Week day') + "*",
-            'from_hour': _('From hour') + "*",
-            'to_hour': _('To hour') + "*"
+            'weekday': format_lazy('{} {}', _('Week day'), _("*")),
+            'from_hour': format_lazy('{} {}', _('From hour'), _("*")),
+            'to_hour': format_lazy('{} {}', _('To hour'), _("*"))
         }
 
         widgets = {
@@ -210,9 +211,9 @@ class SpecialDayForm(forms.ModelForm):
         fields = ('description', 'is_open', 'from_date',
                   'to_date', 'from_hour', 'to_hour')
         labels = {
-            'description': _('Description') + "*",
+            'description': format_lazy('{} {}', _('Description'), _("*")),
             'is_open': _('Is the Free Go open?'),
-            'from_date': _('From date') + "*",
+            'from_date': format_lazy('{} {}',  _('From date'), _("*")),
             'to_date': _('To date'),
             'from_hour': _('From hour'),
             'to_hour': _('To hour')
@@ -277,8 +278,8 @@ class SponsorForm(forms.ModelForm):
         model = Sponsor
         fields = ('name', 'logo', 'website')
         labels = {
-            'name': _('Name') + "*",
-            'logo': _('Logo') + "*",
+            'name': format_lazy('{} {}', _('Name'), _("*")),
+            'logo': format_lazy('{} {}', _('Logo'), _("*")),
             'website': _('Website URL')
         }
         required = {
@@ -293,11 +294,12 @@ class InventoryForm(forms.ModelForm):
         fields = ("date", "product_name",
                   "product_number", "temperature", "visa")
         labels = {
-            "date": _("Date") + "*",
-            "product_name": _("Product name") + "*",
-            "product_number": _("Product number") + "*",
-            "temperature": _("Temperature") + "*",
-            "visa": _("Visa") + "*"
+            "date": format_lazy('{} {}', _("Date"), _("*")),
+            "product_name": format_lazy('{} {}', _("Product name"), _("*")),
+            "product_number": format_lazy('{} {}',
+                                          _("Product number"), _("*")),
+            "temperature": format_lazy('{} {}', _("Temperature"), _("*")),
+            "visa": format_lazy('{} {}', _("Visa"), _("*"))
         }
         widgets = {
             'date': DateInput()
@@ -310,9 +312,9 @@ class TemperatureControlForm(forms.ModelForm):
         model = TemperatureControl
         fields = ("date", "temperature", "visa")
         labels = {
-            "date": _("Date") + "*",
-            "temperature": _("Temperature") + "*",
-            "visa": _("Visa") + "*"
+            "date": format_lazy('{} {}', _("Date"), _("*")),
+            "temperature": format_lazy('{} {}', _("Temperature"), _("*")),
+            "visa": format_lazy('{} {}', _("Visa"), _("*"))
         }
         widgets = {
             'date': DateInput()
@@ -326,5 +328,5 @@ class FridgeContentImageForm(forms.ModelForm):
         model = FridgeContentImage
         fields = ("image",)
         labels = {
-            "image": _("Image") + "*"
+            "image": format_lazy('{} {}', _("Image"), _("*"))
         }
