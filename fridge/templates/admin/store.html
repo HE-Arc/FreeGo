@@ -4,30 +4,30 @@
 {% load static %}
 {% load i18n %}
 
-<img class="responsive-img" src="{{ fridge.image.url }}"  width="600" alt="fridge-image">
+<img class="responsive-img" src="{{ fridge.image.url }}" width="600" alt="fridge-image">
 
 <ul class="collection">
     <li class="collection-item">
-        <h5>{% trans 'Informations' %}</h5>
+        <h5>{% trans 'Information' %}</h5>
         {% if not fridge.is_active %}
         <div class="row">
             <strong class="red-text">{% trans 'Waiting for validation' %}</strong>
         </div>
         {% endif %}
         <div class="row">
-            <strong>{% trans 'Address' %} : </strong>
+            <strong>{% trans 'Address' %}: </strong>
             {{ fridge.address }}, {{ fridge.zip_code }} {{ fridge.city }}
         </div>
         <div class="row">
-            <strong>{% trans 'Username' %} : </strong>
+            <strong>{% trans 'Username' %}: </strong>
             {{ fridge.user.username }}
         </div>
         <div class="row">
-            <strong>{% trans 'Email' %} : </strong>
+            <strong>{% trans 'Email' %}: </strong>
             {{ fridge.user.email }}
         </div>
         <div class="row">
-            <strong>{% trans 'Phone number' %} : </strong>
+            <strong>{% trans 'Phone number' %}: </strong>
             {{ fridge.phone_number }}
         </div>
     </li>

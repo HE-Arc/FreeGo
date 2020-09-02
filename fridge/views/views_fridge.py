@@ -5,14 +5,10 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Permission
-from rest_framework import viewsets
 
-from fridge.models import Fridge, FridgeFollowing, User, FridgeContentImage
+from fridge.models import Fridge, User, FridgeContentImage
 from fridge.forms import FridgeForm, FridgeDemandForm, FridgeContentImageForm
-from fridge.serializers import FridgeSerializer
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework import permissions
+
 from django.utils.translation import gettext_lazy as _
 from notifications.signals import notify
 
@@ -75,6 +71,8 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
                 city=form.cleaned_data['city'],
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
+                latitude=form.cleaned_data['latitude'],
+                longitude=form.cleaned_data['longitude'],
                 user=request.user
             )
             fridge.save()
@@ -85,11 +83,10 @@ class FridgeDemandCreateView(LoginRequiredMixin, generic.CreateView):
             perm = Permission.objects.get(codename="admin")
             recipient = User.objects.filter(
                 user_permissions__in=[perm])
-            verb = _("New request to become a freego.")
+            verb = _("New request to become a Free Go.")
             notify.send(request.user, recipient=recipient,
                         verb=verb)
             return redirect('fridge:settings')
-
         return render(request, self.template_name, {'form': form})
 
 
@@ -109,6 +106,8 @@ class FridgeCreateView(PermissionRequiredMixin, FridgeDemandCreateView):
                 phone_number=form.cleaned_data['phone_number'],
                 image=form.cleaned_data['image'],
                 user=form.cleaned_data['user'],
+                latitude=form.cleaned_data['latitude'],
+                longitude=form.cleaned_data['longitude'],
                 is_active=True
             )
             fridge.save()
@@ -157,19 +156,6 @@ class FridgeRefuseDemand(PermissionRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, args, kwargs)
-
-
-class FridgesViewSet(viewsets.ModelViewSet):
-    queryset = Fridge.objects.filter(is_active=True)
-    serializer_class = FridgeSerializer
-
-    @action(detail=False, permission_classes=[permissions.IsAuthenticated])
-    def favorites(self, request):
-        reserved_fridges = FridgeFollowing.objects.filter(
-            user=request.user).values_list('fridge_id')
-        favorites = Fridge.objects.filter(id__in=reserved_fridges)
-        serializer = self.get_serializer(favorites, many=True)
-        return Response(serializer.data)
 
 
 class FridgeContentImageListView(generic.ListView):
