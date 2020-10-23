@@ -12,5 +12,5 @@ def is_reserved_by_user(food, user):
 
 @register.simple_tag
 def nb_reservation_by_user(food, user):
-    return Reservation.objects.filter(
-        food=food, user=user).count()
+    return Reservation.objects.get(
+        food=food, user=user).quantity

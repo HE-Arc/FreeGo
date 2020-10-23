@@ -28,6 +28,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from fridge.views.views_fridge import ValidFridgeUser
 
 # Constant
 LOGIN_URL = 'fridge:login'
@@ -57,6 +58,19 @@ class FoodReservation(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, args, kwargs)
+
+
+class FoodReservationValidation(View):
+    def get(self, request, *args, **kwargs):
+        food = Food.objects.get(pk=self.kwargs['pk'])
+        reservation = Reservation.objects.get(
+            user=request.user, food=food)
+        food.counter -= reservation.quantity
+        food.save()
+        reservation.delete()
+        if food.counter <= 0:
+            food.delete()
+        return redirect('fridge:store', food.fridge.pk)
 
 
 class FoodCancellation(LoginRequiredMixin, View):
