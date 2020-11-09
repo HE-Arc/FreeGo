@@ -32,6 +32,7 @@ class FoodCreateView(UserPassesTestMixin, generic.CreateView):
             food = Food(
                 name=form.cleaned_data['name'],
                 description=form.cleaned_data['description'],
+                counter=form.cleaned_data['counter'],
                 vegetarian=form.cleaned_data['vegetarian'],
                 vegan=form.cleaned_data['vegan'],
                 halal=form.cleaned_data['halal'],
@@ -39,7 +40,6 @@ class FoodCreateView(UserPassesTestMixin, generic.CreateView):
                 gluten_free=form.cleaned_data['gluten_free'],
                 bio=form.cleaned_data['bio'],
                 expiration_date=form.cleaned_data['expiration_date'],
-                image=form.cleaned_data['image'],
                 fridge=Fridge.objects.get(pk=self.kwargs['pk']),
                 user=request.user
             )
@@ -72,11 +72,12 @@ class FoodDetailView(LoginRequiredMixin, generic.DetailView):
 class FoodUpdateView(ValidFridgeUser, generic.UpdateView):
     model = Food
     template_name = 'common/form.html'
-    fields = ['name', 'description', 'vegetarian', 'vegan',  'halal',
-              'lactose_free', 'gluten_free', 'bio', 'expiration_date', 'image']
+    fields = ['name', 'description', 'counter', 'vegetarian', 'vegan',
+              'halal', 'lactose_free', 'gluten_free', 'bio', 'expiration_date']
 
     def get_success_url(self):
-        return reverse_lazy('fridge:profile')
+        return reverse_lazy('fridge:store',
+                            kwargs={'pk': self.object.fridge.pk})
 
 
 class FoodDeleteView(ValidFridgeUser, generic.DeleteView):

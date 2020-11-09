@@ -1,8 +1,8 @@
 const DB_NAME = 'freego_db';
 const DB_VERSION = 8;
 let DB;
-const SERVER_URL = "https://freego.srvz-webapp.he-arc.ch"
-// const SERVER_URL = "http://127.0.0.1:8000"
+// const SERVER_URL = "https://freego.srvz-webapp.he-arc.ch"
+const SERVER_URL = "http://127.0.0.1:8000"
 
 var appFridges = new Vue({
     delimiters: ['[[', ']]'],
@@ -17,9 +17,8 @@ var appFridges = new Vue({
         //map
         selectedFeatures: [],
         zoom: 15,
-        center: [7.6451, 47.5227],
         rotation: 0,
-        geolocPosition: undefined,
+        geolocPosition: [7.065378, 47.055668],
     }),
     async created() {
         await this.login();
@@ -215,7 +214,6 @@ var appFridges = new Vue({
         },
         clickOnFridge: function (evt) {
             evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-                console.log(feature.getId())
                 window.location.href = SERVER_URL + '/food/' + feature.getId() + "/list";
             })
         },

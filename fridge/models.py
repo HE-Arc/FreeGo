@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from .validators import phone_number_validator, NPA_validator, \
-    expiration_date_validator
+    expiration_date_validator, latitude_longitude_validators
 from PIL import Image
 from io import BytesIO
 from django.utils.translation import gettext_lazy as _
@@ -12,11 +12,16 @@ import sys
 from geopy.geocoders import Nominatim
 
 
-def compress_image(uploaded_image):
+def compress_image(uploaded_image, width):
     '''Return compressed image'''
     tmp_image = Image.open(uploaded_image)
     output_io_stream = BytesIO()
-    tmp_image.save(output_io_stream, format='PNG', quality=60)
+    old_size = tmp_image.size
+    new_width = width
+    new_height = int(old_size[1]/(old_size[0]/new_width))
+    tmp_image = tmp_image.resize((new_width, new_height))
+    tmp_image.save(output_io_stream, format='PNG')
+
     output_io_stream.seek(0)
     uploaded_image = InMemoryUploadedFile(
         output_io_stream, 'ImageField', "%s.png" %
@@ -35,6 +40,11 @@ WEEKDAYS = [
     (6, _("Sunday")),
 ]
 
+IS_OPEN = [
+    (0, _("Opened")),
+    (1, _("Closed"))
+]
+
 
 class Fridge(models.Model):
     '''Fridge model'''
@@ -44,8 +54,10 @@ class Fridge(models.Model):
     zip_code = models.CharField(max_length=45, validators=[NPA_validator])
     phone_number = models.CharField(
         max_length=12, validators=[phone_number_validator])
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(blank=True, validators=[
+                                 latitude_longitude_validators])
+    longitude = models.FloatField(blank=True, validators=[
+                                  latitude_longitude_validators])
     image = models.ImageField(upload_to='images/')
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
@@ -65,11 +77,10 @@ class Fridge(models.Model):
     def get_special_days(self):
         return SpecialDay.objects.filter(fridge=self)
 
-    def get_foods(self):
-        return Food.objects.filter(fridge=self)
-
     def get_available_food(self):
-        all_reservation = Reservation.objects.values_list('food_id')
+        all_reservation = [
+            r.food.pk for r in Reservation.objects.all()
+            if r.quantity == r.food.counter]
         return Food.objects.filter(fridge=self).exclude(id__in=all_reservation)
 
     def get_reserved_food(self):
@@ -90,22 +101,30 @@ class Fridge(models.Model):
         location = geolocator.geocode(address)
         return location.longitude, location.latitude
 
+    def has_content_image(self):
+        return FridgeContentImage.objects.filter(fridge=self).count() != 0
+
     def save(self, *args, **kwargs):
-        geolocator = Nominatim(user_agent=self.name)
-        address = "{}, {} {}".format(self.address, self.zip_code, self.city)
-        location = geolocator.geocode(address)
-        if not location:
-            raise ValidationError(_("Invalid address"))
-        self.latitude = location.latitude
-        self.longitude = location.longitude
-        self.image = compress_image(self.image)
-        super().save(*args, **kwargs)
+        if self.latitude and self.longitude:
+            super().save(*args, **kwargs)
+        else:
+            geolocator = Nominatim(user_agent=self.name)
+            address = "{}, {} {}".format(
+                self.address, self.zip_code, self.city)
+            location = geolocator.geocode(address)
+            if not location:
+                raise ValidationError(_("Invalid address"))
+            self.latitude = location.latitude
+            self.longitude = location.longitude
+            self.image = compress_image(self.image, 600)
+            super().save(*args, **kwargs)
 
 
 class Food(models.Model):
     '''Food model'''
     name = models.CharField(max_length=45)
     description = models.CharField(max_length=200, null=True, blank=True)
+    counter = models.PositiveIntegerField()
     vegetarian = models.BooleanField()
     vegan = models.BooleanField()
     halal = models.BooleanField()
@@ -113,8 +132,6 @@ class Food(models.Model):
     gluten_free = models.BooleanField()
     bio = models.BooleanField()
     expiration_date = models.DateField(validators=[expiration_date_validator])
-    image = models.ImageField(
-        upload_to='images/', default='default.JPG')
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
@@ -128,19 +145,22 @@ class Food(models.Model):
         return Reservation.objects.filter(food=self) \
             .filter(user=current_user).count() != 0
 
-    def is_available(self):
-        return Reservation.objects.filter(food=self).count() == 0
+    def has_reservation(self):
+        return Reservation.objects.filter(
+            user=self.user, food=self).count() != 0
+
+    def quantity_available(self):
+        quantity_available = self.counter - sum(
+            map(lambda r: r.quantity,
+                list(Reservation.objects.filter(food=self))))
+        quantity_available = min(4, quantity_available)
+        return range(1, quantity_available + 1)
+
+    def quantity_reserved_by_user(self, user):
+        return Reservation.objects.filter(user=user, food=self).count()
 
     def __str__(self):
         return str(self.name)
-
-    def save(self, *args, **kwargs):
-        self.image = compress_image(self.image)
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        self.image.delete(save=False)
-        super().delete(*args, **kwargs)
 
 
 class Reservation(models.Model):
@@ -150,11 +170,13 @@ class Reservation(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True)
+    quantity = models.PositiveIntegerField()
 
     def save(self, *args, **kwargs):
-        r = Reservation.objects.filter(food=self.food)
-        if r and r[0].user == self.user:
-            raise ValidationError(_("You can't reserve your own food."))
+        if self.food.counter < int(self.quantity):
+            raise ValidationError(_("Not enough food available"))
+        if int(self.quantity) > 4:
+            raise ValidationError(_("You can't reserve more than for food"))
         super().save(*args, **kwargs)
 
 
@@ -173,15 +195,16 @@ class OpeningHour(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return "{} : {}-{}".format(str(WEEKDAYS[self.weekday][1]),
-                                   self.from_hour.strftime('%H:%M'),
-                                   self.to_hour.strftime('%H:%M'))
+        return "{}: {}-{}".format(str(WEEKDAYS[self.weekday][1]),
+                                  self.from_hour.strftime('%H:%M'),
+                                  self.to_hour.strftime('%H:%M'))
 
 
 class SpecialDay(models.Model):
     '''SpecialDay model'''
     description = models.CharField(max_length=200)
-    is_open = models.BooleanField(default=False)
+    is_open = models.PositiveSmallIntegerField(
+        choices=IS_OPEN, default=0)
     from_date = models.DateField()
     to_date = models.DateField(null=True, blank=True)
     from_hour = models.TimeField(null=True, blank=True)
@@ -202,8 +225,9 @@ class SpecialDay(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        sd = _("%(description)s : %(is_open)s ") % {
-            'description': self.description, 'is_open': _("open") if self.is_open == True else _("closed")}
+        sd = _("%(description)s: %(is_open)s ") % {
+            'description': self.description, 'is_open': _("open")
+            if self.is_open is True else _("closed")}
         if self.to_date:
             return sd + _("from %(from_date)s to %(to_date)s") % \
                 {'from_date': self.from_date.strftime('%d/%m/%Y'),
@@ -230,6 +254,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
     email = models.EmailField(unique=True)
+    email_confirmed = models.BooleanField(default=False)
 
     def has_fridge(self):
         return Fridge.objects.filter(user=self).count() != 0
@@ -245,6 +270,17 @@ class FridgeFollowing(models.Model):
         Fridge, on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class FridgeContentImage(models.Model):
+    '''FridgeContentImage model'''
+    fridge = models.ForeignKey(
+        Fridge, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
+
+    def save(self, *args, **kwargs):
+        self.image = compress_image(self.image, 600)
+        super().save(*args, **kwargs)
 
 
 class ReportContent(models.Model):
@@ -265,7 +301,7 @@ class Sponsor(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.logo = compress_image(self.logo)
+        self.logo = compress_image(self.logo, 600)
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

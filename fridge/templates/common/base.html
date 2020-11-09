@@ -12,17 +12,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     preload>
   <link rel="stylesheet" href="{% static 'fridge/css/style.css' %}" type="text/css" prelaod>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap" type="text/css"
-    preload>
+  <link rel="stylesheet" href="{% static 'fridge/iconfont/material-icons.css' %}" type="text/css" prelaod>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" preload>
   <link rel="stylesheet" href="https://unpkg.com/vuelayers/lib/style.css" type="text/css">
+  <link rel="stylesheet" href="{% static 'fridge/css/all.min.css' %}" preload>
 
   <!-- JS -->
   <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.min.js"></script>
-  <script src="https://kit.fontawesome.com/8072de43d0.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script type="text/javascript" src="https://unpkg.com/idb@5.0.4/build/cjs/index.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  
   <!--Let browser know website is optimized for mobile-->
   <link rel="icon" type="image/png" href="{% static 'fridge/logos/icon-128x128.png' %}" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -88,6 +88,9 @@
       {% endfor %}
       {% endif %}
       <!-- END ALERT BOX -->
+
+      <!-- MODALS -->
+      {% include "common/installation_information.html" %}
 
       {% block content %}{% endblock %}
     </main>

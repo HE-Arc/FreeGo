@@ -5,9 +5,11 @@ from notifications.models import Notification
 
 class FridgeSerializer(serializers.ModelSerializer):
     '''Fridge Serializer'''
+
     class Meta:
         model = Fridge
-        fields = '__all__'
+        fields = ['id', 'name', 'address', 'city', 'zip_code', 'phone_number',
+                  'latitude', 'longitude', 'image', 'user', 'is_active']
 
 
 class UserSerializer(serializers.ModelSerializer):

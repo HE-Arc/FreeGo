@@ -10,6 +10,7 @@ from fridge.tests.test_tools import create_user, create_fridge, create_food, \
 class FridgeModelTest(TestCase):
     def setUp(self):
         self.user = create_user()
+        self.user2 = create_user(username="test2", email="test2@test.ch")
         self.fridge = create_fridge(self.user)
 
     def test_delete(self):
@@ -40,13 +41,6 @@ class FridgeModelTest(TestCase):
 
         self.assertEqual(self.fridge.get_special_days().count(), 2)
 
-    def test_get_foods(self):
-        """
-        Test get_foods method
-        """
-        create_food(self.fridge, self.user)
-        self.assertEqual(self.fridge.get_foods().count(), 1)
-
     def test_available_and_reserved_food(self):
         """
         Test get_available_food and get_reserved_food method
@@ -55,7 +49,13 @@ class FridgeModelTest(TestCase):
         self.assertEqual(self.fridge.get_available_food().count(), 1)
         self.assertEqual(len(self.fridge.get_reserved_food()), 0)
 
-        create_reservation(food, self.user)
+        reservation = create_reservation(food, self.user2, 2)
+        self.assertEqual(self.fridge.get_available_food().count(), 1)
+        self.assertEqual(len(self.fridge.get_reserved_food()), 1)
+
+        reservation.delete()
+
+        create_reservation(food, self.user2, 4)
         self.assertEqual(self.fridge.get_available_food().count(), 0)
         self.assertEqual(len(self.fridge.get_reserved_food()), 1)
 
@@ -84,18 +84,28 @@ class FoodModel(TestCase):
         """
         Test is_reserved_by_me method
         """
-        create_reservation(food=self.food, user=self.user)
+        create_reservation(food=self.food, user=self.user, quantity=3)
 
         self.assertEqual(self.food.is_reserved_by_me(self.user), True)
         self.assertEqual(self.food.is_reserved_by_me(self.another_user), False)
 
-    def test_is_available(self):
+    def test_has_reservation(self):
         """
-        Test is_available method
+        Test has_reservation method
         """
-        self.assertEqual(self.food.is_available(), True)
-        create_reservation(food=self.food, user=self.user)
-        self.assertEqual(self.food.is_available(), False)
+        self.assertEqual(self.food.has_reservation(), False)
+        create_reservation(food=self.food, user=self.user, quantity=3)
+        self.assertEqual(self.food.has_reservation(), True)
+
+    def test_quantity_available(self):
+        """
+        Test quantity_available method
+        """
+        self.assertEqual(self.food.quantity_available(), range(1, 5))
+        create_reservation(food=self.food, user=self.another_user, quantity=2)
+        self.assertEqual(self.food.quantity_available(), range(1, 3))
+        create_reservation(food=self.food, user=self.another_user, quantity=1)
+        self.assertEqual(self.food.quantity_available(), range(1, 2))
 
 
 class OpeningHourModelTests(TestCase):

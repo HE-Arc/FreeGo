@@ -5,7 +5,7 @@
 
 {% if user.is_authenticated %}
 <ul class="collection">
-    <a href="{% url 'fridge:profile' %}" class="collection-item black-text">{% trans 'My profil' %}</a>
+    <a href="{% url 'fridge:profile' %}" class="collection-item black-text">{% trans 'My profile' %}</a>
 
     {% if perms.fridge.admin %}
     <a href="{% url 'fridge:myadmin' %}" class="collection-item black-text">{% trans 'Administration' %}</a>
@@ -13,10 +13,6 @@
 
     {% if user.has_fridge %}
     <a href="{% url 'fridge:store' fridge.pk %}" class="collection-item black-text">{% trans 'My Free Go' %}</a>
-    <a href="{% url 'fridge:inventory-sheet' fridge.pk %}"
-        class="collection-item black-text">{% trans 'Inventory Sheet' %}</a>
-    <a href="{% url 'fridge:temperature-control-list' fridge.pk %}"
-        class="collection-item black-text">{% trans 'Temperature Control' %}</a>
     {% else %}
     <a href="{% url 'fridge:fridge-demand' %}"
         class="collection-item black-text">{% trans 'Ask for become a Free Go' %}</a>

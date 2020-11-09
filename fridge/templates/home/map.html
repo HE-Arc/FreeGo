@@ -4,11 +4,13 @@
 {% block content %}
 
 
-<div class="card red" style="position: absolute;left: 0.5rem;right: 0.5rem;" id="alert_box_map" hidden>
+<div class="card red" style="position: absolute;left: 0.5rem;right: 0.5rem; z-index: 1;" id="alert_box_map" hidden>
     <div class="row">
         <div class="col s12 m10">
             <div class="card-content white-text">
-                <p>{{message}}</p>
+                <p>{% blocktrans %}You must allow access to location. You can do this by accessing to the settings of
+                    your device{% endblocktrans %}
+                </p>
             </div>
         </div>
         <div class="col s12 m2">
@@ -50,14 +52,21 @@
 </div>
 
 <script>
-    // Check for Geolocation API permissions
-    navigator.permissions.query({ name: 'geolocation' })
-        .then(function (permissionStatus) {
-            if (permissionStatus.state == 'denied') {
-                let div = document.getElementById('alert_box_map');
-                div.removeAttribute("hidden")
-            }
-        });
+    if ("geolocation" in navigator) {
+        /* la géolocalisation est disponible */
+        navigator.geolocation.watchPosition(function (position) {
+            console.log("Localization is available");
+        },
+            function (error) {
+                if (error.code == error.PERMISSION_DENIED) {
+                    console.log("you denied me :-(");
+                    let div = document.getElementById('alert_box_map');
+                    console.log(div);
+                    div.removeAttribute("hidden")
+                }
+            });
+    }
+
 </script>
 
 {% endblock %}

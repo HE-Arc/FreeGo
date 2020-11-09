@@ -36,7 +36,7 @@ class OpeningHourCreateView(PermissionRequiredMixin, generic.CreateView):
 
             opening_hour.save()
 
-            return redirect('fridge:fridge-detail', opening_hour.fridge.pk)
+            return redirect('fridge:opening-hour-list', opening_hour.fridge.pk)
         return render(request, self.template_name, {'form': form})
 
 
@@ -49,7 +49,7 @@ class OpeningHourDeleteView(PermissionRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse_lazy('fridge:fridge-detail',
+        return reverse_lazy('fridge:opening-hour-list',
                             kwargs={'pk': self.object.fridge.pk})
 
 
@@ -110,7 +110,7 @@ class SpecialDayCreateView(PermissionRequiredMixin, generic.CreateView):
                 fridge=Fridge.objects.get(pk=self.kwargs['pk'])
             )
             special_day.save()
-            return redirect('fridge:fridge-detail', special_day.fridge.pk)
+            return redirect('fridge:special-day-list', special_day.fridge.pk)
         return render(request, self.template_name, {'form': form})
 
 
@@ -123,5 +123,5 @@ class SpecialDayDeleteView(PermissionRequiredMixin, generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse_lazy('fridge:fridge-detail',
+        return reverse_lazy('fridge:special-day-list',
                             kwargs={'pk': self.object.fridge.pk})

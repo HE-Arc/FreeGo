@@ -1,9 +1,9 @@
+from django.utils.text import format_lazy
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from .models import Fridge, Food, OpeningHour, SpecialDay, User, Sponsor, \
-    Inventory, TemperatureControl
-from .validators import expiration_date_validator
+    Inventory, TemperatureControl, FridgeContentImage
 
 from django.utils.translation import gettext_lazy as _
 from geopy.geocoders import Nominatim
@@ -12,87 +12,115 @@ from geopy.geocoders import Nominatim
 DATE_FORMAT = '%b %d, %Y'
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
+class TimeInput(forms.TimeInput):
+    input_type = 'time'
+    input_formats = ['%H:%M'],
+
+
 class FridgeDemandForm(forms.ModelForm):
     '''Fridge Demand form'''
+    has_address = forms.BooleanField(
+        label=_('As valid address'), required=False)
 
     class Meta:
         model = Fridge
         fields = ('name', 'address', 'zip_code', 'city',
-                  'phone_number', 'image')
+                  'phone_number', 'image', 'latitude', 'longitude')
         labels = {
-            'name': _('Name') + "*",
-            'address': _('Address') + "*",
-            'zip_code': _('Zip code') + "*",
-            'city': _('City') + "*",
-            'phone_number': _('Phone number') + "*",
-            'image': _('Image') + "*",
+            'name': format_lazy('{} {}', _('Name'), _("*")),
+            'address': format_lazy('{} {}', _('Address'), _("*")),
+            'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
+            'city': format_lazy('{} {}', _('City'), _("*")),
+            'phone_number': format_lazy('{} {}', _('Phone number'), _("*")),
+            'image': format_lazy('{} {}', _('Image'), _("*")),
+            'latitude': _('Latitude'),
+            'longitude': _('Longitude')
         }
+
+        required = {
+            'latitude': False,
+            'longitude': False
+        }
+
+    field_order = ['name', 'address', 'zip_code', 'city', 'phone_number',
+                   'image', 'has_address', 'latitude', 'longitude']
 
     def clean(self):
         cleaned_data = super().clean()
-        name = cleaned_data.get('name')
-        address = cleaned_data.get('address')
-        zip_code = cleaned_data.get('zip_code')
-        city = cleaned_data.get('city')
-        address = "{}, {} {}".format(address, zip_code, city)
-        geolocator = Nominatim(user_agent=name)
-        location = geolocator.geocode(address)
-        if not location:
-            raise ValidationError(_("Invalid address"))
+        if not cleaned_data.get('has_address'):
+            address = cleaned_data.get('address')
+            zip_code = cleaned_data.get('zip_code')
+            city = cleaned_data.get('city')
+            address = "{}, {} {}".format(address, zip_code, city)
+            geolocator = Nominatim(user_agent="FreeGo")
+            location = geolocator.geocode(address)
+            if not location:
+                raise ValidationError(_("Invalid address"))
+            cleaned_data['latitude'] = location.latitude
+            cleaned_data['longitude'] = location.longitude
+        else:
+            if cleaned_data.get('latitude') and \
+                    not cleaned_data.get('longitude'):
+                raise ValidationError(
+                    _("You must have latitude AND longitude"))
+            elif not cleaned_data.get('latitude') and \
+                    cleaned_data.get('longitude'):
+                raise ValidationError(
+                    _("You must have latitude AND longitude"))
+            elif not cleaned_data.get('latitude') and \
+                    not cleaned_data.get('longitude'):
+                raise ValidationError(
+                    _("You must have latitude AND longitude"))
 
 
-class FridgeForm(forms.ModelForm):
+class FridgeForm(FridgeDemandForm):
     '''Fridge form'''
 
     class Meta:
         model = Fridge
         fields = ('name', 'address', 'zip_code', 'city',
-                  'phone_number', 'image', 'user')
+                  'phone_number', 'image', 'user', 'latitude', 'longitude')
         labels = {
-            'name': _('Name') + "*",
-            'address': _('Address') + "*",
-            'zip_code': _('Zip code') + "*",
-            'city': _('City') + "*",
-            'phone_number': _('Phone number') + "*",
-            'image': _('Image') + "*",
-            'user': _('User') + "*"
+            'name': format_lazy('{} {}', _('Name'), _("*")),
+            'address': format_lazy('{} {}', _('Address'), _("*")),
+            'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
+            'city': format_lazy('{} {}',  _('City'), _("*")),
+            'phone_number': format_lazy('{} {}', _('Phone number'), _("*")),
+            'image': format_lazy('{} {}', _('Image'), _("*")),
+            'user': format_lazy('{} {}', _('User'), _("*")),
+            'latitude': _('Latitude'),
+            'longitude': _('Longitude')
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        name = cleaned_data.get('name')
-        address = cleaned_data.get('address')
-        zip_code = cleaned_data.get('zip_code')
-        city = cleaned_data.get('city')
-        address = "{}, {} {}".format(address, zip_code, city)
-        geolocator = Nominatim(user_agent=name)
-        location = geolocator.geocode(address)
-        if not location:
-            raise ValidationError(_("Invalid address"))
+        required = {
+            'latitude': False,
+            'longitude': False
+        }
+
+    field_order = ['name', 'address', 'zip_code', 'city', 'phone_number',
+                   'image', 'user', 'has_address', 'latitude', 'longitude']
 
 
-class FridgeUpdateAddressForm(forms.ModelForm):
+class FridgeUpdateAddressForm(FridgeDemandForm):
     '''Fridge form'''
 
     class Meta:
         model = Fridge
-        fields = ('address', 'zip_code', 'city')
+        fields = ('address', 'zip_code', 'city', 'latitude', 'longitude')
         labels = {
-            'address': _('Address') + "*",
-            'zip_code': _('Zip code') + "*",
-            'city': _('City') + "*"
+            'address': format_lazy('{} {}', _('Address'), _("*")),
+            'zip_code': format_lazy('{} {}', _('Zip code'), _("*")),
+            'city': format_lazy('{} {}', _('City'), _("*")),
+            'latitude': _('Latitude'),
+            'longitude': _('Longitude')
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        address = cleaned_data.get('address')
-        zip_code = cleaned_data.get('zip_code')
-        city = cleaned_data.get('city')
-        address = "{}, {} {}".format(address, zip_code, city)
-        geolocator = Nominatim(user_agent='address')
-        location = geolocator.geocode(address)
-        if not location:
-            raise ValidationError(_("Invalid address"))
+    field_order = ['address', 'zip_code', 'city',
+                   'has_address', 'latitude', 'longitude']
 
 
 class FoodForm(forms.ModelForm):
@@ -100,28 +128,26 @@ class FoodForm(forms.ModelForm):
 
     class Meta:
         model = Food
-        fields = ('name', 'description', 'vegetarian', 'vegan', 'halal',
-                  'lactose_free', 'gluten_free', 'bio',
-                  'expiration_date', 'image')
+        fields = ('name', 'description', 'counter', 'vegetarian', 'vegan',
+                  'halal', 'lactose_free', 'gluten_free', 'bio',
+                  'expiration_date')
         labels = {
-            'name': _('Name') + "*",
+            'name': format_lazy('{} {}', _('Name'), _("*")),
             'description': _('Description'),
+            'counter': format_lazy('{} {}', _('Counter'), _("*")),
             'vegetarian': _('Vegetarian'),
             'vegan': _('Vegan'),
             'halal': _('Halal'),
             'lactose_free': _('Lactose free'),
             'gluten_free': _('Gluten free'),
             'bio': _('Bio'),
-            'expiration_date': _('Expiration date') + "*",
-            'image': _('Image'),
-        }
-
-        validators = {
-            'expiration_date': [expiration_date_validator]
+            'expiration_date': format_lazy('{} {}', _('Expiration date'), _("*")),
         }
 
         widgets = {
-            'expiration_date': forms.DateInput(attrs={'class': 'datepicker'})
+            'expiration_date': DateInput(),
+            'description': forms.Textarea(
+                attrs={'class': 'materialize-textarea'})
         }
 
 
@@ -131,15 +157,15 @@ class OpeningHourForm(forms.ModelForm):
         model = OpeningHour
         fields = ('weekday', 'from_hour', 'to_hour')
         labels = {
-            'weekday': _('Week day') + "*",
-            'from_hour': _('From hour') + "*",
-            'to_hour': _('To hour') + "*"
+            'weekday': format_lazy('{} {}', _('Week day'), _("*")),
+            'from_hour': format_lazy('{} {}', _('From hour'), _("*")),
+            'to_hour': format_lazy('{} {}', _('To hour'), _("*"))
         }
 
         widgets = {
             'weekday': forms.Select(attrs={'class': 'browser-default'}),
-            'from_hour': forms.TimeInput(attrs={'class': 'timepicker'}),
-            'to_hour': forms.TimeInput(attrs={'class': 'timepicker'})
+            'from_hour': TimeInput(),
+            'to_hour': TimeInput()
         }
 
     def clean(self):
@@ -160,19 +186,20 @@ class SpecialDayForm(forms.ModelForm):
         fields = ('description', 'is_open', 'from_date',
                   'to_date', 'from_hour', 'to_hour')
         labels = {
-            'description': _('Description') + "*",
+            'description': format_lazy('{} {}', _('Description'), _("*")),
             'is_open': _('Is the Free Go open?'),
-            'from_date': _('From date') + "*",
+            'from_date': format_lazy('{} {}',  _('From date'), _("*")),
             'to_date': _('To date'),
             'from_hour': _('From hour'),
             'to_hour': _('To hour')
         }
 
         widgets = {
-            'from_date': forms.DateInput(attrs={'class': 'datepicker'}),
-            'to_date': forms.DateInput(attrs={'class': 'datepicker'}),
-            'from_hour': forms.TimeInput(attrs={'class': 'timepicker'}),
-            'to_hour': forms.TimeInput(attrs={'class': 'timepicker'})
+            'is_open': forms.RadioSelect(),
+            'from_date': DateInput(),
+            'to_date': DateInput(),
+            'from_hour': TimeInput(),
+            'to_hour': TimeInput()
         }
 
         required = {
@@ -205,7 +232,7 @@ class SpecialDayForm(forms.ModelForm):
 class RegisterForm(UserCreationForm):
     '''Register Form'''
     email = forms.EmailField(
-        max_length=254, help_text=_('Required. Fill an valid email address.'))
+        max_length=254, help_text=_('Required. Fill a valid email address.'))
 
     class Meta:
         model = User
@@ -226,9 +253,9 @@ class SponsorForm(forms.ModelForm):
         model = Sponsor
         fields = ('name', 'logo', 'website')
         labels = {
-            'name': _('Name') + "*",
-            'logo': _('Logo') + "*",
-            'website': _('Website url')
+            'name': format_lazy('{} {}', _('Name'), _("*")),
+            'logo': format_lazy('{} {}', _('Logo'), _("*")),
+            'website': _('Website URL')
         }
         required = {
             'website': False
@@ -242,14 +269,15 @@ class InventoryForm(forms.ModelForm):
         fields = ("date", "product_name",
                   "product_number", "temperature", "visa")
         labels = {
-            "date": _("Date") + "*",
-            "product_name": _("Product name") + "*",
-            "product_number": _("Product number") + "*",
-            "temperature": _("Temperature") + "*",
-            "visa": _("Visa") + "*"
+            "date": format_lazy('{} {}', _("Date"), _("*")),
+            "product_name": format_lazy('{} {}', _("Product name"), _("*")),
+            "product_number": format_lazy('{} {}',
+                                          _("Product number"), _("*")),
+            "temperature": format_lazy('{} {}', _("Temperature"), _("*")),
+            "visa": format_lazy('{} {}', _("Visa"), _("*"))
         }
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'datepicker'})
+            'date': DateInput()
         }
 
 
@@ -259,10 +287,21 @@ class TemperatureControlForm(forms.ModelForm):
         model = TemperatureControl
         fields = ("date", "temperature", "visa")
         labels = {
-            "date": _("Date") + "*",
-            "temperature": _("Temperature") + "*",
-            "visa": _("Visa") + "*"
+            "date": format_lazy('{} {}', _("Date"), _("*")),
+            "temperature": format_lazy('{} {}', _("Temperature"), _("*")),
+            "visa": format_lazy('{} {}', _("Visa"), _("*"))
         }
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'datepicker'})
+            'date': DateInput()
+        }
+
+
+class FridgeContentImageForm(forms.ModelForm):
+    '''FridgeContentImage form'''
+
+    class Meta:
+        model = FridgeContentImage
+        fields = ("image",)
+        labels = {
+            "image": format_lazy('{} {}', _("Image"), _("*"))
         }

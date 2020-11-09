@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'fridge.User'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -121,12 +122,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-TIME_FORMAT = '%I:%M %p'
-
-TIME_INPUT_FORMATS = (
-    '%I:%M %p',
-)
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -179,3 +174,10 @@ PWA_APP_LANG = 'fr'
 
 
 LOGIN_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}

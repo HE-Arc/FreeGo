@@ -1,24 +1,23 @@
 {% load static %}
 {% load i18n %}
+{% load fridge_extras %}
 
-<div class="col offset-s2 s8 m6">
+<div class="col s12 m6">
     <div class="card">
-        <a id="reference" href="{% url 'fridge:food-detail' food.pk %}">
-            <div class="card-image">
-                <img id="image" src="{{ food.image.url }}" alt="fridge image">
-            </div>
-        </a>
         <div class="card-content">
-            <span class="card-title grey-text text-darken-4">{{ food.name }}
-                <a href="{% url 'fridge:food-update' food.pk %}">
-                    <i class="material-icons right black-text" aria-hidden="true">edit</i>
-                </a>
+            <span class="card-title grey-text text-darken-4">
+                <a id="reference" href="{% url 'fridge:food-detail' food.pk %}" class="black-text">{{ food.name }}</a>
             </span>
+            {% if food.description %}
+            <p>{{ food.description }}</p>
+            {% endif %}
+            {% nb_reservation_by_user food request.user as nb_reservations %}
+            <p>{% trans "Number of reservations:" %} {{nb_reservations}}</p>
         </div>
         <div class="card-tabs">
             <ul class="tabs tabs-fixed-width">
                 <li class="tab">
-                    <a href="{% url 'fridge:food-delete' food.pk %}"><i class="material-icons black-text"
+                    <a href="{% url 'fridge:food-reservation-validation' food.pk %}"><i class="material-icons black-text"
                             aria-hidden="true">check</i>
                     </a>
                 </li>
