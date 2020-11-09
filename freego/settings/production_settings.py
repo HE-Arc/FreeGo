@@ -32,12 +32,12 @@ else:
     SECRET_KEY = os.environ['SECRET_KEY']
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': os.environ.get('GROUPNAME', 'freego_db'),
             'USER': os.environ.get('GROUPNAME', 'root'),
             'PASSWORD': os.environ.get('PASSWORD', 'root'),
-            'HOST': os.environ.get('MYSQL_HOST', '127.0.0.1'),
-            'PORT': os.environ.get('MYSQL_PORT', '3306'),
+            'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
+            'PORT': os.environ.get('MYSQL_PORT', ''),
             'OPTIONS': {
                 'charset': 'utf8mb4'
             }
