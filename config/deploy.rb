@@ -1,7 +1,7 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.14.1"
 
-set :application, "Free Go"
+set :application, "FreeGo"
 set :repo_url, "https://github.com/HE-Arc/FreeGo.git"
 
 # Default branch is :master
