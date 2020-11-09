@@ -6,8 +6,8 @@
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-server "freego.srvz-webapp.he-arc.ch", user: "poweruser", 
-			                  roles: %w{app db web}, port: 1430
+server "84.16.75.157", user: "debian", 
+			                  roles: %w{app db web}
 
 
 
