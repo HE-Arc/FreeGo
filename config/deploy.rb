@@ -9,7 +9,7 @@ append :linked_dirs, "media"
 
 set :branch, ENV['BRANCH'] if ENV['BRANCH']
 
-set :deploy_to, "/var/www/freego"
+set :deploy_to, "/var/www/freego/#{fetch(:application)}"
 set :ssh_options, forward_agent: true
 
 namespace :deploy do
