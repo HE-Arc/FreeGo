@@ -1,71 +1,59 @@
-# config valid for current version and patch releases of Capistrano
 lock "~> 3.14.1"
 
-set :application, "FreeGo"
-set :repo_url, "https://github.com/HE-Arc/FreeGo.git"
+set :application, "freego"
+set :repo_url, "git@github.com:HE-Arc/FreeGo.git"
+set :keep_releases, 10
+ 
+append :linked_files, "freego/production_settings.py" # could be .env or any file you probably use for config variables
+append :linked_dirs, "media"
 
-# Default branch is :master
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 set :branch, ENV['BRANCH'] if ENV['BRANCH']
 
-# Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, "/var/www/my_app_name"
+set :deploy_to, "/var/www/freego"
+set :ssh_options, forward_agent: true
 
-# Default value for :format is :airbrussh.
-# set :format, :airbrussh
+namespace :deploy do
 
-# You can configure the Airbrussh format using :format_options.
-# These are the defaults.
-# set :format_options, command_output: true, log_file: "log/capistrano.log", color: :auto, truncate: :auto
+    desc "Run post-deploy actions (migrate and collect static)"
+    task :post_deploy do
+        invoke 'deploy:install_deps'
+        invoke 'deploy:migrate'
+        invoke 'deploy:collect_static'
+        invoke 'deploy:restart'
+    end
 
-# Default value for :pty is false
-# set :pty, true
+    desc "Install dependencies"
+    task :install_deps do
+      on roles(:app), in: :sequence, wait: 5 do
+        within release_path do
+          execute("source #{fetch :venv_path}/bin/activate")
+          execute :pip, :install, '-r', 'requirements.txt'
+        end
+      end
+    end
 
-# Default value for :linked_files is []
-# append :linked_files, "config/database.yml"
+    desc "Migrate database"
+    task :migrate do
+      on roles(:app), in: :sequence, wait: 5 do
+        within release_path do
+          execute :python, 'manage.py', 'migrate', '--no-input'
+        end
+      end
+    end
 
-# Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
-
-# Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
-
-# Default value for local_user is ENV['USER']
-# set :local_user, -> { `git config user.name`.chomp }
-
-# Default value for keep_releases is 5
-# set :keep_releases, 5
-
-# Uncomment the following to require manually verifying the host key before first deploy.
-# set :ssh_options, verify_host_key: :secure
-
-after 'deploy:publishing', 'uwsgi:restart'
-
-
-namespace :uwsgi do
-    desc 'Restart application'
+    desc "Collect static"
+    task :collect_static do
+        on roles(:app), in: :sequence, wait: 5 do
+        within release_path do
+            execute :python, 'manage.py', 'collectstatic', '--no-input'
+        end
+        end
+    end
+    
+    desc "Restart Gunicorn"
     task :restart do
-        on roles(:web) do |h|
-	    execute :sudo, 'sv reload uwsgi'
-	end
-    end
-end
-
-
-after 'deploy:updating', 'python:create_venv'
-
-namespace :python do
-
-    def venv_path
-        File.join(shared_path, 'env')
-    end
-
-    desc 'Create venv'
-    task :create_venv do
-        on roles([:app, :web]) do |h|
-	    execute "python3.7 -m venv #{venv_path}"
-            execute "source #{venv_path}/bin/activate"
-	    execute "#{venv_path}/bin/pip install -r #{release_path}/requirements.txt"
+        on roles(:app), in: :sequence, wait: 5 do
+        execute :sudo, :service, 'gunicorn', :restart
         end
     end
 end
