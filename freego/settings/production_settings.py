@@ -40,7 +40,6 @@ else:
             'PORT': os.environ.get('PORT', '')
         }
     }
-x
 
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
