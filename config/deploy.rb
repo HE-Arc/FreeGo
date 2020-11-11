@@ -1,6 +1,6 @@
 lock "~> 3.14.1"
 
-set :application, "freego"
+set :application, "FreeGo"
 set :repo_url, "https://github.com/HE-Arc/FreeGo.git"
 set :keep_releases, 10
  
@@ -9,7 +9,7 @@ append :linked_dirs, "media"
 
 set :branch, ENV['BRANCH'] if ENV['BRANCH']
 
-set :deploy_to, "/var/www/freego/#{fetch(:application)}"
+set :deploy_to, "/var/www/#{fetch(:application)}"
 set :ssh_options, forward_agent: true
 
 namespace :deploy do
