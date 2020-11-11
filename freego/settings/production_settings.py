@@ -7,8 +7,8 @@ from freego.settings.common_settings import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
-                 '127.0.0.1', 'freego.srvz-webapp.he-arc.ch']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',
+                 'application-freego.ch', '84.16.79.157']
 
 
 # Database
@@ -34,10 +34,10 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': os.environ.get('NAME', 'freego_db'),
-            'USER': os.environ.get('GROUPNAME', 'root'),
+            'USER': os.environ.get('USER', 'root'),
             'PASSWORD': os.environ.get('PASSWORD', 'root'),
-            'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
-            'PORT': os.environ.get('MYSQL_PORT', '')
+            'HOST': os.environ.get('HOST', 'localhost'),
+            'PORT': os.environ.get('PORT', '')
         }
     }
 x
