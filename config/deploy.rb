@@ -1,7 +1,7 @@
 lock "~> 3.14.1"
 
 set :application, "freego"
-set :repo_url, "git@github.com:HE-Arc/FreeGo.git"
+set :repo_url, "https://github.com/HE-Arc/FreeGo.git"
 set :keep_releases, 10
  
 append :linked_files, "freego/production_settings.py" # could be .env or any file you probably use for config variables
