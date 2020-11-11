@@ -33,17 +33,14 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get('GROUPNAME', 'freego_db'),
+            'NAME': os.environ.get('NAME', 'freego_db'),
             'USER': os.environ.get('GROUPNAME', 'root'),
             'PASSWORD': os.environ.get('PASSWORD', 'root'),
             'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
-            'PORT': os.environ.get('MYSQL_PORT', ''),
-            'OPTIONS': {
-                'charset': 'utf8mb4'
-            }
+            'PORT': os.environ.get('MYSQL_PORT', '')
         }
     }
-
+x
 
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
