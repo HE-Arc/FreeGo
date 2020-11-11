@@ -4,7 +4,7 @@ set :application, "FreeGo"
 set :repo_url, "https://github.com/HE-Arc/FreeGo.git"
 set :keep_releases, 10
  
-append :linked_files, "FreeGo/settings/production_settings.py" # could be .env or any file you probably use for config variables
+append :linked_files, "freego/settings/production_settings.py" # could be .env or any file you probably use for config variables
 append :linked_dirs, "media"
 
 set :branch, ENV['BRANCH'] if ENV['BRANCH']
