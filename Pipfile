@@ -19,6 +19,8 @@ pytest-django = "*"
 django-notifications-hq = "*"
 django-cors-headers = "*"
 asgiref = "*"
+gunicorn = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.8"
