@@ -48,6 +48,15 @@ namespace :deploy do
         end
         end
     end
+
+    desc "Translate site"
+    task :collect_static do
+        on roles(:app), in: :sequence, wait: 5 do
+        within release_path do
+            execute :python, 'manage.py', 'compilemessages', '--no-input'
+        end
+        end
+    end
     
     desc "Restart Gunicorn"
     task :restart do
