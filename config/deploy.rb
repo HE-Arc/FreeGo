@@ -4,8 +4,6 @@ set :application, "FreeGo"
 set :repo_url, "https://github.com/HE-Arc/FreeGo.git"
 set :keep_releases, 10
  
-append :linked_dirs, "media"
-
 set :branch, ENV['BRANCH'] if ENV['BRANCH']
 
 set :deploy_to, "/var/www/#{fetch(:application)}"
@@ -18,6 +16,7 @@ namespace :deploy do
         invoke 'deploy:install_deps'
         invoke 'deploy:migrate'
         invoke 'deploy:collect_static'
+        invoke 'deploy:translate_site'
         invoke 'deploy:restart'
     end
 
@@ -50,7 +49,7 @@ namespace :deploy do
     end
 
     desc "Translate site"
-    task :collect_static do
+    task :translate_site do
         on roles(:app), in: :sequence, wait: 5 do
         within release_path do
             execute :python, 'manage.py', 'compilemessages', '--no-input'
