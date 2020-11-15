@@ -41,20 +41,20 @@ namespace :deploy do
 
     desc "Collect static"
     task :collect_static do
-        on roles(:app), in: :sequence, wait: 5 do
+      on roles(:app), in: :sequence, wait: 5 do
         within release_path do
             execute :python, 'manage.py', 'collectstatic', '--no-input'
         end
-        end
+      end
     end
 
     desc "Translate site"
     task :translate_site do
-        on roles(:app), in: :sequence, wait: 5 do
+      on roles(:app), in: :sequence, wait: 5 do
         within release_path do
             execute :python, 'manage.py', 'compilemessages', '--no-input'
         end
-        end
+      end
     end
     
     desc "Restart Gunicorn"
