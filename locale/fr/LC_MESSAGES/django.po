@@ -419,7 +419,7 @@ msgstr "Paramètres"
 #: .\fridge\templates\common\base_email.html:22
 #: .\fridge\templates\user\password_reset_email.html:13
 msgid "The Free Go team"
-msgstr "Est-ce que le Free Go est ouvert ?"
+msgstr "L'équipe Free Go."
 
 #: .\fridge\templates\common\base_store.html:41
 #: .\fridge\templates\home\settings.html:11
@@ -640,7 +640,7 @@ msgid ""
 "                Association Free Go <br>\n"
 "                Rue de Beau-Site 14, 2014 Bôle"
 msgstr ""
-"<strong>En faveur de :?</strong><br>\n"
+"<strong>En faveur de :</strong><br>\n"
 "                Association Free Go <br>\n"
 "                Rue de Beau-Site 14, 2014 Bôle"
 
