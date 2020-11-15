@@ -2,7 +2,7 @@ const DB_NAME = 'freego_db';
 const DB_VERSION = 8;
 let DB;
 // const SERVER_URL = "https://freego.srvz-webapp.he-arc.ch"
-const SERVER_URL = "http://application-freego.ch"
+const SERVER_URL = "https://application-freego.ch"
 
 var appFridges = new Vue({
     delimiters: ['[[', ']]'],

@@ -3,7 +3,7 @@
 {% trans "Hi "  %}{{ user.get_username }}{% trans ","  %}
 {% blocktrans %}Please click on the link to confirm your registration,{% endblocktrans %}
 {% block reset_link %}
-http://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
+https://{{ domain }}{% url 'fridge:activate' uidb64=uid token=token %}
 {% endblock %}
 {% trans "Thanks for using our site!" %}
 {% blocktrans %}The {{ site_name }} team{% endblocktrans %}
