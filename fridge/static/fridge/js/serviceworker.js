@@ -54,18 +54,18 @@ const filesToCache = [
     '/media/default.JPG',
     '/media/offline.PNG',
     //cdn
-    'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css',
-    'https://fonts.googleapis.com/icon?family=Material+Icons&display=swap',
-    'https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap',
-    'https://unpkg.com/vuelayers/lib/style.css',
+    // 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css',
+    // 'https://fonts.googleapis.com/icon?family=Material+Icons&display=swap',
+    // 'https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap',
+    // 'https://unpkg.com/vuelayers/lib/style.css',
 
-    'https://unpkg.com/vue/dist/vue.min.js',
-    'https://kit.fontawesome.com/8072de43d0.js',
-    'https://unpkg.com/axios/dist/axios.min.js',
-    'https://unpkg.com/idb@5.0.4/build/cjs/index.js',
-    'https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v5.3.0/build/ol.js',
-    'https://unpkg.com/vuelayers/lib/index.umd.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js',
+    // 'https://unpkg.com/vue/dist/vue.min.js',
+    // 'https://kit.fontawesome.com/8072de43d0.js',
+    // 'https://unpkg.com/axios/dist/axios.min.js',
+    // 'https://unpkg.com/idb@5.0.4/build/cjs/index.js',
+    // 'https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v5.3.0/build/ol.js',
+    // 'https://unpkg.com/vuelayers/lib/index.umd.js',
+    // 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js',
 ];
 
 
