@@ -133,6 +133,8 @@ urlpatterns = [
 
     path('food/<pk>/reservation/<quantity>',
          views_user.FoodReservation.as_view(), name='food-reservation'),
+    path('food/<pk>/reservation/validation/',
+         views_user.FoodReservationValidation.as_view(), name='food-reservation-validation'),
     path('food/<pk>/cancellation>',
          views_user.FoodCancellation.as_view(), name='food-cancellation'),
     path('reservation/list', views_user.ReservationListView.as_view(),
