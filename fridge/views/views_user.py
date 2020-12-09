@@ -259,11 +259,10 @@ class ActivateAccount(View):
             user.email_confirmed = True
             user.save()
             login(request, user)
-            message = _(
-                "Login with success")
+            message = _("Login with success")
             messages.add_message(request, messages.INFO, message)
             return render(request, 'home/home.html', {
                 'token': token,
             })
         else:
-            return HttpResponse('Activation link is invalid!')
+            return HttpResponse(_('Activation link is invalid!'))
