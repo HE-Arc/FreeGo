@@ -4,7 +4,9 @@ from notifications.models import Notification
 
 
 class FridgeSerializer(serializers.ModelSerializer):
-    '''Fridge Serializer'''
+    """
+    Fridge Serializer
+    """
 
     class Meta:
         model = Fridge
@@ -13,14 +15,18 @@ class FridgeSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    '''User Serializer'''
+    """
+    User Serializer
+    """
     class Meta:
         model = User
         fields = ['pk', 'username', 'email']
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    '''Notification Serializer'''
+    """
+    Notification Serializer
+    """
     class Meta:
         model = Notification
         fields = ['recipient', 'unread', 'target', 'verb']

@@ -12,7 +12,9 @@ NPA_validator = RegexValidator(r'^\d{4}$', _('This NPA is not valid'))
 
 
 def expiration_date_validator(expiration_date):
-    '''Check if the date is already'''
+    """
+    Raise error if the date is already passed.
+    """
     if expiration_date < datetime.now().date():
         raise ValidationError(_("The expiration date is already passed."))
 

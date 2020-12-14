@@ -13,16 +13,24 @@ DATE_FORMAT = '%b %d, %Y'
 
 
 class DateInput(forms.DateInput):
+    """
+    Update forms for DateInput
+    """
     input_type = 'date'
 
 
 class TimeInput(forms.TimeInput):
+    """
+    Update forms for TimeInput
+    """
     input_type = 'time'
     input_formats = ['%H:%M'],
 
 
 class FridgeDemandForm(forms.ModelForm):
-    '''Fridge Demand form'''
+    """
+    Fridge Demand form
+    """
     has_address = forms.BooleanField(
         label=_('As valid address'), required=False)
 
@@ -78,7 +86,9 @@ class FridgeDemandForm(forms.ModelForm):
 
 
 class FridgeForm(FridgeDemandForm):
-    '''Fridge form'''
+    """
+    Fridge form
+    """
 
     class Meta:
         model = Fridge
@@ -106,7 +116,9 @@ class FridgeForm(FridgeDemandForm):
 
 
 class FridgeUpdateAddressForm(FridgeDemandForm):
-    '''Fridge form'''
+    """
+    Fridge form
+    """
 
     class Meta:
         model = Fridge
@@ -124,7 +136,9 @@ class FridgeUpdateAddressForm(FridgeDemandForm):
 
 
 class FoodForm(forms.ModelForm):
-    '''Food form'''
+    """
+    Food form
+    """
 
     class Meta:
         model = Food
@@ -152,7 +166,9 @@ class FoodForm(forms.ModelForm):
 
 
 class OpeningHourForm(forms.ModelForm):
-    '''Opening hour form'''
+    """
+    Opening hour form
+    """
     class Meta:
         model = OpeningHour
         fields = ('weekday', 'from_hour', 'to_hour')
@@ -179,7 +195,9 @@ class OpeningHourForm(forms.ModelForm):
 
 
 class SpecialDayForm(forms.ModelForm):
-    '''Special day form'''
+    """
+    Special day form
+    """
 
     class Meta:
         model = SpecialDay
@@ -230,7 +248,10 @@ class SpecialDayForm(forms.ModelForm):
 
 
 class RegisterForm(UserCreationForm):
-    '''Register Form'''
+    """
+    Register Form
+    """
+
     email = forms.EmailField(
         max_length=254, help_text=_('Required. Fill a valid email address.'))
 
@@ -240,7 +261,9 @@ class RegisterForm(UserCreationForm):
 
 
 class ContactForm(forms.Form):
-    '''Contact Form'''
+    """
+    Contact Form
+    """
     subject = forms.CharField(max_length=45, label=_('Subject'))
     message = forms.CharField(max_length=500, label=_(
         'Message'), widget=forms.Textarea(
@@ -248,7 +271,9 @@ class ContactForm(forms.Form):
 
 
 class SponsorForm(forms.ModelForm):
-    '''Sponsor Form'''
+    """
+    Sponsor Form
+    """
     class Meta:
         model = Sponsor
         fields = ('name', 'logo', 'website')
@@ -263,7 +288,9 @@ class SponsorForm(forms.ModelForm):
 
 
 class InventoryForm(forms.ModelForm):
-    '''Inventory Sheet Form'''
+    """
+    Inventory Sheet Form
+    """
     class Meta:
         model = Inventory
         fields = ("date", "product_name",
@@ -282,7 +309,9 @@ class InventoryForm(forms.ModelForm):
 
 
 class TemperatureControlForm(forms.ModelForm):
-    '''Temperature Control Form'''
+    """
+    Temperature Control Form
+    """
     class Meta:
         model = TemperatureControl
         fields = ("date", "temperature", "visa")
@@ -297,7 +326,9 @@ class TemperatureControlForm(forms.ModelForm):
 
 
 class FridgeContentImageForm(forms.ModelForm):
-    '''FridgeContentImage form'''
+    """
+    FridgeContentImage form
+    """
 
     class Meta:
         model = FridgeContentImage

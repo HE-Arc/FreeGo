@@ -13,7 +13,9 @@ from geopy.geocoders import Nominatim
 
 
 def compress_image(uploaded_image, width):
-    '''Return compressed image'''
+    """
+    Return compressed image
+    """
     tmp_image = Image.open(uploaded_image)
     output_io_stream = BytesIO()
     old_size = tmp_image.size
@@ -47,7 +49,9 @@ IS_OPEN = [
 
 
 class Fridge(models.Model):
-    '''Fridge model'''
+    """
+    Fridge model
+    """
     name = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
     city = models.CharField(max_length=45)
@@ -72,36 +76,60 @@ class Fridge(models.Model):
         super().delete(*args, **kwargs)
 
     def get_opening_hours(self):
+        """
+        Return opening hours
+        """
         return OpeningHour.objects.filter(fridge=self)
 
     def get_special_days(self):
+        """
+        Return special days
+        """
         return SpecialDay.objects.filter(fridge=self)
 
     def get_available_food(self):
+        """
+        Return unreserved food
+        """
         all_reservation = [
             r.food.pk for r in Reservation.objects.all()
             if r.quantity == r.food.counter]
         return Food.objects.filter(fridge=self).exclude(id__in=all_reservation)
 
     def get_reserved_food(self):
+        """
+        Return reserved food
+        """
         return [food for food in Food.objects.filter(fridge=self)
                 if food.is_reserved() is True]
 
     def get_reserved_food_by_me(self, current_user):
+        """
+        Return food reserved by user give in argument
+        """
         return [food for food in Food.objects.filter(fridge=self)
                 if food.is_reserved_by_me(current_user) is True]
 
     def is_favorite(self, user):
+        """
+        Return true if user has fridge in is favorite.
+        """
         return FridgeFollowing.objects.filter(user=user) \
             .filter(fridge=self).count() != 0
 
     def get_longitude_latitude(self):
+        """
+        Return longitude and latitude from the adresses.
+        """
         geolocator = Nominatim(user_agent="freego")
         address = "{}, {} {}".format(self.address, self.zip_code, self.city)
         location = geolocator.geocode(address)
         return location.longitude, location.latitude
 
     def has_content_image(self):
+        """
+        Check if fridge has content image
+        """
         return FridgeContentImage.objects.filter(fridge=self).count() != 0
 
     def save(self, *args, **kwargs):
@@ -121,7 +149,9 @@ class Fridge(models.Model):
 
 
 class Food(models.Model):
-    '''Food model'''
+    """
+    Food model
+    """
     name = models.CharField(max_length=45)
     description = models.CharField(max_length=200, null=True, blank=True)
     counter = models.PositiveIntegerField()
@@ -139,17 +169,30 @@ class Food(models.Model):
         null=True, blank=True)
 
     def is_reserved(self):
+        """
+        Check if food is reserved.
+        """
         return Reservation.objects.filter(food=self).count() != 0
 
     def is_reserved_by_me(self, current_user):
+        """
+        Check if food is reserved by user give in argument
+        """
         return Reservation.objects.filter(food=self) \
             .filter(user=current_user).count() != 0
 
     def has_reservation(self):
+        """
+        Check if food is reserved by user
+        """
+        # TODO check if method is used
         return Reservation.objects.filter(
             user=self.user, food=self).count() != 0
 
     def quantity_available(self):
+        """
+        Get quantity of food available.
+        """
         quantity_available = self.counter - sum(
             map(lambda r: r.quantity,
                 list(Reservation.objects.filter(food=self))))
@@ -157,6 +200,9 @@ class Food(models.Model):
         return range(1, quantity_available + 1)
 
     def quantity_reserved_by_user(self, user):
+        """
+        Get quantity reserved by user give in argument.
+        """
         return Reservation.objects.filter(user=user, food=self).count()
 
     def __str__(self):
@@ -164,7 +210,9 @@ class Food(models.Model):
 
 
 class Reservation(models.Model):
-    '''Reservation model'''
+    """
+    Reservation model
+    """
     food = models.ForeignKey(
         Food, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(
@@ -181,7 +229,9 @@ class Reservation(models.Model):
 
 
 class OpeningHour(models.Model):
-    '''OpeningHour model'''
+    """
+    OpeningHour model
+    """
     weekday = models.PositiveSmallIntegerField(
         choices=WEEKDAYS, default=0)
     from_hour = models.TimeField()
@@ -201,7 +251,9 @@ class OpeningHour(models.Model):
 
 
 class SpecialDay(models.Model):
-    '''SpecialDay model'''
+    """
+    SpecialDay model
+    """
     description = models.CharField(max_length=200)
     is_open = models.PositiveSmallIntegerField(
         choices=IS_OPEN, default=0)
@@ -250,22 +302,32 @@ class SpecialDay(models.Model):
 
 
 class User(AbstractUser):
-    '''User model'''
+    """
+    User model
+    """
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
     email = models.EmailField(unique=True)
     email_confirmed = models.BooleanField(default=False)
 
     def has_fridge(self):
+        """
+        Check if user has fridge
+        """
         return Fridge.objects.filter(user=self).count() != 0
 
     def get_reserved_food(self):
+        """
+        Get food reserved by user.
+        """
         return [food for food in Food.objects.all()
                 if food.is_reserved_by_me(self)]
 
 
 class FridgeFollowing(models.Model):
-    '''FridgeFollowing model'''
+    """
+    FridgeFollowing model
+    """
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE)
     user = models.ForeignKey(
@@ -273,7 +335,9 @@ class FridgeFollowing(models.Model):
 
 
 class FridgeContentImage(models.Model):
-    '''FridgeContentImage model'''
+    """
+    FridgeContentImage model
+    """
     fridge = models.ForeignKey(
         Fridge, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/')
@@ -284,7 +348,9 @@ class FridgeContentImage(models.Model):
 
 
 class ReportContent(models.Model):
-    '''ReportContent model'''
+    """
+    ReportContent model
+    """
     food = models.ForeignKey(
         Food, on_delete=models.CASCADE)
     user = models.ForeignKey(
@@ -292,7 +358,9 @@ class ReportContent(models.Model):
 
 
 class Sponsor(models.Model):
-    '''Sponsor model'''
+    """
+    Sponsor model
+    """
     name = models.CharField(max_length=45)
     logo = models.ImageField(upload_to='images/')
     website = models.URLField(max_length=200, null=True, blank=True)
@@ -310,7 +378,9 @@ class Sponsor(models.Model):
 
 
 class Inventory(models.Model):
-    '''Inventory class for inventory sheet'''
+    """
+    Inventory class for inventory sheet
+    """
     date = models.DateField()
     product_name = models.CharField(max_length=45)
     product_number = models.IntegerField()
@@ -324,7 +394,9 @@ class Inventory(models.Model):
 
 
 class TemperatureControl(models.Model):
-    '''TemperatureControl model'''
+    """
+    TemperatureControl model
+    """
     date = models.DateField()
     temperature = models.FloatField()
     visa = models.CharField(max_length=45)
