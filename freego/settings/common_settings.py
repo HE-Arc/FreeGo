@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'notifications',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 AUTH_USER_MODEL = 'fridge.User'
